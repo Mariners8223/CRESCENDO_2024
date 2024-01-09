@@ -3,9 +3,17 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import frc.util.PIDFGains;
 
 /** Add yo
@@ -19,46 +27,14 @@ public class Constants {
     }
 
     public static final class Vision{
-
-        public static final int numberOfCameras = 4;
-
-            public static final Transform3d[] cameraLocations = new Transform3d[]{
-                new Transform3d(
-                0,
-                0,
-                0,
-                new Rotation3d(
-                0,
-                0,
-                0)),
-
-                new Transform3d(
-                0,
-                0,0,
-                new Rotation3d(
-                0,
-                0,
-                0)),
-                
-                new Transform3d(
-                0,
-                0,
-                0,
-                new Rotation3d(
-                0,
-                0,
-                0)),
-
-                new Transform3d(
-                0,
-                0,0,
-                new Rotation3d(
-                0,
-                0,
-                0))
-            };
-
-            public static final double gamePieceHeight = 0.05; //the height of the game piece in meters
+        public static final Transform3d cameraToRobotCenter = new Transform3d(
+            -0.45,
+            0.001,
+            0.2,
+            new Rotation3d(
+            0,
+            20,
+            -180));
 
         public static final class PhotonVision{
             public static final String rightCameraName = "Right Camera"; //the name of the right camera
