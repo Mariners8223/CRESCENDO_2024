@@ -4,11 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.util.PIDFGains;
@@ -29,21 +32,51 @@ public class Constants {
     }
 
     public static final class Vision{
-        public static final Transform3d cameraToRobotCenter = new Transform3d(
-            -0.45,
-            0.001,
-            0.2,
-            new Rotation3d(
-            0,
-            20,
-            -180));
+            public static final Transform3d[] cameraLocations = new Transform3d[]{
+                new Transform3d(
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+
+                new Transform3d(
+                0,
+                0,0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+                
+                new Transform3d(
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+
+                new Transform3d(
+                0,
+                0,0,
+                new Rotation3d(
+                0,
+                0,
+                0))
+            };
 
         public static final class PhotonVision{
-            public static final String cameraName = "name";
+            public static final String rightCameraName = "Right Camera"; //the name of the right camera
+            public static final String leftCameraName = "Left Camera"; //the name of the left camera
+
         }
 
         public static final class LimeLight{
-            public static final String limeLightName = "";
+            public static final String frontCameraName = "Front Camera"; //the name of the front camera
+            public static final String backCameraName = "Back Camera"; //the name of the back camera
         }
     }
 
@@ -117,11 +150,6 @@ public class Constants {
 
             public static final PIDFGains thetaPID = new PIDFGains(5, 0.0, 0.0); //the pid gains for the PID Controller of the robot angle, units are radians
             public static final PIDFGains XYPID = new PIDFGains(5, 0.0, 1); //the pid gains for the pid controller of the robot's postion (xy)
-        }
-
-        public static final class Vision{
-            public static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(3));
-            public static final Vector<N3> visionStdDevs = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(50));
         }
 
         public static class SwerveModule{
