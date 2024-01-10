@@ -5,7 +5,8 @@
 package frc.robot;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -50,6 +51,7 @@ public class RobotContainer {
     new Trigger(DriverStation::isDSAttached).and(isAllinceNotSet).and(DriverStation.getAlliance()::isPresent).onTrue(new InstantCommand(() -> {
       currentAllince = DriverStation.getAlliance().get();
       allianceSet = true;
+      Logger.recordOutput("Alliance Set to " + currentAllince.toString());
     }).ignoringDisable(true));
   }
 
