@@ -147,6 +147,7 @@ public class DriveBase extends SubsystemBase {
       Constants.DriveTrain.Global.maxRotationSpeed, Constants.DriveTrain.Global.maxAccelerationRotation);
     //^creates path constraints for pathPlanner
 
+    //creates a trigger that will configure the autobuilder if the allince is set and the autobuilder is not configured
     BooleanSupplier isAutoBuilderNotConfiged = () -> !AutoBuilder.isConfigured();
     new Trigger(RobotContainer::isAllinceSet).and(isAutoBuilderNotConfiged).onTrue(new InstantCommand(() -> 
       AutoBuilder.configureHolonomic(

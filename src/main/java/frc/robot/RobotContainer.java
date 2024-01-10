@@ -39,10 +39,14 @@ public class RobotContainer {
     configureNamedCommands();
     configChooser();
 
+    //sets the deafult allince as blue
     currentAllince = Alliance.Blue;
+    //sets the allince to false
     allianceSet = false;
+    //creats a bool supplier for if the allince is not set
     BooleanSupplier isAllinceNotSet = () -> !allianceSet;
 
+    //creates a trigger that will set the allince if the driver station is connected
     new Trigger(DriverStation::isDSAttached).and(isAllinceNotSet).and(DriverStation.getAlliance()::isPresent).onTrue(new InstantCommand(() -> {
       currentAllince = DriverStation.getAlliance().get();
       allianceSet = true;

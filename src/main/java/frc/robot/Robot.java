@@ -9,12 +9,17 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.pathfinding.Pathfinding;
+
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
 
   @Override
   public void robotInit() {
+    Pathfinding.setPathfinder(new LocalADStarAK());
+
     if(isReal()){
       Logger.addDataReceiver(new NT4Publisher());
       Logger.addDataReceiver(new WPILOGWriter("/U"));
