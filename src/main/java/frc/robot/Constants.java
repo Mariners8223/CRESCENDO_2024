@@ -3,17 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
 import frc.util.PIDFGains;
 
 /** Add yo
@@ -21,11 +13,6 @@ import frc.util.PIDFGains;
 
 /** Add your docs here. */
 public class Constants {
-
-    public static final class Logger{
-        public static final String save_location = ""; //add save lcoation (probably a usb stick so /u)
-    }
-
     public static final class Controllers{
         public static final double joyStickDeadBand = 0.05;
         public static final double triggerDeadBand = 0.1;
@@ -67,6 +54,8 @@ public class Constants {
                 0,
                 0))
             };
+
+            public static final double gamePieceHeight = 0.05; //the height of the game piece in meters
 
         public static final class PhotonVision{
             public static final String rightCameraName = "Right Camera"; //the name of the right camera
