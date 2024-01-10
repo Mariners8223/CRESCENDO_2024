@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -146,7 +147,9 @@ public class DriveBase extends SubsystemBase {
       Constants.DriveTrain.Global.maxRotationSpeed, Constants.DriveTrain.Global.maxAccelerationRotation);
     //^creates path constraints for pathPlanner
 
-    AutoBuilder.configureHolonomic(
+    BooleanSupplier isAutoBuilderNotConfiged = () -> !AutoBuilder.isConfigured();
+    new Trigger(RobotContainer::isAllinceSet).and(isAutoBuilderNotConfiged).onTrue(new InstantCommand(() -> 
+      AutoBuilder.configureHolonomic(
       this::getPose,
       this::reset,
       this::getChassisSpeeds,
@@ -159,7 +162,7 @@ public class DriveBase extends SubsystemBase {
           return DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red);
         }
       },
-      this);
+      this)).ignoringDisable(true));
     //^configures the autobuilder for pathPlanner
 
     // new Trigger(RobotState::isAutonomous).onTrue(new InstantCommand(() -> resetOnlyDirection())); //triggers a postion and state reset when the robot starts the auto period
