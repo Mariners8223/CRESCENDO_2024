@@ -177,10 +177,10 @@ public class SwerveModule{
   public void setModuleState(SwerveModuleState targetState){
     this.targetState = targetState;
 
-    // this.targetState.angle = Rotation2d.fromDegrees(minChangeInSteerAngle(this.targetState.angle.getDegrees()));
+    this.targetState.angle = Rotation2d.fromDegrees(minChangeInSteerAngle(this.targetState.angle.getDegrees()));
 
     driveMotorVelocityInput.accept(this.targetState.speedMetersPerSecond);//gives the drive motor the new input
-    steerMotorPostionInput.accept(minChangeInSteerAngle(this.targetState.angle.getDegrees()) / 360); //sets the new angle for the steer motor
+    steerMotorPostionInput.accept(this.targetState.angle.getRotations()); //sets the new angle for the steer motor
 
     inputs.driveMotorInput = this.targetState.speedMetersPerSecond; //updates the input given (for logger)
     inputs.steerMotorInput = this.targetState.angle.getRotations(); //udpats the input given (for logger)
