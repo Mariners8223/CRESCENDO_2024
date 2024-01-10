@@ -19,6 +19,9 @@ public class Constants {
     }
 
     public static final class Vision{
+
+        public static final int numberOfCameras = 4;
+
             public static final Transform3d[] cameraLocations = new Transform3d[]{
                 new Transform3d(
                 0,
