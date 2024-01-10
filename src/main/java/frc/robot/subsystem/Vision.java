@@ -7,6 +7,7 @@ package frc.robot.subsystem;
 
 import java.io.IOException;
 
+import org.littletonrobotics.junction.AutoLog;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
@@ -29,6 +30,17 @@ import frc.util.LimelightHelpers.LimelightResults;
 
 public class Vision extends SubsystemBase {
 
+  @AutoLog
+  public static class VisonOutputs{
+    Pose3d[] poses = new Pose3d[4];
+    double[] timeStamps = new double[4];
+    double[] latencies = new double[4];
+    Translation2d[] translations = new Translation2d[4];
+    double[] poseConfidences = new double[4];
+    boolean[] hasTargets = new boolean[4];
+    double[] poseAmbiguitys = new double[4];
+  }
+
   private static Vision instance;
 
   CameraInterface[] cameras = new CameraInterface[4];
@@ -36,6 +48,10 @@ public class Vision extends SubsystemBase {
   double[] timeStamps = new double[4];
   double[] latencies = new double[4];
   Translation2d[] translations = new Translation2d[4];
+  double[] poseConfidences = new double[4];
+  boolean[] hasTargets = new boolean[4];
+
+  
 
   /**
    * creates a new Vision subsystem with 4 cameras
@@ -45,6 +61,15 @@ public class Vision extends SubsystemBase {
     cameras[1] = new PhotonCameraClass(Constants.Vision.PhotonVision.rightCameraName, CameraLocation.Right);
     cameras[2] = new LimeLightClass(Constants.Vision.LimeLight.backCameraName, CameraLocation.Back);
     cameras[3] = new PhotonCameraClass(Constants.Vision.PhotonVision.leftCameraName, CameraLocation.Left);
+
+    for(int i = 0; i < 4; i++){
+      poses[i] = new Pose3d();
+      timeStamps[i] = 0;
+      latencies[i] = 0;
+      translations[i] = new Translation2d();
+      poseConfidences[i] = 0;
+      hasTargets[i] = false;
+    }
     
   }
 
@@ -129,6 +154,10 @@ public class Vision extends SubsystemBase {
   public Translation2d[] getTranslations(){
     return translations;
   }
+
+  public double[] getPoseAmbiguitys(){
+    return poseConfidences;
+  }
   
   @Override
   public void periodic() {
@@ -139,6 +168,8 @@ public class Vision extends SubsystemBase {
       latencies[i] = cameras[i].getLatency();
       translations[i] = cameras[i].getTranslationToTarget();
     }
+
+    
   }
 
 
@@ -193,6 +224,12 @@ public class Vision extends SubsystemBase {
      * @return the latency of the camera
      */
     public double getLatency();
+
+    /**
+     * returns the pose confidence of the camera (may be 0 if no target is detected)
+     * @return the pose confidence of the camera
+     */
+    public double getPoseAmbiguty();
   }
 
   private class PhotonCameraClass implements CameraInterface{
@@ -206,6 +243,7 @@ public class Vision extends SubsystemBase {
     private Translation2d objectToRobot;
 
     private Pose3d estimatedPose;
+    private double poseConfidence;
 
     private double timeStamp;
     private double latency;
@@ -233,6 +271,7 @@ public class Vision extends SubsystemBase {
 
       timeStamp = 0;
       latency = 0;
+      poseConfidence = 0;
 
       cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
     }
@@ -264,6 +303,8 @@ public class Vision extends SubsystemBase {
         timeStamp = 0;
         latency = 0;
         estimatedPose = null;
+        poseConfidence = 0;
+        objectToRobot = null;
         return;
       }
 
@@ -273,6 +314,7 @@ public class Vision extends SubsystemBase {
       if(mode == CameraMode.AprilTags && fieldLoaded){
         poseEstimator.setReferencePose(RobotContainer.driveBase.getPose());
         estimatedPose = poseEstimator.update().get().estimatedPose;
+        poseConfidence = latestResult.getBestTarget().getPoseAmbiguity();
       }
       else objectToRobot = PhotonUtils.estimateCameraToTargetTranslation(
         PhotonUtils.calculateDistanceToTargetMeters(
@@ -305,6 +347,13 @@ public class Vision extends SubsystemBase {
         mode = CameraMode.Rings;
         estimatedPose = null;
       }
+    }
+
+    @Override
+    public double getPoseAmbiguty() {
+      if(mode == CameraMode.AprilTags && fieldLoaded)
+        return poseConfidence;
+      else return 0;
     }
   }
 
@@ -421,6 +470,11 @@ public class Vision extends SubsystemBase {
     @Override
     public double getLatency() {
       return latency;
+    }
+
+    @Override
+    public double getPoseAmbiguty() {
+      return 0;
     }
   }
 }
