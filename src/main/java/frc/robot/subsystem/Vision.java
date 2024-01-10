@@ -7,14 +7,17 @@ package frc.robot.subsystem;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystem.Vision.CameraInterface.CameraLocation;
@@ -24,6 +27,10 @@ import frc.util.LimelightHelpers.LimelightResults;
 public class Vision extends SubsystemBase {
 
   CameraInterface[] cameras = new CameraInterface[4];
+  Pose3d[] poses = new Pose3d[4];
+  double[] timeStamps = new double[4];
+  double[] latencies = new double[4];
+  Translation2d[] translations = new Translation2d[4];
 
   /** Creates a new Vision. */
   public Vision() {
@@ -34,9 +41,35 @@ public class Vision extends SubsystemBase {
     
   }
 
+  public Pose3d getPose(CameraLocation location){
+    return cameras[location.ordinal()].getPose();
+  }
+
+  public Pose3d[] getposes(){
+    return poses;
+  }
+
+  public double[] getTimeStamps(){
+    return timeStamps;
+  }
+
+  public double[] getLatencies(){
+    return latencies;
+  }
+
+  public Translation2d[] getTranslations(){
+    return translations;
+  }
+  
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    for(int i = 0; i < 4; i++){
+      cameras[i].update();
+      poses[i] = cameras[i].getPose();
+      timeStamps[i] = cameras[i].getTimeStamp();
+      latencies[i] = cameras[i].getLatency();
+      translations[i] = cameras[i].getTranslationToTarget();
+    }
   }
 
   public interface CameraInterface {
@@ -51,8 +84,8 @@ public class Vision extends SubsystemBase {
     public Pose3d getPose();
     public boolean hasTarget();
     public void update();
-    public void setPipeLine(int pipeLine);
-    // public Transform3d getObjectToRobot();
+    public void setPipeLine(int pipeLineIndex);
+    public Translation2d getTranslationToTarget();
     public double getTimeStamp();
     public double getLatency();
   }
@@ -63,8 +96,10 @@ public class Vision extends SubsystemBase {
     private PhotonPipelineResult latestResult;
     private CameraMode mode;
 
+    private Transform3d cameraToRobot;
+    private Translation2d objectToRobot;
+
     private Pose3d estimatedPose;
-    private Transform3d objectToRobot;
 
     private double timeStamp;
     private double latency;
@@ -84,17 +119,28 @@ public class Vision extends SubsystemBase {
       latestResult = new PhotonPipelineResult();
 
       estimatedPose = new Pose3d();
-      objectToRobot = new Transform3d();
+      objectToRobot = new Translation2d();
 
       mode = CameraMode.AprilTags;
 
       timeStamp = 0;
       latency = 0;
+
+      cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
     }
 
     @Override
     public Pose3d getPose() {
-      return estimatedPose;
+      if(mode == CameraMode.AprilTags)
+        return estimatedPose;
+      else return null;
+    }
+
+    @Override
+    public Translation2d getTranslationToTarget(){
+      if(mode == CameraMode.Rings)
+        return objectToRobot;
+      else return null;
     }
 
     @Override
@@ -110,7 +156,6 @@ public class Vision extends SubsystemBase {
         timeStamp = 0;
         latency = 0;
         estimatedPose = null;
-        objectToRobot = null;
         return;
       }
 
@@ -119,7 +164,14 @@ public class Vision extends SubsystemBase {
 
       if(mode == CameraMode.AprilTags)
         estimatedPose = poseEstimator.update().get().estimatedPose;
-      else objectToRobot = latestResult.getBestTarget().getBestCameraToTarget();
+      else objectToRobot = PhotonUtils.estimateCameraToTargetTranslation(
+        PhotonUtils.calculateDistanceToTargetMeters(
+        cameraToRobot.getZ(),
+        Constants.Vision.gamePieceHeight,
+        -cameraToRobot.getRotation().getY(),
+        Units.degreesToRadians(latestResult.getBestTarget().getPitch())),
+        Rotation2d.fromDegrees(latestResult.getBestTarget().getYaw())
+      );
     }
 
     @Override
@@ -144,21 +196,18 @@ public class Vision extends SubsystemBase {
         estimatedPose = null;
       }
     }
-
-    public Transform3d getObjectToRobot() {
-      return objectToRobot;
-    }
-
   }
 
   private class LimeLightClass implements CameraInterface{
     private LimelightResults latestResults;
+    private double[] pythonResults = new double[6];
     private String cameraName;
 
     private CameraMode mode;
+    private Transform3d cameraToRobot;
 
     private Pose3d estimatedPose;
-    private double[] objectToRobot;
+    private Translation2d objectToRobot;
 
     private double timeStamp;
     private double latency;
@@ -179,11 +228,32 @@ public class Vision extends SubsystemBase {
         cameraToRobot.getTranslation().getX(),
         cameraToRobot.getRotation().getY(),
         cameraToRobot.getRotation().getZ());
+
+      estimatedPose = new Pose3d();
+      objectToRobot = new Translation2d();
+
+      timeStamp = 0;
+      latency = 0;
+
+      cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
+
+      for(int i = 0; i < 6; i++){
+        pythonResults[i] = 0;
+      }
     }
 
     @Override
     public Pose3d getPose() {
-      return estimatedPose;
+      if(mode == CameraMode.AprilTags)
+        return estimatedPose;
+      else return null;
+    }
+
+    @Override
+    public Translation2d getTranslationToTarget(){
+      if(mode == CameraMode.Rings)
+        return objectToRobot;
+      else return null;
     }
 
     @Override
@@ -208,7 +278,16 @@ public class Vision extends SubsystemBase {
 
       if(mode == CameraMode.AprilTags)
         estimatedPose = latestResults.targetingResults.getBotPose3d();
-      else objectToRobot = LimelightHelpers.getPythonScriptData(cameraName);
+      else{
+        pythonResults = LimelightHelpers.getPythonScriptData(cameraName);
+        objectToRobot = PhotonUtils.estimateCameraToTargetTranslation(
+        PhotonUtils.calculateDistanceToTargetMeters(
+          cameraToRobot.getZ(),
+          Constants.Vision.gamePieceHeight,
+          -cameraToRobot.getRotation().getY(),
+          pythonResults[5]),
+        Rotation2d.fromDegrees(pythonResults[6]));
+      }
     }
 
     @Override
@@ -233,7 +312,5 @@ public class Vision extends SubsystemBase {
     public double getLatency() {
       return latency;
     }
-  
-    
   }
 }
