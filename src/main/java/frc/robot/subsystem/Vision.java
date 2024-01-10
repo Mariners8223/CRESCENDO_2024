@@ -64,7 +64,7 @@ public class Vision extends SubsystemBase {
 
     outputs = new VisonOutputsAutoLogged();
 
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
       poses[i] = new Pose3d();
       timeStamps[i] = 0;
       latencies[i] = 0;
@@ -169,7 +169,7 @@ public class Vision extends SubsystemBase {
   
   @Override
   public void periodic() {
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
       cameras[i].update();
       poses[i] = cameras[i].getPose();
       timeStamps[i] = cameras[i].getTimeStamp();
