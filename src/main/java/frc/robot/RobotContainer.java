@@ -36,9 +36,7 @@ public class RobotContainer {
 
     driveBase = new DriveBase();
 
-    configureBindings();
-    configureNamedCommands();
-    configChooser();
+
 
     //sets the deafult allince as blue
     currentAllince = Alliance.Blue;
@@ -52,7 +50,13 @@ public class RobotContainer {
       currentAllince = DriverStation.getAlliance().get();
       allianceSet = true;
       Logger.recordOutput("Alliance Set to " + currentAllince.toString());
+      configureBindings();
+      configureNamedCommands();
+      configChooser();
+      
     }).ignoringDisable(true));
+
+
   }
 
   /**

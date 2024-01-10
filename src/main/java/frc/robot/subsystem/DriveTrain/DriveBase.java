@@ -88,19 +88,19 @@ public class DriveBase extends SubsystemBase {
 
   @AutoLog
   public static class DriveBaseInputs{
-    double XspeedInput; //the X speed input
-    double YspeedInput; //the Y speed input
+    double XspeedInput = 0; //the X speed input
+    double YspeedInput = 0; //the Y speed input
 
-    double rotationSpeedInputBeforePID; //the rotation speed input before PID
-    double rotationSpeedInputAfterPID; //the rotation speed input after PID
+    double rotationSpeedInputBeforePID = 0; //the rotation speed input before PID
+    double rotationSpeedInputAfterPID = 0; //the rotation speed input after PID
 
-    double[] currentPose = new double[3]; //the current pose of the robot
-    double targetRotation; //the target rotation of the robot (in radians)
+    Pose2d currentPose = new Pose2d(); //the current pose of the robot
+    Rotation2d targetRotation = new Rotation2d(); //the target rotation of the robot (in radians)
 
-    double chassisAngleRadains; //the angle of the robot
+    Rotation2d chassisAngle = new Rotation2d(); //the angle of the robot
 
-    double[] currentStatesNumeric = new double[8]; //the current states of the modules
-    double[] targetStatesNumeric = new double[8]; //the target states of the modules
+    SwerveModuleState[] currentStates = new SwerveModuleState[4]; //the current states of the modules
+    SwerveModuleState[] targetStates = new SwerveModuleState[4]; //the target states of the modules
   }
 
 
@@ -188,6 +188,10 @@ public class DriveBase extends SubsystemBase {
     }
 
     inputs = new DriveBaseInputsAutoLogged();
+    for(int i = 0; i < 4; i++){
+      inputs.currentStates[i] = currentStates[i];
+      inputs.targetStates[i] = targetStates[i];
+    }
 
     field = new Field2d();
     SmartDashboard.putData(field);
@@ -242,13 +246,11 @@ public class DriveBase extends SubsystemBase {
     currentPose = poseEstimator.getEstimatedPosition();
     targetRotation = currentPose.getRotation();
 
-    inputs.currentPose[0] = startingPose2d.getX();
-    inputs.currentPose[1] = startingPose2d.getY();
-    inputs.currentPose[2] = startingPose2d.getRotation().getRadians();
+    inputs.currentPose = startingPose2d;
 
-    inputs.targetRotation = startingPose2d.getRotation().getRadians();
+    inputs.targetRotation = startingPose2d.getRotation();
     
-    inputs.chassisAngleRadains = startingPose2d.getRotation().getRadians();
+    inputs.chassisAngle= startingPose2d.getRotation();
 
     Logger.processInputs(getName(), inputs);
   }
@@ -263,13 +265,11 @@ public class DriveBase extends SubsystemBase {
     currentPose = poseEstimator.getEstimatedPosition();
     targetRotation = currentPose.getRotation();
 
-    inputs.currentPose[0] = newPose.getX();
-    inputs.currentPose[1] = newPose.getY();
-    inputs.currentPose[2] = newPose.getRotation().getRadians();
+    inputs.currentPose = newPose;
 
-    inputs.targetRotation = newPose.getRotation().getRadians();
+    inputs.targetRotation = newPose.getRotation();
 
-    inputs.chassisAngleRadains = getRotation2d().getRadians();
+    inputs.chassisAngle = getRotation2d();
 
     Logger.processInputs(getName(), inputs);
   }
@@ -374,7 +374,7 @@ public class DriveBase extends SubsystemBase {
     if(rotation == 0) rotation = calculateTheta(); //if the rotation is 0, use the PID to fix the angle
     else{
       targetRotation = getRotation2d();
-      inputs.targetRotation = targetRotation.getRadians();
+      inputs.targetRotation = targetRotation;
     } //if the rotation is not 0, set the target rotation to the current rotation
     
     targetStates = driveTrainKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(Xspeed, Yspeed, rotation, getRotation2d()), centerOfRotation); //calulates the target states
@@ -385,7 +385,7 @@ public class DriveBase extends SubsystemBase {
       modules[i].setModuleState(targetStates[i]); //sets the module state
     }
 
-    updateNumericTargetStates(); //updates the logger target states
+    inputs.targetStates = targetStates; //updates the logger target states
     inputs.XspeedInput = Xspeed; //logs the X speed before PID
     inputs.YspeedInput = Yspeed; //logs the Y speed before PID
     inputs.rotationSpeedInputAfterPID = rotation;
@@ -413,7 +413,7 @@ public class DriveBase extends SubsystemBase {
       modules[i].setModuleState(targetStates[i]);
     }
 
-    updateNumericTargetStates();
+    inputs.targetStates = targetStates;
     inputs.XspeedInput = chassisSpeeds.vxMetersPerSecond;
     inputs.YspeedInput = chassisSpeeds.vyMetersPerSecond;
     inputs.rotationSpeedInputBeforePID = chassisSpeeds.omegaRadiansPerSecond;
@@ -436,7 +436,7 @@ public class DriveBase extends SubsystemBase {
       modules[i].setModuleState(targetStates[i]);
     }
 
-    updateNumericTargetStates();
+    inputs.targetStates = targetStates;
     inputs.XspeedInput = Xspeed;
     inputs.YspeedInput = Yspeed;
     inputs.rotationSpeedInputBeforePID = rotation;
@@ -451,39 +451,6 @@ public class DriveBase extends SubsystemBase {
    */
   public void driveWithOutPID(double Xspeed, double Yspeed, double rotation){ driveWithOutPID(Xspeed, Yspeed, rotation, new Translation2d());}
 
-  /**
-   * updates the logger current states
-   */
-  private void updateNumericCurrentStates(){
-    inputs.currentStatesNumeric[0] = currentStates[0].angle.getRadians();
-    inputs.currentStatesNumeric[1] = currentStates[0].speedMetersPerSecond;
-
-    inputs.currentStatesNumeric[2] = currentStates[1].angle.getRadians();
-    inputs.currentStatesNumeric[3] = currentStates[1].speedMetersPerSecond;
-    
-    inputs.currentStatesNumeric[4] = currentStates[2].angle.getRadians();
-    inputs.currentStatesNumeric[5] = currentStates[2].speedMetersPerSecond;
-
-    inputs.currentStatesNumeric[6] = currentStates[3].angle.getRadians();
-    inputs.currentStatesNumeric[7] = currentStates[3].speedMetersPerSecond;
-  }
-
-  /**
-   * updates the logger target states
-   */
-  private void updateNumericTargetStates(){
-    inputs.targetStatesNumeric[0] = targetStates[0].angle.getRadians();
-    inputs.targetStatesNumeric[1] = targetStates[0].speedMetersPerSecond;
-
-    inputs.targetStatesNumeric[2] = targetStates[1].angle.getRadians();
-    inputs.targetStatesNumeric[3] = targetStates[1].speedMetersPerSecond;
-
-    inputs.targetStatesNumeric[4] = targetStates[2].angle.getRadians();
-    inputs.targetStatesNumeric[5] = targetStates[2].speedMetersPerSecond;
-
-    inputs.targetStatesNumeric[6] = targetStates[3].angle.getRadians();
-    inputs.targetStatesNumeric[7] = targetStates[3].speedMetersPerSecond;
-  }
 
   /**
    * pathfinds a path from the current pose to the target pose
@@ -566,12 +533,11 @@ public class DriveBase extends SubsystemBase {
     SmartDashboard.putData(field);
     SmartDashboard.putData(Navx);
 
-    updateNumericCurrentStates();
-    inputs.currentPose[0] = currentPose.getX();
-    inputs.currentPose[1] = currentPose.getY();
-    inputs.currentPose[2] = currentPose.getRotation().getRadians();
+    inputs.currentPose = currentPose;
 
-    inputs.chassisAngleRadains = getRotation2d().getRadians();
+    inputs.currentStates = currentStates;
+
+    inputs.chassisAngle = getRotation2d();
 
     Logger.processInputs(getName(), inputs);
   }
