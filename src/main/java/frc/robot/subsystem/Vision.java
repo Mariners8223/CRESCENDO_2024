@@ -33,23 +33,23 @@ public class Vision extends SubsystemBase {
 
   @AutoLog
   public static class VisonOutputs{
-    Pose3d[] poses = new Pose3d[4];
-    double[] timeStamps = new double[4];
-    double[] latencies = new double[4];
-    Translation2d[] translations = new Translation2d[4];
-    double[] poseConfidences = new double[4];
-    boolean[] hasTargets = new boolean[4];
+    Pose3d[] poses = new Pose3d[Constants.Vision.numberOfCameras];
+    double[] timeStamps = new double[Constants.Vision.numberOfCameras];
+    double[] latencies = new double[Constants.Vision.numberOfCameras];
+    Translation2d[] translations = new Translation2d[Constants.Vision.numberOfCameras];
+    double[] poseConfidences = new double[Constants.Vision.numberOfCameras];
+    boolean[] hasTargets = new boolean[Constants.Vision.numberOfCameras];
   }
 
   private static Vision instance;
 
-  CameraInterface[] cameras = new CameraInterface[4];
-  Pose3d[] poses = new Pose3d[4];
-  double[] timeStamps = new double[4];
-  double[] latencies = new double[4];
-  Translation2d[] translations = new Translation2d[4];
-  double[] poseConfidences = new double[4];
-  boolean[] hasTargets = new boolean[4];
+  CameraInterface[] cameras = new CameraInterface[Constants.Vision.numberOfCameras];
+  Pose3d[] poses = new Pose3d[Constants.Vision.numberOfCameras];
+  double[] timeStamps = new double[Constants.Vision.numberOfCameras];
+  double[] latencies = new double[Constants.Vision.numberOfCameras];
+  Translation2d[] translations = new Translation2d[Constants.Vision.numberOfCameras];
+  double[] poseConfidences = new double[Constants.Vision.numberOfCameras];
+  boolean[] hasTargets = new boolean[Constants.Vision.numberOfCameras];
 
   VisonOutputsAutoLogged outputs;
 

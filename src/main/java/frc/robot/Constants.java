@@ -19,14 +19,18 @@ public class Constants {
     }
 
     public static final class Vision{
-        public static final Transform3d cameraToRobotCenter = new Transform3d(
-            -0.45,
-            0.001,
-            0.2,
-            new Rotation3d(
-            0,
-            20,
-            -180));
+
+        public static final int numberOfCameras = 4;
+
+            public static final Transform3d[] cameraLocations = new Transform3d[]{
+                new Transform3d(
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
 
             public static final double gamePieceHeight = 0.05; //the height of the game piece in meters
 
