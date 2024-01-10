@@ -8,6 +8,7 @@ package frc.robot.subsystem;
 import java.io.IOException;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
@@ -38,7 +39,6 @@ public class Vision extends SubsystemBase {
     Translation2d[] translations = new Translation2d[4];
     double[] poseConfidences = new double[4];
     boolean[] hasTargets = new boolean[4];
-    double[] poseAmbiguitys = new double[4];
   }
 
   private static Vision instance;
@@ -51,7 +51,7 @@ public class Vision extends SubsystemBase {
   double[] poseConfidences = new double[4];
   boolean[] hasTargets = new boolean[4];
 
-  
+  VisonOutputsAutoLogged outputs;
 
   /**
    * creates a new Vision subsystem with 4 cameras
@@ -62,6 +62,8 @@ public class Vision extends SubsystemBase {
     cameras[2] = new LimeLightClass(Constants.Vision.LimeLight.backCameraName, CameraLocation.Back);
     cameras[3] = new PhotonCameraClass(Constants.Vision.PhotonVision.leftCameraName, CameraLocation.Left);
 
+    outputs = new VisonOutputsAutoLogged();
+
     for(int i = 0; i < 4; i++){
       poses[i] = new Pose3d();
       timeStamps[i] = 0;
@@ -70,7 +72,13 @@ public class Vision extends SubsystemBase {
       poseConfidences[i] = 0;
       hasTargets[i] = false;
     }
-    
+
+    outputs.poses = poses;
+    outputs.timeStamps = timeStamps;
+    outputs.latencies = latencies;
+    outputs.translations = translations;
+    outputs.poseConfidences = poseConfidences;
+    outputs.hasTargets = hasTargets;    
   }
 
   public static Vision getInstance(){
@@ -167,9 +175,19 @@ public class Vision extends SubsystemBase {
       timeStamps[i] = cameras[i].getTimeStamp();
       latencies[i] = cameras[i].getLatency();
       translations[i] = cameras[i].getTranslationToTarget();
+      hasTargets[i] = cameras[i].hasTarget();
+      poseConfidences[i] = cameras[i].getPoseAmbiguty();
+
+      if(poses[i] != null) outputs.poses[i] = poses[i];
+      if(translations[i] != null) outputs.translations[i] = translations[i];
     }
 
-    
+    outputs.hasTargets = hasTargets;
+    outputs.latencies = latencies;
+    outputs.poseConfidences = poseConfidences;
+    outputs.timeStamps = timeStamps;
+
+    Logger.processInputs(getName(), outputs);
   }
 
 
