@@ -148,22 +148,14 @@ public class DriveBase extends SubsystemBase {
     //^creates path constraints for pathPlanner
 
     //creates a trigger that will configure the autobuilder if the allince is set and the autobuilder is not configured
-    BooleanSupplier isAutoBuilderNotConfiged = () -> !AutoBuilder.isConfigured();
-    new Trigger(RobotContainer::isAllinceSet).and(isAutoBuilderNotConfiged).onTrue(new InstantCommand(() -> 
-      AutoBuilder.configureHolonomic(
+    AutoBuilder.configureHolonomic(
       this::getPose,
       this::reset,
       this::getChassisSpeeds,
       this::drive,
       pathFollowerConfig,
-      new BooleanSupplier() {
-        @Override
-        public boolean getAsBoolean() {
-          if(DriverStation.getAlliance().isEmpty()) return false;
-          return DriverStation.getAlliance().get().equals(DriverStation.Alliance.Red);
-        }
-      },
-      this)).ignoringDisable(true));
+      RobotContainer.isRedAllince,
+      this);
     //^configures the autobuilder for pathPlanner
 
     // new Trigger(RobotState::isAutonomous).onTrue(new InstantCommand(() -> resetOnlyDirection())); //triggers a postion and state reset when the robot starts the auto period

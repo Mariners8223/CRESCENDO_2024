@@ -13,12 +13,10 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.util.humanIO.CommandPS5Controller;
 
@@ -28,43 +26,23 @@ public class RobotContainer {
   public static CommandPS5Controller driveController;
   public static SendableChooser<Command> autoChooser;
 
-  public static DriverStation.Alliance currentAllince;
-  public static boolean allianceSet;
+  public static BooleanSupplier isBlueAllince = () -> {
+    if(DriverStation.getAlliance().isEmpty()) return true;
+    return DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue);
+  };
+
+  public static BooleanSupplier isRedAllince = () -> {
+    return !isBlueAllince.getAsBoolean();
+  };
 
   public RobotContainer() {
     driveController = new CommandPS5Controller(0);
 
     driveBase = new DriveBase();
 
-
-
-    //sets the deafult allince as blue
-    currentAllince = Alliance.Blue;
-    //sets the allince to false
-    allianceSet = false;
-    //creats a bool supplier for if the allince is not set
-    BooleanSupplier isAllinceNotSet = () -> !allianceSet;
-
-    //creates a trigger that will set the allince if the driver station is connected
-    new Trigger(DriverStation::isDSAttached).and(isAllinceNotSet).and(DriverStation.getAlliance()::isPresent).onTrue(new InstantCommand(() -> {
-      currentAllince = DriverStation.getAlliance().get();
-      allianceSet = true;
-      Logger.recordOutput("Alliance Set to " + currentAllince.toString());
-      configureBindings();
-      configureNamedCommands();
-      configChooser();
-      
-    }).ignoringDisable(true));
-
-
-  }
-
-  /**
-   * returns if the allince was set (drivers station was connected)
-   * @return
-   */
-  public static boolean isAllinceSet(){
-    return allianceSet;
+    configureBindings();
+    configChooser();
+    configureNamedCommands();
   }
 
   private void configureBindings() {
