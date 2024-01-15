@@ -35,12 +35,12 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystem.Vision;
 import frc.util.humanIO.CommandPS5Controller;
 
 
@@ -171,6 +171,8 @@ public class DriveBase extends SubsystemBase {
       this.removeDefaultCommand();
       DriveBase.DriveCommand.getInstance().cancel();
     }).ignoringDisable(true));
+
+    new Trigger(RobotState::isAutonomous).onTrue(new InstantCommand(() -> this.resetOnlyDirection()).ignoringDisable(true));
 
     orchestra = new Orchestra(); //creats a new orchestra
 
@@ -506,14 +508,6 @@ public class DriveBase extends SubsystemBase {
     currentPose = poseEstimator.getEstimatedPosition();
     targetRotation = path.getGoalEndState().getRotation();
     return AutoBuilder.followPath(path);
-  }
-
-  public void updateVision(){
-    for (int i = 0; i < 4; i++) {
-      if(Vision.getInstance().getposes()[i] != null){
-        poseEstimator.addVisionMeasurement(Vision.getInstance().getposes()[i].toPose2d(), Vision.getInstance().getTimeStamps()[i]);
-      }
-    }
   }
 
   /**
