@@ -49,7 +49,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
-    RobotContainer.driveBase.resetOnlyDirection();
     if (RobotContainer.getAutoCommand() != null) {
       RobotContainer.getAutoCommand().schedule();
     }
