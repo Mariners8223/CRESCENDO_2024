@@ -39,11 +39,12 @@ public class RobotContainer {
   public RobotContainer() {
     driveController = new CommandPS5Controller(0);
 
-    driveBase = new DriveBase();
+    // driveBase = new DriveBase();
 
-    configureBindings();
-    configChooser();
-    configureNamedCommands();
+    // configureBindings();
+    // configChooser();
+    // configureNamedCommands();
+    autoChooser = new SendableChooser<Command>();
 
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> Logger.recordOutput("allince", DriverStation.getAlliance().get().toString())));
   }

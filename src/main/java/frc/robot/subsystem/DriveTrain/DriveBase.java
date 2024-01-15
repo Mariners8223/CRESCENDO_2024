@@ -41,7 +41,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystem.Vision;
 import frc.util.humanIO.CommandPS5Controller;
 
 
@@ -509,14 +508,6 @@ public class DriveBase extends SubsystemBase {
     currentPose = poseEstimator.getEstimatedPosition();
     targetRotation = path.getGoalEndState().getRotation();
     return AutoBuilder.followPath(path);
-  }
-
-  public void updateVision(){
-    for (int i = 0; i < 4; i++) {
-      if(Vision.getInstance().getposes()[i] != null){
-        poseEstimator.addVisionMeasurement(Vision.getInstance().getposes()[i].toPose2d(), Vision.getInstance().getTimeStamps()[i]);
-      }
-    }
   }
 
   /**
