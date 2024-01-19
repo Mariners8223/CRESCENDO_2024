@@ -22,24 +22,26 @@ public class Constants {
 
         public static final int numberOfCameras = 4;
 
-            public static final Transform3d[] cameraLocations = new Transform3d[]{
-                new Transform3d(
+            public static final Transform3d[][] cameraLocations = new Transform3d[][]{
+                {new Transform3d(
                 0,
                 0,
                 0,
                 new Rotation3d(
                 0,
                 0,
-                0)),
+                0))},
 
+                {
                 new Transform3d(
                 0,
                 0,0,
                 new Rotation3d(
                 0,
                 0,
-                0)),
+                0))},
                 
+                {
                 new Transform3d(
                 0,
                 0,
@@ -47,15 +49,16 @@ public class Constants {
                 new Rotation3d(
                 0,
                 0,
-                0)),
+                0))},
 
+                {
                 new Transform3d(
                 0,
                 0,0,
                 new Rotation3d(
                 0,
                 0,
-                0))
+                0))}
             };
 
             public static final double gamePieceHeight = 0.05; //the height of the game piece in meters

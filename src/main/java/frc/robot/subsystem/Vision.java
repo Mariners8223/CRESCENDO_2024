@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -257,7 +258,9 @@ public class Vision extends SubsystemBase {
     private CameraMode mode;
     private boolean fieldLoaded;
 
-    private Transform3d cameraToRobot;
+    private Servo servo;
+
+    private Transform3d cameraToRobot[] = new Transform3d[2];
     private Translation2d objectToRobot;
 
     private Pose3d estimatedPose;
@@ -266,12 +269,12 @@ public class Vision extends SubsystemBase {
     private double timeStamp;
     private double latency;
 
-    public PhotonCameraClass(String cameraName, CameraLocation location) {
+    public PhotonCameraClass(String cameraName, CameraLocation location, int servoPort) {
       camera = new PhotonCamera(cameraName);
 
       try {
         poseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile),
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, Constants.Vision.cameraLocations[location.ordinal()]);
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, Constants.Vision.cameraLocations[location.ordinal()][0]);
 
         poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_REFERENCE_POSE);
 
@@ -279,6 +282,12 @@ public class Vision extends SubsystemBase {
       } catch (IOException exception) {
         fieldLoaded = false;
       }
+
+      if(servoPort != -1){
+        servo = new Servo(servoPort);
+        servo.setPosition(0);
+      }
+      else servo = null;
 
       latestResult = new PhotonPipelineResult();
 
@@ -292,6 +301,10 @@ public class Vision extends SubsystemBase {
       poseConfidence = 0;
 
       cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
+    }
+
+    public PhotonCameraClass(String cameraName, CameraLocation location){
+      this(cameraName, location, -1);
     }
 
     @Override
@@ -336,9 +349,9 @@ public class Vision extends SubsystemBase {
       }
       else objectToRobot = PhotonUtils.estimateCameraToTargetTranslation(
         PhotonUtils.calculateDistanceToTargetMeters(
-        cameraToRobot.getZ(),
+        cameraToRobot[1].getZ(),
         Constants.Vision.gamePieceHeight,
-        -cameraToRobot.getRotation().getY(),
+        -cameraToRobot[1].getRotation().getY(),
         Units.degreesToRadians(latestResult.getBestTarget().getPitch())),
         Rotation2d.fromDegrees(latestResult.getBestTarget().getYaw())
       );
@@ -381,7 +394,7 @@ public class Vision extends SubsystemBase {
     private String cameraName;
 
     private CameraMode mode;
-    private Transform3d cameraToRobot;
+    private Transform3d cameraToRobot[];
 
     private Pose3d estimatedPose;
     private Translation2d objectToRobot;
@@ -396,23 +409,22 @@ public class Vision extends SubsystemBase {
 
       mode = CameraMode.AprilTags;
 
-      Transform3d cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
+      cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
+
       LimelightHelpers.setCameraPose_RobotSpace(
         cameraName,
-        cameraToRobot.getX(),
-        cameraToRobot.getY(),
-        cameraToRobot.getZ(),
-        cameraToRobot.getTranslation().getX(),
-        cameraToRobot.getRotation().getY(),
-        cameraToRobot.getRotation().getZ());
+        cameraToRobot[0].getX(),
+        cameraToRobot[0].getY(),
+        cameraToRobot[0].getZ(),
+        cameraToRobot[0].getTranslation().getX(),
+        cameraToRobot[0].getRotation().getY(),
+        cameraToRobot[0].getRotation().getZ());
 
       estimatedPose = new Pose3d();
       objectToRobot = new Translation2d();
 
       timeStamp = 0;
       latency = 0;
-
-      cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
 
       for(int i = 0; i < 6; i++){
         pythonResults[i] = 0;
@@ -459,9 +471,9 @@ public class Vision extends SubsystemBase {
         pythonResults = LimelightHelpers.getPythonScriptData(cameraName);
         objectToRobot = PhotonUtils.estimateCameraToTargetTranslation(
         PhotonUtils.calculateDistanceToTargetMeters(
-          cameraToRobot.getZ(),
+          cameraToRobot[0].getZ(),
           Constants.Vision.gamePieceHeight,
-          -cameraToRobot.getRotation().getY(),
+          -cameraToRobot[0].getRotation().getY(),
           pythonResults[5]),
         Rotation2d.fromDegrees(pythonResults[6]));
       }
