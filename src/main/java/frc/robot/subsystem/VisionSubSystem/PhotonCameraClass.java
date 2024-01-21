@@ -26,22 +26,23 @@ import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface;
 
 /** Add your docs here. */
 public class PhotonCameraClass implements CameraInterface{
-    private PhotonCamera camera;
-    private PhotonPoseEstimator poseEstimator;
-    private PhotonPipelineResult latestResult;
-    private CameraMode mode;
-    private boolean fieldLoaded;
+    private PhotonCamera camera; //the camera
+    private PhotonPoseEstimator poseEstimator; //the pose estimator
+    private PhotonPipelineResult latestResult; //the latest result from the camera
+    private CameraMode mode; //the mode the camera is in
+    private boolean fieldLoaded; //if the field is loaded
 
-    private Servo servo;
+    private Servo servo; //the servo to move the camera
 
-    private Transform3d cameraToRobot[] = new Transform3d[2];
-    private Translation2d objectToRobot;
+    private Transform3d cameraToRobot[] = new Transform3d[2]; //the transform from the camera to the robot
+    private Translation2d objectToRobot[] = {new Translation2d()}; //the translation from the object to the robot
 
-    private Pose3d estimatedPose;
-    private double poseConfidence;
+    private Pose3d estimatedPose; //the estimated pose of the robot
+    private double poseConfidence; //the confidence of the pose
 
-    private double timeStamp;
-    private double latency;
+    private double timeStamp; //the time stamp of the latest result
+    private double latency; //the latency of the latest result
+
 
     public PhotonCameraClass(String cameraName, CameraLocation location, int servoPort) {
       camera = new PhotonCamera(cameraName);
@@ -66,7 +67,6 @@ public class PhotonCameraClass implements CameraInterface{
       latestResult = new PhotonPipelineResult();
 
       estimatedPose = new Pose3d();
-      objectToRobot = new Translation2d();
 
       mode = CameraMode.AprilTags;
 
@@ -89,7 +89,14 @@ public class PhotonCameraClass implements CameraInterface{
     }
 
     @Override
-    public Translation2d getTranslationToTarget(){
+    public Translation2d getTranslationToBestTarget(){
+      if(mode == CameraMode.Rings)
+        return objectToRobot[0];
+      else return null;
+    }
+
+    @Override
+    public Translation2d[] getTranslationsToTargets(){
       if(mode == CameraMode.Rings)
         return objectToRobot;
       else return null;
@@ -121,14 +128,16 @@ public class PhotonCameraClass implements CameraInterface{
         estimatedPose = poseEstimator.update().get().estimatedPose;
         poseConfidence = latestResult.getBestTarget().getPoseAmbiguity();
       }
-      else objectToRobot = PhotonUtils.estimateCameraToTargetTranslation(
-        PhotonUtils.calculateDistanceToTargetMeters(
-        cameraToRobot[1].getZ(),
-        Constants.Vision.gamePieceHeight,
-        -cameraToRobot[1].getRotation().getY(),
-        Units.degreesToRadians(latestResult.getBestTarget().getPitch())),
-        Rotation2d.fromDegrees(latestResult.getBestTarget().getYaw())
-      );
+      else{
+        var targets = latestResult.getTargets();
+
+        for(int i = 0; i < targets.size() || i == 5; i++){
+          objectToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
+          cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets.get(i).getPitch()),
+          Rotation2d.fromDegrees(targets.get(i).getYaw())).plus(cameraToRobot[1].getTranslation().toTranslation2d()
+          ).rotateBy(cameraToRobot[1].getRotation().toRotation2d());
+        }
+      }
     }
 
     @Override
@@ -142,15 +151,26 @@ public class PhotonCameraClass implements CameraInterface{
     }
 
     @Override
+    public double getServoAngle(){
+      if(servo != null)
+        return servo.getAngle();
+      else return 0;
+    }
+
+    @Override
     public void setPipeLine(int pipeLineIndex) {
       camera.setPipelineIndex(pipeLineIndex);
       if(pipeLineIndex == 0){
         mode = CameraMode.AprilTags;
         objectToRobot = null;
+        if(servo != null)
+          servo.setAngle(Units.radiansToDegrees(Constants.Vision.cameraLocations[CameraLocation.Front.ordinal()][0].getRotation().getY()));
       }
       else{
         mode = CameraMode.Rings;
         estimatedPose = null;
+        if(servo != null)
+          servo.setAngle(Units.radiansToDegrees(Constants.Vision.cameraLocations[CameraLocation.Front.ordinal()][1].getRotation().getY()));
       }
     }
 

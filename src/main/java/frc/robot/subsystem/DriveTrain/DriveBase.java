@@ -327,10 +327,21 @@ public class DriveBase extends SubsystemBase {
     return targetRotation;
   }
 
-
-  
+  /**
+   * gets the current pose of the robot
+   * @return the current pose of the robot
+   */
   public Pose2d getPose(){
     return currentPose;
+  }
+
+  /**
+   * updates odemtry with vision mesurments
+   * @param visionPose the pose of the robot from vision
+   * @param timeStamp the time stamp of the vision mesurment
+   */
+  public void addVisionMesrument(Pose2d visionPose, double timeStamp){
+    poseEstimator.addVisionMeasurement(visionPose, timeStamp);
   }
 
   /**

@@ -25,7 +25,7 @@ public class LimeLightClass implements CameraInterface{
     private Transform3d cameraToRobot[];
 
     private Pose3d estimatedPose;
-    private Translation2d objectToRobot;
+    private Translation2d objectsToRobot[] = {new Translation2d()};
 
     private double timeStamp;
     private double latency;
@@ -49,7 +49,6 @@ public class LimeLightClass implements CameraInterface{
         cameraToRobot[0].getRotation().getZ());
 
       estimatedPose = new Pose3d();
-      objectToRobot = new Translation2d();
 
       timeStamp = 0;
       latency = 0;
@@ -67,10 +66,15 @@ public class LimeLightClass implements CameraInterface{
     }
 
     @Override
-    public Translation2d getTranslationToTarget(){
+    public Translation2d getTranslationToBestTarget(){
       if(mode == CameraMode.Rings)
-        return objectToRobot;
+        return objectsToRobot[0];
       else return null;
+    }
+
+    @Override
+    public double getServoAngle(){
+      return 0;
     }
 
     @Override
@@ -86,7 +90,7 @@ public class LimeLightClass implements CameraInterface{
         timeStamp = 0;
         latency = 0;
         estimatedPose = null;
-        objectToRobot = null;
+        objectsToRobot = null;
         return;
       }
 
@@ -96,15 +100,16 @@ public class LimeLightClass implements CameraInterface{
       if(mode == CameraMode.AprilTags)
         estimatedPose = latestResults.targetingResults.getBotPose3d();
       else{
-        pythonResults = LimelightHelpers.getPythonScriptData(cameraName);
-        objectToRobot = PhotonUtils.estimateCameraToTargetTranslation(
-        PhotonUtils.calculateDistanceToTargetMeters(
-          cameraToRobot[0].getZ(),
-          Constants.Vision.gamePieceHeight,
-          -cameraToRobot[0].getRotation().getY(),
-          pythonResults[5]),
-        Rotation2d.fromDegrees(pythonResults[6]));
+        var targets = latestResults.targetingResults.targets_Retro;
+
+        for(int i = 0; i < targets.length || i == 5; i++){
+
+          objectsToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
+          cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets[i].tx),
+          Rotation2d.fromDegrees(targets[i].ty)).plus(cameraToRobot[1].getTranslation().toTranslation2d()
+          ).rotateBy(cameraToRobot[1].getRotation().toRotation2d());
       }
+    }
     }
 
     @Override
@@ -112,7 +117,7 @@ public class LimeLightClass implements CameraInterface{
       LimelightHelpers.setPipelineIndex(cameraName, pipeLineIndex);
       if(pipeLineIndex == 0){
         mode = CameraMode.AprilTags;
-        objectToRobot = null;
+        objectsToRobot = null;
       }
       else{
         mode = CameraMode.Rings;
@@ -133,5 +138,10 @@ public class LimeLightClass implements CameraInterface{
     @Override
     public double getPoseAmbiguty() {
       return 0;
+    }
+
+    @Override
+    public Translation2d[] getTranslationsToTargets() {
+      return objectsToRobot;
     }
   }
