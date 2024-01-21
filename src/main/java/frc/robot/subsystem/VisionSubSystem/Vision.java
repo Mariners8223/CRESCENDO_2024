@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 
 public class Vision extends SubsystemBase {
@@ -20,7 +21,7 @@ public class Vision extends SubsystemBase {
     Pose3d[] poses = new Pose3d[Constants.Vision.numberOfCameras];
     double[] timeStamps = new double[Constants.Vision.numberOfCameras];
     double[] latencies = new double[Constants.Vision.numberOfCameras];
-    Translation2d[] translations = new Translation2d[Constants.Vision.numberOfCameras];
+    Translation2d[][] objectsToCameras = new Translation2d[Constants.Vision.numberOfCameras][];
     double[] poseConfidences = new double[Constants.Vision.numberOfCameras];
     boolean[] hasTargets = new boolean[Constants.Vision.numberOfCameras];
   }
@@ -31,7 +32,7 @@ public class Vision extends SubsystemBase {
   Pose3d[] poses = new Pose3d[Constants.Vision.numberOfCameras];
   double[] timeStamps = new double[Constants.Vision.numberOfCameras];
   double[] latencies = new double[Constants.Vision.numberOfCameras];
-  Translation2d[] translations = new Translation2d[Constants.Vision.numberOfCameras];
+  Translation2d[][] objectsToCameras = new Translation2d[Constants.Vision.numberOfCameras][];
   double[] poseConfidences = new double[Constants.Vision.numberOfCameras];
   boolean[] hasTargets = new boolean[Constants.Vision.numberOfCameras];
 
@@ -52,7 +53,7 @@ public class Vision extends SubsystemBase {
       poses[i] = new Pose3d();
       timeStamps[i] = 0;
       latencies[i] = 0;
-      translations[i] = new Translation2d();
+      objectsToCameras[i][0] = new Translation2d();
       poseConfidences[i] = 0;
       hasTargets[i] = false;
     }
@@ -60,7 +61,7 @@ public class Vision extends SubsystemBase {
     outputs.poses = poses;
     outputs.timeStamps = timeStamps;
     outputs.latencies = latencies;
-    outputs.translations = translations;
+    outputs.objectsToCameras = objectsToCameras;
     outputs.poseConfidences = poseConfidences;
     outputs.hasTargets = hasTargets;    
   }
@@ -102,8 +103,12 @@ public class Vision extends SubsystemBase {
    * @param location the location of the camera
    * @return the translation to the target from the specified camera
    */
-  public Translation2d getTranslation(CameraLocation location){
-    return cameras[location.ordinal()].getTranslationToTarget();
+  public Translation2d getbestObjectToCamera(CameraLocation location){
+    return objectsToCameras[location.ordinal()][0];
+  }
+
+  public Translation2d[] getObjectsToCamera(CameraLocation location){
+    return objectsToCameras[location.ordinal()];
   }
 
   /**
@@ -139,14 +144,6 @@ public class Vision extends SubsystemBase {
     return latencies;
   }
 
-  /**
-   * gets all the translations to the target from the cameras (may be null if no target is detected or the cameras is not in Rings mode)
-   * @return all the translations to the target from the cameras
-   */
-  public Translation2d[] getTranslations(){
-    return translations;
-  }
-
   public double[] getPoseAmbiguitys(){
     return poseConfidences;
   }
@@ -158,12 +155,15 @@ public class Vision extends SubsystemBase {
       poses[i] = cameras[i].getPose();
       timeStamps[i] = cameras[i].getTimeStamp();
       latencies[i] = cameras[i].getLatency();
-      translations[i] = cameras[i].getTranslationToTarget();
+      objectsToCameras[i] = cameras[i].getTranslationsToTargets();
       hasTargets[i] = cameras[i].hasTarget();
       poseConfidences[i] = cameras[i].getPoseAmbiguty();
 
-      if(poses[i] != null) outputs.poses[i] = poses[i];
-      if(translations[i] != null) outputs.translations[i] = translations[i];
+      if(poses[i] != null){
+        outputs.poses[i] = poses[i];
+        RobotContainer.driveBase.addVisionMesrument(poses[i].toPose2d(), timeStamps[i]);
+      }
+      if(objectsToCameras[i] != null) outputs.objectsToCameras[i] = objectsToCameras[i];
     }
 
     outputs.hasTargets = hasTargets;
@@ -213,7 +213,13 @@ public class Vision extends SubsystemBase {
      * returns the translation to the target from the camera (may be null if no target is detected or the camera is not in Rings mode)
      * @return the translation to the target from the camera
      */
-    public Translation2d getTranslationToTarget();
+    public Translation2d getTranslationToBestTarget();
+
+    /**
+     * returns the translations to the targets from the camera (may be null if no target is detected or the camera is not in Rings mode)
+     * @return the translations to the targets from the camera
+     */
+    public Translation2d[] getTranslationsToTargets();
 
     /**
      * returns the timestamp of the camera (may be 0 if no target is detected)
@@ -232,6 +238,12 @@ public class Vision extends SubsystemBase {
      * @return the pose confidence of the camera
      */
     public double getPoseAmbiguty();
+
+    /**
+     * returns the servo angle of the camera (may be 0 if there is no servo)
+     * @return the servo angle of the camera (in degrees)
+     */
+    public double getServoAngle();
   }
 
   
