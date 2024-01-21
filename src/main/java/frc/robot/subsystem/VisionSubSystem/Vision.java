@@ -29,13 +29,6 @@ public class Vision extends SubsystemBase {
   private static Vision instance;
 
   CameraInterface[] cameras = new CameraInterface[Constants.Vision.numberOfCameras];
-  Pose3d[] poses = new Pose3d[Constants.Vision.numberOfCameras];
-  double[] timeStamps = new double[Constants.Vision.numberOfCameras];
-  double[] latencies = new double[Constants.Vision.numberOfCameras];
-  Translation2d[][] objectsToCameras = new Translation2d[Constants.Vision.numberOfCameras][];
-  double[] poseConfidences = new double[Constants.Vision.numberOfCameras];
-  boolean[] hasTargets = new boolean[Constants.Vision.numberOfCameras];
-
   VisonOutputsAutoLogged outputs;
 
   /**
@@ -50,20 +43,13 @@ public class Vision extends SubsystemBase {
     outputs = new VisonOutputsAutoLogged();
 
     for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
-      poses[i] = new Pose3d();
-      timeStamps[i] = 0;
-      latencies[i] = 0;
-      objectsToCameras[i][0] = new Translation2d();
-      poseConfidences[i] = 0;
-      hasTargets[i] = false;
+      outputs.poses[i] = new Pose3d();
+      outputs.timeStamps[i] = 0;
+      outputs.latencies[i] = 0;
+      outputs.objectsToCameras[i][0] = new Translation2d();
+      outputs.poseConfidences[i] = 0;
+      outputs.hasTargets[i] = false;
     }
-
-    outputs.poses = poses;
-    outputs.timeStamps = timeStamps;
-    outputs.latencies = latencies;
-    outputs.objectsToCameras = objectsToCameras;
-    outputs.poseConfidences = poseConfidences;
-    outputs.hasTargets = hasTargets;    
   }
 
   public static Vision getInstance(){
@@ -104,11 +90,11 @@ public class Vision extends SubsystemBase {
    * @return the translation to the target from the specified camera
    */
   public Translation2d getbestObjectToCamera(CameraLocation location){
-    return objectsToCameras[location.ordinal()][0];
+    return cameras[location.ordinal()].getTranslationToBestTarget();
   }
 
   public Translation2d[] getObjectsToCamera(CameraLocation location){
-    return objectsToCameras[location.ordinal()];
+    return cameras[location.ordinal()].getTranslationsToTargets();
   }
 
   /**
@@ -125,7 +111,7 @@ public class Vision extends SubsystemBase {
    * @return all the poses of the cameras
    */
   public Pose3d[] getposes(){
-    return poses;
+    return outputs.poses;
   }
 
   /**
@@ -133,7 +119,7 @@ public class Vision extends SubsystemBase {
    * @return all the timestamps of the cameras
    */
   public double[] getTimeStamps(){
-    return timeStamps;
+    return outputs.timeStamps;
   }
 
   /**
@@ -141,36 +127,31 @@ public class Vision extends SubsystemBase {
    * @return all the latencies of the cameras
    */
   public double[] getLatencies(){
-    return latencies;
+    return outputs.latencies;
   }
 
   public double[] getPoseAmbiguitys(){
-    return poseConfidences;
+    return outputs.poseConfidences;
   }
   
   @Override
   public void periodic() {
     for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
       cameras[i].update();
-      poses[i] = cameras[i].getPose();
-      timeStamps[i] = cameras[i].getTimeStamp();
-      latencies[i] = cameras[i].getLatency();
-      objectsToCameras[i] = cameras[i].getTranslationsToTargets();
-      hasTargets[i] = cameras[i].hasTarget();
-      poseConfidences[i] = cameras[i].getPoseAmbiguty();
+      outputs.poses[i] = cameras[i].getPose();
+      outputs.timeStamps[i] = cameras[i].getTimeStamp();
+      outputs.latencies[i] = cameras[i].getLatency();
+      outputs.objectsToCameras[i] = cameras[i].getTranslationsToTargets();
+      outputs.hasTargets[i] = cameras[i].hasTarget();
+      outputs.poseConfidences[i] = cameras[i].getPoseAmbiguty();
 
-      if(poses[i] != null){
-        outputs.poses[i] = poses[i];
-        RobotContainer.driveBase.addVisionMesrument(poses[i].toPose2d(), timeStamps[i]);
+      if(outputs.poses[i] != null){
+        outputs.poses[i] = outputs.poses[i];
+        RobotContainer.driveBase.addVisionMesrument(outputs.poses[i].toPose2d(), outputs.timeStamps[i]);
       }
-      if(objectsToCameras[i] != null) outputs.objectsToCameras[i] = objectsToCameras[i];
+      if(outputs.objectsToCameras[i] != null) outputs.objectsToCameras[i] = outputs.objectsToCameras[i];
     }
-
-    outputs.hasTargets = hasTargets;
-    outputs.latencies = latencies;
-    outputs.poseConfidences = poseConfidences;
-    outputs.timeStamps = timeStamps;
-
+    
     Logger.processInputs(getName(), outputs);
   }
 

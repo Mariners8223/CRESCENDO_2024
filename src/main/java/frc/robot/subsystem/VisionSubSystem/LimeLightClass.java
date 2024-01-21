@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Constants;
 import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface;
 import frc.util.LimelightHelpers;
@@ -18,8 +19,9 @@ import frc.util.LimelightHelpers.LimelightResults;
 /** Add your docs here. */
 public class LimeLightClass implements CameraInterface{
     private LimelightResults latestResults;
-    private double[] pythonResults = new double[6];
     private String cameraName;
+
+    private Servo servo;
 
     private CameraMode mode;
     private Transform3d cameraToRobot[];
@@ -31,7 +33,7 @@ public class LimeLightClass implements CameraInterface{
     private double latency;
     
 
-    public LimeLightClass(String cameraName, CameraLocation location) {
+    public LimeLightClass(String cameraName, CameraLocation location, int servoPort) {
       this.cameraName = cameraName;
       latestResults = new LimelightResults();
 
@@ -39,6 +41,11 @@ public class LimeLightClass implements CameraInterface{
 
       cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
 
+      if(servoPort != -1){
+        servo = new Servo(servoPort);
+        servo.setPosition(0);
+      }
+        
       LimelightHelpers.setCameraPose_RobotSpace(
         cameraName,
         cameraToRobot[0].getX(),
@@ -52,10 +59,10 @@ public class LimeLightClass implements CameraInterface{
 
       timeStamp = 0;
       latency = 0;
+    }
 
-      for(int i = 0; i < 6; i++){
-        pythonResults[i] = 0;
-      }
+    public LimeLightClass(String cameraName, CameraLocation location) {
+      this(cameraName, location, -1);
     }
 
     @Override
@@ -74,7 +81,7 @@ public class LimeLightClass implements CameraInterface{
 
     @Override
     public double getServoAngle(){
-      return 0;
+      return servo.getAngle();
     }
 
     @Override
@@ -118,10 +125,14 @@ public class LimeLightClass implements CameraInterface{
       if(pipeLineIndex == 0){
         mode = CameraMode.AprilTags;
         objectsToRobot = null;
+        if(servo != null)
+          servo.setAngle(0);
       }
       else{
         mode = CameraMode.Rings;
         estimatedPose = null;
+        if(servo != null)
+          servo.setAngle(90);
       }
     }
 
@@ -137,11 +148,13 @@ public class LimeLightClass implements CameraInterface{
 
     @Override
     public double getPoseAmbiguty() {
-      return 0;
+      return 1;
     }
 
     @Override
     public Translation2d[] getTranslationsToTargets() {
-      return objectsToRobot;
+      if(mode == CameraMode.Rings)
+        return objectsToRobot;
+      else return null;
     }
   }
