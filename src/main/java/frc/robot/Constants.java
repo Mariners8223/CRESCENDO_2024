@@ -22,44 +22,7 @@ public class Constants {
 
         public static final int numberOfCameras = 4;
 
-            public static final Transform3d[][] cameraLocations = new Transform3d[][]{
-                {new Transform3d(
-                0,
-                0,
-                0,
-                new Rotation3d(
-                0,
-                0,
-                0))},
-
-                {
-                new Transform3d(
-                0,
-                0,0,
-                new Rotation3d(
-                0,
-                0,
-                0))},
-                
-                {
-                new Transform3d(
-                0,
-                0,
-                0,
-                new Rotation3d(
-                0,
-                0,
-                0))},
-
-                {
-                new Transform3d(
-                0,
-                0,0,
-                new Rotation3d(
-                0,
-                0,
-                0))}
-            };
+            public static final Transform3d[][] cameraLocations = Constants.createCameraTransforms();
 
             public static final double gamePieceHeight = 0.05; //the height of the game piece in meters
 
@@ -195,6 +158,90 @@ public class Constants {
         public static final SwerveModule back_right = new SwerveModule(ModuleName.Back_Right, 8, 9, 13, Steer.back_right_absoluteEncoderZeroOffset, false, false);
         //^the constants of the back right module
         
+    }
+
+
+    private static Transform3d[][] createCameraTransforms(){
+        return new Transform3d[][]{
+                {new Transform3d( //camera 1 aprilTag postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+
+                new Transform3d( //camera 1 ring postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0
+                )
+                )},
+
+                {
+                new Transform3d( //camera 2 aprilTag postion
+                0,
+                0,0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+                
+                new Transform3d( //camera 2 ring postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0))
+                },
+                
+                {
+                new Transform3d( //camera 3 aprilTag postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+            
+                new Transform3d( //camera 3 ring postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0)
+                )
+                },
+
+                {
+                new Transform3d( //camera 4 aprilTag postion
+                0,
+                0,0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+
+                new Transform3d( //camera 4 ring postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0))
+            }
+            };
     }
 
     
