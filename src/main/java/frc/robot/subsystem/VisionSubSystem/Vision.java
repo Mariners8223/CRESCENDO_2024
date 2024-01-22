@@ -4,32 +4,21 @@
 
 package frc.robot.subsystem.VisionSubSystem;
 
-import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 
 public class Vision extends SubsystemBase {
 
-  @AutoLog
-  public static class VisonOutputs{
-    Pose3d[] poses = new Pose3d[Constants.Vision.numberOfCameras];
-    double[] timeStamps = new double[Constants.Vision.numberOfCameras];
-    double[] latencies = new double[Constants.Vision.numberOfCameras];
-    Translation2d[][] objectsToCameras = new Translation2d[Constants.Vision.numberOfCameras][];
-    double[] poseConfidences = new double[Constants.Vision.numberOfCameras];
-    boolean[] hasTargets = new boolean[Constants.Vision.numberOfCameras];
-  }
-
   private static Vision instance;
 
-  CameraInterface[] cameras = new CameraInterface[Constants.Vision.numberOfCameras];
-  VisonOutputsAutoLogged outputs;
+  private CameraInterface[] cameras = new CameraInterface[Constants.Vision.numberOfCameras];
+  private Pose3d[] poses = new Pose3d[Constants.Vision.numberOfCameras];
+  private double[] timeStamps = new double[Constants.Vision.numberOfCameras];
+  private double[] latencies = new double[Constants.Vision.numberOfCameras];
+  private Translation2d[][] objectsToRobot = new Translation2d[Constants.Vision.numberOfCameras][];
 
   /**
    * creates a new Vision subsystem with 4 cameras
@@ -40,16 +29,13 @@ public class Vision extends SubsystemBase {
     cameras[2] = new LimeLightClass(Constants.Vision.LimeLight.backCameraName, CameraLocation.Back);
     cameras[3] = new PhotonCameraClass(Constants.Vision.PhotonVision.leftCameraName, CameraLocation.Left);
 
-    outputs = new VisonOutputsAutoLogged();
-
     for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
-      outputs.poses[i] = new Pose3d();
-      outputs.timeStamps[i] = 0;
-      outputs.latencies[i] = 0;
-      outputs.objectsToCameras[i][0] = new Translation2d();
-      outputs.poseConfidences[i] = 0;
-      outputs.hasTargets[i] = false;
+      poses[i] = Constants.Vision.rubbishPose;
+      timeStamps[i] = 0;
+      latencies[i] = 0;
+      objectsToRobot[i] = Constants.Vision.rubbishTranslation;
     }
+
   }
 
   public static Vision getInstance(){
@@ -107,11 +93,27 @@ public class Vision extends SubsystemBase {
   }
 
   /**
+   * returns the best objects to the robot (may be null if no target is detected or the cameras is not in Rings mode)
+   * @return the best objects to the robot (for each camera)
+   */
+  public Translation2d[] getBestObjectsToRobot(){
+    return objectsToRobot[0];
+  }
+
+  /**
+   * returns the objects to the robot (may be null if no target is detected or the cameras is not in Rings mode)
+   * @return the objects to the robot (for each camera)
+   */
+  public Translation2d[][] getObjectsToRobot(){
+    return objectsToRobot;
+  }
+
+  /**
    * gets all the poses of the cameras (may be null if no target is detected or the cameras is not in AprilTag mode)
    * @return all the poses of the cameras
    */
   public Pose3d[] getposes(){
-    return outputs.poses;
+    return poses;
   }
 
   /**
@@ -119,7 +121,7 @@ public class Vision extends SubsystemBase {
    * @return all the timestamps of the cameras
    */
   public double[] getTimeStamps(){
-    return outputs.timeStamps;
+    return timeStamps;
   }
 
   /**
@@ -127,32 +129,18 @@ public class Vision extends SubsystemBase {
    * @return all the latencies of the cameras
    */
   public double[] getLatencies(){
-    return outputs.latencies;
-  }
-
-  public double[] getPoseAmbiguitys(){
-    return outputs.poseConfidences;
+    return latencies;
   }
   
   @Override
   public void periodic() {
     for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
       cameras[i].update();
-      outputs.poses[i] = cameras[i].getPose();
-      outputs.timeStamps[i] = cameras[i].getTimeStamp();
-      outputs.latencies[i] = cameras[i].getLatency();
-      outputs.objectsToCameras[i] = cameras[i].getTranslationsToTargets();
-      outputs.hasTargets[i] = cameras[i].hasTarget();
-      outputs.poseConfidences[i] = cameras[i].getPoseAmbiguty();
-
-      if(outputs.poses[i] != null){
-        outputs.poses[i] = outputs.poses[i];
-        RobotContainer.driveBase.addVisionMesrument(outputs.poses[i].toPose2d(), outputs.timeStamps[i]);
-      }
-      if(outputs.objectsToCameras[i] != null) outputs.objectsToCameras[i] = outputs.objectsToCameras[i];
+      poses[i] = cameras[i].getPose();
+      timeStamps[i] = cameras[i].getTimeStamp();
+      latencies[i] = cameras[i].getLatency();
+      objectsToRobot[i] = cameras[i].getTranslationsToTargets();
     }
-    
-    Logger.processInputs(getName(), outputs);
   }
 
 
