@@ -6,6 +6,8 @@ package frc.robot.subsystem.VisionSubSystem;
 
 import java.io.IOException;
 
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
@@ -30,22 +32,36 @@ public class PhotonCameraClass implements CameraInterface{
     private PhotonPoseEstimator poseEstimator; //the pose estimator
     private PhotonPipelineResult latestResult; //the latest result from the camera
     private CameraMode mode; //the mode the camera is in
-    private boolean fieldLoaded; //if the field is loaded
 
     private Servo servo; //the servo to move the camera
 
     private Transform3d cameraToRobot[] = new Transform3d[2]; //the transform from the camera to the robot
-    private Translation2d objectToRobot[] = {new Translation2d()}; //the translation from the object to the robot
 
-    private Pose3d estimatedPose; //the estimated pose of the robot
-    private double poseConfidence; //the confidence of the pose
+    private PhotonCameraInputsAutoLogged inputs;
 
-    private double timeStamp; //the time stamp of the latest result
-    private double latency; //the latency of the latest result
+    @AutoLog
+    public static class PhotonCameraInputs{
+      public String cameraName; //the name of the camera
+      public String location; //the location of the camera 
+      public String mode; //the mode of the camera (AprilTags or Rings)
+
+      public boolean isfieldLoaded; //if the field is loaded
+
+      public Pose3d estimatedPose; //the estimated pose of the robot
+      public Translation2d[] objectsToRobot; //the translation from the object to the robot
+
+      public double poseConfidence; //the confidence of the pose
+      public double timeStamp; //the time stamp of the camera
+      public double latency; //the latency of the camera
+    }
 
 
     public PhotonCameraClass(String cameraName, CameraLocation location, int servoPort) {
       camera = new PhotonCamera(cameraName);
+      inputs = new PhotonCameraInputsAutoLogged();
+
+      inputs.cameraName = cameraName;
+      inputs.location = location.toString();
 
       try {
         poseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile),
@@ -53,9 +69,9 @@ public class PhotonCameraClass implements CameraInterface{
 
         poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_REFERENCE_POSE);
 
-        fieldLoaded = true;
+        inputs.isfieldLoaded = true;
       } catch (IOException exception) {
-        fieldLoaded = false;
+        inputs.isfieldLoaded = false;
       }
 
       if(servoPort != -1){
@@ -66,13 +82,14 @@ public class PhotonCameraClass implements CameraInterface{
 
       latestResult = new PhotonPipelineResult();
 
-      estimatedPose = new Pose3d();
+      inputs.estimatedPose = Constants.Vision.rubbishPose;
+      inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
 
       mode = CameraMode.AprilTags;
 
-      timeStamp = 0;
-      latency = 0;
-      poseConfidence = 0;
+      inputs.timeStamp = 0;
+      inputs.latency = 0;
+      inputs.poseConfidence = 0;
 
       cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
     }
@@ -83,23 +100,23 @@ public class PhotonCameraClass implements CameraInterface{
 
     @Override
     public Pose3d getPose() {
-      if(mode == CameraMode.AprilTags && fieldLoaded)
-        return estimatedPose;
-      else return null;
+      if(mode == CameraMode.AprilTags && inputs.isfieldLoaded)
+        return inputs.estimatedPose;
+      else return Constants.Vision.rubbishPose;
     }
 
     @Override
     public Translation2d getTranslationToBestTarget(){
       if(mode == CameraMode.Rings)
-        return objectToRobot[0];
-      else return null;
+        return inputs.objectsToRobot[0];
+      else return Constants.Vision.rubbishTranslation[0];
     }
 
     @Override
     public Translation2d[] getTranslationsToTargets(){
       if(mode == CameraMode.Rings)
-        return objectToRobot;
-      else return null;
+        return inputs.objectsToRobot;
+      else return Constants.Vision.rubbishTranslation;
     }
 
     @Override
@@ -112,42 +129,45 @@ public class PhotonCameraClass implements CameraInterface{
       latestResult = camera.getLatestResult();
 
       if(!latestResult.hasTargets()){
-        timeStamp = 0;
-        latency = 0;
-        estimatedPose = null;
-        poseConfidence = 0;
-        objectToRobot = null;
+        inputs.timeStamp = 0;
+        inputs.latency = 0;
+        inputs.estimatedPose = Constants.Vision.rubbishPose;
+        inputs.poseConfidence = 0;
+        inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
+        Logger.processInputs(inputs.cameraName, inputs);
         return;
       }
 
-      timeStamp = latestResult.getTimestampSeconds();
-      latency = latestResult.getLatencyMillis() * 100;
+      inputs.timeStamp = latestResult.getTimestampSeconds();
+      inputs.latency = latestResult.getLatencyMillis() * 100;
 
-      if(mode == CameraMode.AprilTags && fieldLoaded){
+      if(mode == CameraMode.AprilTags && inputs.isfieldLoaded){
         poseEstimator.setReferencePose(RobotContainer.driveBase.getPose());
-        estimatedPose = poseEstimator.update().get().estimatedPose;
-        poseConfidence = latestResult.getBestTarget().getPoseAmbiguity();
+        inputs.estimatedPose = poseEstimator.update().get().estimatedPose;
+        inputs.poseConfidence = latestResult.getBestTarget().getPoseAmbiguity();
       }
       else{
         var targets = latestResult.getTargets();
 
         for(int i = 0; i < targets.size() || i == 5; i++){
-          objectToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
+          inputs.objectsToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
           cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets.get(i).getPitch()),
           Rotation2d.fromDegrees(targets.get(i).getYaw())).plus(cameraToRobot[1].getTranslation().toTranslation2d()
           ).rotateBy(cameraToRobot[1].getRotation().toRotation2d());
         }
       }
+
+      Logger.processInputs(inputs.cameraName, inputs);
     }
 
     @Override
     public double getTimeStamp() {
-      return timeStamp;
+      return inputs.timeStamp;
     }
 
     @Override
     public double getLatency() {
-      return latency;
+      return inputs.latency;
     }
 
     @Override
@@ -162,13 +182,13 @@ public class PhotonCameraClass implements CameraInterface{
       camera.setPipelineIndex(pipeLineIndex);
       if(pipeLineIndex == 0){
         mode = CameraMode.AprilTags;
-        objectToRobot = null;
+        inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
         if(servo != null)
           servo.setAngle(Units.radiansToDegrees(Constants.Vision.cameraLocations[CameraLocation.Front.ordinal()][0].getRotation().getY()));
       }
       else{
         mode = CameraMode.Rings;
-        estimatedPose = null;
+        inputs.estimatedPose = Constants.Vision.rubbishPose;
         if(servo != null)
           servo.setAngle(Units.radiansToDegrees(Constants.Vision.cameraLocations[CameraLocation.Front.ordinal()][1].getRotation().getY()));
       }
@@ -176,8 +196,8 @@ public class PhotonCameraClass implements CameraInterface{
 
     @Override
     public double getPoseAmbiguty() {
-      if(mode == CameraMode.AprilTags && fieldLoaded)
-        return poseConfidence;
+      if(mode == CameraMode.AprilTags && inputs.isfieldLoaded)
+        return inputs.poseConfidence;
       else return 0;
     }
   }

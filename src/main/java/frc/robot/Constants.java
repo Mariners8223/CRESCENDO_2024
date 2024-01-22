@@ -3,6 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -19,6 +22,9 @@ public class Constants {
     }
 
     public static final class Vision{
+
+        public static final Translation2d[] rubbishTranslation = {new Translation2d(-20, -20)};
+        public static final Pose3d rubbishPose = new Pose3d(new Pose2d(rubbishTranslation[0], new Rotation2d(69)));
 
         public static final int numberOfCameras = 4;
 

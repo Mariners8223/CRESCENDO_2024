@@ -31,7 +31,6 @@ public class LimeLightClass implements CameraInterface{
 
     private double timeStamp;
     private double latency;
-    
 
     public LimeLightClass(String cameraName, CameraLocation location, int servoPort) {
       this.cameraName = cameraName;
