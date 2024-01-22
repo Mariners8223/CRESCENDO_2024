@@ -46,6 +46,7 @@ public class PhotonCameraClass implements CameraInterface{
       public String mode; //the mode of the camera (AprilTags or Rings)
 
       public boolean isfieldLoaded; //if the field is loaded
+      public boolean hasServo;
 
       public Pose3d estimatedPose; //the estimated pose of the robot
       public Translation2d[] objectsToRobot; //the translation from the object to the robot
@@ -77,8 +78,12 @@ public class PhotonCameraClass implements CameraInterface{
       if(servoPort != -1){
         servo = new Servo(servoPort);
         servo.setPosition(0);
+        inputs.hasServo = true;
       }
-      else servo = null;
+      else{
+        servo = null;
+        inputs.hasServo = false;
+      }
 
       latestResult = new PhotonPipelineResult();
 

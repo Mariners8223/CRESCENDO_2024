@@ -4,6 +4,8 @@
 
 package frc.robot.subsystem.VisionSubSystem;
 
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.math.geometry.Pose3d;
@@ -19,21 +21,31 @@ import frc.util.LimelightHelpers.LimelightResults;
 /** Add your docs here. */
 public class LimeLightClass implements CameraInterface{
     private LimelightResults latestResults;
-    private String cameraName;
 
     private Servo servo;
 
     private CameraMode mode;
     private Transform3d cameraToRobot[];
 
-    private Pose3d estimatedPose;
-    private Translation2d objectsToRobot[] = {new Translation2d()};
+    private LimelightInputsAutoLogged inputs;
 
-    private double timeStamp;
-    private double latency;
+    @AutoLog
+    public static class LimelightInputs{
+      public String cameraName;
+      public String location;
+      public String mode;
+
+      public boolean hasServo;
+
+      public Pose3d estimatedPose;
+      public Translation2d[] objectsToRobot;
+
+      public double timeStamp;
+      public double latency;
+    }
 
     public LimeLightClass(String cameraName, CameraLocation location, int servoPort) {
-      this.cameraName = cameraName;
+      inputs.cameraName = cameraName;
       latestResults = new LimelightResults();
 
       mode = CameraMode.AprilTags;
@@ -43,6 +55,11 @@ public class LimeLightClass implements CameraInterface{
       if(servoPort != -1){
         servo = new Servo(servoPort);
         servo.setPosition(0);
+        inputs.hasServo = true;
+      }
+      else{
+        servo = null;
+        inputs.hasServo = false;
       }
         
       LimelightHelpers.setCameraPose_RobotSpace(
@@ -54,10 +71,13 @@ public class LimeLightClass implements CameraInterface{
         cameraToRobot[0].getRotation().getY(),
         cameraToRobot[0].getRotation().getZ());
 
-      estimatedPose = new Pose3d();
+      inputs.estimatedPose = Constants.Vision.rubbishPose;
+      inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
 
-      timeStamp = 0;
-      latency = 0;
+      inputs.timeStamp = 0;
+      inputs.latency = 0;
+
+      Logger.processInputs(inputs.cameraName, inputs);
     }
 
     public LimeLightClass(String cameraName, CameraLocation location) {
@@ -67,19 +87,27 @@ public class LimeLightClass implements CameraInterface{
     @Override
     public Pose3d getPose() {
       if(mode == CameraMode.AprilTags)
-        return estimatedPose;
-      else return null;
+        return inputs.estimatedPose;
+      else return Constants.Vision.rubbishPose;
     }
 
     @Override
     public Translation2d getTranslationToBestTarget(){
       if(mode == CameraMode.Rings)
-        return objectsToRobot[0];
-      else return null;
+        return inputs.objectsToRobot[0];
+      else return Constants.Vision.rubbishTranslation[0];
+    }
+    
+    @Override
+    public Translation2d[] getTranslationsToTargets() {
+      if(mode == CameraMode.Rings)
+        return inputs.objectsToRobot;
+      else return Constants.Vision.rubbishTranslation;
     }
 
     @Override
     public double getServoAngle(){
+      if(servo == null) return 0;
       return servo.getAngle();
     }
 
@@ -90,46 +118,49 @@ public class LimeLightClass implements CameraInterface{
 
     @Override
     public void update() {
-      latestResults = LimelightHelpers.getLatestResults(cameraName);
+      latestResults = LimelightHelpers.getLatestResults(inputs.cameraName);
 
       if(!latestResults.targetingResults.valid){
-        timeStamp = 0;
-        latency = 0;
-        estimatedPose = null;
-        objectsToRobot = null;
+        inputs.timeStamp = 0;
+        inputs.latency = 0;
+        inputs.estimatedPose = Constants.Vision.rubbishPose;
+        inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
+        Logger.processInputs(inputs.cameraName, inputs);
         return;
       }
 
-      timeStamp = latestResults.targetingResults.timestamp_RIOFPGA_capture;
-      latency = latestResults.targetingResults.latency_capture * 100;
+      inputs.timeStamp = latestResults.targetingResults.timestamp_RIOFPGA_capture;
+      inputs.latency = latestResults.targetingResults.latency_capture * 100;
 
       if(mode == CameraMode.AprilTags)
-        estimatedPose = latestResults.targetingResults.getBotPose3d();
+        inputs.estimatedPose = latestResults.targetingResults.getBotPose3d();
       else{
         var targets = latestResults.targetingResults.targets_Retro;
 
         for(int i = 0; i < targets.length || i == 5; i++){
 
-          objectsToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
+          inputs.objectsToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
           cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets[i].tx),
           Rotation2d.fromDegrees(targets[i].ty)).plus(cameraToRobot[1].getTranslation().toTranslation2d()
           ).rotateBy(cameraToRobot[1].getRotation().toRotation2d());
       }
-    }
+      }
+
+      Logger.processInputs(inputs.cameraName, inputs);
     }
 
     @Override
     public void setPipeLine(int pipeLineIndex) {
-      LimelightHelpers.setPipelineIndex(cameraName, pipeLineIndex);
+      LimelightHelpers.setPipelineIndex(inputs.cameraName, pipeLineIndex);
       if(pipeLineIndex == 0){
         mode = CameraMode.AprilTags;
-        objectsToRobot = null;
+        inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
         if(servo != null)
           servo.setAngle(0);
       }
       else{
         mode = CameraMode.Rings;
-        estimatedPose = null;
+        inputs.estimatedPose = Constants.Vision.rubbishPose;
         if(servo != null)
           servo.setAngle(90);
       }
@@ -137,23 +168,16 @@ public class LimeLightClass implements CameraInterface{
 
     @Override
     public double getTimeStamp() {
-      return timeStamp;
+      return inputs.timeStamp;
     }
 
     @Override
     public double getLatency() {
-      return latency;
+      return inputs.latency;
     }
 
     @Override
     public double getPoseAmbiguty() {
       return 1;
-    }
-
-    @Override
-    public Translation2d[] getTranslationsToTargets() {
-      if(mode == CameraMode.Rings)
-        return objectsToRobot;
-      else return null;
     }
   }
