@@ -47,6 +47,20 @@ public class Constants {
         }
     }
 
+    public static final class ArmConstants {
+        public static final int armRotationMotorID = 0;
+        public static final int rollerRotationMotorID = 1;
+
+        public static final PIDFGains armRotationPID = new PIDFGains(0, 0, 0);
+        public static final PIDFGains rollerRotationPID = new PIDFGains(0, 0, 0);
+
+        public static final boolean armRotationInverted = false;
+        public static final boolean rollerRotationInverted = false;
+
+        public static final double armTolerance = 1.0;
+        public static final double rotationTolerance = 1.0;
+    }
+
     public static final class DriveTrain{
         /**
          * the name of the swerve modules by order
