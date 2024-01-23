@@ -4,104 +4,91 @@
 
 package frc.robot.subsystem.Arm;
 
+import org.littletonrobotics.junction.AutoLog;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants;
+import frc.util.PIDFGains;
 
 public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
 
-  private CANSparkFlex armMotor;
-  private CANSparkFlex rotationMotor;
+  private CANSparkFlex mainMotor;
+  private CANSparkFlex seconderyMotor;
+
+  private ArmInputsAutoLogged inputs;
+
+  @AutoLog
+  public static class ArmInputs{
+    double mainMotorPostion;
+    double seconderyMotorPosition;
+
+    double mainMotorAbsolutePostion;
+    double seconderyAbsolutePostion;
+
+    double mainCurrent;
+    double seconderyCurrent;
+  }
 
   public Arm() {
-    SparkAbsoluteEncoder armAbsoluteEncoder = armMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-    SparkAbsoluteEncoder rotationAbsoluteEncoder = rotationMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+    mainMotor = configureMotors(Constants.ArmConstants.mainMotorID, Constants.ArmConstants.mainPID, Constants.ArmConstants.mainInverted,
+    Constants.ArmConstants.mainConvertionFactor, Constants.ArmConstants.mainSoftLimits);
 
-    armMotor = new CANSparkFlex(ArmConstants.armRotationMotorID, MotorType.kBrushless);
-    rotationMotor = new CANSparkFlex(ArmConstants.rollerRotationMotorID, MotorType.kBrushless);
-
-    armMotor.getEncoder().setPosition(armAbsoluteEncoder.getPosition());
-    rotationMotor.getEncoder().setPosition(rotationAbsoluteEncoder.getPosition());
-
-    armMotor.setIdleMode(IdleMode.kBrake);
-    rotationMotor.setIdleMode(IdleMode.kBrake);
-
-    armMotor.setInverted(ArmConstants.armRotationInverted);
-    rotationMotor.setInverted(ArmConstants.rollerRotationInverted);
-
-    configureMotors();
+    seconderyMotor = configureMotors(Constants.ArmConstants.seconderyMotorID, Constants.ArmConstants.seconderyPID, Constants.ArmConstants.seconderyInverted,
+    Constants.ArmConstants.seconderyConvecrtionFactor, Constants.ArmConstants.seconderySoftLimits);
   }
 
-  private void configureMotors() {
-    armMotor.getPIDController().setP(ArmConstants.armRotationPID.getP());
-    armMotor.getPIDController().setI(ArmConstants.armRotationPID.getI());
-    armMotor.getPIDController().setD(ArmConstants.armRotationPID.getD());
+  public void updateLogger(){
+    inputs.mainMotorPostion = mainMotor.getEncoder().getPosition();
+    inputs.seconderyMotorPosition = mainMotor.getEncoder().getPosition();
 
-    rotationMotor.getPIDController().setP(ArmConstants.rollerRotationPID.getP());
-    rotationMotor.getPIDController().setI(ArmConstants.rollerRotationPID.getI());
-    rotationMotor.getPIDController().setD(ArmConstants.rollerRotationPID.getD());
+    inputs.mainCurrent = mainMotor.getOutputCurrent();
+    inputs.seconderyCurrent = seconderyMotor.getOutputCurrent();
+
+    inputs.mainMotorAbsolutePostion = mainMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition();
+    inputs.seconderyAbsolutePostion = seconderyMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition();
   }
 
-  public void setArmMotorPO(double precent) {
-    if(precent > 0 && getArmPosition() >= 90) precent = 0;
-    if(precent < 0 && getArmPosition() <= 0) precent = 0;
-
-    precent = MathUtil.clamp(precent, -0.6, 0.6);
-    armMotor.set(precent);
-  }
-
-  public void setRotationMotor(double precent) {
-    if(precent > 0 && getRotationPosition() >= 180) precent = 0;
-    if(precent < 0 && getRotationPosition() <= 0) precent = 0;
-
-    precent = MathUtil.clamp(precent, -0.6, 0.6);
-    rotationMotor.set(precent);
-  }
-
-  public void setArmMotorDegrees(double degrees) {
-    degrees = MathUtil.clamp(degrees, 0, 90);
-    armMotor.getPIDController().setReference(degrees, ControlType.kPosition);
-  }
-
-  public void setRotationMotorDegrees(double degrees) {
-    degrees = MathUtil.clamp(degrees, 0, 180);
-    rotationMotor.getPIDController().setReference(degrees, ControlType.kPosition);
-  }
-
-  public double getArmPosition() {
-    return armMotor.getEncoder().getPosition();
-  }
-
-  public double getRotationPosition() {
-    return rotationMotor.getEncoder().getPosition();
-  }
-
-  public void stopArmMotor() {
-    armMotor.disable();
-  }
-
-  public void stallArmMotor() {
-    armMotor.setIdleMode(IdleMode.kBrake);
-  }
-
-  public void stopRotationMotor() {
-    rotationMotor.disable();
-  }
-
-  public void stallRotationMotor() {
-    rotationMotor.setIdleMode(IdleMode.kBrake);
+  public void update(){
+    updateLogger();
   }
 
   @Override
   public void periodic() {
+    update();
     // This method will be called once per scheduler run
+  }
+
+
+  private CANSparkFlex configureMotors(int canID,PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
+    CANSparkFlex sparkFlex = new CANSparkFlex(canID, MotorType.kBrushless);
+
+    sparkFlex.getPIDController().setP(pidfGains.getP());
+    sparkFlex.getPIDController().setI(pidfGains.getI());
+    sparkFlex.getPIDController().setD(pidfGains.getD());
+    sparkFlex.getPIDController().setIZone(pidfGains.getIZone());
+
+    sparkFlex.setInverted(motorInverted);
+
+    if(softLimit.length > 2) softLimit = new double[]{1, -1};
+
+    sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)softLimit[0]);
+    sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)softLimit[1]);
+
+    sparkFlex.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).setPositionConversionFactor(1 / (convertionFactor * 1024));
+    
+    sparkFlex.getEncoder().setPosition(sparkFlex.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition() * 1024 * convertionFactor);
+
+    sparkFlex.getEncoder().setPositionConversionFactor(1 / convertionFactor);
+
+    return sparkFlex;
   }
 }

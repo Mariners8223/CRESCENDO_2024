@@ -48,17 +48,20 @@ public class Constants {
     }
 
     public static final class ArmConstants {
-        public static final int armRotationMotorID = 0;
-        public static final int rollerRotationMotorID = 1;
+        public static final int mainMotorID = 0;
+        public static final int seconderyMotorID = 1;
 
-        public static final PIDFGains armRotationPID = new PIDFGains(0, 0, 0);
-        public static final PIDFGains rollerRotationPID = new PIDFGains(0, 0, 0);
+        public static final PIDFGains mainPID = new PIDFGains(0.5, 0, 0);
+        public static final PIDFGains seconderyPID = new PIDFGains(0.5, 0, 0);
 
-        public static final boolean armRotationInverted = false;
-        public static final boolean rollerRotationInverted = false;
+        public static final boolean mainInverted = false;
+        public static final boolean seconderyInverted = false;
 
-        public static final double armTolerance = 1.0;
-        public static final double rotationTolerance = 1.0;
+        public static final double mainConvertionFactor = 1;
+        public static final double seconderyConvecrtionFactor = 1;
+
+        public static final double[] mainSoftLimits = new double[]{1, -1};
+        public static final double[] seconderySoftLimits = new double[]{1, -1};
     }
 
     public static final class DriveTrain{
