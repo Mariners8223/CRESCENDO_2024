@@ -63,6 +63,9 @@ public class Constants {
             public static final boolean mainInverted = false;
             public static final boolean seconderyInverted = false;
 
+            public static final double mainZeroOffset = 0;
+            public static final double seconderyZeroOffset = 0;
+
             public static final double mainConvertionFactor = 1;
             public static final double seconderyConvecrtionFactor = 1;
 
