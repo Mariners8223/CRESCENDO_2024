@@ -78,9 +78,10 @@ public class Arm extends SubsystemBase {
     Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters + ArmConstants.armHeightFromFrameMeters,
     Rotation2d.fromRotations(inputs.mainMotorPostion + 1 - inputs.seconderyMotorPosition));
 
-    intakePostion = new Pose2d(shooterPostion.getX() -
-    Math.cos(Units.rotationsToRadians(inputs.seconderyMotorPosition - inputs.mainMotorPostion)) * Constants.ArmConstants.shooterAndIntakeLengthMeters,
-    shooterPostion.getY() - Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition - inputs.mainMotorPostion)) * Constants.ArmConstants.shooterAndIntakeLengthMeters,
+    intakePostion = new Pose2d(shooterPostion.getX() +
+    Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters,
+    shooterPostion.getY() + 
+    Math.cos(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters,
     shooterPostion.getRotation());
   }
 
