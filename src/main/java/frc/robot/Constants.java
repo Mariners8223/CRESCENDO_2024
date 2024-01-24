@@ -52,6 +52,7 @@ public class Constants {
         public static double shooterAndIntakeLengthMeters = 0.5;
 
         public static double mainPivotDistanceFromCenterMeters = 0.1;
+        public static double armHeightFromFrameMeters = 0.1;
 
         public static class MotorConstants{
             public static final int mainMotorID = 0;

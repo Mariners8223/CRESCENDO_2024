@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
 import frc.util.PIDFGains;
 
 public class Arm extends SubsystemBase {
@@ -72,11 +73,9 @@ public class Arm extends SubsystemBase {
   }
 
   public void updateArmPostions(){
-    shooterPostion = new Pose2d(Constants.ArmConstants.mainPivotDistanceFromCenterMeters -
-    Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters -
-    Math.cos(Units.rotationsToRadians(inputs.seconderyMotorPosition - inputs.mainMotorPostion)) * Constants.ArmConstants.shooterAndIntakeLengthMeters / 2,
-    Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters +
-    Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition - inputs.mainMotorPostion)) * Constants.ArmConstants.shooterAndIntakeLengthMeters / 2,
+    shooterPostion = new Pose2d(
+    Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters - ArmConstants.mainPivotDistanceFromCenterMeters,
+    Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters + ArmConstants.armHeightFromFrameMeters,
     Rotation2d.fromRotations(inputs.mainMotorPostion + 1 - inputs.seconderyMotorPosition));
 
     intakePostion = new Pose2d(shooterPostion.getX() -
