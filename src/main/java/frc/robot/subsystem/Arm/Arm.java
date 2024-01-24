@@ -23,6 +23,8 @@ import frc.util.PIDFGains;
 public class Arm extends SubsystemBase {
   /** Creates a new Arm. */
 
+  private static Arm instance;
+
   private CANSparkFlex mainMotor;
   private CANSparkFlex seconderyMotor;
 
@@ -43,7 +45,12 @@ public class Arm extends SubsystemBase {
     double seconderyCurrent;
   }
 
-  public Arm() {
+  public static Arm getInstance(){
+    if(instance == null) instance = new Arm();
+    return instance;
+  }
+
+  private Arm() {
     mainMotor = configureMotors(Constants.ArmConstants.MotorConstants.mainMotorID, Constants.ArmConstants.MotorConstants.mainZeroOffset ,Constants.ArmConstants.MotorConstants.mainPID,
     Constants.ArmConstants.MotorConstants.mainInverted, Constants.ArmConstants.MotorConstants.mainConvertionFactor, Constants.ArmConstants.MotorConstants.mainSoftLimits);
 
@@ -84,6 +91,16 @@ public class Arm extends SubsystemBase {
 
   public Pose2d getIntakePostion(){
     return intakePostion;
+  }
+
+  public void moveShooterToPose(Pose2d pose){
+   //foo
+   //please do cool math here
+  }
+
+  public void moveIntakeToPose(Pose2d pose){
+    //foo
+    //please do cool math here
   }
 
   public void update(){
