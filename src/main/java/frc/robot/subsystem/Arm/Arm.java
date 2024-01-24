@@ -5,6 +5,7 @@
 package frc.robot.subsystem.Arm;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkAbsoluteEncoder;
@@ -14,6 +15,10 @@ import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.util.PIDFGains;
@@ -25,6 +30,9 @@ public class Arm extends SubsystemBase {
   private CANSparkFlex seconderyMotor;
 
   private ArmInputsAutoLogged inputs;
+
+  private Pose2d intakePostion;
+  private Pose2d shooterPostion;
 
   @AutoLog
   public static class ArmInputs{
@@ -39,11 +47,11 @@ public class Arm extends SubsystemBase {
   }
 
   public Arm() {
-    mainMotor = configureMotors(Constants.ArmConstants.mainMotorID, Constants.ArmConstants.mainPID, Constants.ArmConstants.mainInverted,
-    Constants.ArmConstants.mainConvertionFactor, Constants.ArmConstants.mainSoftLimits);
+    mainMotor = configureMotors(Constants.ArmConstants.MotorConstants.mainMotorID, Constants.ArmConstants.MotorConstants.mainPID,
+    Constants.ArmConstants.MotorConstants.mainInverted, Constants.ArmConstants.MotorConstants.mainConvertionFactor, Constants.ArmConstants.MotorConstants.mainSoftLimits);
 
-    seconderyMotor = configureMotors(Constants.ArmConstants.seconderyMotorID, Constants.ArmConstants.seconderyPID, Constants.ArmConstants.seconderyInverted,
-    Constants.ArmConstants.seconderyConvecrtionFactor, Constants.ArmConstants.seconderySoftLimits);
+    seconderyMotor = configureMotors(Constants.ArmConstants.MotorConstants.seconderyMotorID, Constants.ArmConstants.MotorConstants.seconderyPID,
+    Constants.ArmConstants.MotorConstants.seconderyInverted, Constants.ArmConstants.MotorConstants.seconderyConvecrtionFactor, Constants.ArmConstants.MotorConstants.seconderySoftLimits);
   }
 
   public void updateLogger(){
@@ -55,10 +63,27 @@ public class Arm extends SubsystemBase {
 
     inputs.mainMotorAbsolutePostion = mainMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition();
     inputs.seconderyAbsolutePostion = seconderyMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition();
+
+    Logger.processInputs(getName(), inputs);
+  }
+
+  public void updateArmPostions(){
+    shooterPostion = new Pose2d(Constants.ArmConstants.mainPivotDistanceFromCenterMeters -
+    Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters -
+    Math.cos(Units.rotationsToRadians(inputs.seconderyMotorPosition - inputs.mainMotorPostion)) * Constants.ArmConstants.shooterAndIntakeLengthMeters / 2,
+    Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters +
+    Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition - inputs.mainMotorPostion)) * Constants.ArmConstants.shooterAndIntakeLengthMeters / 2,
+    Rotation2d.fromRotations(inputs.mainMotorPostion + 1 - inputs.seconderyMotorPosition));
+
+    intakePostion = new Pose2d(shooterPostion.getX() -
+    Math.cos(Units.rotationsToRadians(inputs.seconderyMotorPosition - inputs.mainMotorPostion)) * Constants.ArmConstants.shooterAndIntakeLengthMeters,
+    shooterPostion.getY() - Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition - inputs.mainMotorPostion)) * Constants.ArmConstants.shooterAndIntakeLengthMeters,
+    shooterPostion.getRotation());
   }
 
   public void update(){
     updateLogger();
+    updateArmPostions();
   }
 
   @Override
