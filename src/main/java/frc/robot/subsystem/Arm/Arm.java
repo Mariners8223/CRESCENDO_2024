@@ -9,6 +9,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -94,8 +95,8 @@ public class Arm extends SubsystemBase {
   }
 
   public void moveShooterToPose(Pose2d pose){
-   //foo
-   //please do cool math here
+    mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos(pose.getX() / ArmConstants.mainPivotDistanceFromCenterMeters)),
+    ControlType.kPosition);
   }
 
   public void moveIntakeToPose(Pose2d pose){
