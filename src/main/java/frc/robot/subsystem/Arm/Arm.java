@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
@@ -101,7 +102,8 @@ public class Arm extends SubsystemBase {
   }
 
   public void moveIntakeToPose(Pose2d pose){
-    
+    seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((pose.getX() - shooterPostion.getX()) / ArmConstants.shooterAndIntakeLengthMeters)),
+    ControlType.kPosition);
   }
 
   public void update(){
