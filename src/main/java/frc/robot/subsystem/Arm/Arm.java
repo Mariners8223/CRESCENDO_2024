@@ -96,13 +96,12 @@ public class Arm extends SubsystemBase {
 
   public void moveShooterToPose(Pose2d pose){
     // Assuming that the units are in rotations
-    mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos(pose.getX() / ArmConstants.mainPivotDistanceFromCenterMeters)),
+    mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos(pose.getX() + ArmConstants.mainPivotDistanceFromCenterMeters / ArmConstants.armLengthMeters)),
     ControlType.kPosition);
   }
 
   public void moveIntakeToPose(Pose2d pose){
-    //foo
-    //please do cool math here
+    
   }
 
   public void update(){
