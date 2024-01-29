@@ -23,6 +23,34 @@ import frc.robot.Constants.ArmConstants;
 import frc.util.PIDFGains;
 
 public class Arm extends SubsystemBase {
+  public static class ArmPostion{
+    public double x;
+    public double y;
+    public double rotation;
+
+    public ArmPostion(double x, double y, double rotation){
+      this.x = x;
+      this.y = y;
+      this.rotation = rotation;
+    }
+
+   public ArmPostion(){
+      this.x = 0;
+      this.y = 0;
+      this.rotation = 0;
+    }
+
+    public ArmPostion(Pose2d pose){
+      this.x = pose.getX();
+      this.y = pose.getY();
+      this.rotation = pose.getRotation().getRadians();
+    }
+
+    public Pose2d toPose2d(){
+      return new Pose2d(x, y, Rotation2d.fromRadians(rotation));
+    }
+  }
+
   /** Creates a new Arm. */
 
   private static Arm instance;
@@ -32,8 +60,8 @@ public class Arm extends SubsystemBase {
 
   private ArmInputsAutoLogged inputs;
 
-  private Pose2d intakePostion;
-  private Pose2d shooterPostion;
+  private ArmPostion intakePostion;
+  private ArmPostion shooterPostion;
 
   @AutoLog
   public static class ArmInputs{
@@ -58,6 +86,11 @@ public class Arm extends SubsystemBase {
 
     seconderyMotor = configureMotors(Constants.ArmConstants.MotorConstants.seconderyMotorID, Constants.ArmConstants.MotorConstants.seconderyZeroOffset, Constants.ArmConstants.MotorConstants.seconderyPID,
     Constants.ArmConstants.MotorConstants.seconderyInverted, Constants.ArmConstants.MotorConstants.seconderyConvecrtionFactor, Constants.ArmConstants.MotorConstants.seconderySoftLimits);
+
+    inputs = new ArmInputsAutoLogged();
+
+    intakePostion = new ArmPostion();
+    shooterPostion = new ArmPostion();
   }
 
   public void updateLogger(){
@@ -74,34 +107,33 @@ public class Arm extends SubsystemBase {
   }
 
   public void updateArmPostions(){
-    shooterPostion = new Pose2d(
-    Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters - ArmConstants.mainPivotDistanceFromCenterMeters,
-    Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters + ArmConstants.armHeightFromFrameMeters,
-    Rotation2d.fromRotations(inputs.mainMotorPostion + 1 - inputs.seconderyMotorPosition));
+    shooterPostion.x = Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters - ArmConstants.mainPivotDistanceFromCenterMeters;
+    shooterPostion.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters + ArmConstants.armHeightFromFrameMeters;
+    shooterPostion.rotation = Units.rotationsToRadians(inputs.mainMotorPostion + 1 - inputs.seconderyMotorPosition);
 
-    intakePostion = new Pose2d(shooterPostion.getX() +
-    Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters,
-    shooterPostion.getY() + 
-    Math.cos(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters,
-    shooterPostion.getRotation());
+    intakePostion.x = shooterPostion.x +
+    Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
+    intakePostion.y = shooterPostion.y + 
+    Math.cos(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
+    intakePostion.rotation = shooterPostion.rotation;
   }
 
-  public Pose2d getShooterPostion(){
+  public ArmPostion getShooterPostion(){
     return shooterPostion;
   }
 
-  public Pose2d getIntakePostion(){
+  public ArmPostion getIntakePostion(){
     return intakePostion;
   }
 
-  public void moveShooterToPose(Pose2d pose){
+  public void moveShooterToPose(ArmPostion position){
     // Assuming that the units are in rotations
-    mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos(pose.getX() + ArmConstants.mainPivotDistanceFromCenterMeters / ArmConstants.armLengthMeters)),
+    mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos(position.x + ArmConstants.mainPivotDistanceFromCenterMeters / ArmConstants.armLengthMeters)),
     ControlType.kPosition);
   }
 
-  public void moveIntakeToPose(Pose2d pose){
-    seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((pose.getX() - shooterPostion.getX()) / ArmConstants.shooterAndIntakeLengthMeters)),
+  public void moveIntakeToPose(ArmPostion postion){
+    seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPostion.x) / ArmConstants.shooterAndIntakeLengthMeters)),
     ControlType.kPosition);
   }
 
