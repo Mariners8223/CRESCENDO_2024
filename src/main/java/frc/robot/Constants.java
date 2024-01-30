@@ -56,8 +56,8 @@ public class Constants {
         public static final double mainPivotDistanceFromCenterMeters = 0.1;
         public static final double armHeightFromFrameMeters = 0.1;
 
-        public static final ArmPostion FloorPosition = new ArmPostion(null, null, null); // In radians
-        public static final ArmPostion SourcePosition = new ArmPostion(null, null, null);
+        public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
+        public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
 
         public static class Shooter{
             public static final int shooterMotor1ID = 0;
