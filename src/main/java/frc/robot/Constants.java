@@ -54,6 +54,21 @@ public class Constants {
         public static double mainPivotDistanceFromCenterMeters = 0.1;
         public static double armHeightFromFrameMeters = 0.1;
 
+        public static class Shooter{
+            public static final int shooterMotor1ID = 0;
+            public static final int shooterMotor2ID = 1;
+
+            public static final PIDFGains shooter1PID = new PIDFGains(0.5, 0, 0);
+            public static final PIDFGains shooter2PID = new PIDFGains(0.5, 0, 0);
+
+            public static final boolean shooter1Inverted = false;
+            public static final boolean shooter2Inverted = false;
+
+            public static double shooterMaxPower = 1;
+            
+            public static PIDFGains shooterPIDGains = new PIDFGains(0, 0, 0, 0, 0, 0);;
+        }
+
         public static class MotorConstants{
             public static final int mainMotorID = 0;
             public static final int seconderyMotorID = 1;
