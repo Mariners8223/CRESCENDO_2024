@@ -20,6 +20,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.subsystem.Arm.Intake.Intake;
+import frc.robot.subsystem.Arm.Shooter.Shooter;
 import frc.util.PIDFGains;
 
 public class Arm extends SubsystemBase {
@@ -63,6 +65,9 @@ public class Arm extends SubsystemBase {
   private ArmPostion intakePostion;
   private ArmPostion shooterPostion;
 
+  public Shooter shooter;
+  public Intake intake;
+
   @AutoLog
   public static class ArmInputs{
     double mainMotorPostion;
@@ -91,6 +96,9 @@ public class Arm extends SubsystemBase {
 
     intakePostion = new ArmPostion();
     shooterPostion = new ArmPostion();
+
+    shooter = Shooter.getInstance();
+    intake = Intake.getInstance();
   }
 
   public void updateLogger(){

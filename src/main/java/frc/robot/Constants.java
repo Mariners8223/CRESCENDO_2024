@@ -11,6 +11,8 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.I2C;
+import frc.robot.subsystem.Arm.Arm.ArmPostion;
 import frc.util.PIDFGains;
 
 /** Add yo
@@ -54,6 +56,9 @@ public class Constants {
         public static final double mainPivotDistanceFromCenterMeters = 0.1;
         public static final double armHeightFromFrameMeters = 0.1;
 
+        public static final ArmPostion FloorPosition = new ArmPostion(null, null, null); // In radians
+        public static final ArmPostion SourcePosition = new ArmPostion(null, null, null);
+
         public static class Shooter{
             public static final int shooterMotor1ID = 0;
             public static final int shooterMotor2ID = 1;
@@ -69,6 +74,19 @@ public class Constants {
             public static final PIDFGains shooterPIDGains = new PIDFGains(0, 0, 0, 0, 0, 0);
 
             public static final double wheelRadius = 0.0508;
+        }
+
+        public static final class IntakeConstants{
+            public static final int intakeMotorID = 0;
+            public static final boolean intakeMotorIsInverted = false;
+
+            public static final double intakeMotorSpeed = 0.1;
+
+            public static final double StallCurrent = 50;
+            public static final int MaxStallTime = 100;
+
+            public static final I2C.Port ColourSensorPort = I2C.Port.kMXP;
+            public static final int CloseProximity = 1500;
         }
 
         public static class MotorConstants{

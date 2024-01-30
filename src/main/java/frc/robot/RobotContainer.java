@@ -18,11 +18,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.util.humanIO.CommandPS5Controller;
 
 public class RobotContainer {
   public static DriveBase driveBase;
+  public static Arm arm;
 
   public static CommandPS5Controller driveController;
   public static SendableChooser<Command> autoChooser;
@@ -40,6 +42,7 @@ public class RobotContainer {
     driveController = new CommandPS5Controller(0);
 
     driveBase = new DriveBase();
+    arm = Arm.getInstance();
 
     configureBindings();
     configChooser();
@@ -65,6 +68,10 @@ public class RobotContainer {
     autoChooser.addOption("Do Nothing", new InstantCommand());
     autoChooser.addOption("auto path", new InstantCommand(() -> driveBase.followPath(PathPlannerPath.fromPathFile("Dedi4")).schedule()));
     SmartDashboard.putData(autoChooser);
+  }
+
+  public static class IntakeToFloor extends InstantCommand{
+    
   }
 
   private void configureNamedCommands(){
