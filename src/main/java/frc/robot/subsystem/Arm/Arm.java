@@ -10,7 +10,6 @@ import org.littletonrobotics.junction.Logger;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -125,42 +124,44 @@ public class Arm extends SubsystemBase{
   }
 
   public void moveShooterToPose(ArmPostion position, ControlType controlType){
-    // Assuming that the units are in rotations
-    // mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos(position.x + ArmConstants.mainPivotDistanceFromCenterMeters / ArmConstants.armLengthMeters)),
-    // CANSparkBase.ControlType.kPosition);
-
     switch (controlType) {
       case Xaxis:
-      //TODO add x axis control
+        mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos(position.x + ArmConstants.mainPivotDistanceFromCenterMeters / ArmConstants.armLengthMeters)),
+        CANSparkBase.ControlType.kPosition);
         break;
       case Yaxis:
-      //TODO add Y axis control
+        mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin(position.y / ArmConstants.armLengthMeters)),
+        CANSparkBase.ControlType.kPosition);
         break;
       case Rotation:
-      //TODO add rotation control
+        mainMotor.getPIDController().setReference(Units.degreesToRotations(position.rotation), 
+        CANSparkBase.ControlType.kPosition);
         break;
       default:
-      //TODO idk what to do here
+        mainMotor.getPIDController().setReference(Units.degreesToRotations(position.rotation), 
+        CANSparkBase.ControlType.kPosition);
         break;
     }
   }
 
   public void moveIntakeToPose(ArmPostion postion, ControlType controlType){
-    // seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPostion.x) / ArmConstants.shooterAndIntakeLengthMeters)),
-    // CANSparkBase.ControlType.kPosition);
-
     switch (controlType) {
       case Xaxis:
-      //TODO add x axis control
+        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPostion.x) / ArmConstants.shooterAndIntakeLengthMeters)),
+        CANSparkBase.ControlType.kPosition);
         break;
       case Yaxis:
-      //TODO add Y axis control
+        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((postion.y - shooterPostion.y) / ArmConstants.shooterAndIntakeLengthMeters) + 
+        (Math.PI / 2) - Units.degreesToRadians(shooterPostion.rotation)), 
+        CANSparkBase.ControlType.kPosition);
         break;
       case Rotation:
-      //TODO add rotation control
+        seconderyMotor.getPIDController().setReference(Units.degreesToRotations(postion.rotation + 180),
+        CANSparkBase.ControlType.kPosition);
         break;
       default:
-      //TODO idk what to do here
+        seconderyMotor.getPIDController().setReference(Units.degreesToRotations(postion.rotation + 180),
+        CANSparkBase.ControlType.kPosition);
         break;
     }
   }
