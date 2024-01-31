@@ -147,12 +147,13 @@ public class Arm extends SubsystemBase{
   public void moveIntakeToPose(ArmPostion postion, ControlType controlType){
     switch (controlType) {
       case Xaxis:
-        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPostion.x) / ArmConstants.shooterAndIntakeLengthMeters)),
+        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPostion.x) / ArmConstants.shooterAndIntakeLengthMeters)) + 
+        (Math.PI / 2) - Units.degreesToRadians(shooterPostion.rotation),
         CANSparkBase.ControlType.kPosition);
         break;
       case Yaxis:
         seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((postion.y - shooterPostion.y) / ArmConstants.shooterAndIntakeLengthMeters) + 
-        (Math.PI / 2) - Units.degreesToRadians(shooterPostion.rotation)), 
+        (Math.PI / 2) - Units.degreesToRadians(shooterPostion.rotation)),
         CANSparkBase.ControlType.kPosition);
         break;
       case Rotation:
