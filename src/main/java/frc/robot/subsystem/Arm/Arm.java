@@ -134,11 +134,11 @@ public class Arm extends SubsystemBase{
         CANSparkBase.ControlType.kPosition);
         break;
       case Rotation:
-        mainMotor.getPIDController().setReference(Units.degreesToRotations(position.rotation), 
+        mainMotor.getPIDController().setReference(Units.radiansToRotations(position.rotation), 
         CANSparkBase.ControlType.kPosition);
         break;
       default:
-        mainMotor.getPIDController().setReference(Units.degreesToRotations(position.rotation), 
+        mainMotor.getPIDController().setReference(Units.radiansToRotations(position.rotation), 
         CANSparkBase.ControlType.kPosition);
         break;
     }
@@ -157,11 +157,11 @@ public class Arm extends SubsystemBase{
         CANSparkBase.ControlType.kPosition);
         break;
       case Rotation:
-        seconderyMotor.getPIDController().setReference(Units.degreesToRotations(postion.rotation + 180),
+        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation + Math.PI),
         CANSparkBase.ControlType.kPosition);
         break;
       default:
-        seconderyMotor.getPIDController().setReference(Units.degreesToRotations(postion.rotation + 180),
+        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation + Math.PI),
         CANSparkBase.ControlType.kPosition);
         break;
     }
@@ -194,16 +194,14 @@ public class Arm extends SubsystemBase{
   public void updateArmPostions(){
     shooterPostion.x = Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters - ArmConstants.mainPivotDistanceFromCenterMeters;
     shooterPostion.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters + ArmConstants.armHeightFromFrameMeters;
-    shooterPostion.rotation = Units.rotationsToRadians(inputs.mainMotorPostion + 1 - inputs.seconderyMotorPosition);
+    shooterPostion.rotation = Units.rotationsToRadians(inputs.mainMotorPostion);
 
     intakePostion.x = shooterPostion.x +
     Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
     intakePostion.y = shooterPostion.y + 
     Math.cos(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
-    intakePostion.rotation = shooterPostion.rotation;
+    intakePostion.rotation = Units.rotationsToRadians(inputs.seconderyMotorPosition) - Math.PI;
   }
-
-
 
   private CANSparkFlex configureMotors(int canID, double zeroOffset, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
     CANSparkFlex sparkFlex = new CANSparkFlex(canID, MotorType.kBrushless);
