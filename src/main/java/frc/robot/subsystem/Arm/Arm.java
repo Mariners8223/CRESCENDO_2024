@@ -7,6 +7,7 @@ package frc.robot.subsystem.Arm;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -51,6 +52,12 @@ public class Arm extends SubsystemBase{
     public Pose2d toPose2d(){
       return new Pose2d(x, y, Rotation2d.fromRadians(rotation));
     }
+  }
+
+  public static enum ControlType{
+    Xaxis,
+    Yaxis,
+    Rotation,
   }
 
   /** Creates a new Arm. */
@@ -109,6 +116,66 @@ public class Arm extends SubsystemBase{
     intake = new Intake();
   }
 
+  public ArmPostion getShooterPostion(){
+    return shooterPostion;
+  }
+
+  public ArmPostion getIntakePostion(){
+    return intakePostion;
+  }
+
+  public void moveShooterToPose(ArmPostion position, ControlType controlType){
+    // Assuming that the units are in rotations
+    // mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos(position.x + ArmConstants.mainPivotDistanceFromCenterMeters / ArmConstants.armLengthMeters)),
+    // CANSparkBase.ControlType.kPosition);
+
+    switch (controlType) {
+      case Xaxis:
+      //TODO add x axis control
+        break;
+      case Yaxis:
+      //TODO add Y axis control
+        break;
+      case Rotation:
+      //TODO add rotation control
+        break;
+      default:
+      //TODO idk what to do here
+        break;
+    }
+  }
+
+  public void moveIntakeToPose(ArmPostion postion, ControlType controlType){
+    // seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPostion.x) / ArmConstants.shooterAndIntakeLengthMeters)),
+    // CANSparkBase.ControlType.kPosition);
+
+    switch (controlType) {
+      case Xaxis:
+      //TODO add x axis control
+        break;
+      case Yaxis:
+      //TODO add Y axis control
+        break;
+      case Rotation:
+      //TODO add rotation control
+        break;
+      default:
+      //TODO idk what to do here
+        break;
+    }
+  }
+
+  public void update(){
+    updateLogger();
+    updateArmPostions();
+  }
+
+  @Override
+  public void periodic() {
+    update();
+    // This method will be called once per scheduler run
+  }
+
   public void updateLogger(){
     inputs.mainMotorPostion = mainMotor.getEncoder().getPosition();
     inputs.seconderyMotorPosition = mainMotor.getEncoder().getPosition();
@@ -134,35 +201,6 @@ public class Arm extends SubsystemBase{
     intakePostion.rotation = shooterPostion.rotation;
   }
 
-  public ArmPostion getShooterPostion(){
-    return shooterPostion;
-  }
-
-  public ArmPostion getIntakePostion(){
-    return intakePostion;
-  }
-
-  public void moveShooterToPose(ArmPostion position){
-    // Assuming that the units are in rotations
-    mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos(position.x + ArmConstants.mainPivotDistanceFromCenterMeters / ArmConstants.armLengthMeters)),
-    ControlType.kPosition);
-  }
-
-  public void moveIntakeToPose(ArmPostion postion){
-    seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPostion.x) / ArmConstants.shooterAndIntakeLengthMeters)),
-    ControlType.kPosition);
-  }
-
-  public void update(){
-    updateLogger();
-    updateArmPostions();
-  }
-
-  @Override
-  public void periodic() {
-    update();
-    // This method will be called once per scheduler run
-  }
 
 
   private CANSparkFlex configureMotors(int canID, double zeroOffset, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {

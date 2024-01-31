@@ -1,7 +1,5 @@
 package frc.robot.commands.IntakeCommands;
 
-import com.revrobotics.ColorSensorV3;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.Arm.Arm;

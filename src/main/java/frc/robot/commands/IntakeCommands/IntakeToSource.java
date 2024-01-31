@@ -7,6 +7,7 @@ package frc.robot.commands.IntakeCommands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.Arm.ControlType;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -22,6 +23,6 @@ public class IntakeToSource extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    arm.moveIntakeToPose(ArmConstants.SourcePosition);
+    arm.moveIntakeToPose(ArmConstants.SourcePosition, ControlType.Rotation);
   }
 }
