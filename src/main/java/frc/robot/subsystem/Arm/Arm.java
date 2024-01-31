@@ -200,7 +200,7 @@ public class Arm extends SubsystemBase{
     Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
     intakePostion.y = shooterPostion.y + 
     Math.cos(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
-    intakePostion.rotation = Units.rotationsToRadians(inputs.seconderyMotorPosition) - Math.PI;
+    intakePostion.rotation = Units.rotationsToRadians(inputs.seconderyMotorPosition);
   }
 
   private CANSparkFlex configureMotors(int canID, double zeroOffset, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
