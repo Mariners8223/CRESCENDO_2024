@@ -18,8 +18,6 @@ public class Shooter {
     private CANSparkFlex shooterMotor1;
     private CANSparkFlex shooterMotor2;
 
-    private static Shooter instance;
-
     // constructor for shooter - configures motors
     public Shooter(){
         shooterMotor1 = configMotor(Constants.ArmConstants.Shooter.shooterPIDGains, Constants.ArmConstants.Shooter.shooterMotor1ID);
@@ -59,11 +57,4 @@ public class Shooter {
         // return velocity in meters per second
         return Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor1.getEncoder().getVelocity()) * Constants.ArmConstants.Shooter.wheelRadius;
     }
-
-    public static Shooter getInstance(){
-        if (instance == null){
-            instance = new Shooter();
-        }
-        return instance;
-    } 
 }

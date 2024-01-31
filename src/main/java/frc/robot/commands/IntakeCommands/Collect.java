@@ -4,17 +4,16 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Intake.Intake;
 import frc.robot.Constants.ArmConstants.IntakeConstants;
 
 public class Collect extends Command{
   private Intake intake;
-  private ColorSensorV3 colourSensor;
   private int timer;
 
   public Collect(){
-    intake = Intake.getInstance();
-    colourSensor = new ColorSensorV3(IntakeConstants.ColourSensorPort);
+    intake = Arm.getInstance().getIntake();
     timer = 0;
   }
 
@@ -29,8 +28,7 @@ public class Collect extends Command{
     if (intake.getCurrent() > IntakeConstants.StallCurrent){
       timer++;
     }
-
-    else if (timer > 0){
+    else{
         timer = 0;
     }
   }
@@ -48,6 +46,6 @@ public class Collect extends Command{
 
   @Override
   public boolean isFinished(){
-    return (colourSensor.getProximity() < IntakeConstants.CloseProximity || timer >= IntakeConstants.MaxStallTime);
+    return (intake.getProximity() < IntakeConstants.CloseProximity || timer >= IntakeConstants.MaxStallTime);
   }
 }

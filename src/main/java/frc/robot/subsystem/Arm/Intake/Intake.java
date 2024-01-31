@@ -5,16 +5,20 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 
 public class Intake {
     private CANSparkFlex intakeMotor;
-    private static Intake instance;
+    private ColorSensorV3 colorSensor;
 
     public Intake() {
         intakeMotor = new CANSparkFlex(IntakeConstants.intakeMotorID, MotorType.kBrushless);
         intakeMotor.setInverted(IntakeConstants.intakeMotorIsInverted);
+
+        colorSensor = new ColorSensorV3(IntakeConstants.ColorSensorPort);
+    }
+
+    public double getProximity(){
+        return colorSensor.getProximity();
     }
 
     public void setMotor(double speed){
@@ -28,12 +32,4 @@ public class Intake {
     public double getCurrent(){
         return intakeMotor.getOutputCurrent();
     }
-
-    public static Intake getInstance(){
-        if (instance == null){
-            instance = new Intake();
-        }
-
-        return instance;
-    } 
 }

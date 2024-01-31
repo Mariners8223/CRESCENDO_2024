@@ -85,7 +85,7 @@ public class Constants {
             public static final double StallCurrent = 50;
             public static final int MaxStallTime = 100;
 
-            public static final I2C.Port ColourSensorPort = I2C.Port.kMXP;
+            public static final I2C.Port ColorSensorPort = I2C.Port.kOnboard;
             public static final int CloseProximity = 1500;
         }
 

@@ -24,7 +24,7 @@ import frc.robot.subsystem.Arm.Intake.Intake;
 import frc.robot.subsystem.Arm.Shooter.Shooter;
 import frc.util.PIDFGains;
 
-public class Arm extends SubsystemBase {
+public class Arm extends SubsystemBase{
   public static class ArmPostion{
     public double x;
     public double y;
@@ -65,8 +65,8 @@ public class Arm extends SubsystemBase {
   private ArmPostion intakePostion;
   private ArmPostion shooterPostion;
 
-  public Shooter shooter;
-  public Intake intake;
+  private Shooter shooter;
+  private Intake intake;
 
   @AutoLog
   public static class ArmInputs{
@@ -85,6 +85,14 @@ public class Arm extends SubsystemBase {
     return instance;
   }
 
+  public Shooter getShooter(){
+    return shooter;
+  }
+
+  public Intake getIntake(){
+    return intake;
+  }
+
   private Arm() {
     mainMotor = configureMotors(Constants.ArmConstants.MotorConstants.mainMotorID, Constants.ArmConstants.MotorConstants.mainZeroOffset ,Constants.ArmConstants.MotorConstants.mainPID,
     Constants.ArmConstants.MotorConstants.mainInverted, Constants.ArmConstants.MotorConstants.mainConvertionFactor, Constants.ArmConstants.MotorConstants.mainSoftLimits);
@@ -97,8 +105,8 @@ public class Arm extends SubsystemBase {
     intakePostion = new ArmPostion();
     shooterPostion = new ArmPostion();
 
-    shooter = Shooter.getInstance();
-    intake = Intake.getInstance();
+    shooter = new Shooter();
+    intake = new Intake();
   }
 
   public void updateLogger(){
