@@ -157,11 +157,11 @@ public class Arm extends SubsystemBase{
         CANSparkBase.ControlType.kPosition);
         break;
       case Rotation:
-        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation + Math.PI),
+        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation),
         CANSparkBase.ControlType.kPosition);
         break;
       default:
-        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation + Math.PI),
+        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation),
         CANSparkBase.ControlType.kPosition);
         break;
     }
@@ -194,7 +194,7 @@ public class Arm extends SubsystemBase{
   public void updateArmPostions(){
     shooterPostion.x = Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters - ArmConstants.mainPivotDistanceFromCenterMeters;
     shooterPostion.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters + ArmConstants.armHeightFromFrameMeters;
-    shooterPostion.rotation = Units.rotationsToRadians(inputs.mainMotorPostion);
+    shooterPostion.rotation = Units.rotationsToRadians(inputs.mainMotorPostion + inputs.seconderyMotorPosition);
 
     intakePostion.x = shooterPostion.x +
     Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
