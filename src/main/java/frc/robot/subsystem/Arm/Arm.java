@@ -125,10 +125,12 @@ public class Arm extends SubsystemBase{
 
   private void createArmTriggers(){
     new Trigger(() -> RobotContainer.getRobotZone() >= 1 && RobotContainer.getRobotZone() <= 3).and(RobotContainer::isAmplified)
-    .and(this::isArmInPosition).and(intake::isGamePieceDetected).whileTrue(new InstantCommand()); //TODO: add command that shoots, and add robot rotation check
+    .and(this::isArmInPosition).and(intake::isGamePieceDetected).and(RobotContainer::isAimingAtSpeaker).onTrue(new InstantCommand()); //TODO: add command that shoots, and add robot rotation check
 
-    new Trigger(() -> RobotContainer.getRobotZone() == 1).and(intake::isGamePieceDetected).and(RobotContainer.driveController.cross()).whileTrue(new InstantCommand()); //TODO: add command the homes the arm
-    new Trigger(() -> RobotContainer.getRobotZone() == 2).and(intake::isGamePieceDetected).whileTrue(new InstantCommand()); //TODO: add command that homes the arm with more advance calculations
+    new Trigger(() -> RobotContainer.getRobotZone() == 1).and(RobotContainer::isRobotSpeakerMode).whileTrue(new InstantCommand()); //TODO: add command the homes the arm
+    new Trigger(() -> RobotContainer.getRobotZone() == 2).and(RobotContainer::isRobotSpeakerMode).whileTrue(new InstantCommand()); //TODO: add command that homes the arm with more advance calculations
+
+    
 
   }
 

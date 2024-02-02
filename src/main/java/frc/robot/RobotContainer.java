@@ -28,6 +28,8 @@ public class RobotContainer {
 
   public static CommandPS5Controller driveController;
   public static SendableChooser<Command> autoChooser;
+  
+  public static boolean aimingAtSpeaker = true;
 
   public static BooleanSupplier isBlueAllince = () -> {
     if(DriverStation.getAlliance().isEmpty()) return true;
@@ -52,14 +54,14 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    driveController.circle().onTrue(DriveBase.lockSwerveInXPatternCommand.getInstance());
-    driveController.square().onTrue(new InstantCommand(() -> DriveBase.lockSwerveInXPatternCommand.getInstance().cancel()));
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
-    driveController.triangle().onTrue(new InstantCommand(() -> driveBase.Reset()));
 
-    driveController.cross().whileTrue(DriveBase.OrchestraCommand.getInstance().ignoringDisable(true));
-    driveController.share().onTrue(DriveBase.CalibrateSwerveCommand.getInstance().ignoringDisable(true));
+    // driveController.cross().whileTrue(DriveBase.OrchestraCommand.getInstance().ignoringDisable(true));
+    // driveController.share().onTrue(DriveBase.CalibrateSwerveCommand.getInstance().ignoringDisable(true));
 
+
+    driveController.cross().debounce(0.1).and(() -> getRobotZone() == 1 || getRobotZone() == 2).onTrue(new InstantCommand(() -> aimingAtSpeaker = !aimingAtSpeaker));
+    new Trigger(() -> getRobotZone() == 1 || getRobotZone() == 2).onTrue(new InstantCommand(() -> aimingAtSpeaker = true));
   }
 
   private void configChooser(){
@@ -92,13 +94,21 @@ public class RobotContainer {
     return false;
   }
 
+  public static boolean isRobotSpeakerMode(){
+    return aimingAtSpeaker && arm.getIntake().isGamePieceDetected();
+  }
+
+  public static boolean isAimingAtSpeaker(){
+    return aimingAtSpeaker;
+  }
+
   public static Command getAutoCommand(){
     return autoChooser.getSelected();
   }
 
    /**
    * gets the zone the robot is in based on the robot's position
-   * @return the index of the zone the robot is in (from 1 to 5 inclusive)
+   * @return the index of the zone the robot is in (from 1 to 4 inclusive)
    */
 
   public static int getRobotZone(){
