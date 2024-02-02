@@ -88,6 +88,10 @@ public class RobotContainer {
     return value;
   }
 
+  public static boolean isAmplified(){
+    return false;
+  }
+
   public static Command getAutoCommand(){
     return autoChooser.getSelected();
   }

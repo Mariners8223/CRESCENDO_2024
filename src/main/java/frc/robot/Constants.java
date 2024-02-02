@@ -118,6 +118,9 @@ public class Constants {
 
             public static final double[] mainSoftLimits = new double[]{1, -1};
             public static final double[] seconderySoftLimits = new double[]{1, -1};
+
+            public static final double mainMotortolarance = 0.1;
+            public static final double seconderyMotorTolarance = 0.1;
         }
     }
 

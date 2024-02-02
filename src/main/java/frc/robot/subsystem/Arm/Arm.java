@@ -17,8 +17,11 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystem.Arm.Intake.Intake;
 import frc.robot.subsystem.Arm.Shooter.Shooter;
@@ -79,6 +82,9 @@ public class Arm extends SubsystemBase{
     double mainMotorPostion;
     double seconderyMotorPosition;
 
+    double mainMotorTargetPostion;
+    double seconderyTargetPostion;
+
     double mainMotorAbsolutePostion;
     double seconderyAbsolutePostion;
 
@@ -113,6 +119,17 @@ public class Arm extends SubsystemBase{
 
     shooter = Shooter.getInstance();
     intake = Intake.getInstance();
+
+    createArmTriggers();
+  }
+
+  private void createArmTriggers(){
+    new Trigger(() -> RobotContainer.getRobotZone() >= 1 && RobotContainer.getRobotZone() <= 3).and(RobotContainer::isAmplified)
+    .and(this::isArmInPosition).and(intake::isGamePieceDetected).whileTrue(new InstantCommand()); //TODO: add command that shoots, and add robot rotation check
+
+    new Trigger(() -> RobotContainer.getRobotZone() == 1).and(intake::isGamePieceDetected).and(RobotContainer.driveController.cross()).whileTrue(new InstantCommand()); //TODO: add command the homes the arm
+    new Trigger(() -> RobotContainer.getRobotZone() == 2).and(intake::isGamePieceDetected).whileTrue(new InstantCommand()); //TODO: add command that homes the arm with more advance calculations
+
   }
 
   public ArmPostion getShooterPostion(){
@@ -123,11 +140,16 @@ public class Arm extends SubsystemBase{
     return intakePostion;
   }
 
+  public boolean isArmInPosition(){
+    return Math.abs(inputs.mainMotorTargetPostion - inputs.mainMotorPostion) < Constants.ArmConstants.MotorConstants.mainMotortolarance &&
+    Math.abs(inputs.seconderyMotorPosition - inputs.seconderyTargetPostion) < Constants.ArmConstants.MotorConstants.seconderyMotorTolarance;
+  }
+
   public void moveShooterToPose(ArmPostion position, ControlType controlType){
     switch (controlType) {
       case Xaxis:
-        mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((position.x + ArmConstants.mainPivotDistanceFromCenterMeters) / ArmConstants.armLengthMeters)),
-        CANSparkBase.ControlType.kPosition);
+        inputs.mainMotorTargetPostion = Units.radiansToRotations(Math.acos((position.x + ArmConstants.mainPivotDistanceFromCenterMeters) / ArmConstants.armLengthMeters));
+        mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);
         break;
       case Yaxis:
         mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((position.y + ArmConstants.armHeightFromFrameMeters) / ArmConstants.armLengthMeters)),

@@ -31,6 +31,10 @@ public class Intake {
         return colorSensor.getProximity();
     }
 
+    public boolean isGamePieceDetected(){
+        return colorSensor.getProximity() < 0;
+    }
+
     public void setMotor(double speed){
         intakeMotor.set(speed);
     }
