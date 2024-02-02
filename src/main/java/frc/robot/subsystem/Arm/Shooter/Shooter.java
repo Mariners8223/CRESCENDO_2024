@@ -6,7 +6,10 @@ package frc.robot.subsystem.Arm.Shooter;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import frc.util.PIDFGains;
@@ -51,16 +54,16 @@ public class Shooter {
 
     // set shooter power
     public void setShooterPower(double power) {
-        // clamp power to max power
-        if (Math.abs(power) > Constants.ArmConstants.Shooter.shooterMaxPower) {
-            if (power < 0) power = Constants.ArmConstants.Shooter.shooterMaxPower * -1;
-            else power = Constants.ArmConstants.Shooter.shooterMaxPower;
-        }
+        power = MathUtil.clamp(power, -1, 1);
 
-        // set power
-        shooterMotor1.getPIDController().setReference(power, CANSparkFlex.ControlType.kPosition);
-        shooterMotor2.getPIDController().setReference(power, CANSparkFlex.ControlType.kPosition);
-      }
+        shooterMotor1.set(power);
+        shooterMotor2.set(power);
+    }
+
+    public void stopMotors(){
+        shooterMotor1.stopMotor();
+        shooterMotor2.stopMotor();
+    }
     
     // get shooter power
     public double getShooterPower() {
