@@ -126,11 +126,11 @@ public class Arm extends SubsystemBase{
   public void moveShooterToPose(ArmPostion position, ControlType controlType){
     switch (controlType) {
       case Xaxis:
-        mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos(position.x + ArmConstants.mainPivotDistanceFromCenterMeters / ArmConstants.armLengthMeters)),
+        mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((position.x + ArmConstants.mainPivotDistanceFromCenterMeters) / ArmConstants.armLengthMeters)),
         CANSparkBase.ControlType.kPosition);
         break;
       case Yaxis:
-        mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin(position.y / ArmConstants.armLengthMeters)),
+        mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((position.y + ArmConstants.armHeightFromFrameMeters) / ArmConstants.armLengthMeters)),
         CANSparkBase.ControlType.kPosition);
         break;
       case Rotation:
@@ -148,12 +148,12 @@ public class Arm extends SubsystemBase{
     switch (controlType) {
       case Xaxis:
         seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPostion.x) / ArmConstants.shooterAndIntakeLengthMeters)) + 
-        (Math.PI / 2) - Units.degreesToRadians(shooterPostion.rotation),
+        (Math.PI / 2) - shooterPostion.rotation,
         CANSparkBase.ControlType.kPosition);
         break;
       case Yaxis:
-        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((postion.y - shooterPostion.y) / ArmConstants.shooterAndIntakeLengthMeters) + 
-        (Math.PI / 2) - Units.degreesToRadians(shooterPostion.rotation)),
+        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((postion.y - shooterPostion.y) / ArmConstants.shooterAndIntakeLengthMeters)) + 
+        (Math.PI / 2) - shooterPostion.rotation,
         CANSparkBase.ControlType.kPosition);
         break;
       case Rotation:
@@ -192,8 +192,8 @@ public class Arm extends SubsystemBase{
   }
 
   public void updateArmPostions(){
-    shooterPostion.x = Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters - ArmConstants.mainPivotDistanceFromCenterMeters;
-    shooterPostion.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * Constants.ArmConstants.armLengthMeters + ArmConstants.armHeightFromFrameMeters;
+    shooterPostion.x = Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * (Constants.ArmConstants.armLengthMeters - ArmConstants.mainPivotDistanceFromCenterMeters);
+    shooterPostion.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * (Constants.ArmConstants.armLengthMeters + ArmConstants.armHeightFromFrameMeters);
     shooterPostion.rotation = Units.rotationsToRadians(inputs.mainMotorPostion + inputs.seconderyMotorPosition);
 
     intakePostion.x = shooterPostion.x +
