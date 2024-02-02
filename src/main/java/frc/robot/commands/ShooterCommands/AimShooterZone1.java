@@ -14,7 +14,7 @@ import frc.robot.subsystem.Arm.Arm.ArmPostion;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AimShooterZone1 extends InstantCommand {
-  private static ArmPostion target = new ArmPostion();
+  private static ArmPostion target = new ArmPostion(0.4, 0.4, 0);
   private static double distanceToSpeaker;
   private static double angleToSpeaker;
 
@@ -30,6 +30,8 @@ public class AimShooterZone1 extends InstantCommand {
 
     angleToSpeaker = Math.atan(Constants.SpeakerTranslation.getZ() / distanceToSpeaker);
 
-    
+    target.rotation = angleToSpeaker;
+
+    Arm.getInstance().moveShooterToPose(target, null);
   }
 }
