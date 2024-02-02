@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
@@ -35,6 +36,7 @@ public class Constants {
     };
 
     public static final Pose2d AmpPose = new Pose2d(3, 8, Rotation2d.fromDegrees(90));
+    public static final Translation3d SpeakerTranslation = new Translation3d(0.5, 5, 3);
 
     public static final class Logger{
         public static final String save_location = ""; //add save lcoation (probably a usb stick so /u)
