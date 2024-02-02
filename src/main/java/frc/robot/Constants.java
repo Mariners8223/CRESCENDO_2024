@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -21,7 +24,11 @@ import frc.util.PIDFGains;
 /** Add your docs here. */
 public class Constants {
 
-    public static final Translation2d[][] robotZones = new Translation2d[][]{
+    // public static final Translation2d[][] robotZones = new Translation2d[][]{
+    //     //TODO: add robot zones
+    // };
+
+    public static final List<Translation2d> robotZones = new ArrayList<Translation2d>() {
         //TODO: add robot zones
     };
 
