@@ -98,6 +98,10 @@ public class RobotContainer {
     return aimingAtSpeaker && arm.getIntake().isGamePieceDetected();
   }
 
+  public static boolean isRobotAmpMode(){
+    return !aimingAtSpeaker && arm.getIntake().isGamePieceDetected();
+  }
+
   public static boolean isAimingAtSpeaker(){
     return aimingAtSpeaker;
   }
