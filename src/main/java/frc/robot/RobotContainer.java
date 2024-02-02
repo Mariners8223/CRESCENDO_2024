@@ -92,4 +92,27 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 
+   /**
+   * gets the zone the robot is in based on the x position
+   * @return the zone the robot is in (from 1 to 6 inclusive, 6 is the default value if the robot is not in any zone)
+   */
+  public static int getRobotZone(){
+    if(driveBase.getPose().getTranslation().getX() >= Constants.robotZones[0][0].getX() &&
+    driveBase.getPose().getTranslation().getX() <= Constants.robotZones[0][1].getX()) return 1;
+
+    if(driveBase.getPose().getTranslation().getX() >= Constants.robotZones[1][0].getX() &&
+    driveBase.getPose().getTranslation().getX() <= Constants.robotZones[1][1].getX()) return 2;
+
+    if(driveBase.getPose().getTranslation().getX() >= Constants.robotZones[2][0].getX() &&
+    driveBase.getPose().getTranslation().getX() <= Constants.robotZones[2][1].getX()) return 3;
+
+    if(driveBase.getPose().getTranslation().getX() >= Constants.robotZones[3][0].getX() &&
+    driveBase.getPose().getTranslation().getX() <= Constants.robotZones[3][1].getX()) return 4;
+
+    if(driveBase.getPose().getTranslation().getX() >= Constants.robotZones[4][0].getX() &&
+    driveBase.getPose().getTranslation().getX() <= Constants.robotZones[4][1].getX()) return 5;
+
+    return 6;
+  }
+
 }

@@ -21,6 +21,10 @@ import frc.util.PIDFGains;
 /** Add your docs here. */
 public class Constants {
 
+    public static final Translation2d[][] robotZones = new Translation2d[][]{
+        //TODO: add robot zones
+    };
+
     public static final class Logger{
         public static final String save_location = ""; //add save lcoation (probably a usb stick so /u)
     }
