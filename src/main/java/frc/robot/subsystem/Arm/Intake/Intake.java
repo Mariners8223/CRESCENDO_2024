@@ -7,15 +7,25 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 
 public class Intake {
+    private static Intake instance;
+
     private CANSparkFlex intakeMotor;
     private ColorSensorV3 colorSensor;
 
-    public Intake() {
+    private Intake() {
         intakeMotor = new CANSparkFlex(IntakeConstants.intakeMotorID, MotorType.kBrushless);
         intakeMotor.setInverted(IntakeConstants.intakeMotorIsInverted);
 
         colorSensor = new ColorSensorV3(IntakeConstants.ColorSensorPort);
     }
+
+    public static Intake getInstance(){
+        if(instance == null){
+            instance = new Intake();
+        }
+
+        return instance;
+    } 
 
     public double getProximity(){
         return colorSensor.getProximity();

@@ -111,8 +111,8 @@ public class Arm extends SubsystemBase{
     intakePostion = new ArmPostion();
     shooterPostion = new ArmPostion();
 
-    shooter = new Shooter();
-    intake = new Intake();
+    shooter = Shooter.getInstance();
+    intake = Intake.getInstance();
   }
 
   public ArmPostion getShooterPostion(){

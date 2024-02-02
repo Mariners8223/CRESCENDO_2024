@@ -14,14 +14,24 @@ import frc.util.PIDFGains;
 /** Add your docs here. */
 public class Shooter {
 
+    private static Shooter instance;
+
     // initialize motors
     private CANSparkFlex shooterMotor1;
     private CANSparkFlex shooterMotor2;
 
     // constructor for shooter - configures motors
-    public Shooter(){
+    private Shooter(){
         shooterMotor1 = configMotor(Constants.ArmConstants.Shooter.shooterPIDGains, Constants.ArmConstants.Shooter.shooterMotor1ID);
         shooterMotor2 = configMotor(Constants.ArmConstants.Shooter.shooterPIDGains, Constants.ArmConstants.Shooter.shooterMotor2ID);
+    }
+
+    public static Shooter getInstance(){
+        if(instance == null) {
+            instance = new Shooter();
+        }
+
+        return instance;
     }
 
     // configures motor with PID gains
