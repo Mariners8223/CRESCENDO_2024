@@ -32,6 +32,6 @@ public class AimShooterZone1 extends InstantCommand {
 
     target.rotation = angleToSpeaker;
 
-    Arm.getInstance().moveShooterToPose(target, null);
+    Arm.getInstance().moveShooterToPose(target);
   }
 }

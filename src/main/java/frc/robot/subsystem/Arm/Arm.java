@@ -147,25 +147,12 @@ public class Arm extends SubsystemBase{
     Math.abs(inputs.seconderyMotorPosition - inputs.seconderyTargetPostion) < Constants.ArmConstants.MotorConstants.seconderyMotorTolarance;
   }
 
-  public void moveShooterToPose(ArmPostion position, ControlType controlType){
-    switch (controlType) {
-      case Xaxis:
-        inputs.mainMotorTargetPostion = Units.radiansToRotations(Math.acos((position.x + ArmConstants.mainPivotDistanceFromCenterMeters) / ArmConstants.armLengthMeters));
-        mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);
-        break;
-      case Yaxis:
-        mainMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((position.y + ArmConstants.armHeightFromFrameMeters) / ArmConstants.armLengthMeters)),
-        CANSparkBase.ControlType.kPosition);
-        break;
-      case Rotation:
-        mainMotor.getPIDController().setReference(Units.radiansToRotations(position.rotation), 
-        CANSparkBase.ControlType.kPosition);
-        break;
-      default:
-        mainMotor.getPIDController().setReference(Units.radiansToRotations(position.rotation), 
-        CANSparkBase.ControlType.kPosition);
-        break;
-    }
+  public void moveShooterToPose(ArmPostion position){
+    inputs.mainMotorTargetPostion = Units.radiansToRotations(Math.asin(position.y / ArmConstants.armLengthMeters));
+    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);
+
+    inputs.seconderyTargetPostion = inputs.mainMotorTargetPostion + Units.radiansToRotations(position.rotation);
+    seconderyMotor.getPIDController().setReference(inputs.seconderyTargetPostion, CANSparkBase.ControlType.kPosition);
   }
 
   public void moveIntakeToPose(ArmPostion postion, ControlType controlType){
