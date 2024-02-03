@@ -67,11 +67,11 @@ public class Constants {
     }
 
     public static final class ArmConstants {
-        public static final double armLengthMeters = 0.5;
-        public static final double shooterAndIntakeLengthMeters = 0.5;
+        public static final double armLengthMeters = 0.46;
+        public static final double shooterAndIntakeLengthMeters = 0.361;
 
-        public static final double mainPivotDistanceFromCenterMeters = 0.1;
-        public static final double armHeightFromFrameMeters = 0.1;
+        public static final double mainPivotDistanceFromCenterMeters = 0.113;
+        public static final double armHeightFromFrameMeters = 0.245;
 
         public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
