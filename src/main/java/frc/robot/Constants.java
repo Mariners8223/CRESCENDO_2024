@@ -67,6 +67,8 @@ public class Constants {
     }
 
     public static final class ArmConstants {
+        public static final double inchToMeterRatio = 0.0254;
+
         public static final double armLengthMeters = 0.46;
         public static final double shooterAndIntakeLengthMeters = 0.361;
 
@@ -75,6 +77,24 @@ public class Constants {
 
         public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
+        public static final double RobotHightFromGround = 0;
+
+        public static final double SpeakerLocationOffset = 1.05/2;
+        public static final double SpeakerLength = 1.05;
+        public static final double SpeakerMidlleLocationY = 218.42 * inchToMeterRatio;
+        public static final double SpeakerBottomLocationY = 218.42 * inchToMeterRatio - SpeakerLocationOffset;
+        public static final double FieldYLength = 323.00 * inchToMeterRatio;
+        public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLocationOffset - SpeakerMidlleLocationY));
+        public static final double SpeakerCenterLocationX = -1.5 * inchToMeterRatio;// - 0.75;
+        public static final double SpeakerHight = 2.31;//meter
+        public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
+        public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLocationOffset - SpeakerMidlleLocationY);
+
+        public static final ArmPostion ShootingPositionSniper = new ArmPostion();
+        public static final ArmPostion ShootingPositionDunker = new ArmPostion();
+        public static final Translation2d DunkingZone = new Translation2d();
+        public static final Translation2d SnipingZone = new Translation2d();
+        public static final Translation2d[] ArmPositionInSpeakerZone = new Translation2d[]{DunkingZone, SnipingZone};
 
         public static class Shooter{
             public static final int shooterMotor1ID = 0;

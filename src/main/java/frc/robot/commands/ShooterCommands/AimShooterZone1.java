@@ -4,6 +4,7 @@
 
 package frc.robot.commands.ShooterCommands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
@@ -17,7 +18,9 @@ import frc.robot.subsystem.Arm.Arm.ArmPostion;
 public class AimShooterZone1 extends InstantCommand {
   private static ArmPostion target = new ArmPostion(0.4, 0.4, 0);
   private static double distanceToSpeaker;
-  private static double angleToSpeaker;
+  private static double X;
+  private static double Y;
+  public static boolean IsDeadZone;
 
   public AimShooterZone1() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -27,11 +30,20 @@ public class AimShooterZone1 extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    distanceToSpeaker = RobotContainer.driveBase.getPose().getTranslation().getDistance(Constants.SpeakerTranslation.toTranslation2d()) - target.x;
+    X = RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX();
+    if (RobotContainer.driveBase.getPose().getTranslation().getY() < Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation) {
+      IsDeadZone = true;
+          Y = Constants.ArmConstants.SpeakerBottomLocationY
+     + Constants.ArmConstants.SpeakerIsCenterRatioReverse * Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation;
+    }
+    else{
+      IsDeadZone = false;
+          Y = Constants.ArmConstants.SpeakerBottomLocationY
+     + Constants.ArmConstants.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
+    }    
+     distanceToSpeaker = Math.sqrt(Math.pow(X, 2) + Math.pow(Y, 2));
 
-    angleToSpeaker = Math.atan((Constants.SpeakerTranslation.getZ() - target.y) / distanceToSpeaker);
-
-    target.rotation = angleToSpeaker;
+    target.rotation = Math.atan((Constants.SpeakerTranslation.getZ() - target.y - Constants.ArmConstants.RobotHightFromGround) / distanceToSpeaker);
 
     Arm.getInstance().moveShooterToPose(target);
   }
