@@ -147,6 +147,10 @@ public class Arm extends SubsystemBase{
     Math.abs(inputs.seconderyMotorPosition - inputs.seconderyTargetPostion) < Constants.ArmConstants.MotorConstants.seconderyMotorTolarance;
   }
 
+  public double getAngleToSpeaker(){
+    return 0;
+  }
+
   public void moveShooterToPose(ArmPostion position){
     inputs.mainMotorTargetPostion = Units.radiansToRotations(Math.asin(position.y / ArmConstants.armLengthMeters));
     mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);

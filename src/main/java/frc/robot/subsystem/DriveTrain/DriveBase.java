@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystem.Arm.Arm;
 import frc.util.humanIO.CommandPS5Controller;
 
 
@@ -63,7 +64,8 @@ public class DriveBase extends SubsystemBase {
   double navxOffset;
   SwerveDrivePoseEstimator poseEstimator; //the pose estimator of the drivetrain
 
-  PIDController thetaController; //the pid controller that governs the angle of the robot
+  PIDController thetaCorrectionController; //the pid controller that fixes the angle of the robot
+  PIDController thetaController;
 
   Pose2d currentPose; //the current pose2d of the robot
   Rotation2d targetRotation; //the target rotation of the robot
@@ -127,7 +129,7 @@ public class DriveBase extends SubsystemBase {
     poseEstimator = new SwerveDrivePoseEstimator(driveTrainKinematics, new Rotation2d(), currentPostions, new Pose2d()); //creates a new pose estimator class with given value
     navxOffset = 0;
 
-    thetaController = Constants.DriveTrain.Global.thetaCorrectionPID.createPIDController(); //creates the pid controller of the robots angle
+    thetaCorrectionController = Constants.DriveTrain.Global.thetaCorrectionPID.createPIDController(); //creates the pid controller of the robots angle
 
     targetRotation = new Rotation2d(); //creates a new target rotation
 
@@ -289,7 +291,7 @@ public class DriveBase extends SubsystemBase {
 
   /**
    * returns the current angle of the robot
-   * @return the angle of the robot (left is positive)
+   * @return the angle of the robot (left is positive) IN DEGREES
    */
   public double getAngle(){
     return getNavxAngle() + navxOffset;
@@ -340,7 +342,7 @@ public class DriveBase extends SubsystemBase {
    */
   public double calculateTheta(Rotation2d setPoint){
     targetRotation = setPoint;
-    double value = thetaController.calculate(getRotation2d().getRadians(), setPoint.getRadians());
+    double value = thetaCorrectionController.calculate(getRotation2d().getRadians(), setPoint.getRadians());
     if(Math.abs(value) < Constants.DriveTrain.Global.chassisSpeedsDeadZone) return 0;
     return value;
   }
@@ -350,7 +352,7 @@ public class DriveBase extends SubsystemBase {
    * @return the value to give to the drive
    */
   public double calculateTheta(){
-    double value = thetaController.calculate(getRotation2d().getRadians(), targetRotation.getRadians());
+    double value = thetaCorrectionController.calculate(getRotation2d().getRadians(), targetRotation.getRadians());
     if(Math.abs(value) < Constants.DriveTrain.Global.chassisSpeedsDeadZone) return 0;
     return value;
   }
@@ -364,7 +366,10 @@ public class DriveBase extends SubsystemBase {
    */
   public void drive(double Xspeed, double Yspeed, double rotation, Translation2d centerOfRotation){
     inputs.rotationSpeedInputBeforePID = rotation; //logs the rotation speed before PID
-    if(rotation == 0) rotation = calculateTheta(); //if the rotation is 0, use the PID to fix the angle
+    if(rotation == 0 && RobotContainer.getRobotZone() > 2 && !RobotContainer.isRobotSpeakerMode()) rotation = calculateTheta();
+    else if(rotation == 0){
+      rotation = thetaController.calculate(getAngle(), Arm.getInstance().getAngleToSpeaker());
+    }
     else{
       targetRotation = getRotation2d();
       inputs.targetRotation = targetRotation;

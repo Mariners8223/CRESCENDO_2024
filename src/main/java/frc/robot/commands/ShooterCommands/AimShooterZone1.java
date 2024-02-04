@@ -4,6 +4,7 @@
 
 package frc.robot.commands.ShooterCommands;
 
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -26,9 +27,9 @@ public class AimShooterZone1 extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    distanceToSpeaker = RobotContainer.driveBase.getPose().getTranslation().getDistance(Constants.SpeakerTranslation.toTranslation2d());
+    distanceToSpeaker = RobotContainer.driveBase.getPose().getTranslation().getDistance(Constants.SpeakerTranslation.toTranslation2d()) - target.x;
 
-    angleToSpeaker = Math.atan(Constants.SpeakerTranslation.getZ() / distanceToSpeaker);
+    angleToSpeaker = Math.atan((Constants.SpeakerTranslation.getZ() - target.y) / distanceToSpeaker);
 
     target.rotation = angleToSpeaker;
 
