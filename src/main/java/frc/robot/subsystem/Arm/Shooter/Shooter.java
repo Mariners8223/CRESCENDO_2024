@@ -4,14 +4,19 @@
 
 package frc.robot.subsystem.Arm.Shooter;
 
+import com.fasterxml.jackson.core.json.DupDetector;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.util.PIDFGains;
 
 /** Add your docs here. */
@@ -70,5 +75,16 @@ public class Shooter {
         // return velocity in meters per second
         return Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor1.getEncoder().getVelocity()) * Constants.ArmConstants.Shooter.wheelRadius
          * Constants.ArmConstants.Shooter.frictionPowerParameterForGPVelocity;
+    }
+
+    public double getTrueXAxisVelocity_RobotRelative(){
+        return RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond + getShooterVelocity();
+    }
+    public double getTrueYAxisVelocity_RobotRelative(){
+        return RobotContainer.driveBase.getChassisSpeeds().vyMetersPerSecond +
+        RobotContainer.driveBase.getChassisSpeeds().omegaRadiansPerSecond * RobotContainer.arm.getIntakePosition().x;
+    }
+    public double getTrueGamePieceVelocityAngle_RobotRelative(){
+        return Math.atan(getTrueYAxisVelocity_RobotRelative()/getTrueXAxisVelocity_RobotRelative());
     }
 }

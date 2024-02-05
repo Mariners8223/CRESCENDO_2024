@@ -36,7 +36,7 @@ public class Constants {
     };
 
     public static final Pose2d AmpPose = new Pose2d(3, 8, Rotation2d.fromDegrees(90));
-    public static final Translation3d SpeakerTranslation = new Translation3d( -1.5 * ArmConstants.inchToMeterRatio, 5, 3);
+    public static final Translation3d SpeakerTranslation = new Translation3d( Units.inchesToMeters(-1.5), 5, 3);
 
     public static final class Logger{
         public static final String save_location = ""; //add save lcoation (probably a usb stick so /u)
@@ -67,8 +67,6 @@ public class Constants {
     }
 
     public static final class ArmConstants {
-        public static final double inchToMeterRatio = 0.0254;
-
         public static final double armLengthMeters = 0.46;
         public static final double shooterAndIntakeLengthMeters = 0.361;
 
@@ -81,15 +79,15 @@ public class Constants {
     
         public static final double RobotHightFromGround = 0;
         public static final double SpeakerLength = 1.05;
-        public static final double SpeakerMidlleLocationY = 218.42 * inchToMeterRatio;
-        public static final double SpeakerBottomLocationY = 218.42 * inchToMeterRatio - SpeakerLength/2;
-        public static final double FieldYLength = 323.00 * inchToMeterRatio;
+        public static final double SpeakerMidlleLocationY = Units.inchesToMeters(218.42);
+        public static final double SpeakerBottomLocationY = Units.inchesToMeters(218.42) - SpeakerLength/2;
+        public static final double FieldYLength = Units.inchesToMeters(323.00);
         public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY));
-        public static final double SpeakerCenterLocationX = -1.5 * inchToMeterRatio;// - 0.75;
+        public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;
         public static final double SpeakerHight = 2.31;//meter
         public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
         public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY);
-
+        
         public static final ArmPostion ShootingPositionSniper = new ArmPostion();
         public static final ArmPostion ShootingPositionDunker = new ArmPostion();
         public static final Translation2d DunkingZone = new Translation2d();
