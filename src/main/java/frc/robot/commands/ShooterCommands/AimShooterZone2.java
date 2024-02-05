@@ -48,7 +48,7 @@ public class AimShooterZone2 extends InstantCommand {
       IsDeadZone = false;
           Dy = Constants.ArmConstants.SpeakerBottomLocationY
      + Constants.ArmConstants.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
-    }    
+    }
     
     distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), 2) + Math.pow(Dy, 2));
 
@@ -57,6 +57,6 @@ public class AimShooterZone2 extends InstantCommand {
     angle = Equation();
     target.rotation = Math.atan(angle);
     Arm.getInstance().moveShooterToPose(target);
-    
+
   }
 }
