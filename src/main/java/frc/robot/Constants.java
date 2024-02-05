@@ -74,6 +74,7 @@ public class Constants {
 
         public static final double mainPivotDistanceFromCenterMeters = 0.113;
         public static final double armHeightFromFrameMeters = 0.245;
+        public static final double SecondaryMotorDistanceFromShooterMeters = 0.06;
 
         public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
@@ -94,6 +95,7 @@ public class Constants {
         public static final Translation2d DunkingZone = new Translation2d();
         public static final Translation2d SnipingZone = new Translation2d();
         public static final Translation2d[] ArmPositionInSpeakerZone = new Translation2d[]{DunkingZone, SnipingZone};
+
 
         public static class Shooter{
             public static final int shooterMotor1ID = 0;
