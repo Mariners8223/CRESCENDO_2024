@@ -27,6 +27,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.commands.ShooterCommands.AimShooterZone1;
 import frc.robot.subsystem.Arm.Intake.Intake;
 import frc.robot.subsystem.Arm.Shooter.Shooter;
+import frc.robot.subsystem.Arm.climb.Elavater;
 import frc.util.PIDFGains;
 
 public class Arm extends SubsystemBase{
@@ -58,28 +59,6 @@ public class Arm extends SubsystemBase{
       return new Pose2d(x, y, Rotation2d.fromRadians(rotation));
     }
   }
-
-  public static enum ControlType{
-    Xaxis,
-    Yaxis,
-    Rotation,
-  }
-
-  /** Creates a new Arm. */
-
-  private static Arm instance;
-
-  private CANSparkFlex mainMotor;
-  private CANSparkFlex secondaryMotor;
-
-  private ArmInputsAutoLogged inputs;
-
-  private ArmPostion intakePosition;
-  private ArmPostion shooterPosition;
-
-  private Shooter shooter;
-  private Intake intake;
-
   @AutoLog
   public static class ArmInputs{
     double mainMotorPostion;
@@ -108,6 +87,29 @@ public class Arm extends SubsystemBase{
     return intake;
   }
 
+  public static enum ControlType{
+    Xaxis,
+    Yaxis,
+    Rotation,
+  }
+
+  /** Creates a new Arm. */
+
+  private static Arm instance;
+
+  private CANSparkFlex mainMotor;
+  private CANSparkFlex secondaryMotor;
+
+  private ArmInputsAutoLogged inputs;
+
+  private ArmPostion intakePosition;
+  private ArmPostion shooterPosition;
+
+  private Shooter shooter;
+  private Intake intake;
+  private Elavater climb;
+
+
   private Arm() {
     mainMotor = configureMotors(Constants.ArmConstants.MotorConstants.mainMotorID, Constants.ArmConstants.MotorConstants.mainZeroOffset ,Constants.ArmConstants.MotorConstants.mainPID,
     Constants.ArmConstants.MotorConstants.mainInverted, Constants.ArmConstants.MotorConstants.mainConvertionFactor, Constants.ArmConstants.MotorConstants.mainSoftLimits);
@@ -122,6 +124,7 @@ public class Arm extends SubsystemBase{
 
     shooter = Shooter.getInstance();
     intake = Intake.getInstance();
+    climb = Elavater.getInstance();
 
     createArmTriggers();
   }

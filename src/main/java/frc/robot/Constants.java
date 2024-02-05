@@ -151,6 +151,10 @@ public class Constants {
             public static final double seconderyMotorTolarance = 0.1;
         }
     }
+    public class ClimbConstants{
+        public static final int ClimbingMotorID = 1;//TODO
+        public static final int SlidingMotorID = 1;//TODO
+    }
 
     public static final class DriveTrain{
         /**
