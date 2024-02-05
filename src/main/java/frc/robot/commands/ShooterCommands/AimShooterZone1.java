@@ -18,7 +18,6 @@ import frc.robot.subsystem.Arm.Arm.ArmPostion;
 public class AimShooterZone1 extends InstantCommand {
   private static ArmPostion target = new ArmPostion(0.4, 0.4, 0);
   private static double distanceToSpeaker;
-  private static double X;
   private static double Y;
   public static boolean IsDeadZone;
 
@@ -30,7 +29,6 @@ public class AimShooterZone1 extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    X = RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX();
     if (RobotContainer.driveBase.getPose().getTranslation().getY() < Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation) {
       IsDeadZone = true;
           Y = Constants.ArmConstants.SpeakerBottomLocationY
@@ -41,7 +39,9 @@ public class AimShooterZone1 extends InstantCommand {
           Y = Constants.ArmConstants.SpeakerBottomLocationY
      + Constants.ArmConstants.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
     }    
-     distanceToSpeaker = Math.sqrt(Math.pow(X, 2) + Math.pow(Y, 2));
+    
+    distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), 2) +
+     Math.pow(Y, 2));
 
     target.rotation = Math.atan((Constants.SpeakerTranslation.getZ() - target.y - Constants.ArmConstants.RobotHightFromGround) / distanceToSpeaker);
 

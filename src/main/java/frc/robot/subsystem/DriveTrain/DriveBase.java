@@ -366,14 +366,11 @@ public class DriveBase extends SubsystemBase {
    */
   public void drive(double Xspeed, double Yspeed, double rotation, Translation2d centerOfRotation){
     inputs.rotationSpeedInputBeforePID = rotation; //logs the rotation speed before PID
-    if(rotation == 0 && RobotContainer.getRobotZone() > 2 && !RobotContainer.isRobotSpeakerMode()) rotation = calculateTheta();
-    else if(rotation == 0){
-      rotation = thetaController.calculate(getAngle(), Arm.getInstance().getAngleToSpeaker());
-    }
+    if(rotation == 0) rotation = calculateTheta();
     else{
       targetRotation = getRotation2d();
       inputs.targetRotation = targetRotation;
-    } //if the rotation is not 0, set the target rotation to the current rotation
+    }
     
     targetStates = driveTrainKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(Xspeed, Yspeed, rotation, getRotation2d()), centerOfRotation); //calulates the target states
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec); //desaturates the wheel speeds (to make sure none of the wheel exceed the max speed)
