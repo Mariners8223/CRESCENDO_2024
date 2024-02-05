@@ -158,6 +158,20 @@ public class Constants {
     public class ClimbConstants{
         public static final int ClimbingMotorID = 1;//TODO
         public static final int SlidingMotorID = 1;//TODO
+
+        public static final class ClimbingMotorPID{
+            public static final double kP = 0.1;
+            public static final double kI = 0.1;
+            public static final double kD = 0.1;
+            public static final double kF = 0.1;
+        }
+
+        public static final class SlidingMotorPID{
+            public static final double kP = 0.1;
+            public static final double kI = 0.1;
+            public static final double kD = 0.1;
+            public static final double kF = 0.1;
+        }
     }
 
     public static final class DriveTrain{

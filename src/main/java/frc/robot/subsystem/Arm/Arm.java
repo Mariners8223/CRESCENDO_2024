@@ -27,7 +27,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.commands.ShooterCommands.AimShooterZone1;
 import frc.robot.subsystem.Arm.Intake.Intake;
 import frc.robot.subsystem.Arm.Shooter.Shooter;
-import frc.robot.subsystem.Arm.climb.Elavater;
+import frc.robot.subsystem.Arm.climb.Elavator;
 import frc.util.PIDFGains;
 
 public class Arm extends SubsystemBase{
@@ -59,6 +59,7 @@ public class Arm extends SubsystemBase{
       return new Pose2d(x, y, Rotation2d.fromRadians(rotation));
     }
   }
+  
   @AutoLog
   public static class ArmInputs{
     double mainMotorPostion;
@@ -107,7 +108,7 @@ public class Arm extends SubsystemBase{
 
   private Shooter shooter;
   private Intake intake;
-  private Elavater climb;
+  private Elavator climb;
 
 
   private Arm() {
@@ -124,7 +125,7 @@ public class Arm extends SubsystemBase{
 
     shooter = Shooter.getInstance();
     intake = Intake.getInstance();
-    climb = Elavater.getInstance();
+    climb = Elavator.getInstance();
 
     createArmTriggers();
   }
