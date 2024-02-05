@@ -86,8 +86,6 @@ public class Constants {
         public static final double SpeakerHight = 2.31;//meter
         public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
         public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY);
-
-        public static final double RobotRadius = 1;//input currect
         
         public static final ArmPostion ShootingPositionSniper = new ArmPostion();
         public static final ArmPostion ShootingPositionDunker = new ArmPostion();
