@@ -82,7 +82,7 @@ public class Shooter {
     }
     public double getTrueYAxisVelocity_RobotRelative(){
         return RobotContainer.driveBase.getChassisSpeeds().vyMetersPerSecond +
-         Units.radiansPerSecondToRotationsPerMinute(RobotContainer.driveBase.getChassisSpeeds().omegaRadiansPerSecond)/60 * RobotContainer.arm.getShooterPosition().x;
+        RobotContainer.driveBase.getChassisSpeeds().omegaRadiansPerSecond * RobotContainer.arm.getIntakePosition().x;
     }
     public double getTrueGamePieceVelocityAngle_RobotRelative(){
         return Math.atan(getTrueYAxisVelocity_RobotRelative()/getTrueXAxisVelocity_RobotRelative());

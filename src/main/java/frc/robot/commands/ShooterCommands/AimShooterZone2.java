@@ -49,12 +49,14 @@ public class AimShooterZone2 extends InstantCommand {
           Dy = Constants.ArmConstants.SpeakerBottomLocationY
      + Constants.ArmConstants.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
     }    
-     distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), 2) + Math.pow(Dy, 2));
+    
+    distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), 2) + Math.pow(Dy, 2));
 
-     StartSpeed = Arm.getInstance().getShooter().getTrueXAxisVelocity_RobotRelative();
+    StartSpeed = Arm.getInstance().getShooter().getTrueXAxisVelocity_RobotRelative();
 
-     angle = Equation();
-     target.rotation = Math.atan(angle);
-     Arm.getInstance().moveShooterToPose(target);
+    angle = Equation();
+    target.rotation = Math.atan(angle);
+    Arm.getInstance().moveShooterToPose(target);
+    
   }
 }
