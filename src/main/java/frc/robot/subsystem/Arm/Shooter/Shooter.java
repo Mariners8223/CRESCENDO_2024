@@ -64,10 +64,11 @@ public class Shooter {
         shooterMotor1.stopMotor();
         shooterMotor2.stopMotor();
     }
-    
+
     // get shooter power
-    public double getShooterPower() {
+    public double getShooterVelocity() {
         // return velocity in meters per second
-        return Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor1.getEncoder().getVelocity()) * Constants.ArmConstants.Shooter.wheelRadius;
+        return Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor1.getEncoder().getVelocity()) * Constants.ArmConstants.Shooter.wheelRadius
+         * Constants.ArmConstants.Shooter.frictionPowerParameterForGPVelocity;
     }
 }

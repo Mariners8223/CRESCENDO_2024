@@ -111,7 +111,7 @@ public class Constants {
 
             public static final double wheelRadius = 0.0508;
 
-            public static final double frictionPowerParameterForGPVelocity = 1;
+            public static final double frictionPowerParameterForGPVelocity = 1;//get from exp
 
         }
 
