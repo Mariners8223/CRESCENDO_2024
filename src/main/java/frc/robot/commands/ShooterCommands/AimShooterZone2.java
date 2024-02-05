@@ -18,11 +18,22 @@ public class AimShooterZone2 extends InstantCommand {
   private static double StartSpeed;
   private static double Dy;//y axis to calc the distance from speaker
   private static double distanceToSpeaker;
+  private static double angle = 45;
   private static boolean IsDeadZone;
 
   public AimShooterZone2() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Arm.getInstance());
+  }
+
+  public static double Equation(){
+    try {
+      return (Math.pow(StartSpeed, 2) - Math.pow(StartSpeed, 2)
+     * Math.sqrt(1 - (2 * Dy*9.8*Math.pow(StartSpeed, 2) + Math.pow(9.8*distanceToSpeaker, 2))/Math.pow(StartSpeed, 4)))/(9.8*distanceToSpeaker);
+    } catch (Exception e) {
+      // TODO: handle exception
+      return angle;
+    }  
   }
 
   // Called when the command is initially scheduled.
@@ -40,8 +51,8 @@ public class AimShooterZone2 extends InstantCommand {
     }    
      distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), 2) + Math.pow(Dy, 2));
 
-     target.rotation = Math.atan(3);//insert
+     angle = Equation();
+     target.rotation = Math.atan(angle);
      Arm.getInstance().moveShooterToPose(target);
-     
   }
 }
