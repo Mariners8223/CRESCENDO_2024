@@ -87,6 +87,8 @@ public class Constants {
         public static final double SpeakerHight = 2.31;//meter
         public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
         public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY);
+
+        public static final ArmPostion AmpArmPosition = new ArmPostion();
         
         public static final ArmPostion ShootingPositionSniper = new ArmPostion();
         public static final ArmPostion ShootingPositionDunker = new ArmPostion();
@@ -113,6 +115,8 @@ public class Constants {
 
             public static final double frictionPowerParameterForGPVelocity = 1;//get from exp
 
+            public static final double ShootToAmpPower = 0.4;
+            public static final double ShootToAmpTime = 2;
         }
 
         public static final class IntakeConstants{

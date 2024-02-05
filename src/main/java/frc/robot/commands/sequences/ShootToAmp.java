@@ -5,22 +5,27 @@
 package frc.robot.commands.sequences;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.commands.IntakeCommands.IntakeToSource;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.commands.ShooterCommands.AmpShootGamePiece;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class GoToAmp extends SequentialCommandGroup {
+public class ShootToAmp extends SequentialCommandGroup {
   /** Creates a new GoToAmp. */
-  public GoToAmp() {
+  public ShootToAmp() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      RobotContainer.driveBase.findPath(Constants.AmpPose),
-      new IntakeToSource()
+      new ParallelCommandGroup(
+        RobotContainer.driveBase.findPath(Constants.AmpPose),
+        new InstantCommand(() -> RobotContainer.arm.moveShooterToPose(ArmConstants.AmpArmPosition))
+      ),
+      new AmpShootGamePiece()
     );
   }
 }
