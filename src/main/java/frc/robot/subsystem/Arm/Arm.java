@@ -73,8 +73,8 @@ public class Arm extends SubsystemBase{
 
   private ArmInputsAutoLogged inputs;
 
-  private ArmPostion intakePostion;
-  private ArmPostion shooterPostion;
+  private ArmPostion intakePosition;
+  private ArmPostion shooterPosition;
 
   private Shooter shooter;
   private Intake intake;
@@ -116,8 +116,8 @@ public class Arm extends SubsystemBase{
 
     inputs = new ArmInputsAutoLogged();
 
-    intakePostion = new ArmPostion();
-    shooterPostion = new ArmPostion();
+    intakePosition = new ArmPostion();
+    shooterPosition = new ArmPostion();
 
     shooter = Shooter.getInstance();
     intake = Intake.getInstance();
@@ -136,12 +136,12 @@ public class Arm extends SubsystemBase{
 
   }
 
-  public ArmPostion getShooterPostion(){
-    return shooterPostion;
+  public ArmPostion getShooterPosition(){
+    return shooterPosition;
   }
 
-  public ArmPostion getIntakePostion(){
-    return intakePostion;
+  public ArmPostion getIntakePosition(){
+    return intakePosition;
   }
 
   public boolean isArmInPosition(){
@@ -164,13 +164,13 @@ public class Arm extends SubsystemBase{
   public void moveIntakeToPose(ArmPostion postion, ControlType controlType){
     switch (controlType) {
       case Xaxis:
-        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPostion.x) / ArmConstants.shooterAndIntakeLengthMeters)) + 
-        (Math.PI / 2) - shooterPostion.rotation,
+        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPosition.x) / ArmConstants.shooterAndIntakeLengthMeters)) + 
+        (Math.PI / 2) - shooterPosition.rotation,
         CANSparkBase.ControlType.kPosition);
         break;
       case Yaxis:
-        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((postion.y - shooterPostion.y) / ArmConstants.shooterAndIntakeLengthMeters)) + 
-        (Math.PI / 2) - shooterPostion.rotation,
+        seconderyMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((postion.y - shooterPosition.y) / ArmConstants.shooterAndIntakeLengthMeters)) + 
+        (Math.PI / 2) - shooterPosition.rotation,
         CANSparkBase.ControlType.kPosition);
         break;
       case Rotation:
@@ -209,15 +209,15 @@ public class Arm extends SubsystemBase{
   }
 
   public void updateArmPostions(){
-    shooterPostion.x = Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * (Constants.ArmConstants.armLengthMeters - ArmConstants.mainPivotDistanceFromCenterMeters);
-    shooterPostion.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * (Constants.ArmConstants.armLengthMeters + ArmConstants.armHeightFromFrameMeters);
-    shooterPostion.rotation = Units.rotationsToRadians(inputs.mainMotorPostion + inputs.seconderyMotorPosition);
+    shooterPosition.x = Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * (Constants.ArmConstants.armLengthMeters - ArmConstants.mainPivotDistanceFromCenterMeters);
+    shooterPosition.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * (Constants.ArmConstants.armLengthMeters + ArmConstants.armHeightFromFrameMeters);
+    shooterPosition.rotation = Units.rotationsToRadians(inputs.mainMotorPostion + inputs.seconderyMotorPosition);
 
-    intakePostion.x = shooterPostion.x +
+    intakePosition.x = shooterPosition.x +
     Math.sin(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
-    intakePostion.y = shooterPostion.y + 
+    intakePosition.y = shooterPosition.y + 
     Math.cos(Units.rotationsToRadians(inputs.seconderyMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
-    intakePostion.rotation = Units.rotationsToRadians(inputs.seconderyMotorPosition);
+    intakePosition.rotation = Units.rotationsToRadians(inputs.seconderyMotorPosition);
   }
 
   private CANSparkFlex configureMotors(int canID, double zeroOffset, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
