@@ -24,10 +24,7 @@ public class Vision extends SubsystemBase {
    * creates a new Vision subsystem with 4 cameras
    */
   private Vision() {
-    cameras[0] = new LimeLightClass(Constants.Vision.LimeLight.frontCameraName, CameraLocation.Front);
-    cameras[1] = new PhotonCameraClass(Constants.Vision.PhotonVision.rightCameraName, CameraLocation.Right);
-    cameras[2] = new LimeLightClass(Constants.Vision.LimeLight.backCameraName, CameraLocation.Back);
-    cameras[3] = new PhotonCameraClass(Constants.Vision.PhotonVision.leftCameraName, CameraLocation.Left);
+    cameras[0] = new PhotonCameraClass("camera", CameraLocation.Front, 9);
 
     for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
       poses[i] = Constants.Vision.rubbishPose;
@@ -122,6 +119,10 @@ public class Vision extends SubsystemBase {
    */
   public double[] getTimeStamps(){
     return timeStamps;
+  }
+
+  public void setPipelineIndex(CameraLocation location, int index){
+    cameras[location.ordinal()].setPipeLine(index);
   }
 
   /**

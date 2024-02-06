@@ -68,7 +68,7 @@ public class PhotonCameraClass implements CameraInterface{
         poseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile),
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, Constants.Vision.cameraLocations[location.ordinal()][0]);
 
-        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_REFERENCE_POSE);
+        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT);
 
         inputs.isfieldLoaded = true;
       } catch (IOException exception) {
@@ -147,14 +147,15 @@ public class PhotonCameraClass implements CameraInterface{
       inputs.latency = latestResult.getLatencyMillis() * 100;
 
       if(mode == CameraMode.AprilTags && inputs.isfieldLoaded){
-        poseEstimator.setReferencePose(RobotContainer.driveBase.getPose());
+        // poseEstimator.setReferencePose(RobotContainer.driveBase.getPose());
+        if(latestResult.getBestTarget().getFiducialId() < 1 || latestResult.getBestTarget().getFiducialId() > 16) return;
         inputs.estimatedPose = poseEstimator.update().get().estimatedPose;
         inputs.poseConfidence = latestResult.getBestTarget().getPoseAmbiguity();
       }
       else{
         var targets = latestResult.getTargets();
 
-        for(int i = 0; i < targets.size() || i == 5; i++){
+        for(int i = 0; i < targets.size() && i == 5; i++){
           inputs.objectsToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
           cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets.get(i).getPitch()),
           Rotation2d.fromDegrees(targets.get(i).getYaw())).plus(cameraToRobot[1].getTranslation().toTranslation2d()
@@ -189,13 +190,13 @@ public class PhotonCameraClass implements CameraInterface{
         mode = CameraMode.AprilTags;
         inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
         if(servo != null)
-          servo.setAngle(Units.radiansToDegrees(Constants.Vision.cameraLocations[CameraLocation.Front.ordinal()][0].getRotation().getY()));
+          servo.set(0.64);
       }
       else{
         mode = CameraMode.Rings;
         inputs.estimatedPose = Constants.Vision.rubbishPose;
         if(servo != null)
-          servo.setAngle(Units.radiansToDegrees(Constants.Vision.cameraLocations[CameraLocation.Front.ordinal()][1].getRotation().getY()));
+          servo.set(0.74);
       }
     }
 
