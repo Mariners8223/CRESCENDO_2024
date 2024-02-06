@@ -13,7 +13,7 @@ import frc.robot.subsystem.Arm.Arm;
 
 public class SlideToClosestRopeEdge extends Command {
   /** Creates a new SlideToClosestRopeEdge. */
-  private Arm arm;
+  private static Arm arm;
   private static Translation2d target;
 
   public SlideToClosestRopeEdge() {
