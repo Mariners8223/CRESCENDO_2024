@@ -171,12 +171,7 @@ public class Arm extends SubsystemBase{
     inputs.secondaryTargetPostion = inputs.mainMotorTargetPostion + Units.radiansToRotations(position.rotation);
     secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, CANSparkBase.ControlType.kPosition);
   }
-  public void moveClimbToPose(ArmPostion position){
-    //TODO
-  }
-  public void moveRobotOnRope(double SpinsToTravel){//right < 0 lrft > 0
-    //TODO
-  }
+
 
   public void moveIntakeToPose(ArmPostion postion, ControlType controlType){
     switch (controlType) {

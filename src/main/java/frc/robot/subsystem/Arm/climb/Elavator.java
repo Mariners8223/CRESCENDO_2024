@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystem.Arm.Arm.ArmPostion;
 
 public class Elavator extends SubsystemBase {
   private static Elavator instance;
@@ -63,6 +64,14 @@ public class Elavator extends SubsystemBase {
     }
     //make talon move MotorRotations rotations.
   }
+
+  public void moveClimbToPose(ArmPostion position){
+    //TODO
+  }
+  public void moveRobotOnRope(double SpinsToTravel){//right < 0 lrft > 0
+    //TODO
+  }
+  
   public void SetSlidingFromRotations(double length){
     //SlidingMotor.setControl(ControlModeValue.DutyCycleOut).setPosition(length); //move motor said rotations or move motor to said location
   }
