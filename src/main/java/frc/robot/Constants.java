@@ -7,6 +7,9 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -162,12 +165,13 @@ public class Constants {
         public static final double MotorRotationsToAirialMeters = 0.0;//TODO
 
         public static final ArmPostion CLIMBING_POSTION = new ArmPostion();//TODO
-        public static final ArmPostion PUSH_ELAVATER_ARM_POSTION = new ArmPostion();//TODO
-        public static final ArmPostion PULL_ELAVATER_ARM_POSTION = new ArmPostion();//TODO
+        public static final PositionDutyCycle PUSH_ELAVATER_ARM_POSTION = new PositionDutyCycle(0);//TODO - up position
+        public static final PositionDutyCycle PULL_ELAVATER_ARM_POSTION = new PositionDutyCycle(0);//TODO - down position
         
         public static final List<Translation2d> SlidingPositions = new ArrayList<Translation2d>(){
             //TODO
         };
+        public static final DutyCycleOut HeightDutyPosition = null;
 
         public static final class ClimbingMotorPID{
             public static final double kP = 0.1;

@@ -5,8 +5,12 @@
 package frc.robot.subsystem.Arm.climb;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ControlModeValue;
+import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -52,9 +56,8 @@ public class Elavator extends SubsystemBase {
     return instance;
   }
 
-  public void SetClimbingHight(double height){
-    //TODO
-    // ClimbingMotor.setControl(ControlModeValue.PositionDutyCycle);
+  public void SetClimbingHight(PositionDutyCycle height){
+    ClimbingMotor.setControl(height);
   }
   public void SetLocationOnRope(Translation2d target){
     double MotorRotations = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getX() - target.getX(), 2)
@@ -64,16 +67,16 @@ public class Elavator extends SubsystemBase {
     }
     //make talon move MotorRotations rotations.
   }
-
-  public void moveClimbToPose(ArmPostion position){
-    //TODO
-  }
   public void moveRobotOnRope(double SpinsToTravel){//right < 0 lrft > 0
-    //TODO
+    SlidingMotor.setControl(new PositionDutyCycle(SpinsToTravel));
   }
   
   public void SetSlidingFromRotations(double length){
+    SlidingMotor.setControl(new PositionDutyCycle(length));
     //SlidingMotor.setControl(ControlModeValue.DutyCycleOut).setPosition(length); //move motor said rotations or move motor to said location
+  }
+  public void HoldInPlace(){
+    //TODO
   }
 
   @Override

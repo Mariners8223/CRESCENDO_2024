@@ -29,17 +29,21 @@ public class SlideToClosestRopeEdge extends Command {
     arm = Arm.getInstance();
     climb = Elavator.getInstance();
     target = RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.ClimbConstants.SlidingPositions);
+    climb.moveRobotOnRope(RobotContainer.driveBase.getPose().getTranslation().getDistance(target) * Constants.ClimbConstants.MotorRotationsToAirialMeters);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climb.moveRobotOnRope(RobotContainer.driveBase.getPose().getTranslation().getDistance(target) * Constants.ClimbConstants.MotorRotationsToAirialMeters);
+    //climb.moveRobotOnRope(RobotContainer.driveBase.getPose().getTranslation().getDistance(target) * Constants.ClimbConstants.MotorRotationsToAirialMeters);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    climb.HoldInPlace();
+  }
 
   // Returns true when the command should end.
   @Override

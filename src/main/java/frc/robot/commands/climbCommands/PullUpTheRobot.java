@@ -24,7 +24,7 @@ public class PullUpTheRobot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climb.moveClimbToPose(frc.robot.Constants.ClimbConstants.PULL_ELAVATER_ARM_POSTION);
+    climb.SetClimbingHight(frc.robot.Constants.ClimbConstants.PULL_ELAVATER_ARM_POSTION);
   }
 
   // Called once the command ends or is interrupted.

@@ -34,7 +34,7 @@ public class SetArmToClimbPosition extends Command {
   @Override
   public void execute() {
     arm.moveShooterToPose(frc.robot.Constants.ClimbConstants.CLIMBING_POSTION);
-    climb.moveClimbToPose(frc.robot.Constants.ClimbConstants.PUSH_ELAVATER_ARM_POSTION);
+    climb.SetClimbingHight(frc.robot.Constants.ClimbConstants.PUSH_ELAVATER_ARM_POSTION);
   }
 
   // Called once the command ends or is interrupted.
