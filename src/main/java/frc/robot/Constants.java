@@ -159,6 +159,16 @@ public class Constants {
         public static final int ClimbingMotorID = 1;//TODO
         public static final int SlidingMotorID = 1;//TODO
 
+        public static final double MotorRotationsToAirialMeters = 0.0;//TODO
+
+        public static final ArmPostion CLIMBING_POSTION = new ArmPostion();//TODO
+        public static final ArmPostion PUSH_ELAVATER_ARM_POSTION = new ArmPostion();//TODO
+        public static final ArmPostion PULL_ELAVATER_ARM_POSTION = new ArmPostion();//TODO
+        
+        public static final List<Translation2d> SlidingPositions = new ArrayList<Translation2d>(){
+            //TODO
+        };
+
         public static final class ClimbingMotorPID{
             public static final double kP = 0.1;
             public static final double kI = 0.1;

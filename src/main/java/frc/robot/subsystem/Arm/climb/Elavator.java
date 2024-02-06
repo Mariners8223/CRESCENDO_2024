@@ -8,8 +8,11 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ControlModeValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Elavator extends SubsystemBase {
   private static Elavator instance;
@@ -48,9 +51,20 @@ public class Elavator extends SubsystemBase {
     return instance;
   }
 
-  public void SetClimbingMode(double height){
+  public void SetClimbingHight(double height){
     //TODO
     // ClimbingMotor.setControl(ControlModeValue.PositionDutyCycle);
+  }
+  public void SetLocationOnRope(Translation2d target){
+    double MotorRotations = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getX() - target.getX(), 2)
+     + Math.pow(RobotContainer.driveBase.getPose().getY() - target.getY(), 2)) * Constants.ClimbConstants.MotorRotationsToAirialMeters;
+    if (target.getY() < RobotContainer.driveBase.getPose().getY()) {
+      MotorRotations = -MotorRotations;
+    }
+    //make talon move MotorRotations rotations.
+  }
+  public void SetSlidingFromRotations(double length){
+    //SlidingMotor.setControl(ControlModeValue.DutyCycleOut).setPosition(length); //move motor said rotations or move motor to said location
   }
 
   @Override

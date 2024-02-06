@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -105,6 +106,7 @@ public class Arm extends SubsystemBase{
 
   private ArmPostion intakePosition;
   private ArmPostion shooterPosition;
+  private ArmPostion climbPosition;
 
   private Shooter shooter;
   private Intake intake;
@@ -122,6 +124,7 @@ public class Arm extends SubsystemBase{
 
     intakePosition = new ArmPostion();
     shooterPosition = new ArmPostion();
+    climbPosition = new ArmPostion();
 
     shooter = Shooter.getInstance();
     intake = Intake.getInstance();
@@ -148,6 +151,9 @@ public class Arm extends SubsystemBase{
   public ArmPostion getIntakePosition(){
     return intakePosition;
   }
+  public ArmPostion getClimbPosition(){
+    return climbPosition;
+  }
 
   public boolean isArmInPosition(){
     return Math.abs(inputs.mainMotorTargetPostion - inputs.mainMotorPostion) < Constants.ArmConstants.MotorConstants.mainMotortolarance &&
@@ -164,6 +170,12 @@ public class Arm extends SubsystemBase{
 
     inputs.secondaryTargetPostion = inputs.mainMotorTargetPostion + Units.radiansToRotations(position.rotation);
     secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, CANSparkBase.ControlType.kPosition);
+  }
+  public void moveClimbToPose(ArmPostion position){
+    //TODO
+  }
+  public void moveRobotOnRope(double SpinsToTravel){//right < 0 lrft > 0
+    //TODO
   }
 
   public void moveIntakeToPose(ArmPostion postion, ControlType controlType){
