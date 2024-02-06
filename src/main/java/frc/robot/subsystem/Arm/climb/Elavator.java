@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm.ArmPostion;
 
@@ -60,14 +61,18 @@ public class Elavator extends SubsystemBase {
     ClimbingMotor.setControl(height);
   }
   public void SetLocationOnRope(Translation2d target){
-    double MotorRotations = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getX() - target.getX(), 2)
-     + Math.pow(RobotContainer.driveBase.getPose().getY() - target.getY(), 2)) * Constants.ClimbConstants.MotorRotationsToAirialMeters;
+    // double MotorRotations = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getX() - target.getX(), 2)
+    //  + Math.pow(RobotContainer.driveBase.getPose().getY() - target.getY(), 2)) * Constants.ClimbConstants.MotorRotationsToAirialMeters;
+    double MotorRotations = Math.hypot(RobotContainer.driveBase.getPose().getX() - target.getX(), RobotContainer.driveBase.getPose().getY() - target.getY())
+    * Constants.ClimbConstants.MotorRotationsToAirialMeters;
+
     if (target.getY() < RobotContainer.driveBase.getPose().getY()) {
       MotorRotations = -MotorRotations;
     }
     //make talon move MotorRotations rotations.
+    moveRobotOnRope(MotorRotations);
   }
-  public void moveRobotOnRope(double SpinsToTravel){//right < 0 lrft > 0
+  public void moveRobotOnRope(double SpinsToTravel){ //right < 0 left > 0
     SlidingMotor.setControl(new PositionDutyCycle(SpinsToTravel));
   }
   
@@ -76,7 +81,7 @@ public class Elavator extends SubsystemBase {
     //SlidingMotor.setControl(ControlModeValue.DutyCycleOut).setPosition(length); //move motor said rotations or move motor to said location
   }
   public void HoldInPlace(){
-    //TODO
+    SlidingMotor.setControl(new PositionDutyCycle(SlidingMotor.getPosition().getValueAsDouble()));
   }
 
   @Override
