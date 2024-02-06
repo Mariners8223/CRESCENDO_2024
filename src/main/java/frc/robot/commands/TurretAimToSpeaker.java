@@ -27,7 +27,7 @@ public class TurretAimToSpeaker extends InstantCommand {
     YaxisOfTargetInSpeaker = Constants.ArmConstants.SpeakerBottomLocationY
     + Constants.ArmConstants.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
 
-    WantedDegree = Math.atan(YaxisOfTargetInSpeaker/RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX());
+    WantedDegree = 180 - Math.atan(YaxisOfTargetInSpeaker/RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX());
     SpeedOffset = RobotContainer.arm.getShooter().getTrueGamePieceVelocityAngle_RobotRelative();
     RobotContainer.driveBase.setTarGetRotation(Rotation2d.fromDegrees(WantedDegree - SpeedOffset));
   }
