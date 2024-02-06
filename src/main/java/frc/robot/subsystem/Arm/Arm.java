@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -101,6 +102,9 @@ public class Arm extends SubsystemBase{
   private CANSparkFlex mainMotor;
   private CANSparkFlex secondaryMotor;
 
+  private DutyCycleEncoder mainAbsEncoder;
+  private DutyCycleEncoder secondaryAbsEncoder;
+
   private ArmInputsAutoLogged inputs;
 
   private ArmPostion intakePosition;
@@ -112,10 +116,14 @@ public class Arm extends SubsystemBase{
 
 
   private Arm() {
-    mainMotor = configureMotors(Constants.ArmConstants.MotorConstants.mainMotorID, Constants.ArmConstants.MotorConstants.mainZeroOffset ,Constants.ArmConstants.MotorConstants.mainPID,
+
+    mainAbsEncoder = configureAbsEncoder(Constants.ArmConstants.MotorConstants.mainAbsEncoderID, Constants.ArmConstants.MotorConstants.mainZeroOffset);
+    secondaryAbsEncoder = configureAbsEncoder(Constants.ArmConstants.MotorConstants.seconderyAbsEncoderID, Constants.ArmConstants.MotorConstants.seconderyZeroOffset);
+
+    mainMotor = configureMotors(Constants.ArmConstants.MotorConstants.mainMotorID, mainAbsEncoder.get() ,Constants.ArmConstants.MotorConstants.mainPID,
     Constants.ArmConstants.MotorConstants.mainInverted, Constants.ArmConstants.MotorConstants.mainConvertionFactor, Constants.ArmConstants.MotorConstants.mainSoftLimits);
 
-    secondaryMotor = configureMotors(Constants.ArmConstants.MotorConstants.seconderyMotorID, Constants.ArmConstants.MotorConstants.seconderyZeroOffset, Constants.ArmConstants.MotorConstants.seconderyPID,
+    secondaryMotor = configureMotors(Constants.ArmConstants.MotorConstants.seconderyMotorID, secondaryAbsEncoder.get(), Constants.ArmConstants.MotorConstants.seconderyPID,
     Constants.ArmConstants.MotorConstants.seconderyInverted, Constants.ArmConstants.MotorConstants.seconderyConvecrtionFactor, Constants.ArmConstants.MotorConstants.seconderySoftLimits);
 
     inputs = new ArmInputsAutoLogged();
@@ -127,7 +135,6 @@ public class Arm extends SubsystemBase{
     intake = Intake.getInstance();
     climb = Elavator.getInstance();
 
-    createArmTriggers();
   }
 
   private void createArmTriggers(){
@@ -227,7 +234,13 @@ public class Arm extends SubsystemBase{
     intakePosition.rotation = Units.rotationsToRadians(inputs.secondaryMotorPosition);
   }
 
-  private CANSparkFlex configureMotors(int canID, double zeroOffset, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
+  private DutyCycleEncoder configureAbsEncoder(int port, double offset){
+    DutyCycleEncoder encoder = new DutyCycleEncoder(port);
+    encoder.setPositionOffset(offset);
+    return encoder;
+  }
+
+  private CANSparkFlex configureMotors(int canID, double absPosition, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
     CANSparkFlex sparkFlex = new CANSparkFlex(canID, MotorType.kBrushless);
 
     sparkFlex.getPIDController().setP(pidfGains.getP());
@@ -242,14 +255,11 @@ public class Arm extends SubsystemBase{
     sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)softLimit[0]);
     sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)softLimit[1]);
 
-    sparkFlex.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).setPositionConversionFactor(1 / (convertionFactor * 1024));
-    sparkFlex.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).setZeroOffset(zeroOffset / 360);
-
     sparkFlex.setIdleMode(IdleMode.kBrake);
-    
-    sparkFlex.getEncoder().setPosition(sparkFlex.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition());
 
     sparkFlex.getEncoder().setPositionConversionFactor(1 / convertionFactor);
+    
+    sparkFlex.getEncoder().setPosition(absPosition);
 
     return sparkFlex;
   }

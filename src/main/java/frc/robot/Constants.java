@@ -148,6 +148,9 @@ public class Constants {
             public static final double mainConvertionFactor = 1;
             public static final double seconderyConvecrtionFactor = 1;
 
+            public static final int mainAbsEncoderID = 0;
+            public static final int seconderyAbsEncoderID = 1;
+
             public static final double[] mainSoftLimits = new double[]{1, -1};
             public static final double[] seconderySoftLimits = new double[]{1, -1};
 
