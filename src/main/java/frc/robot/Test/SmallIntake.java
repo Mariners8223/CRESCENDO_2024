@@ -7,6 +7,7 @@ package frc.robot.Test;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.subsystem.Arm.Arm;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -18,8 +19,8 @@ public class SmallIntake extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveToFree()
-      
+      new MoveToFree(),
+      new IntakeToFloor()
     );
   }
 
