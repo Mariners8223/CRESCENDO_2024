@@ -9,8 +9,6 @@ import java.util.List;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -72,6 +70,8 @@ public class Constants {
 
         public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
+
+        public static final ArmPostion freeMovementPosition = new ArmPostion(0, 0.4, 0);
 
         public static final double FieldYLength = Units.inchesToMeters(323.00);
 
@@ -149,8 +149,8 @@ public class Constants {
             public static final int mainAbsEncoderID = 0;
             public static final int seconderyAbsEncoderID = 1;
 
-            public static final double[] mainSoftLimits = new double[]{1, -1};
-            public static final double[] seconderySoftLimits = new double[]{1, -1};
+            public static final double[] mainSoftLimits = new double[]{0.35, 0.01};
+            public static final double[] seconderySoftLimits = new double[]{0.5, 0.01};
 
             public static final double mainMotortolarance = 0.1;
             public static final double seconderyMotorTolarance = 0.1;
