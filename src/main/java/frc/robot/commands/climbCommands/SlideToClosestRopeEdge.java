@@ -14,7 +14,6 @@ import frc.robot.subsystem.Arm.climb.Elavator;
 
 public class SlideToClosestRopeEdge extends Command {
   /** Creates a new SlideToClosestRopeEdge. */
-  private static Arm arm;
   private static Elavator climb;
   private static Translation2d target;
 
@@ -26,7 +25,6 @@ public class SlideToClosestRopeEdge extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    arm = Arm.getInstance();
     climb = Elavator.getInstance();
     target = RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.ClimbConstants.SlidingPositions);
     climb.moveRobotOnRope(RobotContainer.driveBase.getPose().getTranslation().getDistance(target) * Constants.ClimbConstants.MotorRotationsToAirialMeters);
