@@ -192,7 +192,10 @@ public class Arm extends SubsystemBase{
     //     break;
     // }
 
-    
+    inputs.mainMotorTargetPostion = Units.radiansToRotations(
+      Math.asin((postion.y + Constants.ArmConstants.shooterAndIntakeLengthMeters * Math.cos(postion.rotation - Math.PI / 2)) / Constants.ArmConstants.armLengthMeters));
+
+    inputs.secondaryTargetPostion = Units.radiansToRotations(postion.rotation) - inputs.mainMotorTargetPostion;
   }
 
   public void update(){
