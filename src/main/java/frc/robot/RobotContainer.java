@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.armCommands.moveMainMotorToDegree;
+import frc.robot.commands.armCommands.moveSecondaryMotorToDegree;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 
@@ -60,8 +62,11 @@ public class RobotContainer {
     // driveController.share().onTrue(DriveBase.CalibrateSwerveCommand.getInstance().ignoringDisable(true));
 
 
-    driveController.cross().debounce(0.1).and(() -> getRobotZone() == 1 || getRobotZone() == 2).onTrue(new InstantCommand(() -> aimingAtSpeaker = !aimingAtSpeaker));
-    new Trigger(() -> getRobotZone() == 1 || getRobotZone() == 2).onTrue(new InstantCommand(() -> aimingAtSpeaker = true));
+    // driveController.cross().debounce(0.1).and(() -> getRobotZone() == 1 || getRobotZone() == 2).onTrue(new InstantCommand(() -> aimingAtSpeaker = !aimingAtSpeaker));
+    // new Trigger(() -> getRobotZone() == 1 || getRobotZone() == 2).onTrue(new InstantCommand(() -> aimingAtSpeaker = true));
+
+    driveController.cross().onTrue(new moveMainMotorToDegree(90));
+    driveController.circle().onTrue(new moveMainMotorToDegree(0));
   }
 
   private void configChooser(){
