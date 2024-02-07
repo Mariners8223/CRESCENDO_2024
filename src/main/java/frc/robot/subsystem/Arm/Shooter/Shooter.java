@@ -78,7 +78,7 @@ public class Shooter {
     }
 
     public double getTrueXAxisVelocity_RobotRelative(){
-        return RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond + getShooterVelocity();
+        return RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond + getShooterVelocity() * Math.cos(RobotContainer.arm.getShooterPosition().rotation);
     }
     public double getTrueYAxisVelocity_RobotRelative(){
         return RobotContainer.driveBase.getChassisSpeeds().vyMetersPerSecond +
