@@ -38,11 +38,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
-import frc.util.humanIO.CommandPS5Controller;
 
 
 /**
@@ -321,7 +321,7 @@ public class DriveBase extends SubsystemBase {
     return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(), getRotation2d());
   }
   
-  public void setTarGetRotation(Rotation2d alpha){
+  public void setTargetRotation(Rotation2d alpha){
     
   }
 

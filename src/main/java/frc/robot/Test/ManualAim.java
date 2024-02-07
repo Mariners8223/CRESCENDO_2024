@@ -4,6 +4,7 @@
 
 package frc.robot.Test;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants;
@@ -15,7 +16,7 @@ public class ManualAim extends Command {
   CommandPS5Controller controller;
   Arm arm;
 
-  ArmPostion target = new ArmPostion(0, 0.4, 0);
+  ArmPostion target = new ArmPostion();
   /** Creates a new ManualAim. */
   public ManualAim() {
     controller = RobotContainer.driveController;
@@ -24,7 +25,7 @@ public class ManualAim extends Command {
     addRequirements(arm);
 
     target.y = 0.4;
-    target.rotation = Math.asin(0.4 / Constants.ArmConstants.armLengthMeters);
+    target.rotation = arm.getShooterPosition().rotation;
   }
 
   // Called when the command is initially scheduled.
@@ -36,8 +37,8 @@ public class ManualAim extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    target.rotation = target.rotation + controller.getR2Axis() / 2;
-    target.rotation = target.rotation - controller.getL2Axis() / 2;
+    target.rotation = target.rotation + Units.degreesToRadians(controller.getR2Axis());
+    target.rotation = target.rotation - Units.degreesToRadians(controller.getL2Axis());
 
     arm.moveShooterToPose(target);
   }

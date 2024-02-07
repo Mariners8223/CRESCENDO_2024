@@ -21,21 +21,21 @@ public class Elavator extends SubsystemBase {
 
   /** Creates a new Elavater. */
   private Elavator() {
-    ClimbingMotor = new TalonFX(Constants.ClimbConstants.ClimbingMotorID);
-    SlidingMotor = new TalonFX(Constants.ClimbConstants.SlidingMotorID);
+    ClimbingMotor = new TalonFX(Constants.ClimbConstants.climbingMotorID);
+    SlidingMotor = new TalonFX(Constants.ClimbConstants.slidingMotorID);
 
     ClimbingMotorConfiguration = new TalonFXConfiguration();
     slidingMotorConfiguration = new TalonFXConfiguration();
 
-    ClimbingMotorConfiguration.Slot0.kP = Constants.ClimbConstants.ClimbingMotorPID.kP;
-    ClimbingMotorConfiguration.Slot0.kI = Constants.ClimbConstants.ClimbingMotorPID.kI;
-    ClimbingMotorConfiguration.Slot0.kD = Constants.ClimbConstants.ClimbingMotorPID.kD;
-    ClimbingMotorConfiguration.Slot0.kS = Constants.ClimbConstants.ClimbingMotorPID.kF;
+    ClimbingMotorConfiguration.Slot0.kP = Constants.ClimbConstants.climbingMotorPIDF.getP();
+    ClimbingMotorConfiguration.Slot0.kI = Constants.ClimbConstants.climbingMotorPIDF.getI();
+    ClimbingMotorConfiguration.Slot0.kD = Constants.ClimbConstants.climbingMotorPIDF.getD();
+    ClimbingMotorConfiguration.Slot0.kS = Constants.ClimbConstants.climbingMotorPIDF.getF();
 
-    slidingMotorConfiguration.Slot0.kP = Constants.ClimbConstants.SlidingMotorPID.kP;
-    slidingMotorConfiguration.Slot0.kI = Constants.ClimbConstants.SlidingMotorPID.kI;
-    slidingMotorConfiguration.Slot0.kD = Constants.ClimbConstants.SlidingMotorPID.kD;
-    slidingMotorConfiguration.Slot0.kS = Constants.ClimbConstants.SlidingMotorPID.kF;
+    slidingMotorConfiguration.Slot0.kP = Constants.ClimbConstants.slidingMotorPIDF.getP();
+    slidingMotorConfiguration.Slot0.kI = Constants.ClimbConstants.slidingMotorPIDF.getI();
+    slidingMotorConfiguration.Slot0.kD = Constants.ClimbConstants.slidingMotorPIDF.getD();
+    slidingMotorConfiguration.Slot0.kS = Constants.ClimbConstants.slidingMotorPIDF.getF();
 
     ClimbingMotor.getConfigurator().apply(ClimbingMotorConfiguration);
     SlidingMotor.getConfigurator().apply(slidingMotorConfiguration);

@@ -4,6 +4,8 @@
 
 package frc.robot.commands.sequences;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -16,13 +18,14 @@ import frc.robot.commands.ShooterCommands.AmpShootGamePiece;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootToAmp extends SequentialCommandGroup {
+  private static Pose2d targetPose = new Pose2d(Constants.ampTranslation.getX(), Constants.ampTranslation.getY() - 0, Rotation2d.fromDegrees(90)); //TODO add the correct y minus
   /** Creates a new GoToAmp. */
   public ShootToAmp() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
-        RobotContainer.driveBase.findPath(Constants.AmpPose),
+        RobotContainer.driveBase.findPath(targetPose),
         new InstantCommand(() -> RobotContainer.arm.moveShooterToPose(ArmConstants.AmpArmPosition))
       ),
       new AmpShootGamePiece()

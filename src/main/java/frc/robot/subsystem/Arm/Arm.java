@@ -62,6 +62,8 @@ public class Arm extends SubsystemBase{
     }
   }
   
+
+
   @AutoLog
   public static class ArmInputs{
     double mainMotorPostion;
@@ -90,12 +92,6 @@ public class Arm extends SubsystemBase{
     return intake;
   }
 
-  public static enum ControlType{
-    Xaxis,
-    Yaxis,
-    Rotation,
-  }
-
   /** Creates a new Arm. */
 
   private static Arm instance;
@@ -118,14 +114,14 @@ public class Arm extends SubsystemBase{
 
   private Arm() {
 
-    mainAbsEncoder = configureAbsEncoder(Constants.ArmConstants.MotorConstants.mainAbsEncoderID, Constants.ArmConstants.MotorConstants.mainZeroOffset);
-    secondaryAbsEncoder = configureAbsEncoder(Constants.ArmConstants.MotorConstants.seconderyAbsEncoderID, Constants.ArmConstants.MotorConstants.seconderyZeroOffset);
+    mainAbsEncoder = configureAbsEncoder(Constants.ArmConstants.Motors.mainAbsEncoderID, Constants.ArmConstants.Motors.mainZeroOffset);
+    secondaryAbsEncoder = configureAbsEncoder(Constants.ArmConstants.Motors.seconderyAbsEncoderID, Constants.ArmConstants.Motors.seconderyZeroOffset);
 
-    mainMotor = configureMotors(Constants.ArmConstants.MotorConstants.mainMotorID, mainAbsEncoder.get() ,Constants.ArmConstants.MotorConstants.mainPID,
-    Constants.ArmConstants.MotorConstants.mainInverted, Constants.ArmConstants.MotorConstants.mainConvertionFactor, Constants.ArmConstants.MotorConstants.mainSoftLimits);
+    mainMotor = configureMotors(Constants.ArmConstants.Motors.mainMotorID, mainAbsEncoder.get() ,Constants.ArmConstants.Motors.mainPID,
+    Constants.ArmConstants.Motors.mainInverted, Constants.ArmConstants.Motors.mainConvertionFactor, Constants.ArmConstants.Motors.mainSoftLimits);
 
-    secondaryMotor = configureMotors(Constants.ArmConstants.MotorConstants.seconderyMotorID, secondaryAbsEncoder.get(), Constants.ArmConstants.MotorConstants.seconderyPID,
-    Constants.ArmConstants.MotorConstants.seconderyInverted, Constants.ArmConstants.MotorConstants.seconderyConvecrtionFactor, Constants.ArmConstants.MotorConstants.seconderySoftLimits);
+    secondaryMotor = configureMotors(Constants.ArmConstants.Motors.seconderyMotorID, secondaryAbsEncoder.get(), Constants.ArmConstants.Motors.seconderyPID,
+    Constants.ArmConstants.Motors.seconderyInverted, Constants.ArmConstants.Motors.seconderyConvecrtionFactor, Constants.ArmConstants.Motors.seconderySoftLimits);
 
     inputs = new ArmInputsAutoLogged();
 
@@ -158,8 +154,8 @@ public class Arm extends SubsystemBase{
   }
 
   public boolean isArmInPosition(){
-    return Math.abs(inputs.mainMotorTargetPostion - inputs.mainMotorPostion) < Constants.ArmConstants.MotorConstants.mainMotortolarance &&
-    Math.abs(inputs.secondaryMotorPosition - inputs.secondaryTargetPostion) < Constants.ArmConstants.MotorConstants.seconderyMotorTolarance;
+    return Math.abs(inputs.mainMotorTargetPostion - inputs.mainMotorPostion) < Constants.ArmConstants.Motors.mainMotortolarance &&
+    Math.abs(inputs.secondaryMotorPosition - inputs.secondaryTargetPostion) < Constants.ArmConstants.Motors.seconderyMotorTolarance;
   }
 
   public double getAngleToSpeaker(){
@@ -174,27 +170,29 @@ public class Arm extends SubsystemBase{
     secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, CANSparkBase.ControlType.kPosition);
   }
 
-  public void moveIntakeToPose(ArmPostion postion, ControlType controlType){
-    switch (controlType) {
-      case Xaxis:
-        secondaryMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPosition.x) / ArmConstants.shooterAndIntakeLengthMeters)) + 
-        (Math.PI / 2) - shooterPosition.rotation,
-        CANSparkBase.ControlType.kPosition);
-        break;
-      case Yaxis:
-        secondaryMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((postion.y - shooterPosition.y) / ArmConstants.shooterAndIntakeLengthMeters)) + 
-        (Math.PI / 2) - shooterPosition.rotation,
-        CANSparkBase.ControlType.kPosition);
-        break;
-      case Rotation:
-        secondaryMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation),
-        CANSparkBase.ControlType.kPosition);
-        break;
-      default:
-        secondaryMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation),
-        CANSparkBase.ControlType.kPosition);
-        break;
-    }
+  public void moveIntakeToPose(ArmPostion postion){
+    // switch (controlType) {
+    //   case Xaxis:
+    //     secondaryMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPosition.x) / ArmConstants.shooterAndIntakeLengthMeters)) + 
+    //     (Math.PI / 2) - shooterPosition.rotation,
+    //     CANSparkBase.ControlType.kPosition);
+    //     break;
+    //   case Yaxis:
+    //     secondaryMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((postion.y - shooterPosition.y) / ArmConstants.shooterAndIntakeLengthMeters)) + 
+    //     (Math.PI / 2) - shooterPosition.rotation,
+    //     CANSparkBase.ControlType.kPosition);
+    //     break;
+    //   case Rotation:
+    //     secondaryMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation),
+    //     CANSparkBase.ControlType.kPosition);
+    //     break;
+    //   default:
+    //     secondaryMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation),
+    //     CANSparkBase.ControlType.kPosition);
+    //     break;
+    // }
+
+    
   }
 
   public void update(){

@@ -39,15 +39,15 @@ public class AimShooterZone2 extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (RobotContainer.driveBase.getPose().getTranslation().getY() < Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation) {
+    if (RobotContainer.driveBase.getPose().getTranslation().getY() < Constants.ArmConstants.Speaker.SpeakerIsCenterRatioBottomLocation) {
       IsDeadZone = true;
-          Dy = Constants.ArmConstants.SpeakerBottomLocationY
-     + Constants.ArmConstants.SpeakerIsCenterRatioReverse * Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation;
+          Dy = Constants.ArmConstants.Speaker.SpeakerBottomLocationY
+     + Constants.ArmConstants.Speaker.SpeakerIsCenterRatioReverse * Constants.ArmConstants.Speaker.SpeakerIsCenterRatioBottomLocation;
     }
     else{
       IsDeadZone = false;
-          Dy = Constants.ArmConstants.SpeakerBottomLocationY
-     + Constants.ArmConstants.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
+          Dy = Constants.ArmConstants.Speaker.SpeakerBottomLocationY
+     + Constants.ArmConstants.Speaker.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
     }
     
     distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), 2) + Math.pow(Dy, 2));

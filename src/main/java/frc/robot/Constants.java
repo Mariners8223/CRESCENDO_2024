@@ -26,16 +26,12 @@ import frc.util.PIDFGains;
 
 /** Add your docs here. */
 public class Constants {
-
-    // public static final Translation2d[][] robotZones = new Translation2d[][]{
-    //     //TODO: add robot zones
-    // };
-
     public static final List<Translation2d> robotZones = new ArrayList<Translation2d>() {
         //TODO: add robot zones
     };
 
-    public static final Pose2d AmpPose = new Pose2d(3, 8, Rotation2d.fromDegrees(90));
+    // public static final Pose2d AmpPose = new Pose2d(3, 8, Rotation2d.fromDegrees(90));
+    public static final Translation3d ampTranslation = new Translation3d(3, 8, 0);
     public static final Translation3d SpeakerTranslation = new Translation3d( Units.inchesToMeters(-1.5), 5, 3);
 
     public static final class Logger{
@@ -76,17 +72,10 @@ public class Constants {
 
         public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
-    
-        public static final double RobotHightFromGround = 0;
-        public static final double SpeakerLength = 1.05;
-        public static final double SpeakerMidlleLocationY = Units.inchesToMeters(218.42);
-        public static final double SpeakerBottomLocationY = Units.inchesToMeters(218.42) - SpeakerLength/2;
+
         public static final double FieldYLength = Units.inchesToMeters(323.00);
-        public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY));
-        public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;
+
         public static final double SpeakerHight = 2.31;//meter
-        public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
-        public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY);
 
         public static final ArmPostion AmpArmPosition = new ArmPostion();
         
@@ -96,6 +85,15 @@ public class Constants {
         public static final Translation2d SnipingZone = new Translation2d();
         public static final Translation2d[] ArmPositionInSpeakerZone = new Translation2d[]{DunkingZone, SnipingZone};
 
+        public static final class Speaker{
+            public static final double SpeakerLength = 1.05;
+            public static final double SpeakerMidlleLocationY = Units.inchesToMeters(218.42);
+            public static final double SpeakerBottomLocationY = Units.inchesToMeters(218.42) - SpeakerLength/2;
+            public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY));
+            public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;
+            public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
+            public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY);
+        }
 
         public static class Shooter{
             public static final int shooterMotor1ID = 0;
@@ -119,7 +117,7 @@ public class Constants {
             public static final double ShootToAmpTime = 2;
         }
 
-        public static final class IntakeConstants{
+        public static final class Intake{
             public static final int intakeMotorID = 0;
             public static final boolean intakeMotorIsInverted = false;
 
@@ -128,11 +126,11 @@ public class Constants {
             public static final double StallCurrent = 50;
             public static final int MaxStallTime = 100;
 
-            public static final I2C.Port ColorSensorPort = I2C.Port.kOnboard;
-            public static final int CloseProximity = 1500;
+            public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
+            public static final int CloseProximity = 100;
         }
 
-        public static class MotorConstants{
+        public static class Motors{
             public static final int mainMotorID = 0;
             public static final int seconderyMotorID = 1;
 
@@ -159,22 +157,12 @@ public class Constants {
         }
     }
     public class ClimbConstants{
-        public static final int ClimbingMotorID = 1;//TODO
-        public static final int SlidingMotorID = 1;//TODO
+        public static final int climbingMotorID = 1;//TODO
+        public static final int slidingMotorID = 1;//TODO
 
-        public static final class ClimbingMotorPID{
-            public static final double kP = 0.1;
-            public static final double kI = 0.1;
-            public static final double kD = 0.1;
-            public static final double kF = 0.1;
-        }
+        public static final PIDFGains climbingMotorPIDF = new PIDFGains(0.1, 0.1, 0.1);
 
-        public static final class SlidingMotorPID{
-            public static final double kP = 0.1;
-            public static final double kI = 0.1;
-            public static final double kD = 0.1;
-            public static final double kF = 0.1;
-        }
+        public static final PIDFGains slidingMotorPIDF = new PIDFGains(0.1, 0.1, 0.1);
     }
 
     public static final class DriveTrain{
@@ -202,6 +190,8 @@ public class Constants {
             public static final double maxAllowableErrorSpikeInMeters = 100; //the max value of a pose spike before replan
 
             public static final double maxRotationSpeed = 6.27; //the max speed the robot can rotate in in radains per second
+
+            public static final double RobotHightFromGround = 0;
         }
 
         public static final class Drive{

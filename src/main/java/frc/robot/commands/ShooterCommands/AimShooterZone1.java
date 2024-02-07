@@ -29,21 +29,21 @@ public class AimShooterZone1 extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (RobotContainer.driveBase.getPose().getTranslation().getY() < Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation) {
+    if (RobotContainer.driveBase.getPose().getTranslation().getY() < Constants.ArmConstants.Speaker.SpeakerIsCenterRatioBottomLocation) {
       IsDeadZone = true;
-          Y = Constants.ArmConstants.SpeakerBottomLocationY
-     + Constants.ArmConstants.SpeakerIsCenterRatioReverse * Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation;
+          Y = Constants.ArmConstants.Speaker.SpeakerBottomLocationY
+     + Constants.ArmConstants.Speaker.SpeakerIsCenterRatioReverse * Constants.ArmConstants.Speaker.SpeakerIsCenterRatioBottomLocation;
     }
     else{
       IsDeadZone = false;
-          Y = Constants.ArmConstants.SpeakerBottomLocationY
-     + Constants.ArmConstants.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
+          Y = Constants.ArmConstants.Speaker.SpeakerBottomLocationY
+     + Constants.ArmConstants.Speaker.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
     }    
     
     distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), 2) +
      Math.pow(Y, 2));
 
-    target.rotation = Math.atan((Constants.SpeakerTranslation.getZ() - target.y - Constants.ArmConstants.RobotHightFromGround) / distanceToSpeaker);
+    target.rotation = Math.atan((Constants.SpeakerTranslation.getZ() - target.y - Constants.DriveTrain.Global.RobotHightFromGround) / distanceToSpeaker);
 
     Arm.getInstance().moveShooterToPose(target);
   }

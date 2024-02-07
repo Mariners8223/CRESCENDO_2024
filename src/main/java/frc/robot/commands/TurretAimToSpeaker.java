@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystem.DriveTrain.DriveBase;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -24,11 +23,11 @@ public class TurretAimToSpeaker extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    YaxisOfTargetInSpeaker = Constants.ArmConstants.SpeakerBottomLocationY
-    + Constants.ArmConstants.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
+    YaxisOfTargetInSpeaker = Constants.ArmConstants.Speaker.SpeakerBottomLocationY
+    + Constants.ArmConstants.Speaker.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
 
     WantedDegree = 180 - Math.atan(YaxisOfTargetInSpeaker/RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX());
     SpeedOffset = RobotContainer.arm.getShooter().getTrueGamePieceVelocityAngle_RobotRelative();
-    RobotContainer.driveBase.setTarGetRotation(Rotation2d.fromDegrees(WantedDegree - SpeedOffset));
+    RobotContainer.driveBase.setTargetRotation(Rotation2d.fromDegrees(WantedDegree - SpeedOffset));
   }
 }

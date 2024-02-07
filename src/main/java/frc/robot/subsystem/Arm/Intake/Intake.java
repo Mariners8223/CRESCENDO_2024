@@ -1,6 +1,6 @@
 package frc.robot.subsystem.Arm.Intake;
 
-import frc.robot.Constants.ArmConstants.IntakeConstants;
+import frc.robot.Constants.ArmConstants;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -13,10 +13,10 @@ public class Intake {
     private ColorSensorV3 colorSensor;
 
     private Intake() {
-        intakeMotor = new CANSparkFlex(IntakeConstants.intakeMotorID, MotorType.kBrushless);
-        intakeMotor.setInverted(IntakeConstants.intakeMotorIsInverted);
+        intakeMotor = new CANSparkFlex(ArmConstants.Intake.intakeMotorID, MotorType.kBrushless);
+        intakeMotor.setInverted(ArmConstants.Intake.intakeMotorIsInverted);
 
-        colorSensor = new ColorSensorV3(IntakeConstants.ColorSensorPort);
+        colorSensor = new ColorSensorV3(ArmConstants.Intake.ColorSensorPort);
     }
 
     public static Intake getInstance(){
