@@ -10,10 +10,12 @@ import org.littletonrobotics.junction.Logger;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -153,6 +155,14 @@ public class Arm extends SubsystemBase{
     return intakePosition;
   }
 
+  public double getMainMotorPositionDegrees(){
+    return Units.degreesToRotations(inputs.mainMotorPostion);
+  }
+
+  public double getSeconderyMotorPositionDegrees(){
+    return Units.degreesToRotations(inputs.secondaryTargetPostion);
+  }
+
   public boolean isArmInPosition(){
     return Math.abs(inputs.mainMotorTargetPostion - inputs.mainMotorPostion) < Constants.ArmConstants.Motors.mainMotortolarance &&
     Math.abs(inputs.secondaryMotorPosition - inputs.secondaryTargetPostion) < Constants.ArmConstants.Motors.seconderyMotorTolarance;
@@ -160,6 +170,28 @@ public class Arm extends SubsystemBase{
 
   public double getAngleToSpeaker(){
     return 0;
+  }
+
+  public void moveShooterToDegree(double degree){
+    MathUtil.clamp(degree, 0, 100);
+
+    inputs.mainMotorTargetPostion = Units.degreesToRotations(degree);
+    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kPosition);
+  }
+
+  public void moveIntakeToDegree(double degree){
+    MathUtil.clamp(degree, 0, 180);
+
+    inputs.secondaryTargetPostion = Units.degreesToRotations(degree);
+    secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, ControlType.kPosition);
+  }
+
+  public void stallMainMotor(){
+    mainMotor.setIdleMode(IdleMode.kBrake);
+  }
+
+  public void stallSecondaryMotor(){
+    secondaryMotor.setIdleMode(IdleMode.kBrake);
   }
 
   public void moveShooterToPose(ArmPostion position){

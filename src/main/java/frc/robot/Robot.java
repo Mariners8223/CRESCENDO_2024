@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.util.LocalADStarAK;
 
@@ -68,7 +69,10 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    SmartDashboard.putNumber("Main Motor Position Degrees", RobotContainer.arm.getMainMotorPositionDegrees());
+    SmartDashboard.putNumber("Secondary Motor Position Degrees", RobotContainer.arm.getSeconderyMotorPositionDegrees());
+  }
 
   @Override
   public void teleopExit() {
