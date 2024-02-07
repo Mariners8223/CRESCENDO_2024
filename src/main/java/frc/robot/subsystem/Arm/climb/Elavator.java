@@ -21,8 +21,8 @@ public class Elavator extends SubsystemBase {
 
   /** Creates a new Elavater. */
   private Elavator() {
-    ClimbingMotor = new TalonFX(Constants.ClimbConstants.climbingMotorID);
-    SlidingMotor = new TalonFX(Constants.ClimbConstants.slidingMotorID);
+    ClimbingMotor = new TalonFX(Constants.ClimbConstants.railMotorID);
+    SlidingMotor = new TalonFX(Constants.ClimbConstants.rollerMotorID);
 
     ClimbingMotorConfiguration = new TalonFXConfiguration();
     slidingMotorConfiguration = new TalonFXConfiguration();

@@ -96,8 +96,8 @@ public class Constants {
         }
 
         public static class Shooter{
-            public static final int shooterMotor1ID = 0;
-            public static final int shooterMotor2ID = 1;
+            public static final int shooterMotor1ID = 19;
+            public static final int shooterMotor2ID = 18;
 
             public static final PIDFGains shooter1PID = new PIDFGains(0.5, 0, 0);
             public static final PIDFGains shooter2PID = new PIDFGains(0.5, 0, 0);
@@ -118,7 +118,7 @@ public class Constants {
         }
 
         public static final class Intake{
-            public static final int intakeMotorID = 0;
+            public static final int intakeMotorID = 17;
             public static final boolean intakeMotorIsInverted = false;
 
             public static final double intakeMotorSpeed = 0.1;
@@ -131,8 +131,8 @@ public class Constants {
         }
 
         public static class Motors{
-            public static final int mainMotorID = 0;
-            public static final int seconderyMotorID = 1;
+            public static final int mainMotorID = 15;
+            public static final int seconderyMotorID = 16;
 
             public static final PIDFGains mainPID = new PIDFGains(0.5, 0, 0);
             public static final PIDFGains seconderyPID = new PIDFGains(0.5, 0, 0);
@@ -157,8 +157,8 @@ public class Constants {
         }
     }
     public class ClimbConstants{
-        public static final int climbingMotorID = 1;//TODO
-        public static final int slidingMotorID = 1;//TODO
+        public static final int railMotorID = 20;//TODO
+        public static final int rollerMotorID = 21;//TODO
 
         public static final PIDFGains climbingMotorPIDF = new PIDFGains(0.1, 0.1, 0.1);
 
