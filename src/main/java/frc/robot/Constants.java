@@ -81,10 +81,10 @@ public class Constants {
         public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
     
-        public static final double RobotHightFromGround = 0;
-        public static final double SpeakerLength = 1.181;
-        public static final double SpeakerBottomLocationY = 5.5642;
-        public static final double SpeakerMidlleLocationY = SpeakerLength/2 + SpeakerBottomLocationY;
+        public static final double RobotHightFromGround = 0;//TODO
+        public static final double SpeakerLength = 1.181;//done
+        public static final double SpeakerBottomLocationY = 5.5642;//done
+        public static final double SpeakerMidlleLocationY = SpeakerLength/2 + SpeakerBottomLocationY;//done
         public static final double FieldYLength = Units.inchesToMeters(323.00);
         public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY));
         //public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;

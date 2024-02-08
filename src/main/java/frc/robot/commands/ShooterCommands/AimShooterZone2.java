@@ -52,6 +52,8 @@ public class AimShooterZone2 extends InstantCommand {
     
     distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), 2) + Math.pow(Dy, 2));
 
+    Dy = Constants.SpeakerTranslation.getZ() - target.y - Constants.ArmConstants.RobotHightFromGround;//update Dy to be the hieght and not the length
+
     StartSpeed = Arm.getInstance().getShooter().getTrueXAxisVelocity_RobotRelative();
 
     angle = Equation();
