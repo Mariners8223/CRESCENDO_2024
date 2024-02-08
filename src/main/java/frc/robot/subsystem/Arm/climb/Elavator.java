@@ -6,21 +6,18 @@ package frc.robot.subsystem.Arm.climb;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.ControlModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elavator extends SubsystemBase {
-  private static Elavator instance;
-
   private TalonFX ClimbingMotor;
   private TalonFX SlidingMotor;
   private TalonFXConfiguration ClimbingMotorConfiguration;
   private TalonFXConfiguration slidingMotorConfiguration;
 
   /** Creates a new Elavater. */
-  private Elavator() {
+  public Elavator() {
     ClimbingMotor = new TalonFX(Constants.ClimbConstants.railMotorID);
     SlidingMotor = new TalonFX(Constants.ClimbConstants.rollerMotorID);
 
@@ -39,13 +36,6 @@ public class Elavator extends SubsystemBase {
 
     ClimbingMotor.getConfigurator().apply(ClimbingMotorConfiguration);
     SlidingMotor.getConfigurator().apply(slidingMotorConfiguration);
-  }
-
-  public static Elavator getInstance(){
-    if(instance == null){
-      instance = new Elavator();
-    }
-    return instance;
   }
 
   public void SetClimbingMode(double height){

@@ -20,7 +20,7 @@ public class AmpShootGamePiece extends Command {
   
   public AmpShootGamePiece() {
     arm = Arm.getInstance();
-    shooter = Shooter.getInstance();
+    shooter = arm.getShooterSub();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(arm);
   }

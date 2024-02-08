@@ -70,8 +70,6 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("Main Motor Position Degrees", RobotContainer.arm.getMainMotorPositionDegrees());
-    SmartDashboard.putNumber("Secondary Motor Position Degrees", RobotContainer.arm.getSeconderyMotorPositionDegrees());
   }
 
   @Override

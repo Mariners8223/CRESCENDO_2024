@@ -21,40 +21,14 @@ import frc.util.PIDFGains;
 
 /** Add your docs here. */
 public class Shooter {
-
-    private static Shooter instance;
-
     // initialize motors
     private CANSparkFlex shooterMotor1;
     private CANSparkFlex shooterMotor2;
 
     // constructor for shooter - configures motors
-    private Shooter(){
+    public Shooter(){
         shooterMotor1 = configMotor(Constants.ArmConstants.Shooter.shooterPIDGains, Constants.ArmConstants.Shooter.shooterMotor1ID);
         shooterMotor2 = configMotor(Constants.ArmConstants.Shooter.shooterPIDGains, Constants.ArmConstants.Shooter.shooterMotor2ID);
-    }
-
-    public static Shooter getInstance(){
-        if(instance == null) {
-            instance = new Shooter();
-        }
-
-        return instance;
-    }
-
-    // configures motor with PID gains
-    private CANSparkFlex configMotor(PIDFGains pidGains, int motorID){
-
-        CANSparkFlex motor = new CANSparkFlex(motorID, MotorType.kBrushless);
-        motor.restoreFactoryDefaults();
-        
-        SparkPIDController pidController = motor.getPIDController();
-        pidController.setP(pidGains.getP());
-        pidController.setI(pidGains.getI());
-        pidController.setD(pidGains.getD());
-        pidController.setFF(pidGains.getF());
-        pidController.setIZone(pidGains.getIZone());
-        return motor;
     }
 
     // set shooter power
@@ -86,5 +60,20 @@ public class Shooter {
     }
     public double getTrueGamePieceVelocityAngle_RobotRelative(){
         return Math.atan(getTrueYAxisVelocity_RobotRelative()/getTrueXAxisVelocity_RobotRelative());
+    }
+
+        // configures motor with PID gains
+    private CANSparkFlex configMotor(PIDFGains pidGains, int motorID){
+
+        CANSparkFlex motor = new CANSparkFlex(motorID, MotorType.kBrushless);
+        motor.restoreFactoryDefaults();
+        
+        SparkPIDController pidController = motor.getPIDController();
+        pidController.setP(pidGains.getP());
+        pidController.setI(pidGains.getI());
+        pidController.setD(pidGains.getD());
+        pidController.setFF(pidGains.getF());
+        pidController.setIZone(pidGains.getIZone());
+        return motor;
     }
 }

@@ -10,12 +10,10 @@ import org.littletonrobotics.junction.Logger;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkAbsoluteEncoder;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -86,12 +84,16 @@ public class Arm extends SubsystemBase{
     return instance;
   }
 
-  public Shooter getShooter(){
-    return shooter;
+  public Elavator getElavatorSub(){
+    return elavator;
   }
 
-  public Intake getIntake(){
+  public Intake getIntakeSub(){
     return intake;
+  }
+
+  public Shooter getShooterSub(){
+    return shooter;
   }
 
   /** Creates a new Arm. */
@@ -111,7 +113,7 @@ public class Arm extends SubsystemBase{
 
   private Shooter shooter;
   private Intake intake;
-  private Elavator climb;
+  private Elavator elavator;
 
 
   private Arm() {
@@ -130,9 +132,9 @@ public class Arm extends SubsystemBase{
     intakePosition = new ArmPostion();
     shooterPosition = new ArmPostion();
 
-    shooter = Shooter.getInstance();
-    intake = Intake.getInstance();
-    climb = Elavator.getInstance();
+    shooter = new Shooter();
+    intake = new Intake();
+    elavator = new Elavator();
 
   }
 
@@ -155,14 +157,6 @@ public class Arm extends SubsystemBase{
     return intakePosition;
   }
 
-  public double getMainMotorPositionDegrees(){
-    return Units.degreesToRotations(inputs.mainMotorPostion);
-  }
-
-  public double getSeconderyMotorPositionDegrees(){
-    return Units.degreesToRotations(inputs.secondaryTargetPostion);
-  }
-
   public boolean isArmInPosition(){
     return Math.abs(inputs.mainMotorTargetPostion - inputs.mainMotorPostion) < Constants.ArmConstants.Motors.mainMotortolarance &&
     Math.abs(inputs.secondaryMotorPosition - inputs.secondaryTargetPostion) < Constants.ArmConstants.Motors.seconderyMotorTolarance;
@@ -170,28 +164,6 @@ public class Arm extends SubsystemBase{
 
   public double getAngleToSpeaker(){
     return 0;
-  }
-
-  public void moveShooterToDegree(double degree){
-    MathUtil.clamp(degree, 0, 100);
-
-    inputs.mainMotorTargetPostion = Units.degreesToRotations(degree);
-    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kPosition);
-  }
-
-  public void moveIntakeToDegree(double degree){
-    MathUtil.clamp(degree, 0, 180);
-
-    inputs.secondaryTargetPostion = Units.degreesToRotations(degree);
-    secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, ControlType.kPosition);
-  }
-
-  public void stallMainMotor(){
-    mainMotor.setIdleMode(IdleMode.kBrake);
-  }
-
-  public void stallSecondaryMotor(){
-    secondaryMotor.setIdleMode(IdleMode.kBrake);
   }
 
   public void moveShooterToPose(ArmPostion position){
@@ -205,27 +177,6 @@ public class Arm extends SubsystemBase{
   }
 
   public void moveIntakeToPose(ArmPostion postion){
-    // switch (controlType) {
-    //   case Xaxis:
-    //     secondaryMotor.getPIDController().setReference(Units.radiansToRotations(Math.asin((postion.x - shooterPosition.x) / ArmConstants.shooterAndIntakeLengthMeters)) + 
-    //     (Math.PI / 2) - shooterPosition.rotation,
-    //     CANSparkBase.ControlType.kPosition);
-    //     break;
-    //   case Yaxis:
-    //     secondaryMotor.getPIDController().setReference(Units.radiansToRotations(Math.acos((postion.y - shooterPosition.y) / ArmConstants.shooterAndIntakeLengthMeters)) + 
-    //     (Math.PI / 2) - shooterPosition.rotation,
-    //     CANSparkBase.ControlType.kPosition);
-    //     break;
-    //   case Rotation:
-    //     secondaryMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation),
-    //     CANSparkBase.ControlType.kPosition);
-    //     break;
-    //   default:
-    //     secondaryMotor.getPIDController().setReference(Units.radiansToRotations(postion.rotation),
-    //     CANSparkBase.ControlType.kPosition);
-    //     break;
-    // }
-
     inputs.mainMotorTargetPostion = Units.radiansToRotations(
       Math.asin((postion.y + Constants.ArmConstants.shooterAndIntakeLengthMeters * Math.cos(postion.rotation - Math.PI / 2)) / Constants.ArmConstants.armLengthMeters));
 

@@ -11,7 +11,7 @@ public class Collect extends Command{
   private int timer;
 
   public Collect(){
-    intake = Arm.getInstance().getIntake();
+    intake = Arm.getInstance().getIntakeSub();
     timer = 0;
   }
 

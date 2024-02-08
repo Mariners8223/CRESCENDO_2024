@@ -42,8 +42,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystem.Arm.Arm;
-
 
 /**
  * The DriveBase class represents the drivetrain of the robot.
@@ -65,8 +63,6 @@ public class DriveBase extends SubsystemBase {
   SwerveDrivePoseEstimator poseEstimator; //the pose estimator of the drivetrain
 
   PIDController thetaCorrectionController; //the pid controller that fixes the angle of the robot
-  PIDController thetaController;
-
   Pose2d currentPose; //the current pose2d of the robot
   Rotation2d targetRotation; //the target rotation of the robot
 
