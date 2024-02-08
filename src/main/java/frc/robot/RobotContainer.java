@@ -19,12 +19,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.Arm.SysIDArm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 
 public class RobotContainer {
   public static DriveBase driveBase;
   public static Arm arm;
+
+  public static Arm.SysIDArm sysIDArm;
 
   public static CommandPS5Controller driveController;
   public static SendableChooser<Command> autoChooser;
@@ -46,6 +50,8 @@ public class RobotContainer {
     driveBase = new DriveBase();
     arm = Arm.getInstance();
 
+    sysIDArm = arm.new SysIDArm();
+
     configureBindings();
     configChooser();
     configureNamedCommands();
@@ -63,7 +69,35 @@ public class RobotContainer {
     // driveController.cross().debounce(0.1).and(() -> getRobotZone() == 1 || getRobotZone() == 2).onTrue(new InstantCommand(() -> aimingAtSpeaker = !aimingAtSpeaker));
     // new Trigger(() -> getRobotZone() == 1 || getRobotZone() == 2).onTrue(new InstantCommand(() -> aimingAtSpeaker = true));
 
+    SmartDashboard.putBoolean("Main Motor", true);
+    SmartDashboard.putBoolean("Quasistatic", true);
+
+    driveController.square().and(isMainMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
+    driveController.circle().and(isMainMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
+
+    driveController.square().and(isMainMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
+    driveController.circle().and(isMainMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
+
+
+    driveController.square().and(isSecondaryMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
+    driveController.circle().and(isSecondaryMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
+
+    driveController.square().and(isSecondaryMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
+    driveController.circle().and(isSecondaryMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
   }
+
+  // private boolean isMainMotor(){
+  //   return SmartDashboard.getBoolean("mainMotor", true);
+  // }
+  private BooleanSupplier isMainMotor = () -> { return SmartDashboard.getBoolean("Main Motor", true);};
+  private BooleanSupplier isQuasistatic = () -> {return SmartDashboard.getBoolean("Quasistatic", true);};
+  
+  private BooleanSupplier isSecondaryMotor = () -> { return !SmartDashboard.getBoolean("Main Motor", true);};
+  private BooleanSupplier isDynamic = () -> {return !SmartDashboard.getBoolean("Quasistatic", true);};
+
+  // private boolean isQuas(){
+  //   return SmartDashboard.getBoolean("quas", true);
+  // }
 
   private void configChooser(){
     autoChooser = AutoBuilder.buildAutoChooser();

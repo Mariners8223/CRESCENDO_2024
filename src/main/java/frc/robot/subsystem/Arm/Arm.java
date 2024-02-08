@@ -10,22 +10,31 @@ import org.littletonrobotics.junction.Logger;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
+// import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Current;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
@@ -121,6 +130,7 @@ public class Arm extends SubsystemBase{
   private PIDController mainPIDController;
   private PIDController seconderyPIDController;
 
+  private SysIDArm sysIDArm;
 
   private Arm() {
 
@@ -165,6 +175,24 @@ public class Arm extends SubsystemBase{
 
     new Trigger(() -> RobotContainer.getRobotZone() == 2 || RobotContainer.getRobotZone() == 3).and(RobotContainer::isRobotAmpMode);
 
+    // SmartDashboard.putBoolean("Main Motor", true);
+
+    // if (SmartDashboard.getBoolean("Main Motor", true)){
+    //   new Trigger(() -> RobotContainer.driveController.square().getAsBoolean()).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
+    //   new Trigger(() -> RobotContainer.driveController.cross().getAsBoolean()).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
+
+    //   new Trigger(() -> RobotContainer.driveController.triangle().getAsBoolean()).whileTrue(sysIDArm.dynamicMain(SysIdRoutine.Direction.kForward));
+    //   new Trigger(() -> RobotContainer.driveController.circle().getAsBoolean()).whileTrue(sysIDArm.dynamicMain(SysIdRoutine.Direction.kReverse));
+    // }
+    // else{
+    //   new Trigger(() -> RobotContainer.driveController.square().getAsBoolean()).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kForward));
+    //   new Trigger(() -> RobotContainer.driveController.cross().getAsBoolean()).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kReverse));
+
+    //   new Trigger(() -> RobotContainer.driveController.triangle().getAsBoolean()).whileTrue(sysIDArm.dynamicSecondary(SysIdRoutine.Direction.kForward));
+    //   new Trigger(() -> RobotContainer.driveController.circle().getAsBoolean()).whileTrue(sysIDArm.dynamicSecondary(SysIdRoutine.Direction.kReverse));
+    // }
+
+    
   }
 
   public ArmPostion getShooterPosition(){
@@ -185,33 +213,33 @@ public class Arm extends SubsystemBase{
   }
 
   public void moveShooterToPose(ArmPostion position){
-    inputs.mainMotorTargetPostion = Units.radiansToRotations(Math.asin(position.y / ArmConstants.armLengthMeters));
-    // mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);
-    // mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConversionFactor), CANSparkBase.ControlType.kPosition);
-    mainMotor.set(mainPIDController.calculate(inputs.mainMotorAbsolutePostion, inputs.mainMotorTargetPostion));
+    // inputs.mainMotorTargetPostion = Units.radiansToRotations(Math.asin(position.y / ArmConstants.armLengthMeters));
+    // // mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);
+    // // mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConversionFactor), CANSparkBase.ControlType.kPosition);
+    // mainMotor.set(mainPIDController.calculate(inputs.mainMotorAbsolutePostion, inputs.mainMotorTargetPostion));
 
-    inputs.secondaryMotorTargetPostion = inputs.mainMotorTargetPostion + Units.radiansToRotations(position.rotation);
-    // secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, CANSparkBase.ControlType.kPosition);
-    // secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryTargetPostion, Constants.ArmConstants.Motors.secondaryConversionFactor), CANSparkBase.ControlType.kPosition);
-    secondaryMotor.set(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion, inputs.secondaryMotorTargetPostion));
+    // inputs.secondaryMotorTargetPostion = inputs.mainMotorTargetPostion + Units.radiansToRotations(position.rotation);
+    // // secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, CANSparkBase.ControlType.kPosition);
+    // // secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryTargetPostion, Constants.ArmConstants.Motors.secondaryConversionFactor), CANSparkBase.ControlType.kPosition);
+    // secondaryMotor.set(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion, inputs.secondaryMotorTargetPostion));
   }
 
   public void moveIntakeToPose(ArmPostion postion){
-    inputs.mainMotorTargetPostion = Units.radiansToRotations(
-      Math.asin((postion.y + Constants.ArmConstants.shooterAndIntakeLengthMeters * Math.cos(postion.rotation - Math.PI / 2)) / Constants.ArmConstants.armLengthMeters));
+    // inputs.mainMotorTargetPostion = Units.radiansToRotations(
+    //   Math.asin((postion.y + Constants.ArmConstants.shooterAndIntakeLengthMeters * Math.cos(postion.rotation - Math.PI / 2)) / Constants.ArmConstants.armLengthMeters));
 
-    inputs.secondaryMotorTargetPostion = Units.radiansToRotations(postion.rotation) - inputs.mainMotorTargetPostion;
+    // inputs.secondaryMotorTargetPostion = Units.radiansToRotations(postion.rotation) - inputs.mainMotorTargetPostion;
 
-    // mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConversionFactor), CANSparkBase.ControlType.kPosition);
-    // secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryMotorTargetPostion, Constants.ArmConstants.Motors.secondaryConversionFactor), CANSparkBase.ControlType.kPosition);
+    // // mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConversionFactor), CANSparkBase.ControlType.kPosition);
+    // // secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryMotorTargetPostion, Constants.ArmConstants.Motors.secondaryConversionFactor), CANSparkBase.ControlType.kPosition);
 
-    mainMotor.set(mainPIDController.calculate(inputs.mainMotorAbsolutePostion, inputs.mainMotorTargetPostion));
-    secondaryMotor.set(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion, inputs.secondaryMotorTargetPostion));
+    // mainMotor.set(mainPIDController.calculate(inputs.mainMotorAbsolutePostion, inputs.mainMotorTargetPostion));
+    // secondaryMotor.set(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion, inputs.secondaryMotorTargetPostion));
   }
 
   public void update(){
     updateLogger();
-    updateArmPostions();
+    // updateArmPostions();
   }
 
   @Override
@@ -252,19 +280,19 @@ public class Arm extends SubsystemBase{
     Logger.processInputs(getName(), inputs);
   }
 
-  public void updateArmPostions(){
-    shooterPosition.x = (Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion))) * (Constants.ArmConstants.armLengthMeters) - ArmConstants.mainPivotDistanceFromCenterMeters
-    + (Math.sin(Units.rotationsToRadians(inputs.secondaryMotorPosition)) * ArmConstants.SecondaryMotorDistanceFromShooterMeters);
-    shooterPosition.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * (Constants.ArmConstants.armLengthMeters) + ArmConstants.armHeightFromFrameMeters
-    - (Math.cos(Units.rotationsToRadians(inputs.secondaryMotorPosition))) * ArmConstants.SecondaryMotorDistanceFromShooterMeters;
-    shooterPosition.rotation = Units.rotationsToRadians(inputs.mainMotorPostion + inputs.secondaryMotorPosition);
+  // public void updateArmPostions(){
+  //   shooterPosition.x = (Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion))) * (Constants.ArmConstants.armLengthMeters) - ArmConstants.mainPivotDistanceFromCenterMeters
+  //   + (Math.sin(Units.rotationsToRadians(inputs.secondaryMotorPosition)) * ArmConstants.SecondaryMotorDistanceFromShooterMeters);
+  //   shooterPosition.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * (Constants.ArmConstants.armLengthMeters) + ArmConstants.armHeightFromFrameMeters
+  //   - (Math.cos(Units.rotationsToRadians(inputs.secondaryMotorPosition))) * ArmConstants.SecondaryMotorDistanceFromShooterMeters;
+  //   shooterPosition.rotation = Units.rotationsToRadians(inputs.mainMotorPostion + inputs.secondaryMotorPosition);
 
-    intakePosition.x = shooterPosition.x +
-    Math.sin(Units.rotationsToRadians(inputs.secondaryMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
-    intakePosition.y = shooterPosition.y + 
-    Math.cos(Units.rotationsToRadians(inputs.secondaryMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
-    intakePosition.rotation = Units.rotationsToRadians(inputs.secondaryMotorPosition);
-  }
+  //   intakePosition.x = shooterPosition.x +
+  //   Math.sin(Units.rotationsToRadians(inputs.secondaryMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
+  //   intakePosition.y = shooterPosition.y + 
+  //   Math.cos(Units.rotationsToRadians(inputs.secondaryMotorPosition) - (Math.PI / 2) - Units.rotationsToRadians(inputs.mainMotorPostion)) * ArmConstants.shooterAndIntakeLengthMeters;
+  //   intakePosition.rotation = Units.rotationsToRadians(inputs.secondaryMotorPosition);
+  // }
 
   private DutyCycleEncoder configureAbsEncoder(int port, double offset){
     DutyCycleEncoder encoder = new DutyCycleEncoder(port);
@@ -302,5 +330,66 @@ public class Arm extends SubsystemBase{
 
   private static double motorToRealUnits(double motorUnits, double convertionFactor){
     return motorUnits / convertionFactor;
+  }
+
+  public class SysIDArm{
+    MutableMeasure<Velocity<Velocity<Angle>>> mainAngularAcceleration = MutableMeasure.mutable(Units.RotationsPerSecond.per(Units.Second).zero());
+    MutableMeasure<Velocity<Angle>> mainAngularVelocity = MutableMeasure.mutable(Units.RotationsPerSecond.zero());
+    MutableMeasure<Angle> mainAngularPosition = MutableMeasure.mutable(Units.Rotations.zero());
+    MutableMeasure<Current> mainCurrent = MutableMeasure.mutable(Units.Amps.zero());
+
+    public SysIDArm(){}
+    
+    SysIdRoutine mainMotorRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(),
+      new SysIdRoutine.Mechanism(
+        (volts) -> {
+          mainMotor.getPIDController().setReference(volts.in(edu.wpi.first.units.Units.Volts), ControlType.kVoltage);
+        }, 
+        (log) -> {
+          // How to get Acceleration?
+          log.motor("Main Motor")
+          .angularAcceleration(mainAngularAcceleration.mut_replace(0, null))
+          .angularVelocity(mainAngularVelocity.mut_replace(mainMotor.getEncoder().getVelocity(), Units.RotationsPerSecond))
+          .angularPosition(mainAngularPosition.mut_replace(mainMotor.getEncoder().getPosition(), Units.Rotations))
+          .current(mainCurrent.mut_replace(mainMotor.getOutputCurrent(), Units.Amps));
+        }, 
+        Arm.getInstance()));
+    
+    MutableMeasure<Velocity<Velocity<Angle>>> secondaryAngularAcceleration = MutableMeasure.mutable(Units.RotationsPerSecond.per(Units.Second).zero());
+    MutableMeasure<Velocity<Angle>> secondaryAngularVelocity = MutableMeasure.mutable(Units.RotationsPerSecond.zero());
+    MutableMeasure<Angle> secondaryAngularPosition = MutableMeasure.mutable(Units.Rotations.zero());
+    MutableMeasure<Current> secondaryCurrent = MutableMeasure.mutable(Units.Amps.zero());
+
+    SysIdRoutine secondaryMotorRoutine = new SysIdRoutine(
+      new SysIdRoutine.Config(),
+      new SysIdRoutine.Mechanism(
+        (volts) -> {
+          secondaryMotor.getPIDController().setReference(volts.in(edu.wpi.first.units.Units.Volts), ControlType.kVoltage);
+        }, 
+        (log) -> {
+          // How to get Acceleration?
+          log.motor("Main Motor")
+          .angularAcceleration(secondaryAngularAcceleration.mut_replace(mainMotor.getEncoder().getVelocity() / (mainMotor.getEncoder().getMeasurementPeriod() / 1000), Units.RPM.per(Units.Second)))
+          .angularVelocity(secondaryAngularVelocity.mut_replace(secondaryMotor.getEncoder().getVelocity(), Units.RPM))
+          .angularPosition(secondaryAngularPosition.mut_replace(secondaryMotor.getEncoder().getPosition(), Units.Rotations))
+          .current(secondaryCurrent.mut_replace(secondaryMotor.getOutputCurrent(), Units.Amps));
+        }, 
+        Arm.getInstance()));
+
+    public Command quasistaticMain(SysIdRoutine.Direction direction){
+      return mainMotorRoutine.quasistatic(direction);
+    }
+    public Command quasistaticSecondary(SysIdRoutine.Direction direction){
+      return secondaryMotorRoutine.quasistatic(direction);
+    }
+
+    public Command dynamicMain(SysIdRoutine.Direction direction){
+      return mainMotorRoutine.dynamic(direction);
+    }
+    public Command dynamicSecondary(SysIdRoutine.Direction direction){
+      return secondaryMotorRoutine.dynamic(direction);
+    }
+
   }
 }
