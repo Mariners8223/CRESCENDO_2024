@@ -16,7 +16,7 @@ import frc.robot.subsystem.Arm.Arm.ArmPostion;
 public class AimShooterZone2 extends InstantCommand {
   private static ArmPostion target = new ArmPostion(0.4, 0.4, 0);
   private static double StartSpeed;
-  private static double Dy;//y axis to calc the distance from speaker
+  private static double Dy;//y axis to calc the distance from speaker, after is turned into hieght
   private static double distanceToSpeaker;
   private static double angle = 45;
   private static boolean IsDeadZone;

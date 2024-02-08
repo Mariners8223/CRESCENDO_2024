@@ -16,6 +16,7 @@ public class SlideToTheLeftEdge extends Command {
   /** Creates a new SlideToClosestRopeEdge. */
   private static Elavator climb;
   private static Translation2d target;
+  public static int RopeIndex;
 
   public SlideToTheLeftEdge() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,9 +27,10 @@ public class SlideToTheLeftEdge extends Command {
   @Override
   public void initialize() {
     climb = Elavator.getInstance();
-    target = RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.ClimbConstants.SlidingPositions.SlidingPositions_LeftEdgeRope);
+    target = RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.ClimbConstants.SlidingPositions.SlidingPositions_MiddleRope);
+    RopeIndex = Constants.ClimbConstants.SlidingPositions.SlidingPositions_MiddleRope.indexOf(target);
+    target = Constants.ClimbConstants.SlidingPositions.SlidingPositions_RightEdgeRope.get(RopeIndex);
     climb.moveRobotOnRope(RobotContainer.driveBase.getPose().getTranslation().getDistance(target) * Constants.ClimbConstants.MotorRotationsToAirialMeters);
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.

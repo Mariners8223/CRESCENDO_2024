@@ -14,6 +14,7 @@ public class SlideToTheRightEdge extends Command {
   /** Creates a new SlideToTheRightEdge. */
   private static Elavator climb;
   private static Translation2d target;
+  private static int RopeIndex;
   public SlideToTheRightEdge() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Elavator.getInstance());
@@ -23,7 +24,9 @@ public class SlideToTheRightEdge extends Command {
   @Override
   public void initialize() {
     climb = Elavator.getInstance();
-    target = RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.ClimbConstants.SlidingPositions.SlidingPositions_RightEdgeRope);
+    target = RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.ClimbConstants.SlidingPositions.SlidingPositions_MiddleRope);
+    RopeIndex = Constants.ClimbConstants.SlidingPositions.SlidingPositions_MiddleRope.indexOf(target);
+    target = Constants.ClimbConstants.SlidingPositions.SlidingPositions_RightEdgeRope.get(RopeIndex);
     climb.moveRobotOnRope(RobotContainer.driveBase.getPose().getTranslation().getDistance(target) * Constants.ClimbConstants.MotorRotationsToAirialMeters);
 
   }
