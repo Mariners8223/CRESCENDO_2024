@@ -26,6 +26,7 @@ import edu.wpi.first.units.Current;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -333,10 +334,9 @@ public class Arm extends SubsystemBase{
   }
 
   public class SysIDArm{
-    MutableMeasure<Velocity<Velocity<Angle>>> mainAngularAcceleration = MutableMeasure.mutable(Units.RotationsPerSecond.per(Units.Second).zero());
     MutableMeasure<Velocity<Angle>> mainAngularVelocity = MutableMeasure.mutable(Units.RotationsPerSecond.zero());
     MutableMeasure<Angle> mainAngularPosition = MutableMeasure.mutable(Units.Rotations.zero());
-    MutableMeasure<Current> mainCurrent = MutableMeasure.mutable(Units.Amps.zero());
+    MutableMeasure<Voltage> mainVoltage = MutableMeasure.mutable(Units.Volts.zero());
 
     public SysIDArm(){}
     
@@ -349,17 +349,15 @@ public class Arm extends SubsystemBase{
         (log) -> {
           // How to get Acceleration?
           log.motor("Main Motor")
-          .angularAcceleration(mainAngularAcceleration.mut_replace(0, null))
-          .angularVelocity(mainAngularVelocity.mut_replace(mainMotor.getEncoder().getVelocity(), Units.RotationsPerSecond))
-          .angularPosition(mainAngularPosition.mut_replace(mainMotor.getEncoder().getPosition(), Units.Rotations))
-          .current(mainCurrent.mut_replace(mainMotor.getOutputCurrent(), Units.Amps));
+          .angularVelocity(mainAngularVelocity.mut_replace(mainMotor.getEncoder().getVelocity() / Constants.ArmConstants.Motors.mainConversionFactor, Units.RotationsPerSecond))
+          .angularPosition(mainAngularPosition.mut_replace(mainMotor.getEncoder().getPosition() / Constants.ArmConstants.Motors.mainConversionFactor, Units.Rotations))
+          .voltage(mainVoltage.mut_replace(mainMotor.getAppliedOutput() * mainMotor.getBusVoltage(), Units.Volts));
         }, 
         Arm.getInstance()));
     
-    MutableMeasure<Velocity<Velocity<Angle>>> secondaryAngularAcceleration = MutableMeasure.mutable(Units.RotationsPerSecond.per(Units.Second).zero());
     MutableMeasure<Velocity<Angle>> secondaryAngularVelocity = MutableMeasure.mutable(Units.RotationsPerSecond.zero());
     MutableMeasure<Angle> secondaryAngularPosition = MutableMeasure.mutable(Units.Rotations.zero());
-    MutableMeasure<Current> secondaryCurrent = MutableMeasure.mutable(Units.Amps.zero());
+    MutableMeasure<Voltage> secondaryVoltage = MutableMeasure.mutable(Units.Volts.zero());
 
     SysIdRoutine secondaryMotorRoutine = new SysIdRoutine(
       new SysIdRoutine.Config(),
@@ -370,10 +368,9 @@ public class Arm extends SubsystemBase{
         (log) -> {
           // How to get Acceleration?
           log.motor("Main Motor")
-          .angularAcceleration(secondaryAngularAcceleration.mut_replace(mainMotor.getEncoder().getVelocity() / (mainMotor.getEncoder().getMeasurementPeriod() / 1000), Units.RPM.per(Units.Second)))
-          .angularVelocity(secondaryAngularVelocity.mut_replace(secondaryMotor.getEncoder().getVelocity(), Units.RPM))
-          .angularPosition(secondaryAngularPosition.mut_replace(secondaryMotor.getEncoder().getPosition(), Units.Rotations))
-          .current(secondaryCurrent.mut_replace(secondaryMotor.getOutputCurrent(), Units.Amps));
+          .angularVelocity(secondaryAngularVelocity.mut_replace(secondaryMotor.getEncoder().getVelocity() / Constants.ArmConstants.Motors.secondaryConversionFactor, Units.RPM))
+          .angularPosition(secondaryAngularPosition.mut_replace(secondaryMotor.getEncoder().getPosition() / Constants.ArmConstants.Motors.secondaryConversionFactor, Units.Rotations))
+          .voltage(secondaryVoltage.mut_replace(secondaryMotor.getAppliedOutput() * secondaryMotor.getBusVoltage(), Units.Volts));
         }, 
         Arm.getInstance()));
 

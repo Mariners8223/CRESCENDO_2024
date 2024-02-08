@@ -79,11 +79,11 @@ public class RobotContainer {
     driveController.circle().and(isMainMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
 
 
-    driveController.square().and(isSecondaryMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
-    driveController.circle().and(isSecondaryMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
+    driveController.square().and(isSecondaryMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kForward));
+    driveController.circle().and(isSecondaryMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kReverse));
 
-    driveController.square().and(isSecondaryMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
-    driveController.circle().and(isSecondaryMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
+    driveController.square().and(isSecondaryMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kForward));
+    driveController.circle().and(isSecondaryMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kReverse));
   }
 
   // private boolean isMainMotor(){
