@@ -14,10 +14,13 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -70,7 +73,7 @@ public class Arm extends SubsystemBase{
     double secondaryMotorPosition;
 
     double mainMotorTargetPostion;
-    double secondaryTargetPostion;
+    double secondaryMotorTargetPostion;
 
     double mainMotorAbsolutePostion;
     double secondaryAbsolutePostion;
@@ -115,17 +118,20 @@ public class Arm extends SubsystemBase{
   private Intake intake;
   private Elavator elavator;
 
+  private PIDController mainPIDController;
+  private PIDController seconderyPIDController;
+
 
   private Arm() {
 
     mainAbsEncoder = configureAbsEncoder(Constants.ArmConstants.Motors.mainAbsEncoderID, Constants.ArmConstants.Motors.mainZeroOffset);
-    secondaryAbsEncoder = configureAbsEncoder(Constants.ArmConstants.Motors.seconderyAbsEncoderID, Constants.ArmConstants.Motors.seconderyZeroOffset);
+    secondaryAbsEncoder = configureAbsEncoder(Constants.ArmConstants.Motors.secondaryAbsEncoderID, Constants.ArmConstants.Motors.secondaryZeroOffset);
 
     mainMotor = configureMotors(Constants.ArmConstants.Motors.mainMotorID, mainAbsEncoder.get() ,Constants.ArmConstants.Motors.mainPID,
-    Constants.ArmConstants.Motors.mainInverted, Constants.ArmConstants.Motors.mainConvertionFactor, Constants.ArmConstants.Motors.mainSoftLimits);
+    Constants.ArmConstants.Motors.mainInverted, Constants.ArmConstants.Motors.mainConversionFactor, Constants.ArmConstants.Motors.mainSoftLimits);
 
-    secondaryMotor = configureMotors(Constants.ArmConstants.Motors.seconderyMotorID, secondaryAbsEncoder.get(), Constants.ArmConstants.Motors.seconderyPID,
-    Constants.ArmConstants.Motors.seconderyInverted, Constants.ArmConstants.Motors.seconderyConvecrtionFactor, Constants.ArmConstants.Motors.seconderySoftLimits);
+    secondaryMotor = configureMotors(Constants.ArmConstants.Motors.secondaryMotorID, secondaryAbsEncoder.get(), Constants.ArmConstants.Motors.secondaryPID,
+    Constants.ArmConstants.Motors.secondaryInverted, Constants.ArmConstants.Motors.secondaryConversionFactor, Constants.ArmConstants.Motors.secondarySoftLimits);
 
     inputs = new ArmInputsAutoLogged();
 
@@ -136,6 +142,18 @@ public class Arm extends SubsystemBase{
     intake = new Intake();
     elavator = new Elavator();
 
+    mainPIDController = Constants.ArmConstants.Motors.mainPID.createPIDController();
+    seconderyPIDController = Constants.ArmConstants.Motors.secondaryPID.createPIDController();
+
+    mainPIDController.setTolerance(Constants.ArmConstants.Motors.mainMotorTolerance);
+    seconderyPIDController.setTolerance(Constants.ArmConstants.Motors.secondaryMotorTolerance);
+
+    new Trigger(RobotState::isEnabled).onTrue(new InstantCommand(() -> {
+      mainPIDController.setSetpoint(inputs.mainMotorAbsolutePostion);
+      seconderyPIDController.setSetpoint(inputs.secondaryAbsolutePostion);
+      SmartDashboard.putNumber("mainT", inputs.mainMotorAbsolutePostion);
+      SmartDashboard.putNumber("secoT", inputs.secondaryAbsolutePostion);
+    }).ignoringDisable(true));
   }
 
   private void createArmTriggers(){
@@ -158,8 +176,8 @@ public class Arm extends SubsystemBase{
   }
 
   public boolean isArmInPosition(){
-    return Math.abs(inputs.mainMotorTargetPostion - inputs.mainMotorPostion) < Constants.ArmConstants.Motors.mainMotortolarance &&
-    Math.abs(inputs.secondaryMotorPosition - inputs.secondaryTargetPostion) < Constants.ArmConstants.Motors.seconderyMotorTolarance;
+    return Math.abs(inputs.mainMotorTargetPostion - inputs.mainMotorPostion) < Constants.ArmConstants.Motors.mainMotorTolerance &&
+    Math.abs(inputs.secondaryMotorPosition - inputs.secondaryMotorTargetPostion) < Constants.ArmConstants.Motors.secondaryMotorTolerance;
   }
 
   public double getAngleToSpeaker(){
@@ -169,21 +187,26 @@ public class Arm extends SubsystemBase{
   public void moveShooterToPose(ArmPostion position){
     inputs.mainMotorTargetPostion = Units.radiansToRotations(Math.asin(position.y / ArmConstants.armLengthMeters));
     // mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);
-    mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConvertionFactor), CANSparkBase.ControlType.kPosition);
+    // mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConversionFactor), CANSparkBase.ControlType.kPosition);
+    mainMotor.set(mainPIDController.calculate(inputs.mainMotorAbsolutePostion, inputs.mainMotorTargetPostion));
 
-    inputs.secondaryTargetPostion = inputs.mainMotorTargetPostion + Units.radiansToRotations(position.rotation);
+    inputs.secondaryMotorTargetPostion = inputs.mainMotorTargetPostion + Units.radiansToRotations(position.rotation);
     // secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, CANSparkBase.ControlType.kPosition);
-    secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryTargetPostion, Constants.ArmConstants.Motors.seconderyConvecrtionFactor), CANSparkBase.ControlType.kPosition);
+    // secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryTargetPostion, Constants.ArmConstants.Motors.secondaryConversionFactor), CANSparkBase.ControlType.kPosition);
+    secondaryMotor.set(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion, inputs.secondaryMotorTargetPostion));
   }
 
   public void moveIntakeToPose(ArmPostion postion){
     inputs.mainMotorTargetPostion = Units.radiansToRotations(
       Math.asin((postion.y + Constants.ArmConstants.shooterAndIntakeLengthMeters * Math.cos(postion.rotation - Math.PI / 2)) / Constants.ArmConstants.armLengthMeters));
 
-    inputs.secondaryTargetPostion = Units.radiansToRotations(postion.rotation) - inputs.mainMotorTargetPostion;
+    inputs.secondaryMotorTargetPostion = Units.radiansToRotations(postion.rotation) - inputs.mainMotorTargetPostion;
 
-    mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConvertionFactor), CANSparkBase.ControlType.kPosition);
-    secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryTargetPostion, Constants.ArmConstants.Motors.seconderyConvecrtionFactor), CANSparkBase.ControlType.kPosition);
+    // mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConversionFactor), CANSparkBase.ControlType.kPosition);
+    // secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryMotorTargetPostion, Constants.ArmConstants.Motors.secondaryConversionFactor), CANSparkBase.ControlType.kPosition);
+
+    mainMotor.set(mainPIDController.calculate(inputs.mainMotorAbsolutePostion, inputs.mainMotorTargetPostion));
+    secondaryMotor.set(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion, inputs.secondaryMotorTargetPostion));
   }
 
   public void update(){
@@ -196,18 +219,35 @@ public class Arm extends SubsystemBase{
     update();
     SmartDashboard.putNumber("Main absEncoder", mainAbsEncoder.get());
     SmartDashboard.putNumber("secondary absEncoder", secondaryAbsEncoder.get());
+    SmartDashboard.putData("main", mainPIDController);
+    SmartDashboard.putData("seco", seconderyPIDController);
+
+    SmartDashboard.getData("main");
+    SmartDashboard.getData("seco");
+
+    // mainPIDController.setSetpoint(SmartDashboard.getNumber("mainT", 0.25));
+    // seconderyPIDController.setSetpoint(SmartDashboard.getNumber("secoT", 0.1));
+    mainPIDController.setSetpoint(MathUtil.clamp(SmartDashboard.getNumber("mainT", 0.25), Constants.ArmConstants.Motors.mainSoftLimits[1], Constants.ArmConstants.Motors.mainSoftLimits[0]));
+    seconderyPIDController.setSetpoint(MathUtil.clamp(SmartDashboard.getNumber("secoT", 0.1), Constants.ArmConstants.Motors.secondarySoftLimits[1], Constants.ArmConstants.Motors.secondarySoftLimits[0]));
+
+
+    mainMotor.set(mainPIDController.calculate(inputs.mainMotorAbsolutePostion));
+    secondaryMotor.set(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion));
+
     // This method will be called once per scheduler run
   }
 
   public void updateLogger(){
-    inputs.mainMotorPostion = motorToRealUnits(mainMotor.getEncoder().getPosition(), Constants.ArmConstants.Motors.mainConvertionFactor);
-    inputs.secondaryMotorPosition = motorToRealUnits(secondaryMotor.getEncoder().getPosition(), Constants.ArmConstants.Motors.seconderyConvecrtionFactor);
+    inputs.mainMotorPostion = motorToRealUnits(mainMotor.getEncoder().getPosition(), Constants.ArmConstants.Motors.mainConversionFactor);
+    inputs.secondaryMotorPosition = motorToRealUnits(secondaryMotor.getEncoder().getPosition(), Constants.ArmConstants.Motors.secondaryConversionFactor);
 
     inputs.mainCurrent = mainMotor.getOutputCurrent();
     inputs.secondaryCurrent = secondaryMotor.getOutputCurrent();
 
-    inputs.mainMotorAbsolutePostion = mainMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition();
-    inputs.secondaryAbsolutePostion = secondaryMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition();
+    // inputs.mainMotorAbsolutePostion = mainMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition();
+    // inputs.secondaryAbsolutePostion = secondaryMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition();
+    inputs.mainMotorAbsolutePostion = mainAbsEncoder.get();
+    inputs.secondaryAbsolutePostion = secondaryAbsEncoder.get();
 
     Logger.processInputs(getName(), inputs);
   }
@@ -244,8 +284,8 @@ public class Arm extends SubsystemBase{
 
     if(softLimit.length != 2) softLimit = new double[]{1, -1};
 
-    sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)(softLimit[0] * convertionFactor));
-    sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)(softLimit[1] * convertionFactor));
+    // sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)(softLimit[0] * convertionFactor));
+    // sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)(softLimit[1] * convertionFactor));
 
     sparkFlex.getEncoder().setPositionConversionFactor(1);
 

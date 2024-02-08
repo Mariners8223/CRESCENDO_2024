@@ -75,24 +75,21 @@ public class Constants {
 
         public static final double FieldYLength = Units.inchesToMeters(323.00);
 
-        public static final double SpeakerHight = 2.31;//meter
+        public static final double SpeakerHeight = 2.31;//meter
 
         public static final ArmPostion AmpArmPosition = new ArmPostion();
         
         public static final ArmPostion ShootingPositionSniper = new ArmPostion();
         public static final ArmPostion ShootingPositionDunker = new ArmPostion();
-        public static final Translation2d DunkingZone = new Translation2d();
-        public static final Translation2d SnipingZone = new Translation2d();
-        public static final Translation2d[] ArmPositionInSpeakerZone = new Translation2d[]{DunkingZone, SnipingZone};
-
+        
         public static final class Speaker{
             public static final double SpeakerLength = 1.05;
-            public static final double SpeakerMidlleLocationY = Units.inchesToMeters(218.42);
+            public static final double SpeakerMiddleLocationY = Units.inchesToMeters(218.42);
             public static final double SpeakerBottomLocationY = Units.inchesToMeters(218.42) - SpeakerLength/2;
-            public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY));
+            public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMiddleLocationY));
             public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;
             public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
-            public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY);
+            public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMiddleLocationY);
         }
 
         public static class Shooter{
@@ -132,28 +129,28 @@ public class Constants {
 
         public static class Motors{
             public static final int mainMotorID = 15;
-            public static final int seconderyMotorID = 16;
+            public static final int secondaryMotorID = 16;
 
             public static final PIDFGains mainPID = new PIDFGains(0.5, 0, 0);
-            public static final PIDFGains seconderyPID = new PIDFGains(0.5, 0, 0);
+            public static final PIDFGains secondaryPID = new PIDFGains(0.5, 0, 0);
 
             public static final boolean mainInverted = false;
-            public static final boolean seconderyInverted = false;
+            public static final boolean secondaryInverted = true;
 
-            public static final double mainZeroOffset = 1.6/360;
-            public static final double seconderyZeroOffset = -173.6/360;
+            public static final double mainZeroOffset = 0.648;
+            public static final double secondaryZeroOffset = 0.55;
 
-            public static final double mainConvertionFactor = 1;
-            public static final double seconderyConvecrtionFactor = 1;
+            public static final double mainConversionFactor = 150;
+            public static final double secondaryConversionFactor = 121.5;
 
             public static final int mainAbsEncoderID = 0;
-            public static final int seconderyAbsEncoderID = 1;
+            public static final int secondaryAbsEncoderID = 1;
 
-            public static final double[] mainSoftLimits = new double[]{0.35, 0.01};
-            public static final double[] seconderySoftLimits = new double[]{0.5, 0.01};
+            public static final double[] mainSoftLimits = new double[]{0.28, 0.08};
+            public static final double[] secondarySoftLimits = new double[]{0.5, 0.01};
 
-            public static final double mainMotortolarance = 0.1;
-            public static final double seconderyMotorTolarance = 0.1;
+            public static final double mainMotorTolerance = 0.001;
+            public static final double secondaryMotorTolerance = 0.001;
         }
     }
     public class ClimbConstants{
@@ -191,7 +188,7 @@ public class Constants {
 
             public static final double maxRotationSpeed = 6.27; //the max speed the robot can rotate in in radains per second
 
-            public static final double RobotHightFromGround = 0;
+            public static final double RobotHeightFromGround = 0;
         }
 
         public static final class Drive{
@@ -232,8 +229,8 @@ public class Constants {
         public static final class PathPlanner{
             public static final boolean planPathTostartingPointIfNotAtIt = true; //if pathplanner should plan a path to the starting point if the robot is not there
             public static final boolean enableDynamicReplanning = true; //if pathplanner should replan the path if the robot is beyond the tolarance or if the spike is too big
-            public static final double pathErrorTolarance = 0.1; //the max error in position before pathPlaneer replans the path in meters
-            public static final double pathErrorSpikeTolarance = 1; //the max postion spike before path planner replans the path
+            public static final double pathErrorTolerance = 0.1; //the max error in position before pathPlaneer replans the path in meters
+            public static final double pathErrorSpikeTolerance = 1; //the max postion spike before path planner replans the path
 
             public static final PIDFGains thetaPID = new PIDFGains(5, 0.0, 0.0); //the pid gains for the PID Controller of the robot angle, units are radians
             public static final PIDFGains XYPID = new PIDFGains(5, 0.0, 1); //the pid gains for the pid controller of the robot's postion (xy)
