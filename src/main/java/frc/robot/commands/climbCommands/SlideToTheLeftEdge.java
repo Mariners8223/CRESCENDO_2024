@@ -12,12 +12,12 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.climb.Elavator;
 
-public class SlideToClosestRopeEdge extends Command {
+public class SlideToTheLeftEdge extends Command {
   /** Creates a new SlideToClosestRopeEdge. */
   private static Elavator climb;
   private static Translation2d target;
 
-  public SlideToClosestRopeEdge() {
+  public SlideToTheLeftEdge() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Arm.getInstance());
   }
@@ -26,7 +26,7 @@ public class SlideToClosestRopeEdge extends Command {
   @Override
   public void initialize() {
     climb = Elavator.getInstance();
-    target = RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.ClimbConstants.SlidingPositions);
+    target = RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.ClimbConstants.SlidingPositions.SlidingPositions_LeftEdgeRope);
     climb.moveRobotOnRope(RobotContainer.driveBase.getPose().getTranslation().getDistance(target) * Constants.ClimbConstants.MotorRotationsToAirialMeters);
 
   }
