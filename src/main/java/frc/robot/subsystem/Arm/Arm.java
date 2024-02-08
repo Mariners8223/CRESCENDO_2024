@@ -196,10 +196,12 @@ public class Arm extends SubsystemBase{
 
   public void moveShooterToPose(ArmPostion position){
     inputs.mainMotorTargetPostion = Units.radiansToRotations(Math.asin(position.y / ArmConstants.armLengthMeters));
-    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);
+    // mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);
+    mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConvertionFactor), CANSparkBase.ControlType.kPosition);
 
     inputs.secondaryTargetPostion = inputs.mainMotorTargetPostion + Units.radiansToRotations(position.rotation);
-    secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, CANSparkBase.ControlType.kPosition);
+    // secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, CANSparkBase.ControlType.kPosition);
+    secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryTargetPostion, Constants.ArmConstants.Motors.seconderyConvecrtionFactor), CANSparkBase.ControlType.kPosition);
   }
 
   public void moveIntakeToPose(ArmPostion postion){
@@ -228,6 +230,9 @@ public class Arm extends SubsystemBase{
       Math.asin((postion.y + Constants.ArmConstants.shooterAndIntakeLengthMeters * Math.cos(postion.rotation - Math.PI / 2)) / Constants.ArmConstants.armLengthMeters));
 
     inputs.secondaryTargetPostion = Units.radiansToRotations(postion.rotation) - inputs.mainMotorTargetPostion;
+
+    mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConvertionFactor), CANSparkBase.ControlType.kPosition);
+    secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryTargetPostion, Constants.ArmConstants.Motors.seconderyConvecrtionFactor), CANSparkBase.ControlType.kPosition);
   }
 
   public void update(){
@@ -244,8 +249,8 @@ public class Arm extends SubsystemBase{
   }
 
   public void updateLogger(){
-    inputs.mainMotorPostion = mainMotor.getEncoder().getPosition();
-    inputs.secondaryMotorPosition = mainMotor.getEncoder().getPosition();
+    inputs.mainMotorPostion = motorToRealUnits(mainMotor.getEncoder().getPosition(), Constants.ArmConstants.Motors.mainConvertionFactor);
+    inputs.secondaryMotorPosition = motorToRealUnits(secondaryMotor.getEncoder().getPosition(), Constants.ArmConstants.Motors.seconderyConvecrtionFactor);
 
     inputs.mainCurrent = mainMotor.getOutputCurrent();
     inputs.secondaryCurrent = secondaryMotor.getOutputCurrent();
@@ -286,17 +291,25 @@ public class Arm extends SubsystemBase{
 
     sparkFlex.setInverted(motorInverted);
 
-    if(softLimit.length > 2) softLimit = new double[]{1, -1};
+    if(softLimit.length != 2) softLimit = new double[]{1, -1};
 
-    sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)softLimit[0]);
-    sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)softLimit[1]);
+    sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)(softLimit[0] * convertionFactor));
+    sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)(softLimit[1] * convertionFactor));
+
+    sparkFlex.getEncoder().setPositionConversionFactor(1);
 
     sparkFlex.setIdleMode(IdleMode.kBrake);
-
-    sparkFlex.getEncoder().setPositionConversionFactor(1 / convertionFactor);
     
-    sparkFlex.getEncoder().setPosition(absPosition);
+    sparkFlex.getEncoder().setPosition(absPosition * convertionFactor);
 
     return sparkFlex;
+  }
+
+  private static double realToMotorUnits(double realUnits, double convertionFactor){
+    return realUnits * convertionFactor;
+  }
+
+  private static double motorToRealUnits(double motorUnits, double convertionFactor){
+    return motorUnits / convertionFactor;
   }
 }
