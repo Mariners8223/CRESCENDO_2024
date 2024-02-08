@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -38,8 +39,8 @@ public class Constants {
         //TODO: add robot zones
     };
 
-    public static final Pose2d AmpPose = new Pose2d(3, 8, Rotation2d.fromDegrees(90));
-    public static final Translation3d SpeakerTranslation = new Translation3d( Units.inchesToMeters(-1.5), 5, 3);
+    public static final Pose2d AmpPose = new Pose2d(1.829, 2.814, Rotation2d.fromDegrees(90));
+    public static final Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 6.1547, 2.03);
 
     public static final class Logger{
         public static final String save_location = ""; //add save lcoation (probably a usb stick so /u)
@@ -81,14 +82,13 @@ public class Constants {
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
     
         public static final double RobotHightFromGround = 0;
-        public static final double SpeakerLength = 1.05;
-        public static final double SpeakerMidlleLocationY = Units.inchesToMeters(218.42);
-        public static final double SpeakerBottomLocationY = Units.inchesToMeters(218.42) - SpeakerLength/2;
+        public static final double SpeakerLength = 1.181;
+        public static final double SpeakerBottomLocationY = 5.5642;
+        public static final double SpeakerMidlleLocationY = SpeakerLength/2 + SpeakerBottomLocationY;
         public static final double FieldYLength = Units.inchesToMeters(323.00);
         public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY));
-        public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;
-        public static final double SpeakerHight = 2.31;//meter
-        public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
+        //public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;
+        //public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
         public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY);
 
         public static final ArmPostion AmpArmPosition = new ArmPostion();
@@ -169,15 +169,21 @@ public class Constants {
         public static final PositionDutyCycle PULL_ELAVATER_ARM_POSTION = new PositionDutyCycle(0);//TODO - down position
         
         public static class SlidingPositions{
-            public static final List<Translation2d> SlidingPositions_MiddleRope = new ArrayList<Translation2d>(){
-                //TODO
-            };
-            public static final List<Translation2d> SlidingPositions_RightEdgeRope = new ArrayList<Translation2d>(){
-                //TODO
-            };
-            public static final List<Translation2d> SlidingPositions_LeftEdgeRope = new ArrayList<Translation2d>(){
-                //TODO
-            };
+            public static final List<Translation2d> SlidingPositions_MiddleRope = new ArrayList<Translation2d>(
+                Arrays.asList(new Translation2d(4.389, 4.880),//rope 1 - top rope
+                new Translation2d(4.436, 3.339),//rope 2 - bottom rope
+                new Translation2d(5.747, 4.110)//rope 3 - middle pointing rope
+            ));
+            public static final List<Translation2d> SlidingPositions_RightEdgeRope = new ArrayList<Translation2d>(
+                Arrays.asList(new Translation2d(3.607, 4.429),//rope 1 - top rope
+                new Translation2d(5.217, 2.888),//rope 2 - bottom rope
+                new Translation2d(5.747, 4.971)//rope 3 - middle pointing rope
+            ));
+            public static final List<Translation2d> SlidingPositions_LeftEdgeRope = new ArrayList<Translation2d>(
+                Arrays.asList(new Translation2d(5.171, 5.331),//rope 1 - top rope
+                new Translation2d(3.655, 3.790),//rope 2 - bottom rope
+                new Translation2d(5.747, 3.249)//rope 3 - middle pointing rope
+            ));
         }
         public static final DutyCycleOut HeightDutyPosition = null;
 
