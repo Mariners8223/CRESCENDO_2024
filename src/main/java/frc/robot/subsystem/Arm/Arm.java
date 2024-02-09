@@ -367,7 +367,7 @@ public class Arm extends SubsystemBase{
         }, 
         (log) -> {
           // How to get Acceleration?
-          log.motor("Main Motor")
+          log.motor("Seco Motor")
           .angularVelocity(secondaryAngularVelocity.mut_replace(secondaryMotor.getEncoder().getVelocity() / Constants.ArmConstants.Motors.secondaryConversionFactor, Units.RPM))
           .angularPosition(secondaryAngularPosition.mut_replace(secondaryMotor.getEncoder().getPosition() / Constants.ArmConstants.Motors.secondaryConversionFactor, Units.Rotations))
           .voltage(secondaryVoltage.mut_replace(secondaryMotor.getAppliedOutput() * secondaryMotor.getBusVoltage(), Units.Volts));
