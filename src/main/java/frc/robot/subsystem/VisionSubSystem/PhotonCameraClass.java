@@ -32,6 +32,7 @@ public class PhotonCameraClass implements CameraInterface{
     private PhotonPoseEstimator poseEstimator; //the pose estimator
     private PhotonPipelineResult latestResult; //the latest result from the camera
     private CameraMode mode; //the mode the camera is in
+    private boolean isModeSwitchable;
 
     private Servo servo; //the servo to move the camera
 
@@ -44,6 +45,7 @@ public class PhotonCameraClass implements CameraInterface{
       public String cameraName; //the name of the camera
       public String location; //the location of the camera 
       public String mode; //the mode of the camera (AprilTags or Rings)
+      public boolean isModeSwitchable;
 
       public boolean isfieldLoaded; //if the field is loaded
       public boolean hasServo;
@@ -185,6 +187,7 @@ public class PhotonCameraClass implements CameraInterface{
 
     @Override
     public void setPipeLine(int pipeLineIndex) {
+      if (!isModeSwitchable) return;
       camera.setPipelineIndex(pipeLineIndex);
       if(pipeLineIndex == 0){
         mode = CameraMode.AprilTags;

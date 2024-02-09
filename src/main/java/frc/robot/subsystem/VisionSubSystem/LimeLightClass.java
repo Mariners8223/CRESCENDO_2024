@@ -23,10 +23,9 @@ public class LimeLightClass implements CameraInterface{
     private LimelightResults latestResults;
 
     private Servo servo;
-
     private CameraMode mode;
+    private boolean isModeSwitchable;
     private Transform3d cameraToRobot[];
-
     private LimelightInputsAutoLogged inputs;
 
     @AutoLog
@@ -34,7 +33,7 @@ public class LimeLightClass implements CameraInterface{
       public String cameraName;
       public String location;
       public String mode;
-
+      public boolean isModeSwitchable;
       public boolean hasServo;
 
       public Pose3d estimatedPose;
@@ -151,6 +150,7 @@ public class LimeLightClass implements CameraInterface{
 
     @Override
     public void setPipeLine(int pipeLineIndex) {
+      if (!isModeSwitchable) return;
       LimelightHelpers.setPipelineIndex(inputs.cameraName, pipeLineIndex);
       if(pipeLineIndex == 0){
         mode = CameraMode.AprilTags;
