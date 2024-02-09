@@ -301,7 +301,8 @@ public class Arm extends SubsystemBase{
     return encoder;
   }
 
-  private CANSparkFlex configureMotors(int canID, double absPosition, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
+  // private CANSparkFlex configureMotors(int canID, double absPosition, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit, double VoltageCompensation) {
+    private CANSparkFlex configureMotors(int canID, double absPosition, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
     CANSparkFlex sparkFlex = new CANSparkFlex(canID, MotorType.kBrushless);
 
     sparkFlex.getPIDController().setP(pidfGains.getP());
@@ -321,6 +322,9 @@ public class Arm extends SubsystemBase{
     sparkFlex.setIdleMode(IdleMode.kBrake);
     
     sparkFlex.getEncoder().setPosition(absPosition * convertionFactor);
+
+    sparkFlex.enableVoltageCompensation(12);
+    //Todo: What is Voltage Compensation? 
 
     return sparkFlex;
   }
@@ -360,7 +364,10 @@ public class Arm extends SubsystemBase{
     MutableMeasure<Voltage> secondaryVoltage = MutableMeasure.mutable(Units.Volts.zero());
 
     SysIdRoutine secondaryMotorRoutine = new SysIdRoutine(
-      new SysIdRoutine.Config(),
+      new SysIdRoutine.Config(
+        // null, null, null,
+        // (state) -> Logger.recordOutput("SysIdTestState", state.toString())
+      ),
       new SysIdRoutine.Mechanism(
         (volts) -> {
           secondaryMotor.getPIDController().setReference(volts.in(edu.wpi.first.units.Units.Volts), ControlType.kVoltage);
