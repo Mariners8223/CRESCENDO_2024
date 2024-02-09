@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Test.SmallIntake;
+import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Arm.SysIDArm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
@@ -72,18 +74,22 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Main Motor", true);
     SmartDashboard.putBoolean("Quasistatic", true);
 
-    driveController.square().and(isMainMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
-    driveController.circle().and(isMainMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
+    driveController.cross().onTrue(new SmallIntake.MoveToFree());
 
-    driveController.square().and(isMainMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
-    driveController.circle().and(isMainMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
+    // driveController.circle().whileTrue(new Collect());
+
+    // driveController.square().and(isMainMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
+    // driveController.circle().and(isMainMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
+
+    // driveController.square().and(isMainMotor).and(isDynamic).whileTrue(sysIDArm.dynamicMain(SysIdRoutine.Direction.kForward));
+    // driveController.circle().and(isMainMotor).and(isDynamic).whileTrue(sysIDArm.dynamicMain(SysIdRoutine.Direction.kReverse));
 
 
-    driveController.square().and(isSecondaryMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kForward));
-    driveController.circle().and(isSecondaryMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kReverse));
+    // driveController.square().and(isQuasistatic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kForward));
+    // driveController.circle().and(isQuasistatic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kReverse));
 
-    driveController.square().and(isSecondaryMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kForward));
-    driveController.circle().and(isSecondaryMotor).and(isDynamic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kReverse));
+    // driveController.square().and(isDynamic).whileTrue(sysIDArm.dynamicSecondary(SysIdRoutine.Direction.kForward));
+    // driveController.circle().and(isDynamic).whileTrue(sysIDArm.dynamicSecondary(SysIdRoutine.Direction.kReverse));
   }
 
   // private boolean isMainMotor(){

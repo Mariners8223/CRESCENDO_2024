@@ -4,11 +4,14 @@
 
 package frc.robot.Test;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.Arm.ArmPostion;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -20,23 +23,51 @@ public class SmallIntake extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new MoveToFree(),
-      new IntakeToFloor()
+      new MoveIntakeNumber(Arm.getInstance().getMainMotorRotation(), 0.36),
+      new MoveIntakeNumber(-0.01, Arm.getInstance().getSecoMotorRotation())
     );
   }
 
   public static class MoveToFree extends Command{
     private Arm arm;
+    private ArmPostion target;
 
 
     public MoveToFree() {
       arm = Arm.getInstance();
+      // Use addRequirements() here to declare subsystem dependencies.
+      target = Constants.ArmConstants.freeMovementPosition.copyArmPostion();
+      addRequirements(arm);
+    }
+
+    @Override
+    public void initialize() {
+      target.rotation = arm.getShooterPosition().rotation - Units.rotationsToRadians(arm.getMainMotorRotation()) + Units.rotationsToRadians(0.12);
+      arm.moveShooterToPose(target);
+    }
+
+    @Override
+    public boolean isFinished() {
+      return arm.isArmInPosition();
+    }
+  }
+
+  public static class MoveIntakeNumber extends Command{
+    private Arm arm;
+    private double alpha;
+    private double beta;
+
+    public MoveIntakeNumber(double alpha, double beta) {
+      arm = Arm.getInstance();
+      this.alpha = alpha;
+      this.beta = beta;
       // Use addRequirements() here to declare subsystem dependencies.
       addRequirements(arm);
     }
 
     @Override
     public void initialize() {
-      arm.moveIntakeToPose(Constants.ArmConstants.freeMovementPosition);
+      arm.moveIntakeToPose(alpha, beta);
     }
 
     @Override
@@ -45,3 +76,5 @@ public class SmallIntake extends SequentialCommandGroup {
     }
   }
 }
+
+

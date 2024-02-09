@@ -5,8 +5,10 @@
 package frc.robot.Test;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Arm.ArmPostion;
@@ -23,13 +25,13 @@ public class ManualAim extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(arm);
 
-    target.y = 0.4;
-    target.rotation = arm.getShooterPosition().rotation;
+    target = Constants.ArmConstants.freeMovementPosition.copyArmPostion();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    target.rotation = arm.getShooterPosition().rotation;
     arm.moveShooterToPose(target);
   }
 
@@ -38,6 +40,7 @@ public class ManualAim extends Command {
   public void execute() {
     target.rotation = target.rotation + Units.degreesToRadians(controller.getR2Axis());
     target.rotation = target.rotation - Units.degreesToRadians(controller.getL2Axis());
+    SmartDashboard.putNumber("target rot", Units.radiansToDegrees(target.rotation));
 
     arm.moveShooterToPose(target);
   }

@@ -22,6 +22,6 @@ public class IntakeToSource extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    arm.moveIntakeToPose(ArmConstants.SourcePosition);
+    // arm.moveIntakeToPose(ArmConstants.SourcePosition);
   }
 }

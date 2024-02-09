@@ -71,7 +71,7 @@ public class Constants {
         public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
 
-        public static final ArmPostion freeMovementPosition = new ArmPostion(0, 0.4, 0);
+        public static final ArmPostion freeMovementPosition = new ArmPostion(0, Math.sin(Units.rotationsToRadians(0.12)) * armLengthMeters, 0);
 
         public static final double FieldYLength = Units.inchesToMeters(323.00);
 
@@ -131,25 +131,25 @@ public class Constants {
             public static final int mainMotorID = 15;
             public static final int secondaryMotorID = 16;
 
-            public static final PIDFGains mainPID = new PIDFGains(0.5, 0, 0);
-            public static final PIDFGains secondaryPID = new PIDFGains(0.5, 0, 0);
+            public static final PIDFGains mainPID = new PIDFGains(38.329, 0, 1.4763);
+            public static final PIDFGains secondaryPID = new PIDFGains(35, 1, 0.5);
 
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = true;
 
-            public static final double mainZeroOffset = 0.648;
-            public static final double secondaryZeroOffset = 0.55;
+            public static final double mainZeroOffset = 0.9 - 0.25;
+            public static final double secondaryZeroOffset = 1 + 0.14 - 0.25;
 
-            public static final double mainConversionFactor = 150;
+            public static final double mainConversionFactor = 250;
             public static final double secondaryConversionFactor = 121.5;
 
             public static final int mainAbsEncoderID = 0;
             public static final int secondaryAbsEncoderID = 1;
 
-            public static final double[] mainSoftLimits = new double[]{0.28, 0.08};
+            public static final double[] mainSoftLimits = new double[]{0.28, -0.01};
             public static final double[] secondarySoftLimits = new double[]{0.5, 0.01};
 
-            public static final double mainMotorTolerance = 0.001;
+            public static final double mainMotorTolerance = 0.0001;
             public static final double secondaryMotorTolerance = 0.001;
         }
     }
