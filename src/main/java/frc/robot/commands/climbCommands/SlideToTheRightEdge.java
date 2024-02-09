@@ -28,7 +28,7 @@ public class SlideToTheRightEdge extends Command {
     RopeIndex = Constants.ClimbConstants.SlidingPositions.SlidingPositions_MiddleRope.indexOf(target);
     target = Constants.ClimbConstants.SlidingPositions.SlidingPositions_RightEdgeRope.get(RopeIndex);
     climb.moveRobotOnRope(RobotContainer.driveBase.getPose().getTranslation().getDistance(target) * Constants.ClimbConstants.MotorRotationsToAirialMeters);
-
+    //check if right is + or - for the motor
   }
 
   // Called every time the scheduler runs while the command is scheduled.
