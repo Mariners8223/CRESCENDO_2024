@@ -10,6 +10,7 @@ import org.opencv.core.Mat;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -124,6 +125,8 @@ public class Arm extends SubsystemBase{
   private DutyCycleEncoder mainAbsEncoder;
   private DutyCycleEncoder secondaryAbsEncoder;
 
+  private double test;
+
   private ArmInputsAutoLogged inputs;
 
   private ArmPostion intakePosition;
@@ -153,6 +156,7 @@ public class Arm extends SubsystemBase{
 
     intakePosition = new ArmPostion();
     shooterPosition = new ArmPostion();
+    test = 0;
 
     shooter = new Shooter();
     intake = new Intake();
@@ -164,12 +168,12 @@ public class Arm extends SubsystemBase{
     mainPIDController.setTolerance(Constants.ArmConstants.Motors.mainMotorTolerance);
     seconderyPIDController.setTolerance(Constants.ArmConstants.Motors.secondaryMotorTolerance);
 
-    new Trigger(RobotState::isEnabled).onTrue(new InstantCommand(() -> {
-      mainPIDController.setSetpoint(inputs.mainMotorAbsolutePostion);
-      seconderyPIDController.setSetpoint(inputs.secondaryAbsolutePostion);
-      SmartDashboard.putNumber("mainT", inputs.mainMotorAbsolutePostion);
-      SmartDashboard.putNumber("secoT", inputs.secondaryAbsolutePostion);
-    }).ignoringDisable(true));
+    // new Trigger(RobotState::isEnabled).onTrue(new InstantCommand(() -> {
+    //   mainPIDController.setSetpoint(inputs.mainMotorAbsolutePostion);
+    //   seconderyPIDController.setSetpoint(inputs.secondaryAbsolutePostion);
+    //   SmartDashboard.putNumber("mainT", inputs.mainMotorAbsolutePostion);
+    //   SmartDashboard.putNumber("secoT", inputs.secondaryAbsolutePostion);
+    // }).ignoringDisable(true));
   }
 
   private void createArmTriggers(){
@@ -213,14 +217,15 @@ public class Arm extends SubsystemBase{
     // // mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);
     // // mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConversionFactor), CANSparkBase.ControlType.kPosition);
     // mainMotor.set(mainPIDController.calculate(inputs.mainMotorAbsolutePostion, inputs.mainMotorTargetPostion));
-    mainMotor.getPIDController().setReference(mainPIDController.calculate(inputs.mainMotorAbsolutePostion, MathUtil.clamp(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainSoftLimits[1], Constants.ArmConstants.Motors.mainSoftLimits[0])),
+    test = mainPIDController.calculate(inputs.mainMotorAbsolutePostion, MathUtil.clamp(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainSoftLimits[1], Constants.ArmConstants.Motors.mainSoftLimits[0]));
+    mainMotor.getPIDController().setReference(test,
     ControlType.kVoltage);
 
     inputs.secondaryMotorTargetPostion =  (position.rotation / (Math.PI * 2)) - inputs.mainMotorTargetPostion;
     // // secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, CANSparkBase.ControlType.kPosition);
     // // secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryTargetPostion, Constants.ArmConstants.Motors.secondaryConversionFactor), CANSparkBase.ControlType.kPosition);
-    secondaryMotor.getPIDController().setReference(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion, MathUtil.clamp(inputs.secondaryMotorTargetPostion, Constants.ArmConstants.Motors.secondarySoftLimits[1], Constants.ArmConstants.Motors.secondarySoftLimits[0])),
-    ControlType.kVoltage);
+    // secondaryMotor.getPIDController().setReference(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion, MathUtil.clamp(inputs.secondaryMotorTargetPostion, Constants.ArmConstants.Motors.secondarySoftLimits[1], Constants.ArmConstants.Motors.secondarySoftLimits[0])),
+    // ControlType.kVoltage);
   }
 
   public void moveIntakeToPose(double alpha, double beta){
@@ -248,6 +253,7 @@ public class Arm extends SubsystemBase{
     SmartDashboard.putData("seco", seconderyPIDController);
 
     SmartDashboard.putNumber("shooter angle", shooterPosition.rotation / (Math.PI) * 180);
+    SmartDashboard.putNumber("sngjasg", test);
 
     // SmartDashboard.getData("main");
     // SmartDashboard.getData("seco");
@@ -316,10 +322,11 @@ public class Arm extends SubsystemBase{
     private CANSparkFlex configureMotors(int canID, double absPosition, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
     CANSparkFlex sparkFlex = new CANSparkFlex(canID, MotorType.kBrushless);
 
-    sparkFlex.getPIDController().setP(pidfGains.getP());
-    sparkFlex.getPIDController().setI(pidfGains.getI());
-    sparkFlex.getPIDController().setD(pidfGains.getD());
-    sparkFlex.getPIDController().setIZone(pidfGains.getIZone());
+    sparkFlex.restoreFactoryDefaults();
+    // sparkFlex.getPIDController().setP(pidfGains.getP());
+    // sparkFlex.getPIDController().setI(pidfGains.getI());
+    // sparkFlex.getPIDController().setD(pidfGains.getD());
+    // sparkFlex.getPIDController().setIZone(pidfGains.getIZone());
 
     sparkFlex.setInverted(motorInverted);
 

@@ -22,13 +22,13 @@ public class SmallIntake extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveToFree(),
-      new MoveIntakeNumber(Arm.getInstance().getMainMotorRotation(), 0.36),
-      new MoveIntakeNumber(-0.01, Arm.getInstance().getSecoMotorRotation())
+      new MoveToFree()
+      // new MoveIntakeNumber(Arm.getInstance().getMainMotorRotation(), 0.36)
+      // new MoveIntakeNumber(-0.01, Arm.getInstance().getSecoMotorRotation())
     );
   }
 
-  public static class MoveToFree extends Command{
+  public static class MoveToFree extends Command {
     private Arm arm;
     private ArmPostion target;
 
@@ -42,8 +42,18 @@ public class SmallIntake extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
-      target.rotation = arm.getShooterPosition().rotation - Units.rotationsToRadians(arm.getMainMotorRotation()) + Units.rotationsToRadians(0.12);
+      target.rotation = arm.getShooterPosition().rotation - Units.rotationsToRadians(arm.getMainMotorRotation()) + Units.rotationsToRadians(0.14);
       arm.moveShooterToPose(target);
+    }
+
+    @Override
+    public void execute() {
+      arm.moveShooterToPose(target);
+    }
+
+    @Override
+    public void end(boolean interrupted){
+      System.out.println("command ended");
     }
 
     @Override
@@ -67,6 +77,10 @@ public class SmallIntake extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
+    }
+
+    @Override
+    public void execute() {
       arm.moveIntakeToPose(alpha, beta);
     }
 

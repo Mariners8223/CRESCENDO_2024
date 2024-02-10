@@ -74,7 +74,7 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Main Motor", true);
     SmartDashboard.putBoolean("Quasistatic", true);
 
-    driveController.cross().onTrue(new SmallIntake.MoveToFree());
+    driveController.cross().onTrue(new SmallIntake());
 
     // driveController.circle().whileTrue(new Collect());
 

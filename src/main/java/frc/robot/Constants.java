@@ -71,7 +71,7 @@ public class Constants {
         public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
 
-        public static final ArmPostion freeMovementPosition = new ArmPostion(0, Math.sin(Units.rotationsToRadians(0.12)) * armLengthMeters, 0);
+        public static final ArmPostion freeMovementPosition = new ArmPostion(0, Math.sin(Units.rotationsToRadians(0.14)) * armLengthMeters, 0);
 
         public static final double FieldYLength = Units.inchesToMeters(323.00);
 
@@ -143,7 +143,7 @@ public class Constants {
             public static final double mainZeroOffset = 0.906 - 0.25;
             public static final double secondaryZeroOffset = 0.043;
 
-            public static final double mainConversionFactor = 250;
+            public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 121.5;
 
             public static final int mainAbsEncoderID = 1;
@@ -152,7 +152,7 @@ public class Constants {
             public static final double[] mainSoftLimits = new double[]{0.28, -0.01};
             public static final double[] secondarySoftLimits = new double[]{0.5, 0.01};
 
-            public static final double mainMotorTolerance = 0.0001;
+            public static final double mainMotorTolerance = 0.001;
             public static final double secondaryMotorTolerance = 0.001;
         }
     }
