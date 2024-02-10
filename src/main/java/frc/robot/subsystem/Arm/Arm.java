@@ -301,8 +301,9 @@ public class Arm extends SubsystemBase{
   }
 
   private double getRollerOverPosition(double value){
-    if(value >= 0) return value;
-    return 1 + value;
+    // if(value >= 0) return value;
+    // return 1 + value;
+    return value;
   }
 
   private DutyCycleEncoder configureAbsEncoder(int port, double offset){

@@ -137,14 +137,17 @@ public class Constants {
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = true;
 
-            public static final double mainZeroOffset = 0.9 - 0.25;
-            public static final double secondaryZeroOffset = 1 + 0.14 - 0.25;
+            // public static final double mainZeroOffset = 0;
+            // public static final double secondaryZeroOffset = 0;
+
+            public static final double mainZeroOffset = 0.906 - 0.25;
+            public static final double secondaryZeroOffset = 0.043;
 
             public static final double mainConversionFactor = 250;
             public static final double secondaryConversionFactor = 121.5;
 
-            public static final int mainAbsEncoderID = 0;
-            public static final int secondaryAbsEncoderID = 1;
+            public static final int mainAbsEncoderID = 1;
+            public static final int secondaryAbsEncoderID = 0;
 
             public static final double[] mainSoftLimits = new double[]{0.28, -0.01};
             public static final double[] secondarySoftLimits = new double[]{0.5, 0.01};
