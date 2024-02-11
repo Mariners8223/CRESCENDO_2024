@@ -39,8 +39,8 @@ public class Constants {
         //TODO: add robot zones
     };
 
-    public static final Pose2d AmpPose = new Pose2d(1.829, 2.814, Rotation2d.fromDegrees(90));
-    public static final Pose2d RobotShootingToAMPPosition = new Pose2d(AmpPose.getX(), AmpPose.getY() - 0.75, AmpPose.getRotation());
+    public static final Pose2d AmpPose = new Pose2d(1.829, 8.46, Rotation2d.fromDegrees(90));
+    public static final Pose2d RobotShootingToAMPPosition = new Pose2d(1.83, 7.71, Rotation2d.fromDegrees(-90));
     public static final Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 6.1547, 2.03);
 
     public static final class Logger{
