@@ -22,7 +22,7 @@ public class ShootToAmp extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
-        RobotContainer.driveBase.findPath(Constants.AmpPose),
+        RobotContainer.driveBase.findPath(Constants.RobotShootingToAMPPosition),
         new InstantCommand(() -> RobotContainer.arm.moveShooterToPose(ArmConstants.AmpArmPosition))
       ),
       new AmpShootGamePiece()

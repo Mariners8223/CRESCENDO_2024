@@ -183,6 +183,13 @@ public class Constants {
                 new Translation2d(3.655, 3.790),//rope 2 - bottom rope
                 new Translation2d(5.747, 3.249)//rope 3 - middle pointing rope
             ));
+
+            public static final List<Pose2d> InStageMiddleLocations_POSE2D = new ArrayList<Pose2d>(
+                //TODO
+            );
+            public static final List<Pose2d> UnderRopeMiddleLocations_POSE2D = new ArrayList<>(
+                //TODO
+            );
         }
         public static final DutyCycleOut HeightDutyPosition = null;
 
