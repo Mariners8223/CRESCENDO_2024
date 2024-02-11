@@ -22,8 +22,8 @@ public class Shooter {
 
     // constructor for shooter - configures motors
     public Shooter(){
-        shooterMotor1 = configMotor(Constants.ArmConstants.Shooter.shooterPIDGains, Constants.ArmConstants.Shooter.shooterMotor1ID);
-        shooterMotor2 = configMotor(Constants.ArmConstants.Shooter.shooterPIDGains, Constants.ArmConstants.Shooter.shooterMotor2ID);
+        shooterMotor1 = configMotor(Constants.ArmConstants.Shooter.shooterPIDGains, Constants.ArmConstants.Shooter.shooterMotor1ID, Constants.ArmConstants.Shooter.shooter1Inverted);
+        shooterMotor2 = configMotor(Constants.ArmConstants.Shooter.shooterPIDGains, Constants.ArmConstants.Shooter.shooterMotor2ID, Constants.ArmConstants.Shooter.shooter2Inverted);
     }
 
     // set shooter power
@@ -58,10 +58,12 @@ public class Shooter {
     }
 
         // configures motor with PID gains
-    private CANSparkFlex configMotor(PIDFGains pidGains, int motorID){
+    private CANSparkFlex configMotor(PIDFGains pidGains, int motorID, boolean isInverted){
 
         CANSparkFlex motor = new CANSparkFlex(motorID, MotorType.kBrushless);
         motor.restoreFactoryDefaults();
+
+        motor.setInverted(isInverted);
         
         SparkPIDController pidController = motor.getPIDController();
         pidController.setP(pidGains.getP());

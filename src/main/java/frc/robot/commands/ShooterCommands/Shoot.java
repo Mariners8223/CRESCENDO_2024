@@ -17,7 +17,6 @@ public class Shoot extends Command {
   public Shoot() {
     // Use addRequirements() here to declare subsystem dependencies.
     arm = Arm.getInstance();
-    timer = 0;
 
     addRequirements(arm);
   }
@@ -26,6 +25,7 @@ public class Shoot extends Command {
   @Override
   public void initialize() {
     arm.getShooterSub().setShooterPower(0.8);
+    timer = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,6 +47,6 @@ public class Shoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer >= 30;
+    return timer >= 50;
   }
 }

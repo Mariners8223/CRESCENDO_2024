@@ -16,10 +16,13 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkPIDController.AccelStrategy;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 // import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -135,17 +138,22 @@ public class Arm extends SubsystemBase{
     mainAbsEncoder = mainMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     secondaryAbsEncoder = secondaryMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
 
-    mainAbsEncoder.setZeroOffset(Constants.ArmConstants.Motors.mainZeroOffset);
-    secondaryAbsEncoder.setZeroOffset(Constants.ArmConstants.Motors.secondaryZeroOffset);
+    mainAbsEncoder.setInverted(true);
+    secondaryAbsEncoder.setInverted(true);
+
+    mainAbsEncoder.setZeroOffset(-Constants.ArmConstants.Motors.mainZeroOffset);
+    System.out.println(secondaryAbsEncoder.setZeroOffset(Constants.ArmConstants.Motors.secondaryZeroOffset));
 
     mainEncoder = mainMotor.getExternalEncoder(8192);
     secondaryEncoder = secondaryMotor.getExternalEncoder(8192);
+
+    Timer.delay(0.1);
 
     mainEncoder.setPosition(mainAbsEncoder.getPosition());
     secondaryEncoder.setPosition(secondaryAbsEncoder.getPosition());
 
     mainMotor.getPIDController().setFeedbackDevice(mainEncoder);
-    secondaryMotor.getPIDController().setFeedbackDevice(secondaryEncoder);
+    secondaryMotor.getPIDController().setFeedbackDevice(secondaryAbsEncoder);
 
     inputs = new ArmInputsAutoLogged();
 
@@ -155,6 +163,10 @@ public class Arm extends SubsystemBase{
     shooter = new Shooter();
     intake = new Intake();
     elavator = new Elavator();
+
+    // SmartDashboard.putNumber("target", inputs.secondaryMotorPosition);
+
+    new Trigger(RobotState::isEnabled).onTrue(new InstantCommand(() -> SmartDashboard.putNumber("target", inputs.secondaryAbsolutePostion)));
 
     // new Trigger(RobotState::isEnabled).onTrue(new InstantCommand(() -> {
     //   mainPIDController.setSetpoint(inputs.mainMotorAbsolutePostion);
@@ -232,6 +244,11 @@ public class Arm extends SubsystemBase{
 
     SmartDashboard.putNumber("prox", intake.getProximity());
 
+    SmartDashboard.putNumber("main encoder", inputs.mainMotorPostion);
+    SmartDashboard.putNumber("seco encoder", inputs.secondaryMotorPosition);
+
+    secondaryMotor.getPIDController().setReference(SmartDashboard.getNumber("target", inputs.secondaryMotorTargetPostion), ControlType.kSmartMotion);
+
     // SmartDashboard.getData("main");
     // SmartDashboard.getData("seco");
 
@@ -259,7 +276,7 @@ public class Arm extends SubsystemBase{
     inputs.secondaryCurrent = secondaryMotor.getOutputCurrent();
 
     inputs.mainMotorAbsolutePostion = mainAbsEncoder.getPosition();
-    inputs.secondaryAbsolutePostion = secondaryEncoder.getPosition();
+    inputs.secondaryAbsolutePostion = secondaryAbsEncoder.getPosition();
 
     Logger.processInputs(getName(), inputs);
   }
@@ -287,6 +304,12 @@ public class Arm extends SubsystemBase{
     sparkFlex.getPIDController().setI(pidfGains.getI());
     sparkFlex.getPIDController().setD(pidfGains.getD());
     sparkFlex.getPIDController().setIZone(pidfGains.getIZone());
+
+    sparkFlex.getPIDController().setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
+    sparkFlex.getPIDController().setSmartMotionMaxAccel(1, 0);
+    sparkFlex.getPIDController().setSmartMotionMaxVelocity(0.5, 0);
+    sparkFlex.getPIDController().setSmartMotionAllowedClosedLoopError(1, 0);
+    // sparkFlex.getPIDController().setSmartMotionMinOutputVelocity(convertionFactor, canID)
 
     sparkFlex.setInverted(motorInverted);
 

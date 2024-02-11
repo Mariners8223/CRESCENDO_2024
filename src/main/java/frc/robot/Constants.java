@@ -100,7 +100,7 @@ public class Constants {
             public static final PIDFGains shooter2PID = new PIDFGains(0.5, 0, 0);
 
             public static final boolean shooter1Inverted = false;
-            public static final boolean shooter2Inverted = false;
+            public static final boolean shooter2Inverted = true;
 
             public static final double shooterMaxPower = 1;
             
@@ -131,8 +131,11 @@ public class Constants {
             public static final int mainMotorID = 15;
             public static final int secondaryMotorID = 16;
 
-            public static final PIDFGains mainPID = new PIDFGains(38.329, 0, 1.4763);
-            public static final PIDFGains secondaryPID = new PIDFGains(35, 1, 0.5);
+            // public static final PIDFGains mainPID = new PIDFGains(38.329, 0, 1.4763);
+            // public static final PIDFGains secondaryPID = new PIDFGains(35, 1, 0.5);
+
+            public static final PIDFGains mainPID = new PIDFGains(0.5, 0, 0);
+            public static final PIDFGains secondaryPID = new PIDFGains(7, 0, 0);
 
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = true;
@@ -141,7 +144,7 @@ public class Constants {
             // public static final double secondaryZeroOffset = 0;
 
             public static final double mainZeroOffset = 0.906 - 0.25;
-            public static final double secondaryZeroOffset = 0.043;
+            public static final double secondaryZeroOffset = 0.05;
 
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 121.5;
