@@ -40,8 +40,7 @@ public class AimShooterZone1 extends InstantCommand {
      + Constants.ArmConstants.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
     }    
     
-    distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), 2) +
-     Math.pow(Y, 2));
+    distanceToSpeaker = Math.hypot(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), Y);
   
     target.rotation = Math.atan((Constants.SpeakerTranslation.getZ() - target.y - Constants.ArmConstants.RobotHightFromGround) / distanceToSpeaker);
 

@@ -40,6 +40,7 @@ public class Constants {
     };
 
     public static final Pose2d AmpPose = new Pose2d(1.829, 2.814, Rotation2d.fromDegrees(90));
+    public static final Pose2d RobotShootingToAMPPosition = new Pose2d(AmpPose.getX(), AmpPose.getY() - 0.75, AmpPose.getRotation());
     public static final Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 6.1547, 2.03);
 
     public static final class Logger{
@@ -87,8 +88,6 @@ public class Constants {
         public static final double SpeakerMidlleLocationY = SpeakerLength/2 + SpeakerBottomLocationY;//done
         public static final double FieldYLength = Units.inchesToMeters(323.00);
         public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY));
-        //public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;
-        //public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
         public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY);
 
         public static final ArmPostion AmpArmPosition = new ArmPostion();

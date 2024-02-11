@@ -77,6 +77,13 @@ public class Shooter {
          * Constants.ArmConstants.Shooter.frictionPowerParameterForGPVelocity;
     }
 
+    public double getTrueFullGPVelociti_SideView(){
+        return Math.hypot(getTrueZAxisVelocity_RobotRelative(), getTrueXAxisVelocity_RobotRelative());
+    }
+
+    public double getTrueZAxisVelocity_RobotRelative(){
+        return Math.sin(RobotContainer.arm.getShooterPosition().rotation) * getShooterVelocity();
+    }
     public double getTrueXAxisVelocity_RobotRelative(){
         return RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond + getShooterVelocity() * Math.cos(RobotContainer.arm.getShooterPosition().rotation);
     }
@@ -84,7 +91,7 @@ public class Shooter {
         return RobotContainer.driveBase.getChassisSpeeds().vyMetersPerSecond +
         RobotContainer.driveBase.getChassisSpeeds().omegaRadiansPerSecond * RobotContainer.arm.getIntakePosition().x;
     }
-    public double getTrueGamePieceVelocityAngle_RobotRelative(){
+    public double getTrueGamePieceVelocityAngle_RobotRelative_ArialView(){
         return Math.atan(getTrueYAxisVelocity_RobotRelative()/getTrueXAxisVelocity_RobotRelative());
     }
 }

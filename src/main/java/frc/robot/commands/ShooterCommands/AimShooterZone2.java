@@ -54,7 +54,7 @@ public class AimShooterZone2 extends InstantCommand {
 
     Dy = Constants.SpeakerTranslation.getZ() - target.y - Constants.ArmConstants.RobotHightFromGround;//update Dy to be the hieght and not the length
 
-    StartSpeed = Arm.getInstance().getShooter().getTrueXAxisVelocity_RobotRelative();
+    StartSpeed = Arm.getInstance().getShooter().getTrueFullGPVelociti_SideView();
 
     angle = Equation();
     target.rotation = Math.atan(angle);
