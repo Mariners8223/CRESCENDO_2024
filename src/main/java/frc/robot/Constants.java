@@ -170,26 +170,28 @@ public class Constants {
         public static class SlidingPositions{
             public static final List<Translation2d> SlidingPositions_MiddleRope = new ArrayList<Translation2d>(
                 Arrays.asList(new Translation2d(4.389, 4.880),//rope 1 - top rope
-                new Translation2d(4.436, 3.339),//rope 2 - bottom rope
-                new Translation2d(5.747, 4.110)//rope 3 - middle pointing rope
+                new Translation2d(4.44, 3.26),//rope 2 - bottom rope
+                new Translation2d(5.87, 4.110)//rope 3 - middle pointing rope
             ));
-            public static final List<Translation2d> SlidingPositions_RightEdgeRope = new ArrayList<Translation2d>(
+            public static final List<Translation2d> SlidingPositions_RightEdgeRope = new ArrayList<Translation2d>(//TODO
                 Arrays.asList(new Translation2d(3.607, 4.429),//rope 1 - top rope
                 new Translation2d(5.217, 2.888),//rope 2 - bottom rope
-                new Translation2d(5.747, 4.971)//rope 3 - middle pointing rope
+                new Translation2d(5.87, 4.971)//rope 3 - middle pointing rope
             ));
-            public static final List<Translation2d> SlidingPositions_LeftEdgeRope = new ArrayList<Translation2d>(
+            public static final List<Translation2d> SlidingPositions_LeftEdgeRope = new ArrayList<Translation2d>(//TODO
                 Arrays.asList(new Translation2d(5.171, 5.331),//rope 1 - top rope
                 new Translation2d(3.655, 3.790),//rope 2 - bottom rope
-                new Translation2d(5.747, 3.249)//rope 3 - middle pointing rope
+                new Translation2d(5.87, 3.249)//rope 3 - middle pointing rope
             ));
 
             public static final List<Pose2d> InStageMiddleLocations_POSE2D = new ArrayList<Pose2d>(
-                //TODO
-            );
+                Arrays.asList(//TODO
+            ));
             public static final List<Pose2d> UnderRopeMiddleLocations_POSE2D = new ArrayList<>(
-                //TODO
-            );
+                Arrays.asList(new Pose2d(SlidingPositions_MiddleRope.get(0).getX(), SlidingPositions_MiddleRope.get(0).getY(), Rotation2d.fromDegrees(-60)),//rope 1 - top rope
+                new Pose2d(SlidingPositions_MiddleRope.get(1).getX(), SlidingPositions_MiddleRope.get(1).getY(), Rotation2d.fromDegrees(60)),//rope 2 - bottom rope
+                new Pose2d(SlidingPositions_MiddleRope.get(2).getX(), SlidingPositions_MiddleRope.get(2).getY(), Rotation2d.fromDegrees(180))//rope 3 - middle pointing rope
+            ));
         }
         public static final DutyCycleOut HeightDutyPosition = null;
 
