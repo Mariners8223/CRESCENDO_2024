@@ -4,6 +4,7 @@
 
 package frc.robot.commands.ShooterCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.Arm.Arm;
 
@@ -30,22 +31,22 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(timer == 30)
-      arm.getIntakeSub().setMotor(0.8);
-
     timer++;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.getShooterSub().stopMotors();
+    arm.getIntakeSub().setMotor(1);
+    Timer.delay(0.1);
+
     arm.getIntakeSub().stopMotor();
+    arm.getShooterSub().stopMotors();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !arm.getIntakeSub().isGamePieceDetected() || timer >= 150;
+    return timer >= 30;
   }
 }

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Test.SmallIntake;
 import frc.robot.commands.IntakeCommands.Collect;
+import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 
@@ -69,8 +70,10 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Main Motor", true);
     SmartDashboard.putBoolean("Quasistatic", true);
 
-    driveController.cross().onTrue(new SmallIntake());
-
+    // driveController.cross().onTrue(new SmallIntake());
+    driveController.cross().onTrue(new Collect());
+    driveController.square().onTrue(new Shoot());
+    
     // driveController.circle().whileTrue(new Collect());
 
     // driveController.square().and(isMainMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));

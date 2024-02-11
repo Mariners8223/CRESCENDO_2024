@@ -118,13 +118,13 @@ public class Constants {
             public static final int intakeMotorID = 17;
             public static final boolean intakeMotorIsInverted = false;
 
-            public static final double intakeMotorSpeed = 0.1;
+            public static final double intakeMotorSpeed = 0.8;
 
             public static final double StallCurrent = 50;
             public static final int MaxStallTime = 100;
 
             public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
-            public static final int CloseProximity = 100;
+            public static final int CloseProximity = 75;
         }
 
         public static class Motors{

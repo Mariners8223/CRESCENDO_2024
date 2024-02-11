@@ -230,6 +230,8 @@ public class Arm extends SubsystemBase{
 
     SmartDashboard.putNumber("shooter angle", shooterPosition.rotation / (Math.PI) * 180);
 
+    SmartDashboard.putNumber("prox", intake.getProximity());
+
     // SmartDashboard.getData("main");
     // SmartDashboard.getData("seco");
 

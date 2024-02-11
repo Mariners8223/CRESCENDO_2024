@@ -9,6 +9,7 @@ import frc.robot.Constants.ArmConstants;
 public class Collect extends Command{
   private Intake intake;
   private int timer;
+  private boolean wasGamePieceDetected;
 
   public Collect(){
     intake = Arm.getInstance().getIntakeSub();
@@ -17,7 +18,10 @@ public class Collect extends Command{
 
   @Override
   public void initialize(){
-    intake.setMotor(ArmConstants.Intake.intakeMotorSpeed);
+    wasGamePieceDetected = intake.isGamePieceDetected();
+
+    if(!wasGamePieceDetected) intake.setMotor(ArmConstants.Intake.intakeMotorSpeed);
+    else intake.setMotor(-ArmConstants.Intake.intakeMotorSpeed);
   }
 
   @Override
@@ -33,7 +37,16 @@ public class Collect extends Command{
 
   @Override
   public void end(boolean interrupted){
-    intake.stopMotor();
+    if(wasGamePieceDetected){
+      intake.setMotor(-1);
+      Timer.delay(0.05);
+      intake.stopMotor();
+    }
+    else {
+      intake.setMotor(-0.4);
+      Timer.delay(0.085);
+      intake.stopMotor();
+    }
 
     if (timer >= ArmConstants.Intake.MaxStallTime){
         intake.setMotor(-0.3);
@@ -44,6 +57,7 @@ public class Collect extends Command{
 
   @Override
   public boolean isFinished(){
-    return (intake.getProximity() < ArmConstants.Intake.CloseProximity || timer >= ArmConstants.Intake.MaxStallTime);
+    if(!wasGamePieceDetected) return intake.getProximity() > ArmConstants.Intake.CloseProximity || timer >= ArmConstants.Intake.MaxStallTime;
+    else return intake.getProximity() < ArmConstants.Intake.CloseProximity || timer >= ArmConstants.Intake.MaxStallTime;
   }
 }
