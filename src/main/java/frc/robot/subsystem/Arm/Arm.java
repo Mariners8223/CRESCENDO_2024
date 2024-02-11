@@ -10,34 +10,22 @@ import org.opencv.core.Mat;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.MotorFeedbackSensor;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 // import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Current;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
@@ -122,10 +110,11 @@ public class Arm extends SubsystemBase{
   private CANSparkFlex mainMotor;
   private CANSparkFlex secondaryMotor;
 
-  private DutyCycleEncoder mainAbsEncoder;
-  private DutyCycleEncoder secondaryAbsEncoder;
+  private RelativeEncoder mainEncoder;
+  private RelativeEncoder secondaryEncoder;
 
-  private double test;
+  private SparkAbsoluteEncoder mainAbsEncoder;
+  private SparkAbsoluteEncoder secondaryAbsEncoder;
 
   private ArmInputsAutoLogged inputs;
 
@@ -136,37 +125,36 @@ public class Arm extends SubsystemBase{
   private Intake intake;
   private Elavator elavator;
 
-  private PIDController mainPIDController;
-  private PIDController seconderyPIDController;
-
-  private SysIDArm sysIDArm;
-
   private Arm() {
-
-    mainAbsEncoder = configureAbsEncoder(Constants.ArmConstants.Motors.mainAbsEncoderID, Constants.ArmConstants.Motors.mainZeroOffset);
-    secondaryAbsEncoder = configureAbsEncoder(Constants.ArmConstants.Motors.secondaryAbsEncoderID, Constants.ArmConstants.Motors.secondaryZeroOffset);
-
-    mainMotor = configureMotors(Constants.ArmConstants.Motors.mainMotorID, mainAbsEncoder.get() ,Constants.ArmConstants.Motors.mainPID,
+    mainMotor = configureMotors(Constants.ArmConstants.Motors.mainMotorID ,Constants.ArmConstants.Motors.mainPID,
     Constants.ArmConstants.Motors.mainInverted, Constants.ArmConstants.Motors.mainConversionFactor, Constants.ArmConstants.Motors.mainSoftLimits);
 
-    secondaryMotor = configureMotors(Constants.ArmConstants.Motors.secondaryMotorID, secondaryAbsEncoder.get(), Constants.ArmConstants.Motors.secondaryPID,
+    secondaryMotor = configureMotors(Constants.ArmConstants.Motors.secondaryMotorID, Constants.ArmConstants.Motors.secondaryPID,
     Constants.ArmConstants.Motors.secondaryInverted, Constants.ArmConstants.Motors.secondaryConversionFactor, Constants.ArmConstants.Motors.secondarySoftLimits);
+
+    mainAbsEncoder = mainMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+    secondaryAbsEncoder = secondaryMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
+
+    mainAbsEncoder.setZeroOffset(Constants.ArmConstants.Motors.mainZeroOffset);
+    secondaryAbsEncoder.setZeroOffset(Constants.ArmConstants.Motors.secondaryZeroOffset);
+
+    mainEncoder = mainMotor.getExternalEncoder(8192);
+    secondaryEncoder = secondaryMotor.getExternalEncoder(8192);
+
+    mainEncoder.setPosition(mainAbsEncoder.getPosition());
+    secondaryEncoder.setPosition(secondaryAbsEncoder.getPosition());
+
+    mainMotor.getPIDController().setFeedbackDevice(mainEncoder);
+    secondaryMotor.getPIDController().setFeedbackDevice(secondaryEncoder);
 
     inputs = new ArmInputsAutoLogged();
 
     intakePosition = new ArmPostion();
     shooterPosition = new ArmPostion();
-    test = 0;
 
     shooter = new Shooter();
     intake = new Intake();
     elavator = new Elavator();
-
-    mainPIDController = Constants.ArmConstants.Motors.mainPID.createPIDController();
-    seconderyPIDController = Constants.ArmConstants.Motors.secondaryPID.createPIDController();
-
-    mainPIDController.setTolerance(Constants.ArmConstants.Motors.mainMotorTolerance);
-    seconderyPIDController.setTolerance(Constants.ArmConstants.Motors.secondaryMotorTolerance);
 
     // new Trigger(RobotState::isEnabled).onTrue(new InstantCommand(() -> {
     //   mainPIDController.setSetpoint(inputs.mainMotorAbsolutePostion);
@@ -214,29 +202,19 @@ public class Arm extends SubsystemBase{
 
   public void moveShooterToPose(ArmPostion position){
     inputs.mainMotorTargetPostion = Math.asin(position.y / ArmConstants.armLengthMeters) / (Math.PI * 2);
-    // // mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, CANSparkBase.ControlType.kPosition);
-    // // mainMotor.getPIDController().setReference(realToMotorUnits(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainConversionFactor), CANSparkBase.ControlType.kPosition);
-    // mainMotor.set(mainPIDController.calculate(inputs.mainMotorAbsolutePostion, inputs.mainMotorTargetPostion));
-    test = mainPIDController.calculate(inputs.mainMotorAbsolutePostion, MathUtil.clamp(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainSoftLimits[1], Constants.ArmConstants.Motors.mainSoftLimits[0]));
-    mainMotor.getPIDController().setReference(test,
-    ControlType.kVoltage);
+    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kSmartMotion);
+
 
     inputs.secondaryMotorTargetPostion =  (position.rotation / (Math.PI * 2)) - inputs.mainMotorTargetPostion;
-    // // secondaryMotor.getPIDController().setReference(inputs.secondaryTargetPostion, CANSparkBase.ControlType.kPosition);
-    // // secondaryMotor.getPIDController().setReference(realToMotorUnits(inputs.secondaryTargetPostion, Constants.ArmConstants.Motors.secondaryConversionFactor), CANSparkBase.ControlType.kPosition);
-    // secondaryMotor.getPIDController().setReference(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion, MathUtil.clamp(inputs.secondaryMotorTargetPostion, Constants.ArmConstants.Motors.secondarySoftLimits[1], Constants.ArmConstants.Motors.secondarySoftLimits[0])),
-    // ControlType.kVoltage);
+    secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kSmartMotion);
   }
 
   public void moveIntakeToPose(double alpha, double beta){
     inputs.mainMotorTargetPostion = alpha;
     inputs.secondaryMotorTargetPostion = beta;
 
-    mainMotor.getPIDController().setReference(mainPIDController.calculate(inputs.mainMotorAbsolutePostion, MathUtil.clamp(inputs.mainMotorTargetPostion, Constants.ArmConstants.Motors.mainSoftLimits[1], Constants.ArmConstants.Motors.mainSoftLimits[0])),
-    ControlType.kVoltage);
-
-    secondaryMotor.getPIDController().setReference(seconderyPIDController.calculate(inputs.secondaryAbsolutePostion, MathUtil.clamp(inputs.secondaryMotorTargetPostion, Constants.ArmConstants.Motors.secondarySoftLimits[1], Constants.ArmConstants.Motors.secondarySoftLimits[0])),
-    ControlType.kVoltage);
+    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kSmartMotion);
+    secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kSmartMotion);
   }
 
   public void update(){
@@ -249,11 +227,8 @@ public class Arm extends SubsystemBase{
     update();
     SmartDashboard.putNumber("Main absEncoder", inputs.mainMotorAbsolutePostion);
     SmartDashboard.putNumber("secondary absEncoder", inputs.secondaryAbsolutePostion);
-    SmartDashboard.putData("main", mainPIDController);
-    SmartDashboard.putData("seco", seconderyPIDController);
 
     SmartDashboard.putNumber("shooter angle", shooterPosition.rotation / (Math.PI) * 180);
-    SmartDashboard.putNumber("sngjasg", test);
 
     // SmartDashboard.getData("main");
     // SmartDashboard.getData("seco");
@@ -275,19 +250,14 @@ public class Arm extends SubsystemBase{
   }
 
   public void updateLogger(){
-    // inputs.mainMotorPostion = motorToRealUnits(mainMotor.getEncoder().getPosition(), Constants.ArmConstants.Motors.mainConversionFactor);
-    // inputs.secondaryMotorPosition = motorToRealUnits(secondaryMotor.getEncoder().getPosition(), Constants.ArmConstants.Motors.secondaryConversionFactor);
-
-    inputs.mainMotorPostion = mainAbsEncoder.get();
-    inputs.secondaryMotorPosition = getRollerOverPosition(secondaryAbsEncoder.get());
+    inputs.mainMotorPostion = mainEncoder.getPosition();
+    inputs.secondaryMotorPosition = secondaryEncoder.getPosition();
 
     inputs.mainCurrent = mainMotor.getOutputCurrent();
     inputs.secondaryCurrent = secondaryMotor.getOutputCurrent();
 
-    // inputs.mainMotorAbsolutePostion = mainMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition();
-    // inputs.secondaryAbsolutePostion = secondaryMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle).getPosition();
-    inputs.mainMotorAbsolutePostion = mainAbsEncoder.get();
-    inputs.secondaryAbsolutePostion = getRollerOverPosition(secondaryAbsEncoder.get());
+    inputs.mainMotorAbsolutePostion = mainAbsEncoder.getPosition();
+    inputs.secondaryAbsolutePostion = secondaryEncoder.getPosition();
 
     Logger.processInputs(getName(), inputs);
   }
@@ -306,112 +276,90 @@ public class Arm extends SubsystemBase{
     intakePosition.rotation = Units.rotationsToRadians(inputs.secondaryMotorPosition);
   }
 
-  private double getRollerOverPosition(double value){
-    // if(value >= 0) return value;
-    // return 1 + value;
-    return value;
-  }
-
-  private DutyCycleEncoder configureAbsEncoder(int port, double offset){
-    DutyCycleEncoder encoder = new DutyCycleEncoder(port);
-    encoder.setPositionOffset(offset);
-    return encoder;
-  }
-
   // private CANSparkFlex configureMotors(int canID, double absPosition, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit, double VoltageCompensation) {
-    private CANSparkFlex configureMotors(int canID, double absPosition, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
+    private CANSparkFlex configureMotors(int canID, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
     CANSparkFlex sparkFlex = new CANSparkFlex(canID, MotorType.kBrushless);
 
     sparkFlex.restoreFactoryDefaults();
-    // sparkFlex.getPIDController().setP(pidfGains.getP());
-    // sparkFlex.getPIDController().setI(pidfGains.getI());
-    // sparkFlex.getPIDController().setD(pidfGains.getD());
-    // sparkFlex.getPIDController().setIZone(pidfGains.getIZone());
+    sparkFlex.getPIDController().setP(pidfGains.getP());
+    sparkFlex.getPIDController().setI(pidfGains.getI());
+    sparkFlex.getPIDController().setD(pidfGains.getD());
+    sparkFlex.getPIDController().setIZone(pidfGains.getIZone());
 
     sparkFlex.setInverted(motorInverted);
 
     if(softLimit.length != 2) softLimit = new double[]{1, -1};
 
-    // sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)(softLimit[0] * convertionFactor));
-    // sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)(softLimit[1] * convertionFactor));
+    sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)(softLimit[0]));
+    sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)(softLimit[1]));
 
     sparkFlex.getEncoder().setPositionConversionFactor(1);
 
     sparkFlex.setIdleMode(IdleMode.kBrake);
     
-    sparkFlex.getEncoder().setPosition(absPosition * convertionFactor);
-
     sparkFlex.enableVoltageCompensation(12);
     //Todo: What is Voltage Compensation? 
 
     return sparkFlex;
   }
 
-  private static double realToMotorUnits(double realUnits, double convertionFactor){
-    return realUnits * convertionFactor;
-  }
+  // public class SysIDArm{
+  //   MutableMeasure<Velocity<Angle>> mainAngularVelocity = MutableMeasure.mutable(edu.wpi.first.units.Units.RotationsPerSecond.zero());
+  //   MutableMeasure<Angle> mainAngularPosition = MutableMeasure.mutable(edu.wpi.first.units.Units.Rotations.zero());
+  //   MutableMeasure<Voltage> mainVoltage = MutableMeasure.mutable(edu.wpi.first.units.Units.Volts.zero());
 
-  private static double motorToRealUnits(double motorUnits, double convertionFactor){
-    return motorUnits / convertionFactor;
-  }
-
-  public class SysIDArm{
-    MutableMeasure<Velocity<Angle>> mainAngularVelocity = MutableMeasure.mutable(edu.wpi.first.units.Units.RotationsPerSecond.zero());
-    MutableMeasure<Angle> mainAngularPosition = MutableMeasure.mutable(edu.wpi.first.units.Units.Rotations.zero());
-    MutableMeasure<Voltage> mainVoltage = MutableMeasure.mutable(edu.wpi.first.units.Units.Volts.zero());
-
-    public SysIDArm(){}
+  //   public SysIDArm(){}
     
-    SysIdRoutine mainMotorRoutine = new SysIdRoutine(
-      new SysIdRoutine.Config(),
-      new SysIdRoutine.Mechanism(
-        (volts) -> {
-          mainMotor.getPIDController().setReference(volts.in(edu.wpi.first.units.Units.Volts), ControlType.kVoltage);
-        }, 
-        (log) -> {
-          // How to get Acceleration?
-          log.motor("Main Motor")
-          .angularVelocity(mainAngularVelocity.mut_replace(mainMotor.getEncoder().getVelocity() / Constants.ArmConstants.Motors.mainConversionFactor, edu.wpi.first.units.Units.RotationsPerSecond))
-          .angularPosition(mainAngularPosition.mut_replace(mainMotor.getEncoder().getPosition() / Constants.ArmConstants.Motors.mainConversionFactor, edu.wpi.first.units.Units.Rotations))
-          .voltage(mainVoltage.mut_replace(mainMotor.getAppliedOutput() * mainMotor.getBusVoltage(), edu.wpi.first.units.Units.Volts));
-        }, 
-        Arm.getInstance()));
+  //   SysIdRoutine mainMotorRoutine = new SysIdRoutine(
+  //     new SysIdRoutine.Config(),
+  //     new SysIdRoutine.Mechanism(
+  //       (volts) -> {
+  //         mainMotor.getPIDController().setReference(volts.in(edu.wpi.first.units.Units.Volts), ControlType.kVoltage);
+  //       }, 
+  //       (log) -> {
+  //         // How to get Acceleration?
+  //         log.motor("Main Motor")
+  //         .angularVelocity(mainAngularVelocity.mut_replace(mainMotor.getEncoder().getVelocity() / Constants.ArmConstants.Motors.mainConversionFactor, edu.wpi.first.units.Units.RotationsPerSecond))
+  //         .angularPosition(mainAngularPosition.mut_replace(mainMotor.getEncoder().getPosition() / Constants.ArmConstants.Motors.mainConversionFactor, edu.wpi.first.units.Units.Rotations))
+  //         .voltage(mainVoltage.mut_replace(mainMotor.getAppliedOutput() * mainMotor.getBusVoltage(), edu.wpi.first.units.Units.Volts));
+  //       }, 
+  //       Arm.getInstance()));
     
-    MutableMeasure<Velocity<Angle>> secondaryAngularVelocity = MutableMeasure.mutable(edu.wpi.first.units.Units.RotationsPerSecond.zero());
-    MutableMeasure<Angle> secondaryAngularPosition = MutableMeasure.mutable(edu.wpi.first.units.Units.Rotations.zero());
-    MutableMeasure<Voltage> secondaryVoltage = MutableMeasure.mutable(edu.wpi.first.units.Units.Volts.zero());
+  //   MutableMeasure<Velocity<Angle>> secondaryAngularVelocity = MutableMeasure.mutable(edu.wpi.first.units.Units.RotationsPerSecond.zero());
+  //   MutableMeasure<Angle> secondaryAngularPosition = MutableMeasure.mutable(edu.wpi.first.units.Units.Rotations.zero());
+  //   MutableMeasure<Voltage> secondaryVoltage = MutableMeasure.mutable(edu.wpi.first.units.Units.Volts.zero());
 
-    SysIdRoutine secondaryMotorRoutine = new SysIdRoutine(
-      new SysIdRoutine.Config(
-        // null, null, null,
-        // (state) -> Logger.recordOutput("SysIdTestState", state.toString())
-      ),
-      new SysIdRoutine.Mechanism(
-        (volts) -> {
-          secondaryMotor.getPIDController().setReference(volts.in(edu.wpi.first.units.Units.Volts), ControlType.kVoltage);
-        }, 
-        (log) -> {
-          // How to get Acceleration?
-          log.motor("Seco Motor")
-          .angularVelocity(secondaryAngularVelocity.mut_replace(secondaryMotor.getEncoder().getVelocity() / Constants.ArmConstants.Motors.secondaryConversionFactor, edu.wpi.first.units.Units.RPM))
-          .angularPosition(secondaryAngularPosition.mut_replace(secondaryMotor.getEncoder().getPosition() / Constants.ArmConstants.Motors.secondaryConversionFactor, edu.wpi.first.units.Units.Rotations))
-          .voltage(secondaryVoltage.mut_replace(secondaryMotor.getAppliedOutput() * secondaryMotor.getBusVoltage(), edu.wpi.first.units.Units.Volts));
-        }, 
-        Arm.getInstance()));
+  //   SysIdRoutine secondaryMotorRoutine = new SysIdRoutine(
+  //     new SysIdRoutine.Config(
+  //       // null, null, null,
+  //       // (state) -> Logger.recordOutput("SysIdTestState", state.toString())
+  //     ),
+  //     new SysIdRoutine.Mechanism(
+  //       (volts) -> {
+  //         secondaryMotor.getPIDController().setReference(volts.in(edu.wpi.first.units.Units.Volts), ControlType.kVoltage);
+  //       }, 
+  //       (log) -> {
+  //         // How to get Acceleration?
+  //         log.motor("Seco Motor")
+  //         .angularVelocity(secondaryAngularVelocity.mut_replace(secondaryMotor.getEncoder().getVelocity() / Constants.ArmConstants.Motors.secondaryConversionFactor, edu.wpi.first.units.Units.RPM))
+  //         .angularPosition(secondaryAngularPosition.mut_replace(secondaryMotor.getEncoder().getPosition() / Constants.ArmConstants.Motors.secondaryConversionFactor, edu.wpi.first.units.Units.Rotations))
+  //         .voltage(secondaryVoltage.mut_replace(secondaryMotor.getAppliedOutput() * secondaryMotor.getBusVoltage(), edu.wpi.first.units.Units.Volts));
+  //       }, 
+  //       Arm.getInstance()));
 
-    public Command quasistaticMain(SysIdRoutine.Direction direction){
-      return mainMotorRoutine.quasistatic(direction);
-    }
-    public Command quasistaticSecondary(SysIdRoutine.Direction direction){
-      return secondaryMotorRoutine.quasistatic(direction);
-    }
+  //   public Command quasistaticMain(SysIdRoutine.Direction direction){
+  //     return mainMotorRoutine.quasistatic(direction);
+  //   }
+  //   public Command quasistaticSecondary(SysIdRoutine.Direction direction){
+  //     return secondaryMotorRoutine.quasistatic(direction);
+  //   }
 
-    public Command dynamicMain(SysIdRoutine.Direction direction){
-      return mainMotorRoutine.dynamic(direction);
-    }
-    public Command dynamicSecondary(SysIdRoutine.Direction direction){
-      return secondaryMotorRoutine.dynamic(direction);
-    }
+  //   public Command dynamicMain(SysIdRoutine.Direction direction){
+  //     return mainMotorRoutine.dynamic(direction);
+  //   }
+  //   public Command dynamicSecondary(SysIdRoutine.Direction direction){
+  //     return secondaryMotorRoutine.dynamic(direction);
+  //   }
 
-  }
+  // }
 }

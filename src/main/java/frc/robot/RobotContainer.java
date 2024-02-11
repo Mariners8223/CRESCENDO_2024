@@ -23,14 +23,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Test.SmallIntake;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.subsystem.Arm.Arm;
-import frc.robot.subsystem.Arm.Arm.SysIDArm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 
 public class RobotContainer {
   public static DriveBase driveBase;
   public static Arm arm;
-
-  public static Arm.SysIDArm sysIDArm;
 
   public static CommandPS5Controller driveController;
   public static SendableChooser<Command> autoChooser;
@@ -51,8 +48,6 @@ public class RobotContainer {
 
     driveBase = new DriveBase();
     arm = Arm.getInstance();
-
-    sysIDArm = arm.new SysIDArm();
 
     configureBindings();
     configChooser();
