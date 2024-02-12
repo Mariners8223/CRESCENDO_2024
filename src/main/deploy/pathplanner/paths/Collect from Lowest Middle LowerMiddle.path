@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9143586253154081,
-        "y": 1.9770060234663343
+        "x": 7.900996326443399,
+        "y": 0.7813062826692614
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9143586253154066,
-        "y": 1.9770060234663343
+        "x": 8.900996326443398,
+        "y": 0.7813062826692612
       },
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "MiddleNotes_BottmNote"
     },
     {
       "anchor": {
         "x": 7.900996326443399,
-        "y": 0.7813062826692614
+        "y": 2.4341853361240395
       },
       "prevControl": {
         "x": 6.900996326443399,
-        "y": 0.7813062826692614
+        "y": 2.4341853361240395
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "MiddleNotes_BottmNote"
+      "linkedName": "MiddleNotes_UpperBottmNote"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Collect",
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -42,7 +42,7 @@
       }
     },
     {
-      "name": "Shoot To Our Side",
+      "name": "Shot To Our Side",
       "waypointRelativePos": 1.0,
       "command": {
         "type": "parallel",
