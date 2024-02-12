@@ -70,6 +70,12 @@ public class Constants {
             public static final String limeLightName = "";
         }
     }
+    
+    public static class AutoConstants{
+        public static ArmPostion FastShootPose = new ArmPostion();
+
+        public static Pose2d MiddleNote = new Pose2d();
+    }
 
     public static final class ArmConstants {
         public static final double armLengthMeters = 0.46;
