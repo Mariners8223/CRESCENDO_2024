@@ -121,7 +121,7 @@ public class Constants {
             public static final double intakeMotorSpeed = 0.8;
 
             public static final double StallCurrent = 50;
-            public static final int MaxStallTime = 100;
+            public static final int MaxStallTime = 200;
 
             public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
             public static final int CloseProximity = 75;
@@ -134,8 +134,10 @@ public class Constants {
             // public static final PIDFGains mainPID = new PIDFGains(38.329, 0, 1.4763);
             // public static final PIDFGains secondaryPID = new PIDFGains(35, 1, 0.5);
 
-            public static final PIDFGains mainPID = new PIDFGains(0.5, 0, 0);
-            public static final PIDFGains secondaryPID = new PIDFGains(7, 0, 0);
+            public static final PIDFGains mainPID = new PIDFGains(2.8, 0, 0);
+            public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0.1, 0, 0.002);
+
+            public static final double seconderyMaxOutput = 0.5;
 
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = true;
@@ -143,8 +145,8 @@ public class Constants {
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 
-            public static final double mainZeroOffset = 0.906 - 0.25;
-            public static final double secondaryZeroOffset = 0.05;
+            public static final double mainZeroOffset = 1 - 0.008;
+            public static final double secondaryZeroOffset = 0.0419571;
 
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 121.5;
@@ -155,8 +157,8 @@ public class Constants {
             public static final double[] mainSoftLimits = new double[]{0.28, -0.01};
             public static final double[] secondarySoftLimits = new double[]{0.5, 0.01};
 
-            public static final double mainMotorTolerance = 0.001;
-            public static final double secondaryMotorTolerance = 0.001;
+            public static final double mainMotorTolerance = 0.01;
+            public static final double secondaryMotorTolerance = 0.01;
         }
     }
     public class ClimbConstants{

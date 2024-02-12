@@ -22,8 +22,8 @@ public class SmallIntake extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveToFree()
-      // new MoveIntakeNumber(Arm.getInstance().getMainMotorRotation(), 0.36)
+      new MoveToFree(),
+      new MoveIntakeNumber(Arm.getInstance().getMainMotorRotation(), 0.36)
       // new MoveIntakeNumber(-0.01, Arm.getInstance().getSecoMotorRotation())
     );
   }

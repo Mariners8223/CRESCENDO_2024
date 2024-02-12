@@ -54,6 +54,9 @@ public class PIDFGains {
     }
 
     public PIDController createPIDController() {
-      return new PIDController(_kP, _kI, _kD);
+      var controller = new PIDController(_kP, _kI, _kD);
+      controller.setTolerance(_tolerance);
+      controller.setIZone(_iZone);
+      return controller;
     }
   }

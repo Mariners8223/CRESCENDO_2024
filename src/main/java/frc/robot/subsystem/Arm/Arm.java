@@ -130,10 +130,10 @@ public class Arm extends SubsystemBase{
 
   private Arm() {
     mainMotor = configureMotors(Constants.ArmConstants.Motors.mainMotorID ,Constants.ArmConstants.Motors.mainPID,
-    Constants.ArmConstants.Motors.mainInverted, Constants.ArmConstants.Motors.mainConversionFactor, Constants.ArmConstants.Motors.mainSoftLimits);
+    Constants.ArmConstants.Motors.mainInverted, Constants.ArmConstants.Motors.mainConversionFactor, Constants.ArmConstants.Motors.mainSoftLimits, Constants.ArmConstants.Motors.seconderyMaxOutput);
 
     secondaryMotor = configureMotors(Constants.ArmConstants.Motors.secondaryMotorID, Constants.ArmConstants.Motors.secondaryPID,
-    Constants.ArmConstants.Motors.secondaryInverted, Constants.ArmConstants.Motors.secondaryConversionFactor, Constants.ArmConstants.Motors.secondarySoftLimits);
+    Constants.ArmConstants.Motors.secondaryInverted, Constants.ArmConstants.Motors.secondaryConversionFactor, Constants.ArmConstants.Motors.secondarySoftLimits, Constants.ArmConstants.Motors.seconderyMaxOutput);
 
     mainAbsEncoder = mainMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     secondaryAbsEncoder = secondaryMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
@@ -141,19 +141,21 @@ public class Arm extends SubsystemBase{
     mainAbsEncoder.setInverted(true);
     secondaryAbsEncoder.setInverted(true);
 
-    mainAbsEncoder.setZeroOffset(-Constants.ArmConstants.Motors.mainZeroOffset);
-    System.out.println(secondaryAbsEncoder.setZeroOffset(Constants.ArmConstants.Motors.secondaryZeroOffset));
-
     mainEncoder = mainMotor.getExternalEncoder(8192);
     secondaryEncoder = secondaryMotor.getExternalEncoder(8192);
 
     Timer.delay(0.1);
 
-    mainEncoder.setPosition(mainAbsEncoder.getPosition());
-    secondaryEncoder.setPosition(secondaryAbsEncoder.getPosition());
+    mainAbsEncoder.setZeroOffset(Constants.ArmConstants.Motors.mainZeroOffset);
+    secondaryAbsEncoder.setZeroOffset(Constants.ArmConstants.Motors.secondaryZeroOffset);
+
+    Timer.delay(0.2);
+
+    mainEncoder.setPosition(getRollOverPosition(mainAbsEncoder.getPosition()));
+    secondaryEncoder.setPosition(getRollOverPosition(secondaryAbsEncoder.getPosition()));
 
     mainMotor.getPIDController().setFeedbackDevice(mainEncoder);
-    secondaryMotor.getPIDController().setFeedbackDevice(secondaryAbsEncoder);
+    secondaryMotor.getPIDController().setFeedbackDevice(secondaryEncoder);
 
     inputs = new ArmInputsAutoLogged();
 
@@ -165,8 +167,6 @@ public class Arm extends SubsystemBase{
     elavator = new Elavator();
 
     // SmartDashboard.putNumber("target", inputs.secondaryMotorPosition);
-
-    new Trigger(RobotState::isEnabled).onTrue(new InstantCommand(() -> SmartDashboard.putNumber("target", inputs.secondaryAbsolutePostion)));
 
     // new Trigger(RobotState::isEnabled).onTrue(new InstantCommand(() -> {
     //   mainPIDController.setSetpoint(inputs.mainMotorAbsolutePostion);
@@ -214,19 +214,19 @@ public class Arm extends SubsystemBase{
 
   public void moveShooterToPose(ArmPostion position){
     inputs.mainMotorTargetPostion = Math.asin(position.y / ArmConstants.armLengthMeters) / (Math.PI * 2);
-    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kSmartMotion);
+    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kPosition);
 
 
     inputs.secondaryMotorTargetPostion =  (position.rotation / (Math.PI * 2)) - inputs.mainMotorTargetPostion;
-    secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kSmartMotion);
+    secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kPosition);
   }
 
   public void moveIntakeToPose(double alpha, double beta){
     inputs.mainMotorTargetPostion = alpha;
     inputs.secondaryMotorTargetPostion = beta;
 
-    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kSmartMotion);
-    secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kSmartMotion);
+    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kPosition);
+    secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kPosition);
   }
 
   public void update(){
@@ -243,12 +243,7 @@ public class Arm extends SubsystemBase{
     SmartDashboard.putNumber("shooter angle", shooterPosition.rotation / (Math.PI) * 180);
 
     SmartDashboard.putNumber("prox", intake.getProximity());
-
-    SmartDashboard.putNumber("main encoder", inputs.mainMotorPostion);
-    SmartDashboard.putNumber("seco encoder", inputs.secondaryMotorPosition);
-
-    secondaryMotor.getPIDController().setReference(SmartDashboard.getNumber("target", inputs.secondaryMotorTargetPostion), ControlType.kSmartMotion);
-
+    SmartDashboard.putNumber("main Encoder", inputs.mainMotorPostion);
     // SmartDashboard.getData("main");
     // SmartDashboard.getData("seco");
 
@@ -281,6 +276,11 @@ public class Arm extends SubsystemBase{
     Logger.processInputs(getName(), inputs);
   }
 
+  private double getRollOverPosition(double value){
+    if(value < 0.75) return value;
+    return value - 1;
+  }
+
   public void updateArmPostions(){
     shooterPosition.x = (Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion))) * (Constants.ArmConstants.armLengthMeters) - ArmConstants.mainPivotDistanceFromCenterMeters
     + (Math.sin(Units.rotationsToRadians(inputs.secondaryMotorPosition)) * ArmConstants.SecondaryMotorDistanceFromShooterMeters);
@@ -296,20 +296,20 @@ public class Arm extends SubsystemBase{
   }
 
   // private CANSparkFlex configureMotors(int canID, double absPosition, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit, double VoltageCompensation) {
-    private CANSparkFlex configureMotors(int canID, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit) {
+    private CANSparkFlex configureMotors(int canID, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit, double maxOutput) {
     CANSparkFlex sparkFlex = new CANSparkFlex(canID, MotorType.kBrushless);
 
     sparkFlex.restoreFactoryDefaults();
+
+    Timer.delay(0.1);
+
     sparkFlex.getPIDController().setP(pidfGains.getP());
     sparkFlex.getPIDController().setI(pidfGains.getI());
     sparkFlex.getPIDController().setD(pidfGains.getD());
     sparkFlex.getPIDController().setIZone(pidfGains.getIZone());
 
-    sparkFlex.getPIDController().setSmartMotionAccelStrategy(AccelStrategy.kTrapezoidal, 0);
-    sparkFlex.getPIDController().setSmartMotionMaxAccel(1, 0);
-    sparkFlex.getPIDController().setSmartMotionMaxVelocity(0.5, 0);
-    sparkFlex.getPIDController().setSmartMotionAllowedClosedLoopError(1, 0);
-    // sparkFlex.getPIDController().setSmartMotionMinOutputVelocity(convertionFactor, canID)
+    sparkFlex.getPIDController().setOutputRange(-maxOutput, maxOutput);
+
 
     sparkFlex.setInverted(motorInverted);
 
@@ -317,6 +317,9 @@ public class Arm extends SubsystemBase{
 
     sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)(softLimit[0]));
     sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)(softLimit[1]));
+
+    sparkFlex.enableSoftLimit(SoftLimitDirection.kForward, true);
+    sparkFlex.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     sparkFlex.getEncoder().setPositionConversionFactor(1);
 

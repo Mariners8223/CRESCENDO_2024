@@ -43,8 +43,8 @@ public class Collect extends Command{
       intake.stopMotor();
     }
     else {
-      intake.setMotor(-0.4);
-      Timer.delay(0.085);
+      intake.setMotor(-0.35);
+      Timer.delay(0.09);
       intake.stopMotor();
     }
 

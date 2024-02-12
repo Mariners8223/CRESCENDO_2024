@@ -24,7 +24,9 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    arm.getShooterSub().setShooterPower(0.8);
+    if(!Arm.getInstance().getIntakeSub().isGamePieceDetected()) cancel();
+
+    arm.getShooterSub().setShooterPower(1);
     timer = 0;
   }
 
@@ -37,6 +39,8 @@ public class Shoot extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if(interrupted) return;
+
     arm.getIntakeSub().setMotor(1);
     Timer.delay(0.1);
 
@@ -47,6 +51,6 @@ public class Shoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer >= 50;
+    return timer >= 70;
   }
 }
