@@ -74,7 +74,9 @@ public class Constants {
     public static class AutoConstants{
         public static ArmPostion FastShootPose = new ArmPostion();
 
-        public static Pose2d MiddleNote = new Pose2d();
+        public static Pose2d MiddleNote = new Pose2d(2.52, 5.56, Rotation2d.fromDegrees(0));
+        public static Pose2d UpperNote = new Pose2d(2.89, 6.61, Rotation2d.fromDegrees(90));
+        public static Pose2d LowerNote = new Pose2d(2.52, 4.1, Rotation2d.fromDegrees(-31.35));
     }
 
     public static final class ArmConstants {
