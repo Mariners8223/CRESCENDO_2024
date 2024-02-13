@@ -38,6 +38,7 @@ public class Constants {
     public static final List<Translation2d> robotZones = new ArrayList<Translation2d>() {
         //TODO: add robot zones
     };
+    public static final double gGravity_phisics = 9.8;
 
     public static final Pose2d AmpPose = new Pose2d(1.829, 8.46, Rotation2d.fromDegrees(90));
     public static final Pose2d RobotShootingToAMPPosition = new Pose2d(1.83, 7.71, Rotation2d.fromDegrees(-90));
@@ -90,21 +91,20 @@ public class Constants {
         public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
     
-        public static final double RobotHightFromGround = 0;//TODO
+        public static final double RobotHightFromGround = 0;//TODO: robot hieght from ground
         public static final double SpeakerLength = 1.181;//done
         public static final double SpeakerBottomLocationY = 5.5642;//done
         public static final double SpeakerMidlleLocationY = SpeakerLength/2 + SpeakerBottomLocationY;//done
         public static final double FieldYLength = Units.inchesToMeters(323.00);
-        public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY));
+        public static final double SpeakerIsCenterRatio = SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY));
         public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY);
 
         public static final ArmPostion AmpArmPosition = new ArmPostion();
-        
-        public static final ArmPostion ShootingPositionSniper = new ArmPostion();
-        public static final ArmPostion ShootingPositionDunker = new ArmPostion();
-        public static final Translation2d DunkingZone = new Translation2d();
-        public static final Translation2d SnipingZone = new Translation2d();
-        public static final Translation2d[] ArmPositionInSpeakerZone = new Translation2d[]{DunkingZone, SnipingZone};
+
+        public static final ArmPostion Zone1_ArmPosition = new ArmPostion();//main motor location for zone 1
+        public static final ArmPostion Zone2_ArmPosition = new ArmPostion();//main motor location for zone 2
+        public static final double EndOfZone1 = 0;//TODO: the distince from the speaker right before the lazer equasion is not relevent
+
 
 
         public static class Shooter{
@@ -166,12 +166,12 @@ public class Constants {
         }
     }
     public class ClimbConstants{
-        public static final int ClimbingMotorID = 1;//TODO
-        public static final int SlidingMotorID = 1;//TODO
+        public static final int ClimbingMotorID = 1;//TODO: climb motor and sliding motor IDs
+        public static final int SlidingMotorID = 1;
 
-        public static final double MotorRotationsToAirialMeters = 0.0;//TODO
+        public static final double MotorRotationsToAirialMeters = 0.0;//TODO: find ratio
 
-        public static final ArmPostion CLIMBING_POSTION = new ArmPostion();//TODO
+        public static final ArmPostion CLIMBING_POSTION = new ArmPostion();//TODO: find needed arm position
         public static final PositionDutyCycle PUSH_ELAVATER_ARM_POSTION = new PositionDutyCycle(0);//TODO - up position
         public static final PositionDutyCycle PULL_ELAVATER_ARM_POSTION = new PositionDutyCycle(0);//TODO - down position
         
@@ -181,19 +181,19 @@ public class Constants {
                 new Translation2d(4.44, 3.26),//rope 2 - bottom rope
                 new Translation2d(5.87, 4.110)//rope 3 - middle pointing rope
             ));
-            public static final List<Translation2d> SlidingPositions_RightEdgeRope = new ArrayList<Translation2d>(//TODO
+            public static final List<Translation2d> SlidingPositions_RightEdgeRope = new ArrayList<Translation2d>(//TODO: find locations
                 Arrays.asList(new Translation2d(3.607, 4.429),//rope 1 - top rope
                 new Translation2d(5.217, 2.888),//rope 2 - bottom rope
                 new Translation2d(5.87, 4.971)//rope 3 - middle pointing rope
             ));
-            public static final List<Translation2d> SlidingPositions_LeftEdgeRope = new ArrayList<Translation2d>(//TODO
+            public static final List<Translation2d> SlidingPositions_LeftEdgeRope = new ArrayList<Translation2d>(//TODO: find locations
                 Arrays.asList(new Translation2d(5.171, 5.331),//rope 1 - top rope
                 new Translation2d(3.655, 3.790),//rope 2 - bottom rope
                 new Translation2d(5.87, 3.249)//rope 3 - middle pointing rope
             ));
 
             public static final List<Pose2d> InStageMiddleLocations_POSE2D = new ArrayList<Pose2d>(
-                Arrays.asList(//TODO
+                Arrays.asList(//TODO: find locations
             ));
             public static final List<Pose2d> UnderRopeMiddleLocations_POSE2D = new ArrayList<>(
                 Arrays.asList(new Pose2d(SlidingPositions_MiddleRope.get(0).getX(), SlidingPositions_MiddleRope.get(0).getY(), Rotation2d.fromDegrees(-60)),//rope 1 - top rope
