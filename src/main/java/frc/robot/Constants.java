@@ -137,8 +137,6 @@ public class Constants {
             public static final PIDFGains mainPID = new PIDFGains(2.8, 0, 0);
             public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0.1, 0, 0.002);
 
-            public static final double seconderyMaxOutput = 0.5;
-
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = true;
 
@@ -156,6 +154,9 @@ public class Constants {
 
             public static final double[] mainSoftLimits = new double[]{0.28, -0.01};
             public static final double[] secondarySoftLimits = new double[]{0.5, 0.01};
+
+            public static final double[] mainMaxOutputs = new double[]{0.4, -0.2};
+            public static final double[] secondaryMaxOutputs = new double[]{0.2, -0.25};
 
             public static final double mainMotorTolerance = 0.01;
             public static final double secondaryMotorTolerance = 0.01;

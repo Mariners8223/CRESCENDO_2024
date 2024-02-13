@@ -130,10 +130,10 @@ public class Arm extends SubsystemBase{
 
   private Arm() {
     mainMotor = configureMotors(Constants.ArmConstants.Motors.mainMotorID ,Constants.ArmConstants.Motors.mainPID,
-    Constants.ArmConstants.Motors.mainInverted, Constants.ArmConstants.Motors.mainConversionFactor, Constants.ArmConstants.Motors.mainSoftLimits, Constants.ArmConstants.Motors.seconderyMaxOutput);
+    Constants.ArmConstants.Motors.mainInverted, Constants.ArmConstants.Motors.mainConversionFactor, Constants.ArmConstants.Motors.mainSoftLimits, Constants.ArmConstants.Motors.mainMaxOutputs);
 
     secondaryMotor = configureMotors(Constants.ArmConstants.Motors.secondaryMotorID, Constants.ArmConstants.Motors.secondaryPID,
-    Constants.ArmConstants.Motors.secondaryInverted, Constants.ArmConstants.Motors.secondaryConversionFactor, Constants.ArmConstants.Motors.secondarySoftLimits, Constants.ArmConstants.Motors.seconderyMaxOutput);
+    Constants.ArmConstants.Motors.secondaryInverted, Constants.ArmConstants.Motors.secondaryConversionFactor, Constants.ArmConstants.Motors.secondarySoftLimits, Constants.ArmConstants.Motors.secondaryMaxOutputs);
 
     mainAbsEncoder = mainMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     secondaryAbsEncoder = secondaryMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
@@ -296,7 +296,7 @@ public class Arm extends SubsystemBase{
   }
 
   // private CANSparkFlex configureMotors(int canID, double absPosition, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit, double VoltageCompensation) {
-    private CANSparkFlex configureMotors(int canID, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit, double maxOutput) {
+    private CANSparkFlex configureMotors(int canID, PIDFGains pidfGains, boolean motorInverted, double convertionFactor, double[] softLimit, double[] maxOutputs) {
     CANSparkFlex sparkFlex = new CANSparkFlex(canID, MotorType.kBrushless);
 
     sparkFlex.restoreFactoryDefaults();
@@ -308,8 +308,9 @@ public class Arm extends SubsystemBase{
     sparkFlex.getPIDController().setD(pidfGains.getD());
     sparkFlex.getPIDController().setIZone(pidfGains.getIZone());
 
-    sparkFlex.getPIDController().setOutputRange(-maxOutput, maxOutput);
+    if(maxOutputs.length != 2) maxOutputs = new double[]{0.25, -0.25};
 
+    sparkFlex.getPIDController().setOutputRange(maxOutputs[1], maxOutputs[0]);
 
     sparkFlex.setInverted(motorInverted);
 
