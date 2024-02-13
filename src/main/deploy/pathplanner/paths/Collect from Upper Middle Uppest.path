@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.900996326443399,
-        "y": 5.786833628947201
+        "x": 7.9127188729218005,
+        "y": 5.915781640209631
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.900996326443398,
-        "y": 5.786833628947201
+        "x": 8.9127188729218,
+        "y": 5.915781640209631
       },
       "isLocked": true,
       "linkedName": "MiddleNotes_LowerUppestNote"
