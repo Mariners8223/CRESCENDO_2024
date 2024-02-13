@@ -26,7 +26,8 @@ public class AimShooter extends InstantCommand {
 
   public AimShooter() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Arm.getInstance());
+    arm = Arm.getInstance();
+    addRequirements(arm);
   }
 
   public double getAngle(){//for the turret aim
@@ -66,7 +67,6 @@ public class AimShooter extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    arm = Arm.getInstance();
     StartSpeed = Shooter.getInstance().getShooterVelocity();
     //Get Aiming Point
     //at this moment Dy represents the actual Y axis on pose2d for the point we are aiming at
