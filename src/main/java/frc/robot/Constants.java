@@ -7,6 +7,8 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ctre.phoenix6.StatusSignal;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -71,7 +73,7 @@ public class Constants {
         public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
         public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
 
-        public static final ArmPostion freeMovementPosition = new ArmPostion(0, Math.sin(Units.rotationsToRadians(0.14)) * armLengthMeters, 0);
+        public static final ArmPostion freeMovementPosition = new ArmPostion(0, Math.sin(Units.rotationsToRadians(0.15)) * armLengthMeters, 0);
 
         public static final double FieldYLength = Units.inchesToMeters(323.00);
 
@@ -125,6 +127,8 @@ public class Constants {
 
             public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
             public static final int CloseProximity = 75;
+            public static final double secondaryIntakeAngle = 0.43;
+            public static final double mainIntakeAngle = -0.02;
         }
 
         public static class Motors{
@@ -134,7 +138,7 @@ public class Constants {
             // public static final PIDFGains mainPID = new PIDFGains(38.329, 0, 1.4763);
             // public static final PIDFGains secondaryPID = new PIDFGains(35, 1, 0.5);
 
-            public static final PIDFGains mainPID = new PIDFGains(2.8, 0, 0);
+            public static final PIDFGains mainPID = new PIDFGains(3.1, 0.01, 0, 1, 0, 0.02);
             public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0.1, 0, 0.002);
 
             public static final boolean mainInverted = false;
@@ -143,8 +147,10 @@ public class Constants {
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 
-            public static final double mainZeroOffset = 1 - 0.008;
-            public static final double secondaryZeroOffset = 0.0419571;
+            // public static final double mainZeroOffset = 1 - 0.008;
+            // public static final double secondaryZeroOffset = 0.0419571;
+            public static final double mainZeroOffset = 0.975;
+            public static final double secondaryZeroOffset = 0.033;
 
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 121.5;
@@ -152,23 +158,31 @@ public class Constants {
             public static final int mainAbsEncoderID = 1;
             public static final int secondaryAbsEncoderID = 0;
 
-            public static final double[] mainSoftLimits = new double[]{0.28, -0.01};
+            public static final double[] mainSoftLimits = new double[]{0.28, -0.02};
             public static final double[] secondarySoftLimits = new double[]{0.5, 0.01};
 
-            public static final double[] mainMaxOutputs = new double[]{0.4, -0.2};
-            public static final double[] secondaryMaxOutputs = new double[]{0.2, -0.25};
+            public static final double[] mainMaxOutputs = new double[]{0.15, -0.05};
+            public static final double[] secondaryMaxOutputs = new double[]{0.1, -0.05};
 
-            public static final double mainMotorTolerance = 0.01;
+            public static final double mainMotorTolerance = 0.005;
             public static final double secondaryMotorTolerance = 0.01;
         }
     }
     public class ClimbConstants{
+        public static final double chainHeight = 72;
+
         public static final int railMotorID = 20;//TODO
         public static final int rollerMotorID = 21;//TODO
 
-        public static final PIDFGains climbingMotorPIDF = new PIDFGains(0.1, 0.1, 0.1);
+        public static final PIDFGains railMotorPIDF = new PIDFGains(0.2, 0.02, 0.02);
 
-        public static final PIDFGains slidingMotorPIDF = new PIDFGains(0.1, 0.1, 0.1);
+        public static final PIDFGains rollerMotorPIDF = new PIDFGains(0.1, 0.1, 0.1);
+
+        public static final double railMotorConvertionFactor = 90 / (3 * Math.PI);
+        public static final double rollerMotorConvertionFactor = 1;
+
+        public static final double railMotorTolarance = 0.1;
+        public static final double rollerMotorTolarance = 0.01;
     }
 
     public static final class DriveTrain{
@@ -197,7 +211,7 @@ public class Constants {
 
             public static final double maxRotationSpeed = 6.27; //the max speed the robot can rotate in in radains per second
 
-            public static final double RobotHeightFromGround = 0;
+            public static final double RobotHeightFromGround = 0.155;
         }
 
         public static final class Drive{

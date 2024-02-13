@@ -17,9 +17,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Test.MoveToHome;
 import frc.robot.Test.SmallIntake;
+import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.subsystem.Arm.Arm;
@@ -59,34 +62,15 @@ public class RobotContainer {
   private void configureBindings() {
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
 
-    // driveController.cross().whileTrue(DriveBase.OrchestraCommand.getInstance().ignoringDisable(true));
-    // driveController.share().onTrue(DriveBase.CalibrateSwerveCommand.getInstance().ignoringDisable(true));
-
-
-    // driveController.cross().debounce(0.1).and(() -> getRobotZone() == 1 || getRobotZone() == 2).onTrue(new InstantCommand(() -> aimingAtSpeaker = !aimingAtSpeaker));
-    // new Trigger(() -> getRobotZone() == 1 || getRobotZone() == 2).onTrue(new InstantCommand(() -> aimingAtSpeaker = true));
-
     SmartDashboard.putBoolean("Main Motor", true);
     SmartDashboard.putBoolean("Quasistatic", true);
 
     // driveController.cross().onTrue(new SmallIntake());
-    driveController.cross().onTrue(new Collect());
-    driveController.square().onTrue(new Shoot());
-    
-    // driveController.circle().whileTrue(new Collect());
+    // driveController.triangle().onTrue(new MoveToHome());
 
-    // driveController.square().and(isMainMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kForward));
-    // driveController.circle().and(isMainMotor).and(isQuasistatic).whileTrue(sysIDArm.quasistaticMain(SysIdRoutine.Direction.kReverse));
+    // driveController.square().onTrue(new Collect());
 
-    // driveController.square().and(isMainMotor).and(isDynamic).whileTrue(sysIDArm.dynamicMain(SysIdRoutine.Direction.kForward));
-    // driveController.circle().and(isMainMotor).and(isDynamic).whileTrue(sysIDArm.dynamicMain(SysIdRoutine.Direction.kReverse));
-
-
-    // driveController.square().and(isQuasistatic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kForward));
-    // driveController.circle().and(isQuasistatic).whileTrue(sysIDArm.quasistaticSecondary(SysIdRoutine.Direction.kReverse));
-
-    // driveController.square().and(isDynamic).whileTrue(sysIDArm.dynamicSecondary(SysIdRoutine.Direction.kForward));
-    // driveController.circle().and(isDynamic).whileTrue(sysIDArm.dynamicSecondary(SysIdRoutine.Direction.kReverse));
+    driveController.cross().onTrue(new ClimbSequence());
   }
 
   // private boolean isMainMotor(){

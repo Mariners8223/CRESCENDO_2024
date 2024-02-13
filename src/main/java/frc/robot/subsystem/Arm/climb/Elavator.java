@@ -4,47 +4,89 @@
 
 package frc.robot.subsystem.Arm.climb;
 
+import org.littletonrobotics.junction.AutoLog;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elavator extends SubsystemBase {
-  private TalonFX ClimbingMotor;
-  private TalonFX SlidingMotor;
-  private TalonFXConfiguration ClimbingMotorConfiguration;
-  private TalonFXConfiguration slidingMotorConfiguration;
+  @AutoLog
+  public static class ElavatorInputs{
+    double railMotorPosition;
+    double rollerMotorPosition;
+
+    double railMotorTarget;
+    double rollerMotorTarget;
+  }
+
+  private TalonFX railMotor;
+  private TalonFX rollerMotor;
+
+  private PositionDutyCycle railoutput;
+
+  private ElavatorInputsAutoLogged inputs;
 
   /** Creates a new Elavater. */
   public Elavator() {
-    ClimbingMotor = new TalonFX(Constants.ClimbConstants.railMotorID);
-    SlidingMotor = new TalonFX(Constants.ClimbConstants.rollerMotorID);
+    railMotor = new TalonFX(Constants.ClimbConstants.railMotorID);
+    rollerMotor = new TalonFX(Constants.ClimbConstants.rollerMotorID);
 
-    ClimbingMotorConfiguration = new TalonFXConfiguration();
-    slidingMotorConfiguration = new TalonFXConfiguration();
+    var railMotorConfiguration = new TalonFXConfiguration();
+    var rollerMotorConfiguration = new TalonFXConfiguration();
 
-    ClimbingMotorConfiguration.Slot0.kP = Constants.ClimbConstants.climbingMotorPIDF.getP();
-    ClimbingMotorConfiguration.Slot0.kI = Constants.ClimbConstants.climbingMotorPIDF.getI();
-    ClimbingMotorConfiguration.Slot0.kD = Constants.ClimbConstants.climbingMotorPIDF.getD();
-    ClimbingMotorConfiguration.Slot0.kS = Constants.ClimbConstants.climbingMotorPIDF.getF();
+    railMotorConfiguration.Slot0.kP = Constants.ClimbConstants.railMotorPIDF.getP();
+    railMotorConfiguration.Slot0.kI = Constants.ClimbConstants.railMotorPIDF.getI();
+    railMotorConfiguration.Slot0.kD = Constants.ClimbConstants.railMotorPIDF.getD();
+    railMotorConfiguration.Slot0.kS = Constants.ClimbConstants.railMotorPIDF.getF();
 
-    slidingMotorConfiguration.Slot0.kP = Constants.ClimbConstants.slidingMotorPIDF.getP();
-    slidingMotorConfiguration.Slot0.kI = Constants.ClimbConstants.slidingMotorPIDF.getI();
-    slidingMotorConfiguration.Slot0.kD = Constants.ClimbConstants.slidingMotorPIDF.getD();
-    slidingMotorConfiguration.Slot0.kS = Constants.ClimbConstants.slidingMotorPIDF.getF();
+    railMotorConfiguration.Feedback.SensorToMechanismRatio = Constants.ClimbConstants.railMotorConvertionFactor;
 
-    ClimbingMotor.getConfigurator().apply(ClimbingMotorConfiguration);
-    SlidingMotor.getConfigurator().apply(slidingMotorConfiguration);
+    railMotorConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+    rollerMotorConfiguration.Slot0.kP = Constants.ClimbConstants.rollerMotorPIDF.getP();
+    rollerMotorConfiguration.Slot0.kI = Constants.ClimbConstants.rollerMotorPIDF.getI();
+    rollerMotorConfiguration.Slot0.kD = Constants.ClimbConstants.rollerMotorPIDF.getD();
+    rollerMotorConfiguration.Slot0.kS = Constants.ClimbConstants.rollerMotorPIDF.getF();
+
+    railMotor.getConfigurator().apply(railMotorConfiguration);
+    rollerMotor.getConfigurator().apply(rollerMotorConfiguration);
+
+    inputs = new ElavatorInputsAutoLogged();
+
+    railMotor.setPosition(0);
+
+    railoutput = new PositionDutyCycle(0);
+    railoutput.EnableFOC = false;
   }
 
-  public void SetClimbingMode(double height){
-    //TODO
-    // ClimbingMotor.setControl(ControlModeValue.PositionDutyCycle);
+  public void setRailMotor(double height){
+    railMotor.setControl(railoutput.withPosition(height));
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    inputs.railMotorPosition = getRailMotorPosition();
+    inputs.rollerMotorPosition = getSlidingMotorPosition();
+  }
+
+  public double getRailMotorPosition(){
+    return inputs.railMotorPosition;
+  }
+
+  public double getSlidingMotorPosition(){
+    return inputs.rollerMotorPosition;
+  }
+
+  public boolean isRailMotorInPosition(){
+    return Math.abs(inputs.railMotorPosition - inputs.railMotorTarget) < Constants.ClimbConstants.railMotorTolarance;
+  }
+
+  public boolean isRollerMotorInPosition(){
+    return Math.abs(inputs.rollerMotorPosition - inputs.rollerMotorTarget) < Constants.ClimbConstants.rollerMotorTolarance;
   }
 }

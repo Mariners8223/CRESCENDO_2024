@@ -5,6 +5,7 @@
 package frc.robot.Test;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -18,13 +19,16 @@ import frc.robot.subsystem.Arm.Arm.ArmPostion;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SmallIntake extends SequentialCommandGroup {
   /** Creates a new SmallIntake. */
-  public SmallIntake() {
+  public 
+  SmallIntake() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new MoveToFree(),
-      new MoveIntakeNumber(Arm.getInstance().getMainMotorRotation(), 0.36)
+      // new MoveIntakeNumber(Arm.getInstance().getMainMotorRotation(), 0.36)
       // new MoveIntakeNumber(-0.01, Arm.getInstance().getSecoMotorRotation())
+      new MoveIntakeNumber(false),
+      new MoveIntakeNumber(true)
     );
   }
 
@@ -47,11 +51,6 @@ public class SmallIntake extends SequentialCommandGroup {
     }
 
     @Override
-    public void execute() {
-      arm.moveShooterToPose(target);
-    }
-
-    @Override
     public void end(boolean interrupted){
       System.out.println("command ended");
     }
@@ -64,24 +63,19 @@ public class SmallIntake extends SequentialCommandGroup {
 
   public static class MoveIntakeNumber extends Command{
     private Arm arm;
-    private double alpha;
-    private double beta;
+    boolean mainMotor;
 
-    public MoveIntakeNumber(double alpha, double beta) {
+    public MoveIntakeNumber(boolean mainMotor) {
       arm = Arm.getInstance();
-      this.alpha = alpha;
-      this.beta = beta;
+      this.mainMotor = mainMotor;
       // Use addRequirements() here to declare subsystem dependencies.
       addRequirements(arm);
     }
 
     @Override
     public void initialize() {
-    }
-
-    @Override
-    public void execute() {
-      arm.moveIntakeToPose(alpha, beta);
+      if(mainMotor) arm.moveIntakeToPose(Constants.ArmConstants.Intake.mainIntakeAngle, Arm.getInstance().getSecoMotorRotation());
+      else arm.moveIntakeToPose(Arm.getInstance().getMainMotorRotation(), Constants.ArmConstants.Intake.secondaryIntakeAngle);
     }
 
     @Override

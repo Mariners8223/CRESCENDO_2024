@@ -196,10 +196,12 @@ public class Arm extends SubsystemBase{
   }
 
   public double getMainMotorRotation(){
+    // return mainEncoder.getPosition();
     return inputs.mainMotorPostion;
   }
 
   public double getSecoMotorRotation(){
+    // return secondaryEncoder.getPosition();
     return inputs.secondaryMotorPosition;
   }
 
@@ -225,6 +227,7 @@ public class Arm extends SubsystemBase{
     inputs.mainMotorTargetPostion = alpha;
     inputs.secondaryMotorTargetPostion = beta;
 
+
     mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kPosition);
     secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kPosition);
   }
@@ -244,6 +247,9 @@ public class Arm extends SubsystemBase{
 
     SmartDashboard.putNumber("prox", intake.getProximity());
     SmartDashboard.putNumber("main Encoder", inputs.mainMotorPostion);
+
+    SmartDashboard.putNumber("intake pos", intake.getMotorPosition());
+
     // SmartDashboard.getData("main");
     // SmartDashboard.getData("seco");
 
