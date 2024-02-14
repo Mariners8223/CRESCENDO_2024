@@ -13,8 +13,6 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystem.VisionSubSystem.Vision;
-import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
@@ -38,7 +36,6 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    Vision.getInstance().setPipelineIndex(CameraLocation.Front, (int)SmartDashboard.getNumber("id", 0.0));
   }
 
   @Override

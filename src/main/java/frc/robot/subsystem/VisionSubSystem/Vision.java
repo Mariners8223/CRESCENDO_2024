@@ -15,6 +15,7 @@ public class Vision extends SubsystemBase {
   private static Vision instance;
 
   private CameraInterface[] cameras = new CameraInterface[Constants.Vision.numberOfCameras];
+  // private List<CameraInterface> cameras = new ArrayList<>(Constants.Vision.);
   private Pose3d[] poses = new Pose3d[Constants.Vision.numberOfCameras];
   private double[] timeStamps = new double[Constants.Vision.numberOfCameras];
   private double[] latencies = new double[Constants.Vision.numberOfCameras];
@@ -24,7 +25,7 @@ public class Vision extends SubsystemBase {
    * creates a new Vision subsystem with 4 cameras
    */
   private Vision() {
-    cameras[0] = new PhotonCameraClass("camera", CameraLocation.Front, 9);
+    cameras[0] = new PhotonCameraClass("camera", CameraLocation.Front_Left, 9);
 
     for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
       poses[i] = Constants.Vision.rubbishPose;
@@ -149,7 +150,11 @@ public class Vision extends SubsystemBase {
 
   public interface CameraInterface {
     public enum CameraLocation{
-      Front, Right, Back, Left
+      Front_Left,
+      Front_Right,
+      Right,
+      Back,
+      Left
     }
 
     public enum CameraMode{
