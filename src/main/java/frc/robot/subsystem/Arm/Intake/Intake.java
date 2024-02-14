@@ -1,7 +1,6 @@
 package frc.robot.subsystem.Arm.Intake;
 
 import frc.robot.Constants;
-import frc.robot.Constants.Arm;
 
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
@@ -27,12 +26,12 @@ public class Intake {
     private IntakeInputsAutoLogged inputs;
 
     public Intake() {
-        intakeMotor = new CANSparkFlex(Arm.Intake.intakeMotorID, MotorType.kBrushless);
-        intakeMotor.setInverted(Arm.Intake.intakeMotorIsInverted);
+        intakeMotor = new CANSparkFlex(Constants.Intake.intakeMotorID, MotorType.kBrushless);
+        intakeMotor.setInverted(Constants.Intake.intakeMotorIsInverted);
 
         intakeMotor.getPIDController().setP(5);
 
-        colorSensor = new ColorSensorV3(Arm.Intake.ColorSensorPort);
+        colorSensor = new ColorSensorV3(Constants.Intake.ColorSensorPort);
 
         inputs = new IntakeInputsAutoLogged();
     }
@@ -42,7 +41,7 @@ public class Intake {
     }
 
     public boolean isGamePieceDetected(){
-        return inputs.proximity > Constants.Arm.Intake.CloseProximity;
+        return inputs.proximity > Constants.Intake.CloseProximity;
     }
 
     public double getMotorPosition(){

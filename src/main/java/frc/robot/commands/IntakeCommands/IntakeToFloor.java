@@ -65,8 +65,8 @@ public class IntakeToFloor extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
-      if(mainMotor) arm.moveMotorsToRotation(Constants.Arm.Intake.mainIntakeAngle, Arm.getInstance().getSecondaryMotorRotation());
-      else arm.moveMotorsToRotation(Arm.getInstance().getMainMotorRotation(), Constants.Arm.Intake.secondaryIntakeAngle);
+      if(mainMotor) arm.moveMotorsToRotation(Constants.Intake.mainIntakeAngle, Arm.getInstance().getSecondaryMotorRotation());
+      else arm.moveMotorsToRotation(Arm.getInstance().getMainMotorRotation(), Constants.Intake.secondaryIntakeAngle);
     }
 
     @Override

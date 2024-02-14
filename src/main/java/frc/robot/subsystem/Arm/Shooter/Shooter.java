@@ -39,8 +39,8 @@ public class Shooter {
     private ShooterInputsAutoLogged inputs;
 
     public Shooter(){
-        shooterMotor1 = configMotor(Constants.Arm.Shooter.shooterPID, Constants.Arm.Shooter.shooterMotor1ID, Constants.Arm.Shooter.shooter1Inverted);
-        shooterMotor2 = configMotor(Constants.Arm.Shooter.shooterPID, Constants.Arm.Shooter.shooterMotor2ID, Constants.Arm.Shooter.shooter2Inverted);
+        shooterMotor1 = configMotor(Constants.Shooter.shooterPID, Constants.Shooter.shooterMotor1ID, Constants.Shooter.shooter1Inverted);
+        shooterMotor2 = configMotor(Constants.Shooter.shooterPID, Constants.Shooter.shooterMotor2ID, Constants.Shooter.shooter2Inverted);
 
         inputs = new ShooterInputsAutoLogged();
     }
@@ -50,7 +50,7 @@ public class Shooter {
      * @param power power to set the shooter to (precent output)
      */
     public void setShooterPower(double power) {
-        power = MathUtil.clamp(power, -Constants.Arm.Shooter.shooterMaxPower, Constants.Arm.Shooter.shooterMaxPower);
+        power = MathUtil.clamp(power, -Constants.Shooter.shooterMaxPower, Constants.Shooter.shooterMaxPower);
 
         shooterMotor1.set(power);
         shooterMotor2.set(power);
@@ -108,11 +108,11 @@ public class Shooter {
     public void update(){
         inputs.shooterPower = shooterMotor1.getAppliedOutput();
 
-        inputs.motor1Velocity = Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor1.getEncoder().getVelocity()) * Constants.Arm.Shooter.wheelRadius
-         * Constants.Arm.Shooter.frictionPowerParameterForGPVelocity;
+        inputs.motor1Velocity = Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor1.getEncoder().getVelocity()) * Constants.Shooter.wheelRadius
+         * Constants.Shooter.frictionPowerParameterForGPVelocity;
 
-        inputs.motor2Velocity = Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor2.getEncoder().getVelocity()) * Constants.Arm.Shooter.wheelRadius
-         * Constants.Arm.Shooter.frictionPowerParameterForGPVelocity;
+        inputs.motor2Velocity = Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor2.getEncoder().getVelocity()) * Constants.Shooter.wheelRadius
+         * Constants.Shooter.frictionPowerParameterForGPVelocity;
 
         inputs.motor1RPM = shooterMotor1.getEncoder().getVelocity();
         inputs.motor2RPM = shooterMotor2.getEncoder().getVelocity();

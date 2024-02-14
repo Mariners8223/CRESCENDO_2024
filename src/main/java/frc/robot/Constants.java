@@ -78,41 +78,6 @@ public class Constants {
         public static final ArmPosition ShootingPositionSniper = new ArmPosition();
         public static final ArmPosition ShootingPositionDunker = new ArmPosition();
 
-        public static class Shooter{
-            public static final int shooterMotor1ID = 19;
-            public static final int shooterMotor2ID = 18;
-
-            public static final PIDFGains shooterPID = new PIDFGains(0.5, 0, 0); //TODO: get the real value
-
-            public static final boolean shooter1Inverted = false;
-            public static final boolean shooter2Inverted = true;
-
-            public static final double shooterMaxPower = 0.9;
-
-            public static final double wheelRadius = 0.0508;
-
-            public static final double frictionPowerParameterForGPVelocity = 1;//get from exp
-
-            public static final double ShootToAmpPower = 0.4;
-            public static final double ShootToAmpTime = 2;
-        }
-
-        public static final class Intake{
-            public static final int intakeMotorID = 17;
-            public static final boolean intakeMotorIsInverted = false;
-
-            public static final double intakeMotorSpeed = 0.8;
-
-            public static final double StallCurrent = 60;
-            public static final int MaxStallTime = 100;
-
-            public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
-            public static final int CloseProximity = 75;
-
-            public static final double secondaryIntakeAngle = 0.43;
-            public static final double mainIntakeAngle = -0.02;
-        }
-
         public static class Motors{
             public static final int mainMotorID = 15;
             public static final int secondaryMotorID = 16;
@@ -138,7 +103,42 @@ public class Constants {
             public static final double secondaryConversionFactor = 121.5;
         }
     }
-    public class Elevator{
+
+    public static class Shooter{
+        public static final int shooterMotor1ID = 19;
+        public static final int shooterMotor2ID = 18;
+
+        public static final PIDFGains shooterPID = new PIDFGains(0.5, 0, 0); //TODO: get the real value
+
+        public static final boolean shooter1Inverted = false;
+        public static final boolean shooter2Inverted = true;
+
+        public static final double shooterMaxPower = 0.9;
+
+        public static final double wheelRadius = 0.0508;
+
+        public static final double frictionPowerParameterForGPVelocity = 1;//get from exp
+
+        public static final double ShootToAmpPower = 0.4;
+        public static final double ShootToAmpTime = 2;
+    }
+
+    public static final class Intake{
+        public static final int intakeMotorID = 17;
+        public static final boolean intakeMotorIsInverted = false;
+
+        public static final double intakeMotorSpeed = 0.8;
+
+        public static final double StallCurrent = 60;
+        public static final int MaxStallTime = 100;
+
+        public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
+        public static final int CloseProximity = 75;
+
+        public static final double secondaryIntakeAngle = 0.43;
+        public static final double mainIntakeAngle = -0.02;
+    }
+    public static class Elevator{
         public static final double chainHeight = 72;
 
         public static final int railMotorID = 20;
