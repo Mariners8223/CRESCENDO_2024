@@ -149,6 +149,11 @@ public class LimeLightClass implements CameraInterface{
     }
 
     @Override
+    public CameraLocation getCameraLocation(){
+      return CameraLocation.valueOf(inputs.location);
+    }
+
+    @Override
     public void setPipeLine(int pipeLineIndex) {
       if (!isModeSwitchable) return;
       LimelightHelpers.setPipelineIndex(inputs.cameraName, pipeLineIndex);

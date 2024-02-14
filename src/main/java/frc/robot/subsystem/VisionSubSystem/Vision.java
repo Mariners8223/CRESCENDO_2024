@@ -47,7 +47,11 @@ public class Vision extends SubsystemBase {
    * @return the detected pose of the robot from the specified camera
    */
   public Pose3d getPose(CameraLocation location){
-    return cameras[location.ordinal()].getPose();
+    // return cameras[location.ordinal()].getPose();
+    for (CameraInterface camera : cameras) {
+      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].getPose();
+    }
+    return Constants.Vision.rubbishPose;
   }
 
   /**
@@ -56,7 +60,11 @@ public class Vision extends SubsystemBase {
    * @return the timestamp of the specified camera
    */
   public double getTimeStamp(CameraLocation location){
-    return cameras[location.ordinal()].getTimeStamp();
+    // return cameras[location.ordinal()].getTimeStamp();
+    for (CameraInterface camera: cameras) {
+      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].getTimeStamp();
+    }
+    return 0;
   }
 
   /**
@@ -65,7 +73,11 @@ public class Vision extends SubsystemBase {
    * @return the latency of the specified camera
    */
   public double getLatency(CameraLocation location){
-    return cameras[location.ordinal()].getLatency();
+    // return cameras[location.ordinal()].getLatency();
+    for (CameraInterface camera : cameras) {
+      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].getLatency();
+    }
+    return 0;
   }
 
   /**
@@ -74,11 +86,19 @@ public class Vision extends SubsystemBase {
    * @return the translation to the target from the specified camera
    */
   public Translation2d getbestObjectToCamera(CameraLocation location){
-    return cameras[location.ordinal()].getTranslationToBestTarget();
+    // return cameras[location.ordinal()].getTranslationToBestTarget();
+    for (CameraInterface camera : cameras) {
+      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].getTranslationToBestTarget();
+    }
+    return Constants.Vision.rubbishTranslation[0];
   }
 
   public Translation2d[] getObjectsToCamera(CameraLocation location){
-    return cameras[location.ordinal()].getTranslationsToTargets();
+    // return cameras[location.ordinal()].getTranslationsToTargets();
+    for (CameraInterface camera : cameras) {
+      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].getTranslationsToTargets();
+    }
+    return Constants.Vision.rubbishTranslation;
   }
 
   /**
@@ -87,7 +107,10 @@ public class Vision extends SubsystemBase {
    * @return if the specified camera has a target
    */
   public boolean hasTarget(CameraLocation location){
-    return cameras[location.ordinal()].hasTarget();
+    for (CameraInterface camera : cameras) {
+      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].hasTarget();
+    }
+    return false;
   }
 
   /**
@@ -123,7 +146,9 @@ public class Vision extends SubsystemBase {
   }
 
   public void setPipelineIndex(CameraLocation location, int index){
-    cameras[location.ordinal()].setPipeLine(index);
+    for (CameraInterface camera : cameras) {
+      if(camera.getCameraLocation() == location) cameras[location.ordinal()].setPipeLine(index);
+    }
   }
 
   /**
@@ -213,6 +238,12 @@ public class Vision extends SubsystemBase {
      * @return the pose confidence of the camera
      */
     public double getPoseAmbiguty();
+
+    /**
+     * return the physical location of the camera
+     * @return the physical location of the camera
+     */
+    public CameraLocation getCameraLocation();
 
     /**
      * returns the servo angle of the camera (may be 0 if there is no servo)

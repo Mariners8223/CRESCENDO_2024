@@ -172,6 +172,11 @@ public class PhotonCameraClass implements CameraInterface{
     }
 
     @Override
+    public CameraLocation getCameraLocation(){
+      return CameraLocation.valueOf(inputs.location);
+    }
+
+    @Override
     public double getLatency() {
       return inputs.latency;
     }
