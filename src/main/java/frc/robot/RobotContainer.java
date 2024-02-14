@@ -53,9 +53,10 @@ public class RobotContainer {
     driveBase = new DriveBase();
     arm = Arm.getInstance();
 
-    configureBindings();
-    configChooser();
-    configureNamedCommands();
+    // configureBindings();
+    // configChooser();
+    // configureNamedCommands();
+    autoChooser = new SendableChooser<Command>();
 
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> Logger.recordOutput("allince", DriverStation.getAlliance().get().toString())));
   }

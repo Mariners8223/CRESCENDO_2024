@@ -9,13 +9,17 @@ import java.util.List;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
-import frc.robot.subsystem.Arm.climb.ElavatorInputsAutoLogged;
 import frc.util.PIDFGains;
 
 /** Add yo
@@ -36,6 +40,29 @@ public class Constants {
     public static final class Controllers{
         public static final double joyStickDeadBand = 0.05;
         public static final double triggerDeadBand = 0.1;
+    }
+
+    public static final class Vision{
+
+        public static final Translation2d[] rubbishTranslation = {new Translation2d(-20, -20)};
+        public static final Pose3d rubbishPose = new Pose3d(new Pose2d(rubbishTranslation[0], new Rotation2d(69)));
+
+        public static final int numberOfCameras = 1;
+
+            public static final Transform3d[][] cameraLocations = Constants.createCameraTransforms();
+
+            public static final double gamePieceHeight = 0.05; //the height of the game piece in meters
+
+        public static final class PhotonVision{
+            public static final String rightCameraName = "Right Camera"; //the name of the right camera
+            public static final String leftCameraName = "Left Camera"; //the name of the left camera
+
+        }
+
+        public static final class LimeLight{
+            public static final String frontCameraName = "Front Camera"; //the name of the front camera
+            public static final String backCameraName = "Back Camera"; //the name of the back camera
+        }
     }
 
     public static final class Speaker{
@@ -233,11 +260,6 @@ public class Constants {
             public static final PIDFGains XYPID = new PIDFGains(5, 0.0, 1); //the pid gains for the pid controller of the robot's postion (xy)
         }
 
-        public static final class Vision{
-            public static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(3));
-            public static final Vector<N3> visionStdDevs = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(50));
-        }
-
         public static class SwerveModule{
             public static Translation2d[] moduleTranslations = new Translation2d[]
                 {new Translation2d(Global.distanceBetweenWheels / 2, Global.distanceBetweenWheels / 2), new Translation2d(Global.distanceBetweenWheels / 2, -Global.distanceBetweenWheels / 2),
@@ -286,6 +308,90 @@ public class Constants {
         public static final SwerveModule back_right = new SwerveModule(ModuleName.Back_Right, 8, 9, 13, Steer.back_right_absoluteEncoderZeroOffset, false, false);
         //^the constants of the back right module
         
+    }
+
+
+    private static Transform3d[][] createCameraTransforms(){
+        return new Transform3d[][]{
+                {new Transform3d( //camera 1 aprilTag postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+
+                new Transform3d( //camera 1 ring postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0
+                )
+                )},
+
+                {
+                new Transform3d( //camera 2 aprilTag postion
+                0,
+                0,0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+                
+                new Transform3d( //camera 2 ring postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0))
+                },
+                
+                {
+                new Transform3d( //camera 3 aprilTag postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+            
+                new Transform3d( //camera 3 ring postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0)
+                )
+                },
+
+                {
+                new Transform3d( //camera 4 aprilTag postion
+                0,
+                0,0,
+                new Rotation3d(
+                0,
+                0,
+                0)),
+
+                new Transform3d( //camera 4 ring postion
+                0,
+                0,
+                0,
+                new Rotation3d(
+                0,
+                0,
+                0))
+            }
+            };
     }
 
     

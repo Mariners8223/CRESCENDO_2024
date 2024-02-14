@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.util.LocalADStarAK;
 
@@ -29,6 +30,7 @@ public class Robot extends LoggedRobot {
     Logger.start();
 
     new RobotContainer();
+    SmartDashboard.putNumber("id", 0.0);
   }
 
   @Override
