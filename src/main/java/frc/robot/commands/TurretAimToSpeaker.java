@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -28,8 +29,11 @@ public class TurretAimToSpeaker extends InstantCommand {
      - Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation);//this is the y axis of the wanted point
     YaxisOfTargetInSpeaker = YaxisOfTargetInSpeaker - RobotContainer.driveBase.getPose().getY();//distance between robot and speaker on y axis
     
-    WantedDegree = 180 - Math.atan(YaxisOfTargetInSpeaker/(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX()));
-    SpeedOffset = RobotContainer.arm.getShooter().getTrueGamePieceVelocityAngle_RobotRelative_ArialView();
+    WantedDegree = Units.degreesToRadians(180) - Math.atan(YaxisOfTargetInSpeaker/(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX()));
+    SpeedOffset = Math.atan((RobotContainer.driveBase.getChassisSpeeds().vyMetersPerSecond +
+    RobotContainer.driveBase.getChassisSpeeds().omegaRadiansPerSecond * RobotContainer.arm.getIntakePosition().x)
+    /(RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond
+    + RobotContainer.arm.getShooter().getShooterVelocity()*Math.cos(RobotContainer.arm.getShooter().getTrueGamePieceVelocityAngle_RobotRelative_ArialView())));//not very accurate
     RobotContainer.driveBase.setTarGetRotation(Rotation2d.fromDegrees(WantedDegree + SpeedOffset));
   }
 }

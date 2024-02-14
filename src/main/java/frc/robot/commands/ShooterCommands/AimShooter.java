@@ -16,7 +16,7 @@ import frc.robot.subsystem.Arm.Shooter.Shooter;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AimShooter extends InstantCommand {
   private static Arm arm;
-  private static ArmPostion target = new ArmPostion(0.4, 0.4, 0);
+  private static ArmPostion target;
   private static double StartSpeed;
   private static double Dy;//y axis of targeted point (to calc the distance from speaker)
   private static double Dx;//airial distance to speaker
