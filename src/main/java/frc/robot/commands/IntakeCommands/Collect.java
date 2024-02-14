@@ -10,11 +10,9 @@ public class Collect extends Command{
   private Intake intake;
   private int timer;
   private boolean wasGamePieceDetected;
-  private boolean trigger;
 
   public Collect(){
     intake = Arm.getInstance().getIntakeSub();
-    timer = 0;
 
     addRequirements(Arm.getInstance());
   }
@@ -22,7 +20,7 @@ public class Collect extends Command{
   @Override
   public void initialize(){
     wasGamePieceDetected = intake.isGamePieceDetected();
-    trigger = false;
+    timer = 0;
 
     if(!wasGamePieceDetected) intake.setMotor(Constants.Intake.intakeMotorSpeed);
     else intake.setMotor(-Constants.Intake.intakeMotorSpeed);
@@ -32,13 +30,8 @@ public class Collect extends Command{
   @Override
   public void execute(){
     // Check if Motors are in stall for too much time
-    if (intake.getCurrent() > Constants.Intake.StallCurrent){
-      trigger = true;
-    }
-    
-    if(trigger){
-      timer++;
-    }
+    if (intake.getCurrent() > Constants.Intake.StallCurrent) timer ++;
+    else timer = 0;
   }
 
   @Override
@@ -52,19 +45,16 @@ public class Collect extends Command{
       intake.setPosition(intake.getMotorPosition());
     }
 
-    // if (timer >= Constants.Intake.MaxStallTime){
-    //     intake.setMotor(-0.3);
-    //     Timer.delay(2);
-    //     intake.stopMotor();
-    // }
-    // // intake.setPosition(intake.getMotorPosition());
+    if (timer >= Constants.Intake.MaxStallTime){
+        intake.setMotor(-0.3);
+        Timer.delay(2);
+        intake.stopMotor();
+    }
   }
 
   @Override
   public boolean isFinished(){
-    if(!wasGamePieceDetected) return intake.getProximity() > Constants.Intake.CloseProximity;// || timer >= Constants.Intake.MaxStallTime;
-    else return intake.getProximity() < Constants.Intake.CloseProximity;// || timer >= Constants.Intake.MaxStallTime;
-    // if(!wasGamePieceDetected) return timer >= Constants.Intake.MaxStallTime;
-    // else return timer >= Constants.Intake.MaxStallTime;
+    if(!wasGamePieceDetected) return intake.getProximity() > Constants.Intake.CloseProximity || timer >= Constants.Intake.MaxStallTime;
+    else return intake.getProximity() < Constants.Intake.CloseProximity || timer >= Constants.Intake.MaxStallTime;
   }
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 
 public class Vision extends SubsystemBase {
@@ -25,7 +26,9 @@ public class Vision extends SubsystemBase {
    * creates a new Vision subsystem with 4 cameras
    */
   private Vision() {
-    cameras[0] = new PhotonCameraClass("camera", CameraLocation.Front_Left, 9);
+    cameras[0] = new PhotonCameraClass("camera1", CameraLocation.Back, 9);
+    cameras[1] = new LimeLightClass("limelight", CameraLocation.Front_Right);
+    cameras[2] = new PhotonCameraClass("camera2", CameraLocation.Front_Left);
 
     for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
       poses[i] = Constants.Vision.rubbishPose;
@@ -167,7 +170,9 @@ public class Vision extends SubsystemBase {
       timeStamps[i] = cameras[i].getTimeStamp();
       latencies[i] = cameras[i].getLatency();
       objectsToRobot[i] = cameras[i].getTranslationsToTargets();
-    }
+
+      if(poses[i] != Constants.Vision.rubbishPose) RobotContainer.driveBase.addVisionMesrument(poses[i].toPose2d(), timeStamps[i]);
+    }    
   }
 
 
