@@ -20,6 +20,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Climb.ClimbSequence;
+import frc.robot.commands.IntakeCommands.Collect;
+import frc.robot.commands.IntakeCommands.IntakeToFloor;
+import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 
@@ -60,12 +63,11 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Main Motor", true);
     SmartDashboard.putBoolean("Quasistatic", true);
 
-    // driveController.cross().onTrue(new SmallIntake());
+    driveController.square().onTrue(new IntakeToFloor());
     // driveController.triangle().onTrue(new MoveToHome());
 
-    // driveController.square().onTrue(new Collect());
-
-    driveController.cross().onTrue(new ClimbSequence());
+    driveController.cross().onTrue(new Collect());
+    driveController.circle().onTrue(new ShootToAmp());
   }
 
   private void configChooser(){
@@ -74,10 +76,6 @@ public class RobotContainer {
     autoChooser.addOption("Do Nothing", new InstantCommand());
     autoChooser.addOption("auto path", new InstantCommand(() -> driveBase.followPath(PathPlannerPath.fromPathFile("Dedi4")).schedule()));
     SmartDashboard.putData(autoChooser);
-  }
-
-  public static class IntakeToFloor extends InstantCommand{
-    
   }
 
   private void configureNamedCommands(){

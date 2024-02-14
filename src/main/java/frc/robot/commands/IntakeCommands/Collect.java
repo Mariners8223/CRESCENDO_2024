@@ -10,52 +10,61 @@ public class Collect extends Command{
   private Intake intake;
   private int timer;
   private boolean wasGamePieceDetected;
+  private boolean trigger;
 
   public Collect(){
     intake = Arm.getInstance().getIntakeSub();
     timer = 0;
+
+    addRequirements(Arm.getInstance());
   }
 
   @Override
   public void initialize(){
     wasGamePieceDetected = intake.isGamePieceDetected();
+    trigger = false;
 
     if(!wasGamePieceDetected) intake.setMotor(Constants.Intake.intakeMotorSpeed);
     else intake.setMotor(-Constants.Intake.intakeMotorSpeed);
+    Timer.delay(0.15);
   }
 
   @Override
   public void execute(){
     // Check if Motors are in stall for too much time
     if (intake.getCurrent() > Constants.Intake.StallCurrent){
-      timer++;
+      trigger = true;
     }
-    else{
-        timer = 0;
+    
+    if(trigger){
+      timer++;
     }
   }
 
   @Override
   public void end(boolean interrupted){
-    if(wasGamePieceDetected){
-      intake.setMotor(-1);
-      Timer.delay(0.05);
-      intake.stopMotor();
-    }
-    else {
-      intake.setPosition(intake.getMotorPosition());
-    }
+    // if(wasGamePieceDetected){
+    //   intake.setMotor(-1);
+    //   Timer.delay(0.05);
+    //   intake.stopMotor();
+    // }
+    // else {
+    //   intake.setPosition(intake.getMotorPosition());
+    // }
 
-    if (timer >= Constants.Intake.MaxStallTime){
-        intake.setMotor(-0.3);
-        Timer.delay(2);
-        intake.stopMotor();
-    }
+    // if (timer >= Constants.Intake.MaxStallTime){
+    //     intake.setMotor(-0.3);
+    //     Timer.delay(2);
+    //     intake.stopMotor();
+    // }
+    intake.setPosition(intake.getMotorPosition());
   }
 
   @Override
   public boolean isFinished(){
-    if(!wasGamePieceDetected) return intake.getProximity() > Constants.Intake.CloseProximity || timer >= Constants.Intake.MaxStallTime;
-    else return intake.getProximity() < Constants.Intake.CloseProximity || timer >= Constants.Intake.MaxStallTime;
+    // if(!wasGamePieceDetected) return intake.getProximity() > Constants.Intake.CloseProximity || timer >= Constants.Intake.MaxStallTime;
+    // else return intake.getProximity() < Constants.Intake.CloseProximity || timer >= Constants.Intake.MaxStallTime;
+    if(!wasGamePieceDetected) return timer >= Constants.Intake.MaxStallTime;
+    else return timer >= Constants.Intake.MaxStallTime;
   }
 }

@@ -20,7 +20,7 @@ public class MoveToHome extends SequentialCommandGroup {
     );
   }
 
-  public static class MoveToHome1 extends Command{
+  private static class MoveToHome1 extends Command{
     Arm arm;
     private static ArmPosition target = Constants.Arm.freeMovementPosition.copyArmPostion();
     /** Creates a new MoveToHome. */
@@ -49,7 +49,7 @@ public class MoveToHome extends SequentialCommandGroup {
     }
   }
 
-  public static class MoveToHome2 extends Command{
+  private static class MoveToHome2 extends Command{
     Arm arm;
     public MoveToHome2(){
       arm = Arm.getInstance();

@@ -5,13 +5,13 @@
 package frc.robot.subsystem.Arm.climb;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import frc.robot.Constants;
-import frc.robot.Constants.Logger;
 import frc.util.PIDFGains;
 
 public class Elavator {
@@ -101,6 +101,10 @@ public class Elavator {
     motor.getConfigurator().apply(config);
 
     motor.optimizeBusUtilization();
+
+    motor.getVelocity().setUpdateFrequency(50);
+    motor.getStatorCurrent().setUpdateFrequency(50);
+    motor.getPosition().setUpdateFrequency(50);
 
     return motor;
   }

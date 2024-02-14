@@ -31,11 +31,6 @@ public class Constants {
 
     public static final class Logger{
         public static final String save_location = ""; //add save lcoation (probably a usb stick so /u)
-
-        public static void processInputs(String string, ElavatorInputsAutoLogged inputs) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'processInputs'");
-        }
     }
 
     public static final class Controllers{
@@ -88,12 +83,12 @@ public class Constants {
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = true;
 
-            public static final double mainZeroOffset = 0.975;
+            public static final double mainZeroOffset = 0.997;
             public static final double secondaryZeroOffset = 0.033;
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 
-            public static final double[] mainSoftLimits = new double[]{0.28, -0.02};
+            public static final double[] mainSoftLimits = new double[]{0.35, -0.04};
             public static final double[] secondarySoftLimits = new double[]{0.5, 0.01};
 
             public static final double[] mainMaxOutputs = new double[]{0.15, -0.05};
@@ -129,15 +124,16 @@ public class Constants {
 
         public static final double intakeMotorSpeed = 0.8;
 
-        public static final double StallCurrent = 60;
-        public static final int MaxStallTime = 100;
+        public static final double StallCurrent = 15;
+        public static final int MaxStallTime = 20;
 
         public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
         public static final int CloseProximity = 75;
 
         public static final double secondaryIntakeAngle = 0.43;
-        public static final double mainIntakeAngle = -0.02;
+        public static final double mainIntakeAngle = -0.04;
     }
+
     public static class Elevator{
         public static final double chainHeight = 72;
 

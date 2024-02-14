@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.subsystem.Arm.*;
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
 
@@ -21,35 +22,6 @@ public class IntakeToFloor extends SequentialCommandGroup {
       new MoveIntakeNumber(false),
       new MoveIntakeNumber(true)
     );
-  }
-
-  public static class MoveToFree extends Command {
-    private Arm arm;
-    private ArmPosition target;
-
-
-    public MoveToFree() {
-      arm = Arm.getInstance();
-      // Use addRequirements() here to declare subsystem dependencies.
-      target = Constants.Arm.freeMovementPosition.copyArmPostion();
-      addRequirements(arm);
-    }
-
-    @Override
-    public void initialize() {
-      target.rotation = arm.getShooterPosition().rotation - Units.rotationsToRadians(arm.getMainMotorRotation()) + Units.rotationsToRadians(0.14);
-      arm.moveShooterToPose(target);
-    }
-
-    @Override
-    public void end(boolean interrupted){
-      System.out.println("command ended");
-    }
-
-    @Override
-    public boolean isFinished() {
-      return arm.isArmInPosition();
-    }
   }
 
   public static class MoveIntakeNumber extends Command{
