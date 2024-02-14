@@ -61,7 +61,11 @@ public class AimShooter extends InstantCommand {
     }
   }
   public double RobotSpeedRelative_angle(){
-    return (StartSpeed*Math.sin(angle))/(StartSpeed*Math.cos(angle) + RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond);
+    try {
+      return (StartSpeed*Math.sin(angle))/(StartSpeed*Math.cos(angle) + RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond);
+    } catch (Exception e) {
+      return angle;
+    }
   }
 
   // Called when the command is initially scheduled.

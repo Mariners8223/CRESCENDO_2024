@@ -31,7 +31,14 @@ public class AimQuikShoot extends InstantCommand {
     distanceToSpeaker = Math.hypot(Constants.ArmConstants.SpeakerBottomLocationY
      + Constants.ArmConstants.SpeakerLength - Constants.ArmConstants.SpeakerIsCenterRatio * (RobotContainer.driveBase.getPose().getTranslation().getY()
       - Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation), RobotContainer.driveBase.getPose().getX() + arm.getShooterPosition().x - Constants.SpeakerTranslation.getX());
+    
     angle = Math.atan((Constants.SpeakerTranslation.getZ() - arm.getShooterPosition().y)/distanceToSpeaker);
+    try {
+      target.rotation = Math.atan((RobotContainer.arm.getShooter().getShooterVelocity()*Math.sin(angle))
+    /(RobotContainer.arm.getShooter().getShooterVelocity()*Math.cos(angle) + RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond));
+    } catch (Exception e) {
+      target.rotation = angle;
+    }
     target.rotation = Math.atan((RobotContainer.arm.getShooter().getShooterVelocity()*Math.sin(angle))
     /(RobotContainer.arm.getShooter().getShooterVelocity()*Math.cos(angle) + RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond));
     //TODO: check if the angle needs to be reverted bcz the shooter needs to shoot backwards - from the collection position

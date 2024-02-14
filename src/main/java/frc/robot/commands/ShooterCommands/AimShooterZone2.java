@@ -58,8 +58,12 @@ public class AimShooterZone2 extends InstantCommand {
     StartSpeed = Arm.getInstance().getShooter().getShooterVelocity();
 
     angle = Equation();
-    target.rotation = Math.atan((StartSpeed*Math.sin(angle))
+    try {
+      target.rotation = Math.atan((StartSpeed*Math.sin(angle))
     /(StartSpeed*Math.cos(angle) + RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond));
+    } catch (Exception e) {
+      target.rotation = angle;
+    }
     Arm.getInstance().moveShooterToPose(target);
 
   }
