@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Intake.Intake;
-import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants;
 
 public class Collect extends Command{
   private Intake intake;
@@ -20,14 +20,14 @@ public class Collect extends Command{
   public void initialize(){
     wasGamePieceDetected = intake.isGamePieceDetected();
 
-    if(!wasGamePieceDetected) intake.setMotor(ArmConstants.Intake.intakeMotorSpeed);
-    else intake.setMotor(-ArmConstants.Intake.intakeMotorSpeed);
+    if(!wasGamePieceDetected) intake.setMotor(Constants.Arm.Intake.intakeMotorSpeed);
+    else intake.setMotor(-Constants.Arm.Intake.intakeMotorSpeed);
   }
 
   @Override
   public void execute(){
     // Check if Motors are in stall for too much time
-    if (intake.getCurrent() > ArmConstants.Intake.StallCurrent){
+    if (intake.getCurrent() > Constants.Arm.Intake.StallCurrent){
       timer++;
     }
     else{
@@ -43,10 +43,10 @@ public class Collect extends Command{
       intake.stopMotor();
     }
     else {
-      intake.keepPosition(intake.getMotorPosition());
+      intake.setPosition(intake.getMotorPosition());
     }
 
-    if (timer >= ArmConstants.Intake.MaxStallTime){
+    if (timer >= Constants.Arm.Intake.MaxStallTime){
         intake.setMotor(-0.3);
         Timer.delay(2);
         intake.stopMotor();
@@ -55,7 +55,7 @@ public class Collect extends Command{
 
   @Override
   public boolean isFinished(){
-    if(!wasGamePieceDetected) return intake.getProximity() > ArmConstants.Intake.CloseProximity || timer >= ArmConstants.Intake.MaxStallTime;
-    else return intake.getProximity() < ArmConstants.Intake.CloseProximity || timer >= ArmConstants.Intake.MaxStallTime;
+    if(!wasGamePieceDetected) return intake.getProximity() > Constants.Arm.Intake.CloseProximity || timer >= Constants.Arm.Intake.MaxStallTime;
+    else return intake.getProximity() < Constants.Arm.Intake.CloseProximity || timer >= Constants.Arm.Intake.MaxStallTime;
   }
 }

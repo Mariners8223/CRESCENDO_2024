@@ -2,14 +2,14 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Test;
+package frc.robot.commands.armCommands;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystem.Arm.Arm;
-import frc.robot.subsystem.Arm.Arm.ArmPostion;
+import frc.robot.subsystem.Arm.Arm.ArmPosition;
 
 public class MoveToHome extends SequentialCommandGroup {
 
@@ -22,7 +22,7 @@ public class MoveToHome extends SequentialCommandGroup {
 
   public static class MoveToHome1 extends Command{
     Arm arm;
-    private static ArmPostion target = Constants.ArmConstants.freeMovementPosition.copyArmPostion();
+    private static ArmPosition target = Constants.Arm.freeMovementPosition.copyArmPostion();
     /** Creates a new MoveToHome. */
     public MoveToHome1() {
       arm = Arm.getInstance();
@@ -59,7 +59,7 @@ public class MoveToHome extends SequentialCommandGroup {
 
     @Override
     public void initialize(){
-      arm.moveIntakeToPose(arm.getMainMotorRotation(), 0.09);
+      arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.09);
     }
 
     @Override

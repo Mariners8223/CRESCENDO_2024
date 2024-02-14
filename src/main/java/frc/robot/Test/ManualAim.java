@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
-import frc.robot.subsystem.Arm.Arm.ArmPostion;
+import frc.robot.subsystem.Arm.Arm.ArmPosition;
 
 public class ManualAim extends Command {
   CommandPS5Controller controller;
   Arm arm;
 
-  ArmPostion target = new ArmPostion();
+  ArmPosition target = new ArmPosition();
   /** Creates a new ManualAim. */
   public ManualAim() {
     controller = RobotContainer.driveController;
@@ -25,7 +25,7 @@ public class ManualAim extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(arm);
 
-    target = Constants.ArmConstants.freeMovementPosition.copyArmPostion();
+    target = Constants.Arm.freeMovementPosition.copyArmPostion();
   }
 
   // Called when the command is initially scheduled.

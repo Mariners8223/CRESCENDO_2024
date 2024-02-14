@@ -23,10 +23,10 @@ public class TurretAimToSpeaker extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    YaxisOfTargetInSpeaker = Constants.ArmConstants.Speaker.SpeakerBottomLocationY
-    + Constants.ArmConstants.Speaker.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
+    YaxisOfTargetInSpeaker = Constants.Speaker.SpeakerBottomLocationY
+    + Constants.Speaker.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
 
-    WantedDegree = 180 - Math.atan(YaxisOfTargetInSpeaker/RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX());
+    WantedDegree = 180 - Math.atan(YaxisOfTargetInSpeaker/RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.Speaker.SpeakerTranslation.getX());
     SpeedOffset = RobotContainer.arm.getShooterSub().getTrueGamePieceVelocityAngle_RobotRelative();
     RobotContainer.driveBase.setTargetRotation(Rotation2d.fromDegrees(WantedDegree - SpeedOffset));
   }

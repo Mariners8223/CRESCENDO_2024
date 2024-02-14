@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
-import frc.robot.subsystem.Arm.Arm.ArmPostion;
+import frc.robot.subsystem.Arm.Arm.ArmPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AimShooterZone2 extends InstantCommand {
-  private static ArmPostion target = new ArmPostion(0.4, 0.4, 0);
+  private static ArmPosition target = new ArmPosition(0.4, 0.4, 0);
   private static double StartSpeed;
   private static double Dy;//y axis to calc the distance from speaker
   private static double distanceToSpeaker;
@@ -39,18 +39,18 @@ public class AimShooterZone2 extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (RobotContainer.driveBase.getPose().getTranslation().getY() < Constants.ArmConstants.Speaker.SpeakerIsCenterRatioBottomLocation) {
+    if (RobotContainer.driveBase.getPose().getTranslation().getY() < Constants.Speaker.SpeakerIsCenterRatioBottomLocation) {
       IsDeadZone = true;
-          Dy = Constants.ArmConstants.Speaker.SpeakerBottomLocationY
-     + Constants.ArmConstants.Speaker.SpeakerIsCenterRatioReverse * Constants.ArmConstants.Speaker.SpeakerIsCenterRatioBottomLocation;
+          Dy = Constants.Speaker.SpeakerBottomLocationY
+     + Constants.Speaker.SpeakerIsCenterRatioReverse * Constants.Speaker.SpeakerIsCenterRatioBottomLocation;
     }
     else{
       IsDeadZone = false;
-          Dy = Constants.ArmConstants.Speaker.SpeakerBottomLocationY
-     + Constants.ArmConstants.Speaker.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
+          Dy = Constants.Speaker.SpeakerBottomLocationY
+     + Constants.Speaker.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
     }
     
-    distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), 2) + Math.pow(Dy, 2));
+    distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.Speaker.SpeakerTranslation.getX(), 2) + Math.pow(Dy, 2));
 
     StartSpeed = Arm.getInstance().getShooterSub().getTrueXAxisVelocity_RobotRelative();
 

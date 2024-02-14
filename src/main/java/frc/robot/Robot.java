@@ -11,10 +11,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Test.ManualAim;
-import frc.robot.subsystem.Arm.Arm;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {

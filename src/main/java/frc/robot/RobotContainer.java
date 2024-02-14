@@ -17,14 +17,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Test.MoveToHome;
-import frc.robot.Test.SmallIntake;
 import frc.robot.commands.Climb.ClimbSequence;
-import frc.robot.commands.IntakeCommands.Collect;
-import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 
@@ -72,19 +67,6 @@ public class RobotContainer {
 
     driveController.cross().onTrue(new ClimbSequence());
   }
-
-  // private boolean isMainMotor(){
-  //   return SmartDashboard.getBoolean("mainMotor", true);
-  // }
-  private BooleanSupplier isMainMotor = () -> { return SmartDashboard.getBoolean("Main Motor", true);};
-  private BooleanSupplier isQuasistatic = () -> {return SmartDashboard.getBoolean("Quasistatic", true);};
-  
-  private BooleanSupplier isSecondaryMotor = () -> { return !SmartDashboard.getBoolean("Main Motor", true);};
-  private BooleanSupplier isDynamic = () -> {return !SmartDashboard.getBoolean("Quasistatic", true);};
-
-  // private boolean isQuas(){
-  //   return SmartDashboard.getBoolean("quas", true);
-  // }
 
   private void configChooser(){
     autoChooser = AutoBuilder.buildAutoChooser();

@@ -10,11 +10,11 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Logger;
+import frc.util.PIDFGains;
 
-public class Elavator extends SubsystemBase {
+public class Elavator {
   @AutoLog
   public static class ElavatorInputs{
     double railMotorPosition;
@@ -22,6 +22,12 @@ public class Elavator extends SubsystemBase {
 
     double railMotorTarget;
     double rollerMotorTarget;
+
+    boolean isRailMotorInPosition;
+    boolean isRollerMotorInPosition;
+
+    double railMotorCurrent;
+    double rollerMotorCurrent;
   }
 
   private TalonFX railMotor;
@@ -33,28 +39,8 @@ public class Elavator extends SubsystemBase {
 
   /** Creates a new Elavater. */
   public Elavator() {
-    railMotor = new TalonFX(Constants.ClimbConstants.railMotorID);
-    rollerMotor = new TalonFX(Constants.ClimbConstants.rollerMotorID);
-
-    var railMotorConfiguration = new TalonFXConfiguration();
-    var rollerMotorConfiguration = new TalonFXConfiguration();
-
-    railMotorConfiguration.Slot0.kP = Constants.ClimbConstants.railMotorPIDF.getP();
-    railMotorConfiguration.Slot0.kI = Constants.ClimbConstants.railMotorPIDF.getI();
-    railMotorConfiguration.Slot0.kD = Constants.ClimbConstants.railMotorPIDF.getD();
-    railMotorConfiguration.Slot0.kS = Constants.ClimbConstants.railMotorPIDF.getF();
-
-    railMotorConfiguration.Feedback.SensorToMechanismRatio = Constants.ClimbConstants.railMotorConvertionFactor;
-
-    railMotorConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-    rollerMotorConfiguration.Slot0.kP = Constants.ClimbConstants.rollerMotorPIDF.getP();
-    rollerMotorConfiguration.Slot0.kI = Constants.ClimbConstants.rollerMotorPIDF.getI();
-    rollerMotorConfiguration.Slot0.kD = Constants.ClimbConstants.rollerMotorPIDF.getD();
-    rollerMotorConfiguration.Slot0.kS = Constants.ClimbConstants.rollerMotorPIDF.getF();
-
-    railMotor.getConfigurator().apply(railMotorConfiguration);
-    rollerMotor.getConfigurator().apply(rollerMotorConfiguration);
+    railMotor = configMotor(Constants.Elevator.railMotorID, Constants.Elevator.isRailMotorInverted, Constants.Elevator.railMotorPIDF, Constants.Elevator.railMotorConvertionFactor);
+    rollerMotor = configMotor(Constants.Elevator.rollerMotorID, Constants.Elevator.isRollerMotorInverted, Constants.Elevator.rollerMotorPIDF, Constants.Elevator.rollerMotorConvertionFactor);
 
     inputs = new ElavatorInputsAutoLogged();
 
@@ -65,13 +51,8 @@ public class Elavator extends SubsystemBase {
   }
 
   public void setRailMotor(double height){
-    railMotor.setControl(railoutput.withPosition(height));
-  }
-
-  @Override
-  public void periodic() {
-    inputs.railMotorPosition = getRailMotorPosition();
-    inputs.rollerMotorPosition = getSlidingMotorPosition();
+    inputs.railMotorTarget = height;
+    railMotor.setControl(railoutput.withPosition(inputs.railMotorTarget));
   }
 
   public double getRailMotorPosition(){
@@ -83,10 +64,44 @@ public class Elavator extends SubsystemBase {
   }
 
   public boolean isRailMotorInPosition(){
-    return Math.abs(inputs.railMotorPosition - inputs.railMotorTarget) < Constants.ClimbConstants.railMotorTolarance;
+    return Math.abs(inputs.railMotorPosition - inputs.railMotorTarget) < Constants.Elevator.railMotorTolarance;
   }
 
   public boolean isRollerMotorInPosition(){
-    return Math.abs(inputs.rollerMotorPosition - inputs.rollerMotorTarget) < Constants.ClimbConstants.rollerMotorTolarance;
+    return Math.abs(inputs.rollerMotorPosition - inputs.rollerMotorTarget) < Constants.Elevator.rollerMotorTolarance;
+  }
+
+  public void update(){
+    inputs.railMotorPosition = railMotor.getPosition().getValueAsDouble();
+    inputs.rollerMotorPosition = rollerMotor.getPosition().getValueAsDouble();
+
+    inputs.isRailMotorInPosition = isRailMotorInPosition();
+    inputs.isRollerMotorInPosition = isRollerMotorInPosition();
+
+    inputs.railMotorCurrent = railMotor.getStatorCurrent().getValueAsDouble();
+    inputs.rollerMotorCurrent = rollerMotor.getStatorCurrent().getValueAsDouble();
+
+    Logger.processInputs("elavator", inputs);
+  }
+
+  private TalonFX configMotor(int motorID, boolean isInverted, PIDFGains pidGains, double convertionFactor){
+    TalonFX motor = new TalonFX(motorID);
+
+    TalonFXConfiguration config = new TalonFXConfiguration();
+
+    config.Slot0.kP = pidGains.getP();
+    config.Slot0.kI = pidGains.getI();
+    config.Slot0.kD = pidGains.getD();
+    config.Slot0.kS = pidGains.getF();
+
+    config.Feedback.SensorToMechanismRatio = convertionFactor;
+
+    config.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+
+    motor.getConfigurator().apply(config);
+
+    motor.optimizeBusUtilization();
+
+    return motor;
   }
 }

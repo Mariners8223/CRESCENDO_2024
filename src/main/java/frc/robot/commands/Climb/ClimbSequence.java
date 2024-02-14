@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
-import frc.robot.Test.MoveToHome;
+import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.climb.Elavator;
 
@@ -39,7 +39,7 @@ public class ClimbSequence extends SequentialCommandGroup {
 
     @Override
     public void initialize(){
-      arm.moveIntakeToPose(0.25, 0.5);
+      arm.moveMotorsToRotation(0.25, 0.5);
     }
 
     @Override
@@ -61,8 +61,8 @@ public class ClimbSequence extends SequentialCommandGroup {
 
     @Override
     public void initialize(){
-      if(goingUp) elavator.setRailMotor(Constants.ClimbConstants.chainHeight - (Constants.ArmConstants.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround) * 100 + 8);
-      else elavator.setRailMotor(Constants.ClimbConstants.chainHeight - (Constants.ArmConstants.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround) * 100 - 15);
+      if(goingUp) elavator.setRailMotor(Constants.Elevator.chainHeight - (Constants.Arm.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround) * 100 + 8);
+      else elavator.setRailMotor(Constants.Elevator.chainHeight - (Constants.Arm.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround) * 100 - 15);
     }
 
     @Override 

@@ -5,8 +5,7 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Constants.ArmConstants;
-import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.*;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

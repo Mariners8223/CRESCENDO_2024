@@ -28,7 +28,7 @@ public class AmpShootGamePiece extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterPower(Constants.ArmConstants.Shooter.ShootToAmpPower);
+    shooter.setShooterPower(Constants.Arm.Shooter.ShootToAmpPower);
     startTime = Timer.getFPGATimestamp();
   }
 
@@ -45,6 +45,6 @@ public class AmpShootGamePiece extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Timer.getFPGATimestamp() - startTime >= Constants.ArmConstants.Shooter.ShootToAmpTime);
+    return (Timer.getFPGATimestamp() - startTime >= Constants.Arm.Shooter.ShootToAmpTime);
   }
 }
