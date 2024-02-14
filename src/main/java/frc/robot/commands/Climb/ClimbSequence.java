@@ -22,9 +22,9 @@ public class ClimbSequence extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new MoveToFree(),
-      new Climb1(),
-      new Climb2(true),
-      new Climb2(false)
+      new Climb1()
+      // new Climb2(true)
+      // new Climb2(false)
     );
   }
 

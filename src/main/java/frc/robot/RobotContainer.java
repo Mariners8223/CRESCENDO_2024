@@ -19,9 +19,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Test.TestShoot;
 import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
+import frc.robot.commands.ShooterCommands.Shoot;
+import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
@@ -63,11 +66,13 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Main Motor", true);
     SmartDashboard.putBoolean("Quasistatic", true);
 
-    driveController.square().onTrue(new IntakeToFloor());
-    // driveController.triangle().onTrue(new MoveToHome());
+    // driveController.square().onTrue(new IntakeToFloor());
+    // driveController.triangle().whileTrue(new TestShoot()).onFalse(new MoveToHome());
 
-    driveController.cross().onTrue(new Collect());
-    driveController.circle().onTrue(new ShootToAmp());
+    // driveController.cross().onTrue(new Collect());
+    // driveController.circle().onTrue(new Shoot());
+
+    driveController.cross().onTrue(new ClimbSequence());
   }
 
   private void configChooser(){

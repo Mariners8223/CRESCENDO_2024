@@ -43,28 +43,28 @@ public class Collect extends Command{
 
   @Override
   public void end(boolean interrupted){
-    // if(wasGamePieceDetected){
-    //   intake.setMotor(-1);
-    //   Timer.delay(0.05);
-    //   intake.stopMotor();
-    // }
-    // else {
-    //   intake.setPosition(intake.getMotorPosition());
-    // }
+    if(wasGamePieceDetected){
+      intake.setMotor(-1);
+      Timer.delay(0.05);
+      intake.stopMotor();
+    }
+    else {
+      intake.setPosition(intake.getMotorPosition());
+    }
 
     // if (timer >= Constants.Intake.MaxStallTime){
     //     intake.setMotor(-0.3);
     //     Timer.delay(2);
     //     intake.stopMotor();
     // }
-    intake.setPosition(intake.getMotorPosition());
+    // // intake.setPosition(intake.getMotorPosition());
   }
 
   @Override
   public boolean isFinished(){
-    // if(!wasGamePieceDetected) return intake.getProximity() > Constants.Intake.CloseProximity || timer >= Constants.Intake.MaxStallTime;
-    // else return intake.getProximity() < Constants.Intake.CloseProximity || timer >= Constants.Intake.MaxStallTime;
-    if(!wasGamePieceDetected) return timer >= Constants.Intake.MaxStallTime;
-    else return timer >= Constants.Intake.MaxStallTime;
+    if(!wasGamePieceDetected) return intake.getProximity() > Constants.Intake.CloseProximity;// || timer >= Constants.Intake.MaxStallTime;
+    else return intake.getProximity() < Constants.Intake.CloseProximity;// || timer >= Constants.Intake.MaxStallTime;
+    // if(!wasGamePieceDetected) return timer >= Constants.Intake.MaxStallTime;
+    // else return timer >= Constants.Intake.MaxStallTime;
   }
 }

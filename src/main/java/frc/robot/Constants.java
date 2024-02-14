@@ -51,7 +51,12 @@ public class Constants {
 
             public static final Translation3d ampTranslation = new Translation3d(3, 8, 0);
             public static final Translation3d SpeakerTranslation = new Translation3d( Units.inchesToMeters(-1.5), 5, 3);
-        }
+    }
+
+    public static final class Zone1{
+        public static final double maxAngle = 90;
+        public static final double minAngle = 60;
+    }
 
     public static final class Arm {
         public static final double armLengthMeters = 0.46;
@@ -64,7 +69,7 @@ public class Constants {
         public static final ArmPosition FloorPosition = new ArmPosition(0, 0, 0); // In radians
         public static final ArmPosition SourcePosition = new ArmPosition(0, 0, 0);
 
-        public static final ArmPosition freeMovementPosition = new ArmPosition(0, Math.sin(Units.rotationsToRadians(0.15)) * armLengthMeters, 0);
+        public static final ArmPosition freeMovementPosition = new ArmPosition(0, Math.sin(Units.rotationsToRadians(0.13)) * armLengthMeters, 0);
 
         public static final double SpeakerHeight = 2.31;//meter
 
@@ -83,7 +88,7 @@ public class Constants {
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = true;
 
-            public static final double mainZeroOffset = 0.997;
+            public static final double mainZeroOffset = 0.497;
             public static final double secondaryZeroOffset = 0.033;
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;

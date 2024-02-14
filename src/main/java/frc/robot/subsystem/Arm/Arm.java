@@ -144,6 +144,8 @@ public class Arm extends SubsystemBase{
     shooter = new Shooter();
     intake = new Intake();
     elavator = new Elavator();
+
+    SmartDashboard.putNumber("distance To Speaker", 0.1);
   }
 
   /**
@@ -202,7 +204,9 @@ public class Arm extends SubsystemBase{
   }
 
   public double getAngleToSpeaker(){
-    return 0; //TODO add calculations
+    // return SmartDashboard.getNumber("angle To Speaker", 90);
+    return Units.radiansToDegrees(Math.atan((Constants.Speaker.SpeakerTranslation.getZ() - (shooterPosition.y + Constants.Arm.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround))
+    / SmartDashboard.getNumber("distance To Speaker", 0.1)));
   }
 
   /**
