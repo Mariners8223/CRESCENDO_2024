@@ -46,9 +46,10 @@ public class ArmUtil{
     }
   
     private static void RobotSpeedRelative_angle(){//calcs the arm angle with speed relativity
-      try {//TODO: figure out why is not working
-        ArmAngle = Math.atan((StartSpeed*Math.sin(ArmAngle))/(VelocityX*Math.cos(YaxisWantedAngle)*(-1)
-         + VelocityY*Math.cos(YaxisWantedAngle - Units.degreesToRadians(90))));
+      try {
+        ArmAngle = Math.atan(-(StartSpeed*Math.sin(ArmAngle))/(StartSpeed * Math.cos(ArmAngle)
+        + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond * Math.cos(YaxisWantedAngle)
+        + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond * Math.sin(YaxisWantedAngle)));
       } catch (Exception e) {
       }
     }
@@ -74,7 +75,7 @@ public class ArmUtil{
         else{
           ZaxisTarget = Constants.Arm.Zone2_ArmPosition;        }
       }
-      // RobotSpeedRelative_angle();
+      RobotSpeedRelative_angle();
     }
   
     private static void getDy(){
