@@ -28,6 +28,8 @@ public class AccurateAllSpeakerAim extends SequentialCommandGroup {
   //chassis parameters
   private static double YaxisWantedAngle;
   private static double YaxisOffset;
+  private static double VelocityY;
+  private static double VelocityX;
 
   public void Zone1_Equasion(){//simple lazer for zone 1
     try {
@@ -50,8 +52,8 @@ public class AccurateAllSpeakerAim extends SequentialCommandGroup {
 
   public void RobotSpeedRelative_angle(){
     try {
-      angleZaxis = Math.atan((StartSpeed*Math.sin(angleZaxis))/(StartSpeed*Math.cos(angleZaxis)
-       + RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond));
+      angleZaxis = Math.atan((StartSpeed*Math.sin(angleZaxis))/(VelocityX*Math.cos(YaxisWantedAngle)*(-1)
+       + VelocityY*Math.cos(YaxisWantedAngle - Units.degreesToRadians(90))));
     } catch (Exception e) {
     }
   }
@@ -93,20 +95,27 @@ public class AccurateAllSpeakerAim extends SequentialCommandGroup {
     YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);
   }
   public void getChassisOffset(){
-    YaxisOffset = Math.atan((RobotContainer.driveBase.getChassisSpeeds().vyMetersPerSecond +
-    RobotContainer.driveBase.getChassisSpeeds().omegaRadiansPerSecond * RobotContainer.arm.getIntakePosition().x)
-    /(RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond
-    + RobotContainer.arm.getShooter().getShooterVelocity()*Math.cos(angleZaxis)));
+    YaxisOffset = Math.atan(VelocityY/VelocityX);
   }
   public double CalcYaxisAngle(){
     getChassisOffset();
-    getWantedDegree();
-    return YaxisWantedAngle - YaxisOffset;
+    return YaxisWantedAngle*2 - YaxisOffset;
+  }
+  private void CalcVelocityXy_field(){
+    VelocityY = StartSpeed*Math.cos(angleZaxis)*Math.sin(YaxisWantedAngle)
+    + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond + RobotContainer.driveBase.getAbsoluteChassisSpeeds().omegaRadiansPerSecond
+    * RobotContainer.arm.getShooterPosition().x * Math.sin(Units.degreesToRadians(-90) + YaxisWantedAngle);
+    VelocityX = StartSpeed*Math.cos(angleZaxis)*(-1)*Math.cos(YaxisWantedAngle)
+    + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond + RobotContainer.driveBase.getAbsoluteChassisSpeeds().omegaRadiansPerSecond
+    * RobotContainer.arm.getShooterPosition().x * Math.cos(Units.degreesToRadians(-90) + YaxisWantedAngle);
   }
   /** Creates a new AccurateAllSpeakerAim. */
   public AccurateAllSpeakerAim() {
+    StartSpeed = RobotContainer.arm.getShooter().getShooterVelocity();
     CalcDistance_withDxDy();
+    getWantedDegree();
     CalcAngleZaxis();
+    CalcVelocityXy_field();
     ZaxisTarget.rotation = angleZaxis;
   
     // Add your commands in the addCommands() call, e.g.
