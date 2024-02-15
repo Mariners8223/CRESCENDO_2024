@@ -122,7 +122,7 @@ public class AccurateAllSpeakerAim extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new InstantCommand(() -> RobotContainer.arm.getShooter().setShooterPower(0.8)),
     new ParallelCommandGroup(new InstantCommand(() -> RobotContainer.arm.moveShooterToPose(ZaxisTarget)),
-    new InstantCommand(() -> RobotContainer.driveBase.setTarGetRotation(Rotation2d.fromDegrees(CalcYaxisAngle()))))
+    new InstantCommand(() -> RobotContainer.driveBase.setTargetRotation(Rotation2d.fromDegrees(CalcYaxisAngle()))))
     );
   }
 }

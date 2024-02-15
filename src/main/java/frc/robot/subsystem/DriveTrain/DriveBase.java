@@ -321,7 +321,7 @@ public class DriveBase extends SubsystemBase {
     return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(), getRotation2d());
   }
   
-  public void setTarGetRotation(Rotation2d alpha){
+  public void setTargetRotation(Rotation2d alpha){
     
   }
 

@@ -34,6 +34,6 @@ public class TurretAimToSpeaker extends InstantCommand {
     RobotContainer.driveBase.getChassisSpeeds().omegaRadiansPerSecond * RobotContainer.arm.getIntakePosition().x)
     /(RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond
     + RobotContainer.arm.getShooter().getShooterVelocity()*Math.cos(RobotContainer.arm.getShooter().getTrueGamePieceVelocityAngle_RobotRelative_ArialView())));//not very accurate
-    RobotContainer.driveBase.setTarGetRotation(Rotation2d.fromDegrees(WantedDegree + SpeedOffset));
+    RobotContainer.driveBase.setTargetRotation(Rotation2d.fromDegrees(WantedDegree + SpeedOffset));
   }
 }

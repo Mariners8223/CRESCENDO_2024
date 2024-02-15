@@ -5,10 +5,8 @@
 package frc.robot.commands.sequences;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
-import frc.robot.commands.TurretAimToSpeaker;
 import frc.robot.commands.ShooterCommands.AimShooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,7 +18,6 @@ public class AimToSpeaker extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new InstantCommand(() -> RobotContainer.arm.getShooter().setShooterPower(0.8)),
-    new ParallelCommandGroup(new AimShooter(),
-    new TurretAimToSpeaker()));
+    new AimShooter());
   }
 }
