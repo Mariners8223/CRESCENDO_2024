@@ -124,7 +124,7 @@ public class Constants {
 
         public static final ArmPosition Zone1_ArmPosition = new ArmPosition();//main motor location for zone 1
         public static final ArmPosition Zone2_ArmPosition = new ArmPosition();//main motor location for zone 2
-        public static final ArmPosition QuikShotPosition = new ArmPosition();//main motor location at flor
+        public static final ArmPosition QuikShotPosition = new ArmPosition(0, 0, 0);//main motor location at flor
         public static final double EndOfZone1 = 0;//TODO: the distince from the speaker right before the lazer equasion is not relevent
 
         public static class Motors{

@@ -18,7 +18,7 @@ public class ArmUtil{
     private static double distanceToSpeaker;
     private static double ArmAngle = 45;
     public static boolean IsDeadZone;
-    public static boolean IsQuikShot;
+    public static boolean IsQuikShot = true;
     //chassis parameters
     private static double YaxisWantedAngle;
     private static double YaxisOffset;
@@ -54,7 +54,9 @@ public class ArmUtil{
     }
   
     private static void CalcAngleZaxis(){
+      // System.out.println("shit");
       if (distanceToSpeaker <= Constants.Arm.EndOfZone1) {
+        // System.out.println("1");
         Zone1_Equasion();
         if(IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
@@ -63,14 +65,16 @@ public class ArmUtil{
         else ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
       }
       else{
+        // System.out.println("2");
         Zone2_Equasion();
         if(IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
           ArmAngle = Units.degreesToRadians(180) - ArmAngle;
         }
-        else ZaxisTarget = Constants.Arm.Zone2_ArmPosition;
+        else{
+          ZaxisTarget = Constants.Arm.Zone2_ArmPosition;        }
       }
-      RobotSpeedRelative_angle();
+      // RobotSpeedRelative_angle();
     }
   
     private static void getDy(){
@@ -114,7 +118,7 @@ public class ArmUtil{
     }
 
     public static void UpdateParameters(){
-    StartSpeed = RobotContainer.arm.getShooterSub().getShooterVelocity();
+    StartSpeed = RobotContainer.arm.getShooterSub().getAvrageShooterVelocity();
     CalcDistance_withDxDy();
     getWantedDegree();
     CalcAngleZaxis();

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Climb.ClimbSequence;
+import frc.robot.commands.ShooterCommands.QuikAim;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.subsystem.Arm.Arm;
@@ -72,8 +73,10 @@ public class RobotContainer {
 
     // driveController.cross().onTrue(new Collect());
     // driveController.circle().onTrue(new Shoot());
-    driveController.cross().onTrue(new MoveToFree());
-    driveController.square().onTrue(new MoveToHome());
+    // driveController.cross().onTrue(new MoveToFree());
+    // driveController.square().onTrue(new MoveToHome());
+    // driveController.cross().onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(0.5))).onFalse(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
+    driveController.cross().whileTrue(new QuikAim());
 
     // driveController.cross().onTrue(new ClimbSequence());
     // driveController.cross().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 1)));
