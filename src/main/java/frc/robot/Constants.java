@@ -44,7 +44,7 @@ public class Constants {
         public static final Translation2d[] rubbishTranslation = {new Translation2d(-20, -20)};
         public static final Pose3d rubbishPose = new Pose3d(new Pose2d(rubbishTranslation[0], new Rotation2d(69)));
 
-        public static final int numberOfCameras = 3;
+        public static final int numberOfCameras = 2;
 
             public static final Transform3d[][] cameraLocations = Constants.createCameraTransforms();
 

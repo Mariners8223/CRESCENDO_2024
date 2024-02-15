@@ -5,9 +5,12 @@
 package frc.robot.subsystem.VisionSubSystem;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
@@ -22,6 +25,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface;
 
 /** Add your docs here. */
@@ -29,6 +33,7 @@ public class PhotonCameraClass implements CameraInterface{
     private PhotonCamera camera; //the camera
     private PhotonPoseEstimator poseEstimator; //the pose estimator
     private PhotonPipelineResult latestResult; //the latest result from the camera
+    private Optional<EstimatedRobotPose> estimatedPose;
     private CameraMode mode; //the mode the camera is in
 
     private Servo servo; //the servo to move the camera
@@ -56,7 +61,7 @@ public class PhotonCameraClass implements CameraInterface{
     }
 
 
-    public PhotonCameraClass(String cameraName, CameraLocation location, int servoPort) {
+    public PhotonCameraClass(String cameraName, CameraLocation location, int servoPort, boolean onlyRing) {
       camera = new PhotonCamera(cameraName);
       inputs = new PhotonCameraInputsAutoLogged();
 
@@ -67,7 +72,7 @@ public class PhotonCameraClass implements CameraInterface{
         poseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile),
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, Constants.Vision.cameraLocations[location.ordinal()][0]);
 
-        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT);
+        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_REFERENCE_POSE);
 
         inputs.isfieldLoaded = true;
       } catch (IOException exception) {
@@ -76,14 +81,13 @@ public class PhotonCameraClass implements CameraInterface{
 
       if(servoPort != -1){
         servo = new Servo(servoPort);
-        servo.set(0.69);
+        servo.set(0.55);
         inputs.hasServo = true;
       }
       else{
         servo = null;
         inputs.hasServo = false;
       }
-
 
       latestResult = new PhotonPipelineResult();
 
@@ -92,6 +96,8 @@ public class PhotonCameraClass implements CameraInterface{
 
       mode = CameraMode.AprilTags;
 
+      if(onlyRing) mode = CameraMode.Rings;
+
       inputs.timeStamp = 0;
       inputs.latency = 0;
       inputs.poseConfidence = 0;
@@ -99,8 +105,8 @@ public class PhotonCameraClass implements CameraInterface{
       cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
     }
 
-    public PhotonCameraClass(String cameraName, CameraLocation location){
-      this(cameraName, location, -1);
+    public PhotonCameraClass(String cameraName, CameraLocation location, boolean onlyRing){
+      this(cameraName, location, -1, onlyRing);
     }
 
     @Override
@@ -147,10 +153,18 @@ public class PhotonCameraClass implements CameraInterface{
       inputs.latency = latestResult.getLatencyMillis() * 100;
 
       if(mode == CameraMode.AprilTags && inputs.isfieldLoaded){
-        // poseEstimator.setReferencePose(RobotContainer.driveBase.getPose());
         if(latestResult.getBestTarget().getFiducialId() < 1 || latestResult.getBestTarget().getFiducialId() > 16) return;
-        inputs.estimatedPose = poseEstimator.update().get().estimatedPose;
-        inputs.poseConfidence = latestResult.getBestTarget().getPoseAmbiguity();
+
+        poseEstimator.setReferencePose(RobotContainer.driveBase.getPose());
+        estimatedPose = poseEstimator.update();
+        if(estimatedPose.isPresent()){
+          inputs.estimatedPose = estimatedPose.get().estimatedPose;
+          inputs.poseConfidence = latestResult.getBestTarget().getPoseAmbiguity();
+        }
+        else{
+          inputs.estimatedPose = Constants.Vision.rubbishPose;
+          inputs.poseConfidence = 0;
+        }
       }
       else{
         var targets = latestResult.getTargets();
@@ -196,7 +210,7 @@ public class PhotonCameraClass implements CameraInterface{
         mode = CameraMode.AprilTags;
         inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
         if(servo != null)
-          servo.set(0.6);
+          servo.set(0.55);
       }
       else{
         mode = CameraMode.Rings;
