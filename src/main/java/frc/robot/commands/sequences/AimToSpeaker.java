@@ -15,9 +15,10 @@ import frc.robot.commands.ShooterCommands.AimShooter;
 public class AimToSpeaker extends SequentialCommandGroup {
   /** Creates a new AimToSpeaker. */
   public AimToSpeaker() {
+    AimShooter Aim = new AimShooter();
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new InstantCommand(() -> RobotContainer.arm.getShooter().setShooterPower(0.8)),
-    new AimShooter());
+    Aim);
   }
 }

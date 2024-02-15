@@ -64,7 +64,7 @@ public class Elavator extends SubsystemBase {
     // double MotorRotations = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getX() - target.getX(), 2)
     //  + Math.pow(RobotContainer.driveBase.getPose().getY() - target.getY(), 2)) * Constants.ClimbConstants.MotorRotationsToAirialMeters;
     double MotorRotations = Math.hypot(RobotContainer.driveBase.getPose().getX() - target.getX(), RobotContainer.driveBase.getPose().getY() - target.getY())
-    * Constants.ClimbConstants.MotorRotationsToAirialMeters;
+    * Constants.ClimbConstants.AirialMetersToRopeLength;
 
     if (target.getY() < RobotContainer.driveBase.getPose().getY()) {
       MotorRotations = -MotorRotations;

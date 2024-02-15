@@ -169,7 +169,8 @@ public class Constants {
         public static final int ClimbingMotorID = 1;//TODO: climb motor and sliding motor IDs
         public static final int SlidingMotorID = 1;
 
-        public static final double MotorRotationsToAirialMeters = 0.0;//TODO: find ratio
+        public static final double AirialMetersToRopeLength = 2.52/2.65;
+        public static final double RopeLengthToMotorRotaions = 8/84;
 
         public static final ArmPostion CLIMBING_POSTION = new ArmPostion();//TODO: find needed arm position
         public static final PositionDutyCycle PUSH_ELAVATER_ARM_POSTION = new PositionDutyCycle(0);//TODO - up position
