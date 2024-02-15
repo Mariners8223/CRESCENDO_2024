@@ -20,15 +20,15 @@ public class QuikShoot extends SequentialCommandGroup {
   public QuikShoot() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
-      new InstantCommand(() -> RobotContainer.arm.moveIntakeToPose(
-        Constants.ArmConstants.FloorPosition, frc.robot.subsystem.Arm.Arm.ControlType.Rotation)),//move intake to collect
-      new InstantCommand(() -> RobotContainer.arm.getShooter().setShooterPower(0.8)),//start the shooting prosses
-      new ParallelCommandGroup(
-        new Collect(),
-        new InstantCommand(() -> RobotContainer.driveBase.findPath(Constants.AutoConstants.MiddleNote))),//get game piece
-      new InstantCommand(() -> RobotContainer.arm.moveShooterToPose(Constants.AutoConstants.FastShootPose)),//aim
-      new Shoot()//shoot
+    addCommands(//TODO
+      // new InstantCommand(() -> RobotContainer.arm.moveIntakeToPose(
+      //   Constants.Arm.FloorPosition, frc.robot.subsystem.Arm.Arm.ControlType.Rotation)),//move intake to collect
+      // new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(0.8)),//start the shooting prosses
+      // new ParallelCommandGroup(
+      //   new Collect(),
+      //   new InstantCommand(() -> RobotContainer.driveBase.findPath(Constants.AutoConstants.MiddleNote))),//get game piece
+      // new InstantCommand(() -> RobotContainer.arm.moveShooterToPose(Constants.AutoConstants.FastShootPose)),//aim
+      // new Shoot()//shoot
     );
   }
 }

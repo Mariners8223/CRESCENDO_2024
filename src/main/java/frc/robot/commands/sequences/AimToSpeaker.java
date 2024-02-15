@@ -18,7 +18,7 @@ public class AimToSpeaker extends SequentialCommandGroup {
     AimShooter Aim = new AimShooter();
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new InstantCommand(() -> RobotContainer.arm.getShooter().setShooterPower(0.8)),
+    addCommands(new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(0.8)),
     Aim);
   }
 }

@@ -20,6 +20,6 @@ public class ArmAmpPosition extends InstantCommand {
   @Override
   public void initialize() {
     arm = Arm.getInstance();
-    arm.moveShooterToPose(Constants.ArmConstants.AmpArmPosition);
+    arm.moveShooterToPose(Constants.Arm.AmpArmPosition);
   }
 }

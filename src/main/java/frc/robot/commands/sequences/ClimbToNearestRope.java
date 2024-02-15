@@ -23,17 +23,17 @@ public class ClimbToNearestRope extends SequentialCommandGroup {
       RobotContainer.driveBase.getPose().getTranslation().nearest(
         Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope));
     
-    addCommands(
-    new InstantCommand(() -> //go in stage and face the rope closest to you
-     RobotContainer.driveBase.findPath(Constants.Elevator.SlidingPositions.InStageMiddleLocations_POSE2D.get(index))),
-    new InstantCommand(() -> // move the arm to the climbing position
-     Arm.getInstance().moveShooterToPose(frc.robot.Constants.Elevator.CLIMBING_POSTION)),
-    new InstantCommand(() -> // move the elavator to the climbing position
-     Arm.getInstance().getElavatorSub().SetClimbingHight(frc.robot.Constants.Elevator.PUSH_ELAVATER_ARM_POSTION)),
-    new InstantCommand(() -> // move the robot to the rope
-     RobotContainer.driveBase.findPath(Constants.Elevator.SlidingPositions.UnderRopeMiddleLocations_POSE2D.get(index))),
-    new InstantCommand(() -> //pull yourself up
-    Arm.getInstance().getElavatorSub().SetClimbingHight(frc.robot.Constants.Elevator.PULL_ELAVATER_ARM_POSTION))
+    addCommands(//TODO
+    // new InstantCommand(() -> //go in stage and face the rope closest to you
+    //  RobotContainer.driveBase.findPath(Constants.Elevator.SlidingPositions.InStageMiddleLocations_POSE2D.get(index))),
+    // new InstantCommand(() -> // move the arm to the climbing position
+    //  Arm.getInstance().moveMotorsToRotation(0.25, 0.5)),
+    // new InstantCommand(() -> // move the elavator to the climbing position
+    //  Arm.getInstance().getElavatorSub().SetClimbingHight(frc.robot.Constants.Elevator.PUSH_ELAVATER_ARM_POSTION)),
+    // new InstantCommand(() -> // move the robot to the rope
+    //  RobotContainer.driveBase.findPath(Constants.Elevator.SlidingPositions.UnderRopeMiddleLocations_POSE2D.get(index))),
+    // new InstantCommand(() -> //pull yourself up
+    // Arm.getInstance().getElavatorSub().SetClimbingHight(frc.robot.Constants.Elevator.PULL_ELAVATER_ARM_POSTION))
     );
   }
 }
