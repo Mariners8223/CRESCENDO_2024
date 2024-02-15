@@ -9,11 +9,10 @@ import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
-public class Elavator extends SubsystemBase {
+public class Elavator{
   private static Elavator instance;
 
   private TalonFX ClimbingMotor;
@@ -78,8 +77,7 @@ public class Elavator extends SubsystemBase {
     SlidingMotor.setControl(new PositionDutyCycle(SlidingMotor.getPosition().getValueAsDouble()));
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public double getRollerPosition(){
+    return SlidingMotor.getPosition().getValueAsDouble();
   }
 }

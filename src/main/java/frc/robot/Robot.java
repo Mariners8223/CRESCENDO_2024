@@ -22,7 +22,7 @@ public class Robot extends LoggedRobot {
 
     if(isReal()){
       Logger.addDataReceiver(new NT4Publisher());
-      Logger.addDataReceiver(new WPILOGWriter("/U/Logs"));
+      // Logger.addDataReceiver(new WPILOGWriter("/U/Logs"));
     }
     else setUseTiming(false);
 
