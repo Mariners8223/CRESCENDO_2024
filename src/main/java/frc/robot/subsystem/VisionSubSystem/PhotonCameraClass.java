@@ -30,7 +30,6 @@ public class PhotonCameraClass implements CameraInterface{
     private PhotonPoseEstimator poseEstimator; //the pose estimator
     private PhotonPipelineResult latestResult; //the latest result from the camera
     private CameraMode mode; //the mode the camera is in
-    private boolean isModeSwitchable;
 
     private Servo servo; //the servo to move the camera
 
@@ -77,13 +76,14 @@ public class PhotonCameraClass implements CameraInterface{
 
       if(servoPort != -1){
         servo = new Servo(servoPort);
-        servo.setPosition(0);
+        servo.set(0.69);
         inputs.hasServo = true;
       }
       else{
         servo = null;
         inputs.hasServo = false;
       }
+
 
       latestResult = new PhotonPipelineResult();
 
@@ -190,13 +190,13 @@ public class PhotonCameraClass implements CameraInterface{
 
     @Override
     public void setPipeLine(int pipeLineIndex) {
-      if (!isModeSwitchable) return;
+      System.out.println("switch to" + pipeLineIndex);
       camera.setPipelineIndex(pipeLineIndex);
       if(pipeLineIndex == 0){
         mode = CameraMode.AprilTags;
         inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
         if(servo != null)
-          servo.set(0.64);
+          servo.set(0.6);
       }
       else{
         mode = CameraMode.Rings;

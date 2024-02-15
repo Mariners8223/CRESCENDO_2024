@@ -12,9 +12,6 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 
 public class Vision extends SubsystemBase {
-
-  private static Vision instance;
-
   private CameraInterface[] cameras = new CameraInterface[Constants.Vision.numberOfCameras];
   // private List<CameraInterface> cameras = new ArrayList<>(Constants.Vision.);
   private Pose3d[] poses = new Pose3d[Constants.Vision.numberOfCameras];
@@ -25,7 +22,7 @@ public class Vision extends SubsystemBase {
   /**
    * creates a new Vision subsystem with 4 cameras
    */
-  private Vision() {
+  public Vision() {
     cameras[0] = new PhotonCameraClass("camera1", CameraLocation.Back, 9);
     cameras[1] = new LimeLightClass("limelight", CameraLocation.Front_Right);
     cameras[2] = new PhotonCameraClass("camera2", CameraLocation.Front_Left);
@@ -36,13 +33,13 @@ public class Vision extends SubsystemBase {
       latencies[i] = 0;
       objectsToRobot[i] = Constants.Vision.rubbishTranslation;
     }
-
   }
 
-  public static Vision getInstance(){
-    if(instance == null) instance = new Vision();
-    return instance;
-  }
+  // public static Vision getInstance(){
+  //   if(instance == null) instance = new Vision();
+  //   return instance;
+  //   // return null;
+  // }
 
   /**
    * returns the detected pose of the robot from the specified camera (may be null if no target is detected or the camera is not in AprilTag mode)
@@ -52,7 +49,8 @@ public class Vision extends SubsystemBase {
   public Pose3d getPose(CameraLocation location){
     // return cameras[location.ordinal()].getPose();
     for (CameraInterface camera : cameras) {
-      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].getPose();
+      if(camera != null)
+      if(camera.getCameraLocation() == location) return camera.getPose();
     }
     return Constants.Vision.rubbishPose;
   }
@@ -65,7 +63,8 @@ public class Vision extends SubsystemBase {
   public double getTimeStamp(CameraLocation location){
     // return cameras[location.ordinal()].getTimeStamp();
     for (CameraInterface camera: cameras) {
-      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].getTimeStamp();
+      if(camera != null)
+      if(camera.getCameraLocation() == location) return camera.getTimeStamp();
     }
     return 0;
   }
@@ -78,7 +77,8 @@ public class Vision extends SubsystemBase {
   public double getLatency(CameraLocation location){
     // return cameras[location.ordinal()].getLatency();
     for (CameraInterface camera : cameras) {
-      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].getLatency();
+      if(camera != null)
+      if(camera.getCameraLocation() == location) return camera.getLatency();
     }
     return 0;
   }
@@ -91,7 +91,8 @@ public class Vision extends SubsystemBase {
   public Translation2d getbestObjectToCamera(CameraLocation location){
     // return cameras[location.ordinal()].getTranslationToBestTarget();
     for (CameraInterface camera : cameras) {
-      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].getTranslationToBestTarget();
+      if(camera != null)
+      if(camera.getCameraLocation() == location) return camera.getTranslationToBestTarget();
     }
     return Constants.Vision.rubbishTranslation[0];
   }
@@ -99,7 +100,8 @@ public class Vision extends SubsystemBase {
   public Translation2d[] getObjectsToCamera(CameraLocation location){
     // return cameras[location.ordinal()].getTranslationsToTargets();
     for (CameraInterface camera : cameras) {
-      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].getTranslationsToTargets();
+      if(camera != null)
+      if(camera.getCameraLocation() == location) return camera.getTranslationsToTargets();
     }
     return Constants.Vision.rubbishTranslation;
   }
@@ -111,7 +113,8 @@ public class Vision extends SubsystemBase {
    */
   public boolean hasTarget(CameraLocation location){
     for (CameraInterface camera : cameras) {
-      if(camera.getCameraLocation() == location) return cameras[location.ordinal()].hasTarget();
+      if(camera != null)
+      if(camera.getCameraLocation() == location) return camera.hasTarget();
     }
     return false;
   }
@@ -150,7 +153,8 @@ public class Vision extends SubsystemBase {
 
   public void setPipelineIndex(CameraLocation location, int index){
     for (CameraInterface camera : cameras) {
-      if(camera.getCameraLocation() == location) cameras[location.ordinal()].setPipeLine(index);
+      if(camera != null)
+      if(camera.getCameraLocation() == location) camera.setPipeLine(index);
     }
   }
 
@@ -164,14 +168,16 @@ public class Vision extends SubsystemBase {
   
   @Override
   public void periodic() {
+    // System.out.println("sss");
     for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
       cameras[i].update();
       poses[i] = cameras[i].getPose();
       timeStamps[i] = cameras[i].getTimeStamp();
       latencies[i] = cameras[i].getLatency();
       objectsToRobot[i] = cameras[i].getTranslationsToTargets();
+      // System.out.println("safbjhsabgksabg sajhg");
 
-      if(poses[i] != Constants.Vision.rubbishPose) RobotContainer.driveBase.addVisionMesrument(poses[i].toPose2d(), timeStamps[i]);
+      // if(poses[i] != Constants.Vision.rubbishPose) RobotContainer.driveBase.addVisionMesrument(poses[i].toPose2d(), timeStamps[i]);
     }    
   }
 

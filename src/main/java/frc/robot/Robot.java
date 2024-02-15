@@ -13,9 +13,12 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystem.VisionSubSystem.Vision;
+import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
+  private boolean mode;
 
   @Override
   public void robotInit() {
@@ -30,7 +33,6 @@ public class Robot extends LoggedRobot {
     Logger.start();
 
     new RobotContainer();
-    SmartDashboard.putNumber("id", 0.0);
   }
 
   @Override

@@ -22,10 +22,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
+import frc.robot.subsystem.VisionSubSystem.Vision;
+import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 
 public class RobotContainer {
   public static DriveBase driveBase;
   public static Arm arm;
+  public static Vision vision;
 
   public static CommandPS5Controller driveController;
   public static SendableChooser<Command> autoChooser;
@@ -46,10 +49,11 @@ public class RobotContainer {
 
     driveBase = new DriveBase();
     arm = Arm.getInstance();
+    vision = new Vision();
 
-    // configureBindings();
-    // configChooser();
-    // configureNamedCommands();
+    configureBindings();
+    configChooser();
+    configureNamedCommands();
     autoChooser = new SendableChooser<Command>();
 
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> Logger.recordOutput("allince", DriverStation.getAlliance().get().toString())));
@@ -67,7 +71,9 @@ public class RobotContainer {
     // driveController.cross().onTrue(new Collect());
     // driveController.circle().onTrue(new Shoot());
 
-    driveController.cross().onTrue(new ClimbSequence());
+    // driveController.cross().onTrue(new ClimbSequence());
+    driveController.cross().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 1)));
+    driveController.square().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 0)));
   }
 
   private void configChooser(){

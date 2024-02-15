@@ -44,12 +44,14 @@ public class LimeLightClass implements CameraInterface{
     }
 
     public LimeLightClass(String cameraName, CameraLocation location, int servoPort) {
+      inputs = new LimelightInputsAutoLogged();
       inputs.cameraName = cameraName;
       latestResults = new LimelightResults();
 
       mode = CameraMode.AprilTags;
 
       cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
+      this.inputs.location = location.name();
 
       if(servoPort != -1){
         servo = new Servo(servoPort);
@@ -61,14 +63,14 @@ public class LimeLightClass implements CameraInterface{
         inputs.hasServo = false;
       }
         
-      LimelightHelpers.setCameraPose_RobotSpace(
-        cameraName,
-        cameraToRobot[0].getX(),
-        cameraToRobot[0].getY(),
-        cameraToRobot[0].getZ(),
-        cameraToRobot[0].getTranslation().getX(),
-        cameraToRobot[0].getRotation().getY(),
-        cameraToRobot[0].getRotation().getZ());
+      // LimelightHelpers.setCameraPose_RobotSpace(
+      //   cameraName,
+      //   cameraToRobot[0].getX(),
+      //   cameraToRobot[0].getY(),
+      //   cameraToRobot[0].getZ(),
+      //   cameraToRobot[0].getTranslation().getX(),
+      //   cameraToRobot[0].getRotation().getY(),
+      //   cameraToRobot[0].getRotation().getZ());
 
       inputs.estimatedPose = Constants.Vision.rubbishPose;
       inputs.objectsToRobot = Constants.Vision.rubbishTranslation;

@@ -10,9 +10,6 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.I2C;
-
-
 public class Intake {
     @AutoLog
     public static class IntakeInputs{
