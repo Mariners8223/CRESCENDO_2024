@@ -5,20 +5,13 @@
 package frc.robot.subsystem.Arm.climb;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.ControlRequest;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.ControlModeValue;
-import com.revrobotics.CANSparkBase.IdleMode;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
-import frc.robot.subsystem.Arm.Arm.ArmPostion;
 
 public class Elavator extends SubsystemBase {
   private static Elavator instance;
@@ -73,11 +66,12 @@ public class Elavator extends SubsystemBase {
     moveRobotOnRope(MotorRotations);
   }
   public void moveRobotOnRope(double SpinsToTravel){ //right < 0 left > 0
-    SlidingMotor.setControl(new PositionDutyCycle(SpinsToTravel));
+    SlidingMotor.setControl(new PositionDutyCycle(SpinsToTravel + Constants.ClimbConstants.SlidingMotorOffset));
   }
   
-  public void SetSlidingFromRotations(double length){
-    SlidingMotor.setControl(new PositionDutyCycle(length));
+  public void SetSlidingFromRotations(double ArialLength){
+    ArialLength = ArialLength * Constants.ClimbConstants.AirialMetersToRopeLength * Constants.ClimbConstants.RopeLengthToMotorRotaions;
+    SlidingMotor.setControl(new PositionDutyCycle(ArialLength + Constants.ClimbConstants.SlidingMotorOffset));
     //SlidingMotor.setControl(ControlModeValue.DutyCycleOut).setPosition(length); //move motor said rotations or move motor to said location
   }
   public void HoldInPlace(){

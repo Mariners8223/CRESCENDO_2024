@@ -169,6 +169,9 @@ public class Constants {
         public static final int ClimbingMotorID = 1;//TODO: climb motor and sliding motor IDs
         public static final int SlidingMotorID = 1;
 
+        public static final double ClimbingMotorOffset = 0;//TODO: climbing and sliding motor offset
+        public static final double SlidingMotorOffset = 0;
+
         public static final double AirialMetersToRopeLength = 2.52/2.65;
         public static final double RopeLengthToMotorRotaions = 8/84;
 

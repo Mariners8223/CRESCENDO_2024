@@ -323,6 +323,7 @@ public class DriveBase extends SubsystemBase {
   
   public void setTargetRotation(Rotation2d alpha){//TODO: dis shit
     inputs.targetRotation = alpha.plus(Rotation2d.fromRotations((int)currentPose.getRotation().getRotations()));
+    //calculateTheta(alpha);//dis may work
   }
 
   /**
