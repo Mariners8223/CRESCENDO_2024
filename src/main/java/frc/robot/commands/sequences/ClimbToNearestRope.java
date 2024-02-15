@@ -19,21 +19,21 @@ public class ClimbToNearestRope extends SequentialCommandGroup {
   public ClimbToNearestRope() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    int index = Constants.ClimbConstants.SlidingPositions.SlidingPositions_MiddleRope.indexOf(
+    int index = Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope.indexOf(
       RobotContainer.driveBase.getPose().getTranslation().nearest(
-        Constants.ClimbConstants.SlidingPositions.SlidingPositions_MiddleRope));
+        Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope));
     
     addCommands(
     new InstantCommand(() -> //go in stage and face the rope closest to you
-     RobotContainer.driveBase.findPath(Constants.ClimbConstants.SlidingPositions.InStageMiddleLocations_POSE2D.get(index))),
+     RobotContainer.driveBase.findPath(Constants.Elevator.SlidingPositions.InStageMiddleLocations_POSE2D.get(index))),
     new InstantCommand(() -> // move the arm to the climbing position
-     Arm.getInstance().moveShooterToPose(frc.robot.Constants.ClimbConstants.CLIMBING_POSTION)),
+     Arm.getInstance().moveShooterToPose(frc.robot.Constants.Elevator.CLIMBING_POSTION)),
     new InstantCommand(() -> // move the elavator to the climbing position
-     Elavator.getInstance().SetClimbingHight(frc.robot.Constants.ClimbConstants.PUSH_ELAVATER_ARM_POSTION)),
+     Arm.getInstance().getElavatorSub().SetClimbingHight(frc.robot.Constants.Elevator.PUSH_ELAVATER_ARM_POSTION)),
     new InstantCommand(() -> // move the robot to the rope
-     RobotContainer.driveBase.findPath(Constants.ClimbConstants.SlidingPositions.UnderRopeMiddleLocations_POSE2D.get(index))),
+     RobotContainer.driveBase.findPath(Constants.Elevator.SlidingPositions.UnderRopeMiddleLocations_POSE2D.get(index))),
     new InstantCommand(() -> //pull yourself up
-    Elavator.getInstance().SetClimbingHight(frc.robot.Constants.ClimbConstants.PULL_ELAVATER_ARM_POSTION))
+    Arm.getInstance().getElavatorSub().SetClimbingHight(frc.robot.Constants.Elevator.PULL_ELAVATER_ARM_POSTION))
     );
   }
 }

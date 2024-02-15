@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.ArmUtil;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -22,8 +23,8 @@ public class QuikAim extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Arm.ArmAimUtil.UpdateParameters();
-    arm.moveShooterToPose(Arm.ArmAimUtil.getArmNeededPosition());
-    RobotContainer.driveBase.setTargetRotation(Rotation2d.fromDegrees(Arm.ArmAimUtil.getChassisAngle()));
+    ArmUtil.UpdateParameters();
+    arm.moveShooterToPose(ArmUtil.getArmNeededPosition());
+    RobotContainer.driveBase.setTargetRotation(Rotation2d.fromDegrees(ArmUtil.getChassisAngle()));
   }
 }

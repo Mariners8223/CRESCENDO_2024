@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
-import frc.robot.subsystem.Arm.Arm.ArmPostion;
+import frc.robot.subsystem.Arm.Arm.ArmPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AimShooter extends InstantCommand {
   private static Arm arm;
-  private static ArmPostion ZaxisTarget;
+  private static ArmPosition ZaxisTarget;
   private static double StartSpeed;
   private static double Dy;//y axis of targeted point (to calc the distance from speaker)
   private static double Dx;//airial distance to speaker
@@ -37,7 +37,7 @@ public class AimShooter extends InstantCommand {
   }
   public void Zone1_Equasion(){//simple lazer for zone 1
     try {
-      angleZaxis = Math.atan((Constants.SpeakerTranslation.getZ() - ZaxisTarget.y - Constants.ArmConstants.RobotHightFromGround)//hieght
+      angleZaxis = Math.atan((Constants.SpeakerTranslation.getZ() - ZaxisTarget.y - Constants.Arm.RobotHightFromGround)//hieght
       /distanceToSpeaker);//if there is a problem, return last angle
     } catch (Exception e) {
     }
@@ -46,7 +46,7 @@ public class AimShooter extends InstantCommand {
     try {
       angleZaxis = Math.atan((Math.pow(StartSpeed, 2)
      - Math.sqrt(Math.pow(StartSpeed, 4)
-      - 2*(Constants.SpeakerTranslation.getZ() - ZaxisTarget.y - Constants.ArmConstants.RobotHightFromGround)//hieght
+      - 2*(Constants.SpeakerTranslation.getZ() - ZaxisTarget.y - Constants.Arm.RobotHightFromGround)//hieght
       *Constants.gGravity_phisics*Math.pow(StartSpeed, 2) - Math.pow(Constants.gGravity_phisics*Dx, 2)))
       /(Dx*Constants.gGravity_phisics)
     );
@@ -63,27 +63,27 @@ public class AimShooter extends InstantCommand {
   }
 
   public void CalcAngleZaxis(){
-    if (distanceToSpeaker <= Constants.ArmConstants.EndOfZone1) {
-      ZaxisTarget = Constants.ArmConstants.Zone1_ArmPosition;
+    if (distanceToSpeaker <= Constants.Arm.EndOfZone1) {
+      ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
       Zone1_Equasion();
     }
     else{
-      ZaxisTarget = Constants.ArmConstants.Zone2_ArmPosition;
+      ZaxisTarget = Constants.Arm.Zone2_ArmPosition;
       Zone2_Equasion();
     }
     RobotSpeedRelative_angle();
   }
 
   public void getDy(){
-    if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation) {
+    if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.Arm.SpeakerIsCenterRatioBottomLocation) {
       IsDeadZone = true;
-          Dy = Constants.ArmConstants.SpeakerBottomLocationY + Constants.ArmConstants.SpeakerLength;//aime to the most right corner (robot prespective)
+          Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength;//aime to the most right corner (robot prespective)
     }
     else{
       IsDeadZone = false;
-          Dy = Constants.ArmConstants.SpeakerBottomLocationY
-     + Constants.ArmConstants.SpeakerLength - Constants.ArmConstants.SpeakerIsCenterRatio * (RobotContainer.driveBase.getPose().getTranslation().getY()
-      - Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation);//aim to a point prespective to the robot location in the chosen shooting zone
+          Dy = Constants.Arm.SpeakerBottomLocationY
+     + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio * (RobotContainer.driveBase.getPose().getTranslation().getY()
+      - Constants.Arm.SpeakerIsCenterRatioBottomLocation);//aim to a point prespective to the robot location in the chosen shooting zone
     }
   }
   public void getDx(){
@@ -116,7 +116,7 @@ public class AimShooter extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    StartSpeed = RobotContainer.arm.getShooter().getShooterVelocity();
+    StartSpeed = RobotContainer.arm.getShooterSub().getShooterVelocity();
     CalcDistance_withDxDy();
     getWantedDegree();
     CalcAngleZaxis();

@@ -30,7 +30,7 @@ public class AimShooterZone2 extends InstantCommand {
     try {
       return Math.atan((Math.pow(StartSpeed, 2)
      - Math.sqrt(Math.pow(StartSpeed, 4)
-      - 2*(Constants.SpeakerTranslation.getZ() - target.y - Constants.ArmConstants.RobotHightFromGround)//hieght
+     - 2*(Constants.SpeakerTranslation.getZ() - target.y - Constants.Arm.RobotHightFromGround)//hieght
       *Constants.gGravity_phisics*Math.pow(StartSpeed, 2) - Math.pow(Constants.gGravity_phisics*(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX()), 2)))
       /((RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX())*Constants.gGravity_phisics)
     );
@@ -42,20 +42,20 @@ public class AimShooterZone2 extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation) {
+    if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.Arm.SpeakerIsCenterRatioBottomLocation) {
       IsDeadZone = true;
-          Dy = Constants.ArmConstants.SpeakerBottomLocationY + Constants.ArmConstants.SpeakerLength;//aime to the most right corner (robot prespective)
+          Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength;//aime to the most right corner (robot prespective)
     }
     else{
       IsDeadZone = false;
-          Dy = Constants.ArmConstants.SpeakerBottomLocationY
-     + Constants.ArmConstants.SpeakerLength - Constants.ArmConstants.SpeakerIsCenterRatio * (RobotContainer.driveBase.getPose().getTranslation().getY()
-      - Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation);//aim to a point prespective to the robot location in the chosen shooting zone
+          Dy = Constants.Arm.SpeakerBottomLocationY
+     + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio * (RobotContainer.driveBase.getPose().getTranslation().getY()
+      - Constants.Arm.SpeakerIsCenterRatioBottomLocation);//aim to a point prespective to the robot location in the chosen shooting zone
     }
     
     distanceToSpeaker = Math.hypot(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), Dy);
 
-    StartSpeed = Arm.getInstance().getShooter().getShooterVelocity();
+    StartSpeed = Arm.getInstance().getShooterSub().getShooterVelocity();
 
     angle = Equation();
     try {

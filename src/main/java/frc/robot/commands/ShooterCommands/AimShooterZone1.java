@@ -15,7 +15,7 @@ import frc.robot.subsystem.Arm.Arm.ArmPosition;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AimShooterZone1 extends InstantCommand {
-  private static ArmPostion target = new ArmPostion(0.4, 0.4, 0);
+  private static ArmPosition target = new ArmPosition(0.4, 0.4, 0);
   private static double angle;
   private static double distanceToSpeaker;
   private static double Y;
@@ -29,27 +29,27 @@ public class AimShooterZone1 extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation) {
+    if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.Arm.SpeakerIsCenterRatioBottomLocation) {
       IsDeadZone = true;
-          Y = Constants.ArmConstants.SpeakerBottomLocationY + Constants.ArmConstants.SpeakerLength;//aime to the most right corner (robot prespective)
+          Y = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength;//aime to the most right corner (robot prespective)
     }
     else{
       IsDeadZone = false;
-          Y = Constants.ArmConstants.SpeakerBottomLocationY
-     + Constants.ArmConstants.SpeakerLength - Constants.ArmConstants.SpeakerIsCenterRatio * (RobotContainer.driveBase.getPose().getTranslation().getY()
-      - Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation);//aim to a point prespective to the robot location in the chosen shooting zone
+          Y = Constants.Arm.SpeakerBottomLocationY
+     + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio * (RobotContainer.driveBase.getPose().getTranslation().getY()
+      - Constants.Arm.SpeakerIsCenterRatioBottomLocation);//aim to a point prespective to the robot location in the chosen shooting zone
     }
     
     distanceToSpeaker = Math.hypot(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), Y);
 
     try {
-      angle = Math.atan((Constants.SpeakerTranslation.getZ() - target.y - Constants.ArmConstants.RobotHightFromGround) / distanceToSpeaker);
+      angle = Math.atan((Constants.SpeakerTranslation.getZ() - target.y - Constants.Arm.RobotHightFromGround) / distanceToSpeaker);
     } catch (Exception e) {
       angle = 0;
     }
     try {
-      target.rotation = Math.atan((RobotContainer.arm.getShooter().getShooterVelocity()*Math.sin(angle))
-    /(RobotContainer.arm.getShooter().getShooterVelocity()*Math.cos(angle) + RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond));
+      target.rotation = Math.atan((RobotContainer.arm.getShooterSub().getShooterVelocity()*Math.sin(angle))
+    /(RobotContainer.arm.getShooterSub().getShooterVelocity()*Math.cos(angle) + RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond));
     } catch (Exception e) {
       target.rotation = angle;
     }

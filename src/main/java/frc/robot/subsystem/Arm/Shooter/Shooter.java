@@ -4,6 +4,9 @@
 
 package frc.robot.subsystem.Arm.Shooter;
 
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
+
 import com.fasterxml.jackson.core.json.DupDetector;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkPIDController;
@@ -65,12 +68,13 @@ public class Shooter {
     // get shooter power
     public double getShooterVelocity() {//dis is good
         // return velocity in meters per second
-        return Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor1.getEncoder().getVelocity()) * Constants.ArmConstants.Shooter.wheelRadius
-         * Constants.ArmConstants.Shooter.frictionPowerParameterForGPVelocity;
+        return Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor1.getEncoder().getVelocity()) * Constants.Shooter.wheelRadius
+         * Constants.Shooter.frictionPowerParameterForGPVelocity;
     }
 
     public double getTrueFullGPVelociti_SideView(){//dis is not good
         return Math.hypot(getTrueZAxisVelocity_RobotRelative(), getTrueXAxisVelocity_RobotRelative());
+    }
     /**
      * gets the avrage velocity of the shooter wheels
      * @return avrage velocity in meters per second
@@ -86,10 +90,7 @@ public class Shooter {
     public double getTrueZAxisVelocity_RobotRelative(){//dis is not good
         return Math.sin(RobotContainer.arm.getShooterPosition().rotation) * getShooterVelocity();
     }
-    public double getTrueXAxisVelocity_RobotRelative(){//dis is not good but is needed
-        return RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond
-         + getShooterVelocity() * Math.cos(RobotContainer.arm.getShooterPosition().rotation);
-    }
+    
     public double getTrueYAxisVelocity_RobotRelative(){//dis is good
         return RobotContainer.driveBase.getChassisSpeeds().vyMetersPerSecond +
         RobotContainer.driveBase.getChassisSpeeds().omegaRadiansPerSecond * RobotContainer.arm.getIntakePosition().x;

@@ -11,15 +11,25 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ControlModeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
+import frc.util.PIDFGains;
 
 public class Elavator extends SubsystemBase {
+  
   private static Elavator instance;
 
+  @AutoLog
+  public static class ElavatorInputs{
     double railMotorTarget;
     double rollerMotorTarget;
+
+    double railMotorPosition;
+    double rollerMotorPosition;
 
     boolean isRailMotorInPosition;
     boolean isRollerMotorInPosition;
@@ -60,11 +70,6 @@ public class Elavator extends SubsystemBase {
   public double getSlidingMotorPosition(){
     return inputs.rollerMotorPosition;
   }
-  public void SetLocationOnRope(Translation2d target){
-    // double MotorRotations = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getX() - target.getX(), 2)
-    //  + Math.pow(RobotContainer.driveBase.getPose().getY() - target.getY(), 2)) * Constants.ClimbConstants.MotorRotationsToAirialMeters;
-    double MotorRotations = Math.hypot(RobotContainer.driveBase.getPose().getX() - target.getX(), RobotContainer.driveBase.getPose().getY() - target.getY())
-    * Constants.ClimbConstants.AirialMetersToRopeLength;
 
   public boolean isRailMotorInPosition(){
     return Math.abs(inputs.railMotorPosition - inputs.railMotorTarget) < Constants.Elevator.railMotorTolarance;

@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -68,8 +66,8 @@ public class Constants {
         }
     }
     
-    public static class AutoConstants{
-        public static ArmPostion FastShootPose = new ArmPostion();
+    // public static class AutoConstants{
+    //     public static ArmPostion FastShootPose = new ArmPostion();
 
     public static final class Speaker{
             public static final double FieldYLength = Units.inchesToMeters(323.00);
@@ -91,22 +89,19 @@ public class Constants {
         public static final double minAngle = 60;
     }
 
-    public static final class Arm {
-        public static Pose2d MiddleNote = new Pose2d(2.52, 5.56, Rotation2d.fromDegrees(0));
-        public static Pose2d UpperNote = new Pose2d(2.89, 6.61, Rotation2d.fromDegrees(90));
-        public static Pose2d LowerNote = new Pose2d(2.52, 4.1, Rotation2d.fromDegrees(-31.35));
-    }
+    // public static final class Arm {
+    //     public static Pose2d MiddleNote = new Pose2d(2.52, 5.56, Rotation2d.fromDegrees(0));
+    //     public static Pose2d UpperNote = new Pose2d(2.89, 6.61, Rotation2d.fromDegrees(90));
+    //     public static Pose2d LowerNote = new Pose2d(2.52, 4.1, Rotation2d.fromDegrees(-31.35));
+    // }
 
-    public static final class ArmConstants {
+    public static final class Arm{
         public static final double armLengthMeters = 0.46;
         public static final double shooterAndIntakeLengthMeters = 0.361;
 
         public static final double mainPivotDistanceFromCenterMeters = 0.113;
         public static final double armHeightFromFrameMeters = 0.245;
         public static final double SecondaryMotorDistanceFromShooterMeters = 0.06;
-
-        public static final ArmPostion FloorPosition = new ArmPostion(0, 0, 0); // In radians
-        public static final ArmPostion SourcePosition = new ArmPostion(0, 0, 0);
     
         public static final double RobotHightFromGround = 0;//TODO: robot hieght from ground
         public static final double SpeakerLength = 1.181;//done
@@ -118,7 +113,6 @@ public class Constants {
         public static final ArmPosition FloorPosition = new ArmPosition(0, 0, 0); // In radians
         public static final ArmPosition SourcePosition = new ArmPosition(0, 0, 0);
 
-        public static final ArmPostion AmpArmPosition = new ArmPostion();
         public static final ArmPosition freeMovementPosition = new ArmPosition(0, Math.sin(Units.rotationsToRadians(0.13)) * armLengthMeters, 0);
 
         public static final double SpeakerHeight = 2.31;//meter
@@ -128,10 +122,11 @@ public class Constants {
         public static final ArmPosition ShootingPositionSniper = new ArmPosition();
         public static final ArmPosition ShootingPositionDunker = new ArmPosition();
 
-        public static final ArmPostion Zone1_ArmPosition = new ArmPostion();//main motor location for zone 1
-        public static final ArmPostion Zone2_ArmPosition = new ArmPostion();//main motor location for zone 2
-        public static final ArmPostion QuikShotPosition = new ArmPostion();//main motor location at flor
+        public static final ArmPosition Zone1_ArmPosition = new ArmPosition();//main motor location for zone 1
+        public static final ArmPosition Zone2_ArmPosition = new ArmPosition();//main motor location for zone 2
+        public static final ArmPosition QuikShotPosition = new ArmPosition();//main motor location at flor
         public static final double EndOfZone1 = 0;//TODO: the distince from the speaker right before the lazer equasion is not relevent
+
         public static class Motors{
             public static final int mainMotorID = 15;
             public static final int secondaryMotorID = 16;
@@ -192,7 +187,26 @@ public class Constants {
         public static final double secondaryIntakeAngle = 0.43;
         public static final double mainIntakeAngle = -0.04;
     }
-    public class ClimbConstants{
+
+    public static class Elevator{
+        public static final double chainHeight = 72;
+
+        public static final int railMotorID = 20;
+        public static final int rollerMotorID = 21;
+
+        public static final PIDFGains railMotorPIDF = new PIDFGains(0.2, 0.02, 0.02);
+
+        public static final PIDFGains rollerMotorPIDF = new PIDFGains(0.1, 0.1, 0.1); //TODO: get the real value
+
+        public static final double railMotorConvertionFactor = 90 / (3 * Math.PI);
+        public static final double rollerMotorConvertionFactor = 1; //TODO: get the real value
+
+        public static final double railMotorTolarance = 0.1;
+        public static final double rollerMotorTolarance = 0.01;
+
+        public static final boolean isRailMotorInverted = true;
+        public static final boolean isRollerMotorInverted = false;
+
         public static final int ClimbingMotorID = 1;//TODO: climb motor and sliding motor IDs
         public static final int SlidingMotorID = 1;
 
@@ -202,10 +216,6 @@ public class Constants {
         public static final double AirialMetersToRopeLength = 2.52/2.65;
         public static final double RopeLengthToMotorRotaions = 8/84;
 
-        public static final ArmPostion CLIMBING_POSTION = new ArmPostion();//TODO: find needed arm position
-        public static final PositionDutyCycle PUSH_ELAVATER_ARM_POSTION = new PositionDutyCycle(0);//TODO - up position
-        public static final PositionDutyCycle PULL_ELAVATER_ARM_POSTION = new PositionDutyCycle(0);//TODO - down position
-        
         public static class SlidingPositions{
             public static final List<Translation2d> SlidingPositions_MiddleRope = new ArrayList<Translation2d>(
                 Arrays.asList(new Translation2d(4.389, 4.880),//rope 1 - top rope
@@ -232,33 +242,8 @@ public class Constants {
                 new Pose2d(SlidingPositions_MiddleRope.get(2).getX(), SlidingPositions_MiddleRope.get(2).getY(), Rotation2d.fromDegrees(180))//rope 3 - middle pointing rope
             ));
         }
-        public static final DutyCycleOut HeightDutyPosition = null;
-
-        public static final class ClimbingMotorPID{
-            public static final double kP = 0.1;
-            public static final double kI = 0.1;
-            public static final double kD = 0.1;
-            public static final double kF = 0.1;
-        }
-    public static class Elevator{
-        public static final double chainHeight = 72;
-
-        public static final int railMotorID = 20;
-        public static final int rollerMotorID = 21;
-
-        public static final PIDFGains railMotorPIDF = new PIDFGains(0.2, 0.02, 0.02);
-
-        public static final PIDFGains rollerMotorPIDF = new PIDFGains(0.1, 0.1, 0.1); //TODO: get the real value
-
-        public static final double railMotorConvertionFactor = 90 / (3 * Math.PI);
-        public static final double rollerMotorConvertionFactor = 1; //TODO: get the real value
-
-        public static final double railMotorTolarance = 0.1;
-        public static final double rollerMotorTolarance = 0.01;
-
-        public static final boolean isRailMotorInverted = true;
-        public static final boolean isRollerMotorInverted = false;
     }
+
 
     public static final class DriveTrain{
         /**
@@ -338,11 +323,6 @@ public class Constants {
             public static Translation2d[] moduleTranslations = new Translation2d[]
                 {new Translation2d(Global.distanceBetweenWheels / 2, Global.distanceBetweenWheels / 2), new Translation2d(Global.distanceBetweenWheels / 2, -Global.distanceBetweenWheels / 2),
                  new Translation2d(-Global.distanceBetweenWheels / 2, Global.distanceBetweenWheels / 2), new Translation2d(-Global.distanceBetweenWheels / 2, -Global.distanceBetweenWheels / 2)};
-
-            // public static Translation2d[] moduleTranslations = new Translation2d[]
-            //     {new Translation2d(Global.distanceBetweenWheels / 2, -Global.distanceBetweenWheels / 2), new Translation2d(Global.distanceBetweenWheels / 2, Global.distanceBetweenWheels / 2),
-            //      new Translation2d(-Global.distanceBetweenWheels / 2, -Global.distanceBetweenWheels / 2), new Translation2d(-Global.distanceBetweenWheels / 2, Global.distanceBetweenWheels / 2)};
-            // the lcoation of the moudles by enum order comperd to the center of the robot
 
             public ModuleName moduleName; //the name of the moudle (enum)
 
@@ -466,7 +446,7 @@ public class Constants {
                 0))
             }
             };
-    }
+        }
 
     
 }
