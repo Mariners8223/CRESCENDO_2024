@@ -43,6 +43,7 @@ public class QuikAim extends SequentialCommandGroup {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+      ArmUtil.ResetParameters();
       ArmUtil.UpdateParameters();
       target = ArmUtil.getArmNeededPosition();
       target.rotation = MathUtil.clamp(target.rotation, Units.rotationsToRadians(0.347), Units.rotationsToRadians(0.5));
