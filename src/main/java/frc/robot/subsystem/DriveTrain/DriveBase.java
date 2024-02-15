@@ -320,8 +320,9 @@ public class DriveBase extends SubsystemBase {
     return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(), getRotation2d());
   }
   
-  public void setTargetRotation(Rotation2d alpha){
-    
+  public void setTargetRotation(Rotation2d alpha){//TODO: dis shit
+    inputs.targetRotation = alpha.plus(Rotation2d.fromRotations((int)currentPose.getRotation().getRotations()));
+    //calculateTheta(alpha);//dis may work
   }
 
   /**

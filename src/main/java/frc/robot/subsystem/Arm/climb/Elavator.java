@@ -10,15 +10,13 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import frc.robot.Constants;
-import frc.util.PIDFGains;
+import com.ctre.phoenix6.signals.ControlModeValue;
 
-public class Elavator {
-  @AutoLog
-  public static class ElavatorInputs{
-    double railMotorPosition;
-    double rollerMotorPosition;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+
+public class Elavator extends SubsystemBase {
+  private static Elavator instance;
 
     double railMotorTarget;
     double rollerMotorTarget;
@@ -62,6 +60,11 @@ public class Elavator {
   public double getSlidingMotorPosition(){
     return inputs.rollerMotorPosition;
   }
+  public void SetLocationOnRope(Translation2d target){
+    // double MotorRotations = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getX() - target.getX(), 2)
+    //  + Math.pow(RobotContainer.driveBase.getPose().getY() - target.getY(), 2)) * Constants.ClimbConstants.MotorRotationsToAirialMeters;
+    double MotorRotations = Math.hypot(RobotContainer.driveBase.getPose().getX() - target.getX(), RobotContainer.driveBase.getPose().getY() - target.getY())
+    * Constants.ClimbConstants.AirialMetersToRopeLength;
 
   public boolean isRailMotorInPosition(){
     return Math.abs(inputs.railMotorPosition - inputs.railMotorTarget) < Constants.Elevator.railMotorTolarance;

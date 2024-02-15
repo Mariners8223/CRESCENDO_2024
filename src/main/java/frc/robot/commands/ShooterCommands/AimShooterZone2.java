@@ -28,10 +28,13 @@ public class AimShooterZone2 extends InstantCommand {
 
   public static double Equation(){
     try {
-      return (Math.pow(StartSpeed, 2) - Math.pow(StartSpeed, 2)
-     * Math.sqrt(1 - (2 * Dy*9.8*Math.pow(StartSpeed, 2) + Math.pow(9.8*distanceToSpeaker, 2))/Math.pow(StartSpeed, 4)))/(9.8*distanceToSpeaker);
+      return Math.atan((Math.pow(StartSpeed, 2)
+     - Math.sqrt(Math.pow(StartSpeed, 4)
+      - 2*(Constants.SpeakerTranslation.getZ() - target.y - Constants.ArmConstants.RobotHightFromGround)//hieght
+      *Constants.gGravity_phisics*Math.pow(StartSpeed, 2) - Math.pow(Constants.gGravity_phisics*(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX()), 2)))
+      /((RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX())*Constants.gGravity_phisics)
+    );
     } catch (Exception e) {
-      // TODO: handle exception
       return angle;
     }  
   }
@@ -39,23 +42,28 @@ public class AimShooterZone2 extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (RobotContainer.driveBase.getPose().getTranslation().getY() < Constants.Speaker.SpeakerIsCenterRatioBottomLocation) {
+    if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation) {
       IsDeadZone = true;
-          Dy = Constants.Speaker.SpeakerBottomLocationY
-     + Constants.Speaker.SpeakerIsCenterRatioReverse * Constants.Speaker.SpeakerIsCenterRatioBottomLocation;
+          Dy = Constants.ArmConstants.SpeakerBottomLocationY + Constants.ArmConstants.SpeakerLength;//aime to the most right corner (robot prespective)
     }
     else{
       IsDeadZone = false;
-          Dy = Constants.Speaker.SpeakerBottomLocationY
-     + Constants.Speaker.SpeakerIsCenterRatioReverse * RobotContainer.driveBase.getPose().getTranslation().getY();
+          Dy = Constants.ArmConstants.SpeakerBottomLocationY
+     + Constants.ArmConstants.SpeakerLength - Constants.ArmConstants.SpeakerIsCenterRatio * (RobotContainer.driveBase.getPose().getTranslation().getY()
+      - Constants.ArmConstants.SpeakerIsCenterRatioBottomLocation);//aim to a point prespective to the robot location in the chosen shooting zone
     }
     
-    distanceToSpeaker = Math.sqrt(Math.pow(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.Speaker.SpeakerTranslation.getX(), 2) + Math.pow(Dy, 2));
+    distanceToSpeaker = Math.hypot(RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX(), Dy);
 
-    StartSpeed = Arm.getInstance().getShooterSub().getTrueXAxisVelocity_RobotRelative();
+    StartSpeed = Arm.getInstance().getShooter().getShooterVelocity();
 
     angle = Equation();
-    target.rotation = Math.atan(angle);
+    try {
+      target.rotation = Math.atan((StartSpeed*Math.sin(angle))
+    /(StartSpeed*Math.cos(angle) + RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond));
+    } catch (Exception e) {
+      target.rotation = angle;
+    }
     Arm.getInstance().moveShooterToPose(target);
 
   }
