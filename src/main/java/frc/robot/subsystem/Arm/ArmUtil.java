@@ -55,18 +55,20 @@ public class ArmUtil{
   
     private static void CalcAngleZaxis(){
       if (distanceToSpeaker <= Constants.Arm.EndOfZone1) {
+        Zone1_Equasion();
         if(IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
+          ArmAngle = Units.degreesToRadians(180) - ArmAngle;
         }
         else ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
-        Zone1_Equasion();
       }
       else{
+        Zone2_Equasion();
         if(IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
+          ArmAngle = Units.degreesToRadians(180) - ArmAngle;
         }
         else ZaxisTarget = Constants.Arm.Zone2_ArmPosition;
-        Zone2_Equasion();
       }
       RobotSpeedRelative_angle();
     }

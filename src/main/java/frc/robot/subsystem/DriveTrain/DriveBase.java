@@ -24,9 +24,7 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -44,7 +42,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystem.VisionSubSystem.Vision;
 
 /**
  * The DriveBase class represents the drivetrain of the robot.
@@ -68,6 +65,8 @@ public class DriveBase extends SubsystemBase {
   PIDController thetaCorrectionController; //the pid controller that fixes the angle of the robot
   Pose2d currentPose; //the current pose2d of the robot
   Rotation2d targetRotation; //the target rotation of the robot
+
+  boolean isControlled;
 
   HolonomicPathFollowerConfig pathFollowerConfig; //the config for path following a path
   ReplanningConfig replanConfig; //the config for when to replan a path
@@ -131,6 +130,8 @@ public class DriveBase extends SubsystemBase {
     thetaCorrectionController = Constants.DriveTrain.Global.thetaCorrectionPID.createPIDController(); //creates the pid controller of the robots angle
 
     targetRotation = new Rotation2d(); //creates a new target rotation
+
+    isControlled = false;
 
     replanConfig = new ReplanningConfig(Constants.DriveTrain.PathPlanner.planPathTostartingPointIfNotAtIt, Constants.DriveTrain.PathPlanner.enableDynamicReplanning, Constants.DriveTrain.PathPlanner.pathErrorTolerance, Constants.DriveTrain.PathPlanner.pathErrorSpikeTolerance);
     //^how pathplanner reacts to postion error
@@ -322,6 +323,7 @@ public class DriveBase extends SubsystemBase {
   
   public void setTargetRotation(Rotation2d alpha){//TODO: dis shit
     inputs.targetRotation = alpha.plus(Rotation2d.fromRotations((int)currentPose.getRotation().getRotations()));
+    isControlled = true;
     //calculateTheta(alpha);//dis may work
   }
 
@@ -381,12 +383,17 @@ public class DriveBase extends SubsystemBase {
    */
   public void drive(double Xspeed, double Yspeed, double rotation, Translation2d centerOfRotation){
     inputs.rotationSpeedInputBeforePID = rotation; //logs the rotation speed before PID
+    // if(rotation == 0) rotation = calculateTheta();
+    // else{
+    //   targetRotation = getRotation2d();
+    //   inputs.targetRotation = targetRotation;
+    // }
     if(rotation == 0) rotation = calculateTheta();
-    else{
+    else if(!isControlled){
       targetRotation = getRotation2d();
       inputs.targetRotation = targetRotation;
     }
-    
+
     targetStates = driveTrainKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(Xspeed, Yspeed, rotation, getRotation2d()), centerOfRotation); //calulates the target states
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec); //desaturates the wheel speeds (to make sure none of the wheel exceed the max speed)
 
