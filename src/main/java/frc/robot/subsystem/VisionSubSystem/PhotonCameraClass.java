@@ -61,7 +61,7 @@ public class PhotonCameraClass implements CameraInterface{
     }
 
 
-    public PhotonCameraClass(String cameraName, CameraLocation location, int servoPort, boolean onlyRing) {
+    public PhotonCameraClass(String cameraName, CameraLocation location, int servoPort, boolean onlyRing, Transform3d[] cameraToRobot) {
       camera = new PhotonCamera(cameraName);
       inputs = new PhotonCameraInputsAutoLogged();
 
@@ -70,7 +70,7 @@ public class PhotonCameraClass implements CameraInterface{
 
       try {
         poseEstimator = new PhotonPoseEstimator(AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile),
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, Constants.Vision.cameraLocations[location.ordinal()][0]);
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, cameraToRobot[0]);
 
         poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_REFERENCE_POSE);
 
@@ -102,11 +102,11 @@ public class PhotonCameraClass implements CameraInterface{
       inputs.latency = 0;
       inputs.poseConfidence = 0;
 
-      cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
+      this.cameraToRobot = cameraToRobot;
     }
 
-    public PhotonCameraClass(String cameraName, CameraLocation location, boolean onlyRing){
-      this(cameraName, location, -1, onlyRing);
+    public PhotonCameraClass(String cameraName, CameraLocation location, boolean onlyRing, Transform3d[] cameraToRobot){
+      this(cameraName, location, -1, onlyRing, cameraToRobot);
     }
 
     @Override

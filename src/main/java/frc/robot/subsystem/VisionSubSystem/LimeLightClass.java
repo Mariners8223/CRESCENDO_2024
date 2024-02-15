@@ -10,9 +10,15 @@ import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface;
 import frc.util.LimelightHelpers;
@@ -22,94 +28,68 @@ import frc.util.LimelightHelpers.LimelightResults;
 public class LimeLightClass implements CameraInterface{
     private LimelightResults latestResults;
 
-    private Servo servo;
-    private CameraMode mode;
-    private boolean isModeSwitchable;
-    private Transform3d cameraToRobot[];
     private LimelightInputsAutoLogged inputs;
+    private NetworkTable table;
 
     @AutoLog
     public static class LimelightInputs{
       public String cameraName;
       public String location;
-      public String mode;
-      public boolean isModeSwitchable;
-      public boolean hasServo;
 
       public Pose3d estimatedPose;
-      public Translation2d[] objectsToRobot;
 
       public double timeStamp;
       public double latency;
     }
 
-    public LimeLightClass(String cameraName, CameraLocation location, int servoPort) {
+    public LimeLightClass(String cameraName, CameraLocation location, int servoPort, Transform3d[] cameraToRobot) {
       inputs = new LimelightInputsAutoLogged();
       inputs.cameraName = cameraName;
       latestResults = new LimelightResults();
 
-      mode = CameraMode.AprilTags;
-
-      cameraToRobot = Constants.Vision.cameraLocations[location.ordinal()];
       this.inputs.location = location.name();
-
-      if(servoPort != -1){
-        servo = new Servo(servoPort);
-        servo.setPosition(0);
-        inputs.hasServo = true;
-      }
-      else{
-        servo = null;
-        inputs.hasServo = false;
-      }
         
-      // LimelightHelpers.setCameraPose_RobotSpace(
-      //   cameraName,
-      //   cameraToRobot[0].getX(),
-      //   cameraToRobot[0].getY(),
-      //   cameraToRobot[0].getZ(),
-      //   cameraToRobot[0].getTranslation().getX(),
-      //   cameraToRobot[0].getRotation().getY(),
-      //   cameraToRobot[0].getRotation().getZ());
+      LimelightHelpers.setCameraPose_RobotSpace(
+        cameraName,
+        cameraToRobot[0].getX(),
+        cameraToRobot[0].getY(),
+        cameraToRobot[0].getZ(),
+        cameraToRobot[0].getRotation().getX(),
+        cameraToRobot[0].getRotation().getY(),
+        cameraToRobot[0].getRotation().getZ());
 
       inputs.estimatedPose = Constants.Vision.rubbishPose;
-      inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
 
       inputs.timeStamp = 0;
       inputs.latency = 0;
 
+      table = NetworkTableInstance.getDefault().getTable("limelight");
+
       Logger.processInputs(inputs.cameraName, inputs);
     }
 
-    public LimeLightClass(String cameraName, CameraLocation location) {
-      this(cameraName, location, -1);
+    public LimeLightClass(String cameraName, CameraLocation location, Transform3d[] cameraToRobot) {
+      this(cameraName, location, -1, cameraToRobot);
     }
 
     @Override
     public Pose3d getPose() {
-      if(mode == CameraMode.AprilTags)
-        return inputs.estimatedPose;
-      else return Constants.Vision.rubbishPose;
+      return inputs.estimatedPose;
     }
 
     @Override
     public Translation2d getTranslationToBestTarget(){
-      if(mode == CameraMode.Rings)
-        return inputs.objectsToRobot[0];
-      else return Constants.Vision.rubbishTranslation[0];
+      return Constants.Vision.rubbishTranslation[0];
     }
     
     @Override
     public Translation2d[] getTranslationsToTargets() {
-      if(mode == CameraMode.Rings)
-        return inputs.objectsToRobot;
-      else return Constants.Vision.rubbishTranslation;
+      return Constants.Vision.rubbishTranslation;
     }
 
     @Override
     public double getServoAngle(){
-      if(servo == null) return 0;
-      return servo.getAngle();
+      return 0;
     }
 
     @Override
@@ -121,33 +101,38 @@ public class LimeLightClass implements CameraInterface{
     public void update() {
       latestResults = LimelightHelpers.getLatestResults(inputs.cameraName);
 
-      if(!latestResults.targetingResults.valid){
+      if(!LimelightHelpers.getTV(inputs.cameraName)){
         inputs.timeStamp = 0;
         inputs.latency = 0;
         inputs.estimatedPose = Constants.Vision.rubbishPose;
-        inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
         Logger.processInputs(inputs.cameraName, inputs);
         return;
       }
 
-      inputs.timeStamp = latestResults.targetingResults.timestamp_RIOFPGA_capture;
-      inputs.latency = latestResults.targetingResults.latency_capture * 100;
+      // System.out.println("udpates");
+      inputs.timeStamp = Timer.getFPGATimestamp() - (table.getEntry("tl").getDouble(0) - table.getEntry("cl").getDouble(0)) / 1000;
+      inputs.latency = (table.getEntry("tl").getDouble(0) - table.getEntry("cl").getDouble(0)) / 1000;
 
-      if(mode == CameraMode.AprilTags)
-        inputs.estimatedPose = latestResults.targetingResults.getBotPose3d();
-      else{
-        var targets = latestResults.targetingResults.targets_Retro;
+      // inputs.timeStamp = latestResults.targetingResults.timestamp_RIOFPGA_capture;
+      // inputs.latency = latestResults.targetingResults.latency_capture * 100;
+      inputs.estimatedPose = toPose3d(table.getEntry("botpose_wpiblue").getDoubleArray(new double[6]));
 
-        for(int i = 0; i < targets.length || i == 5; i++){
+      // SmartDashboard.putNumber("timestamp", getTimeStamp());
 
-          inputs.objectsToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
-          cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets[i].tx),
-          Rotation2d.fromDegrees(targets[i].ty)).plus(cameraToRobot[1].getTranslation().toTranslation2d()
-          ).rotateBy(cameraToRobot[1].getRotation().toRotation2d());
-      }
-      }
+      // inputs.estimatedPose = latestResults.targetingResults.getBotPose3d();
 
       Logger.processInputs(inputs.cameraName, inputs);
+    }
+
+    private Pose3d toPose3d(double[] arr){
+      return new Pose3d(
+        arr[0],
+        arr[1],
+        arr[2],
+        new Rotation3d(
+        arr[3],
+        arr[4],
+        arr[5]));
     }
 
     @Override
@@ -157,20 +142,6 @@ public class LimeLightClass implements CameraInterface{
 
     @Override
     public void setPipeLine(int pipeLineIndex) {
-      if (!isModeSwitchable) return;
-      LimelightHelpers.setPipelineIndex(inputs.cameraName, pipeLineIndex);
-      if(pipeLineIndex == 0){
-        mode = CameraMode.AprilTags;
-        inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
-        if(servo != null)
-          servo.setAngle(0);
-      }
-      else{
-        mode = CameraMode.Rings;
-        inputs.estimatedPose = Constants.Vision.rubbishPose;
-        if(servo != null)
-          servo.setAngle(90);
-      }
     }
 
     @Override

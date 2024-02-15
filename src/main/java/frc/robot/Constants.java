@@ -44,7 +44,7 @@ public class Constants {
         public static final Translation2d[] rubbishTranslation = {new Translation2d(-20, -20)};
         public static final Pose3d rubbishPose = new Pose3d(new Pose2d(rubbishTranslation[0], new Rotation2d(69)));
 
-        public static final int numberOfCameras = 2;
+        public static final int numberOfCameras = 3;
 
             public static final Transform3d[][] cameraLocations = Constants.createCameraTransforms();
 
@@ -313,61 +313,61 @@ public class Constants {
                 {new Transform3d( //camera 1 aprilTag postion
                 -0.27,
                 -0.13,
-                0,
+                0.06,
                 new Rotation3d(
                 0,
-                0,
-                0)),
+                Units.degreesToRadians(19),
+                Math.PI)),
 
                 new Transform3d( //camera 1 ring postion
-                0,
-                0,
-                0,
+                -0.27,
+                -0.13,
+                0.06,
                 new Rotation3d(
                 0,
-                0,
-                0
+                Units.degreesToRadians(-14),
+                Math.PI
                 )
                 )},
 
                 {
                 new Transform3d( //camera 2 aprilTag postion
-                0.4,
-                0.35
-                ,0,
+                0.45,
+                0.33
+                ,0.18,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(-15),
-                Units.degreesToRadians(10))),
+                Units.degreesToRadians(18),
+                Units.degreesToRadians(-30))),
                 
                 new Transform3d( //camera 2 aprilTag postion
-                0.4,
-                -0.35
-                ,0,
+                0.45,
+                0.33
+                ,0.18,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(-15),
-                Units.degreesToRadians(10)))
+                Units.degreesToRadians(18),
+                Units.degreesToRadians(-30)))
                 },
                 
                 {
                 new Transform3d( //camera 3 aprilTag postion
-                0.45,
-                0.30,
-                0,
+                0.35,
+                -0.35,
+                0.15,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(10),
-                Units.degreesToRadians(-20))),
+                Units.degreesToRadians(-15),
+                Units.degreesToRadians(11))),
             
                 new Transform3d( //camera 3 aprilTag postion
-                0.45,
-                0.30,
-                0,
+                0.35,
+                -0.35,
+                0.15,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(10),
-                Units.degreesToRadians(-20)))
+                Units.degreesToRadians(-15),
+                Units.degreesToRadians(11)))
                 },
 
                 {
