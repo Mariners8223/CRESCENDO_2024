@@ -37,7 +37,8 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     ArmUtil.UpdateParameters();
-    SmartDashboard.putNumber("angle", ArmUtil.getArmAngle());
+    SmartDashboard.putNumber("Arm angle", ArmUtil.getArmAngle());
+    SmartDashboard.putNumber("Robot angle", ArmUtil.getChassisAngle());
   }
 
   @Override

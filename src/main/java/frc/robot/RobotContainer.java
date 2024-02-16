@@ -19,14 +19,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.ShooterCommands.QuikAim;
-import frc.robot.commands.armCommands.MoveToFree;
-import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
-import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 
 public class RobotContainer {
   public static DriveBase driveBase;
