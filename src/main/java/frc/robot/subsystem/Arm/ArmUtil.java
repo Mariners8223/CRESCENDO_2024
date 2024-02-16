@@ -5,6 +5,7 @@
 package frc.robot.subsystem.Arm;
 
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -66,8 +67,8 @@ public class ArmUtil{
         }
         else{
           ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
-          ZaxisTarget.y = Constants.Arm.armLengthMeters * Math.sin(ArmAngle);
-          ZaxisTarget.x = Constants.Arm.armLengthMeters * Math.cos(ArmAngle);
+          ZaxisTarget.y = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.sin(ArmAngle), 0, Constants.Arm.armLengthMeters);
+          ZaxisTarget.x = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.cos(ArmAngle), Constants.Arm.armLengthMeters, 0);
       }
       }
       else{
@@ -148,7 +149,12 @@ public class ArmUtil{
       getWantedDegree();
       CalcAngleZaxis();
       CalcVelocityXy_field();
-      ZaxisTarget.rotation = ArmAngle;
+      if (IsQuikShot) {
+      ZaxisTarget.rotation = ArmAngle;        
+      }
+      else{
+        ZaxisTarget.rotation = 0;
+      }
       CalcYaxisAngle();
     }
     public static double getArmAngle(){

@@ -6,8 +6,11 @@ package frc.robot.commands.sequences;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ShooterCommands.AimShooter;
+import frc.robot.commands.ShooterCommands.Shoot;
+import frc.robot.subsystem.Arm.ArmUtil;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -18,7 +21,14 @@ public class AimToSpeaker extends SequentialCommandGroup {
     AimShooter Aim = new AimShooter();
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(0.8)),
+    if (!ArmUtil.IsDeadZone) {//TODO: add an "if was asked to shoot and is not deadezone"
+      addCommands(new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(Constants.Arm.ShootingPowerToSpeaker)),
+    Aim,
+    new Shoot());
+    }
+    else{
+      addCommands(new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(Constants.Arm.ShootingPowerToSpeaker)),
     Aim);
+    }
   }
 }

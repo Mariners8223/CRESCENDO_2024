@@ -7,16 +7,12 @@ package frc.robot;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
-import frc.robot.subsystem.VisionSubSystem.Vision;
-import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {

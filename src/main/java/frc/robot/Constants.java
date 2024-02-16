@@ -99,6 +99,8 @@ public class Constants {
         public static final double armLengthMeters = 0.46;
         public static final double shooterAndIntakeLengthMeters = 0.361;
 
+        public static final double ShootingPowerToSpeaker = 0.5;
+
         public static final double mainPivotDistanceFromCenterMeters = 0.113;
         public static final double armHeightFromFrameMeters = 0.245;
         public static final double SecondaryMotorDistanceFromShooterMeters = 0.06;

@@ -5,11 +5,10 @@
 package frc.robot.commands.sequences;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.commands.IntakeCommands.Collect;
+import frc.robot.commands.ShooterCommands.QuikAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -21,14 +20,9 @@ public class QuikShoot extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(//TODO
-      // new InstantCommand(() -> RobotContainer.arm.moveIntakeToPose(
-      //   Constants.Arm.FloorPosition, frc.robot.subsystem.Arm.Arm.ControlType.Rotation)),//move intake to collect
-      // new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(0.8)),//start the shooting prosses
-      // new ParallelCommandGroup(
-      //   new Collect(),
-      //   new InstantCommand(() -> RobotContainer.driveBase.findPath(Constants.AutoConstants.MiddleNote))),//get game piece
-      // new InstantCommand(() -> RobotContainer.arm.moveShooterToPose(Constants.AutoConstants.FastShootPose)),//aim
-      // new Shoot()//shoot
+      new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(Constants.Arm.ShootingPowerToSpeaker)),
+      new QuikAim(),
+      new Shoot()
     );
   }
 }
