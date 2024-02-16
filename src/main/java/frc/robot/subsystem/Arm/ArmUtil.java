@@ -117,6 +117,9 @@ public class ArmUtil{
     private static void CalcYaxisAngle(){//calcs the Chassis angle to the speaker relative to the speed
       getChassisOffset();
       ChasisAngle =  YaxisWantedAngle*2 - YaxisOffset;
+      if (IsQuikShot) {
+        ChasisAngle = Units.degreesToRadians(180) - ChasisAngle;
+      }
     }
     private static void CalcVelocityXy_field(){//calcs the Velocity in Y and X axises
       VelocityY = StartSpeed*Math.cos(ArmAngle)*Math.sin(YaxisWantedAngle)
