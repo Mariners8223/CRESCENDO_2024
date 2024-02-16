@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.armCommands.MoveToFree;
+import frc.robot.commands.climbCommands.MoveArmToClimbPosition;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.climb.Elavator;
 
@@ -19,59 +20,11 @@ public class ClimbSequence extends SequentialCommandGroup {
   public ClimbSequence() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(
+    addCommands(//Can be deleted
       new MoveToFree(),
-      new Climb1()
+      new MoveArmToClimbPosition()
       // new Climb2(true)
       // new Climb2(false)
     );
-  }
-
-  public static class Climb1 extends Command{
-    Arm arm;
-
-    public Climb1(){
-      arm = Arm.getInstance();
-      // addRequirements();
-      addRequirements(arm);
-    }
-
-    @Override
-    public void initialize(){
-      arm.moveMotorsToRotation(0.25, 0.5);
-    }
-
-    @Override
-    public boolean isFinished(){
-      return arm.isArmInPosition();
-    }
-  }
-
-  public static class Climb2 extends Command{
-    Elavator elavator;
-    boolean goingUp;
-
-    public Climb2(boolean goingUp){
-      elavator = Arm.getInstance().getElavatorSub();
-      this.goingUp = goingUp;
-
-      addRequirements(Arm.getInstance());
-    }
-
-    @Override
-    public void initialize(){
-      if(goingUp) elavator.setRailMotor(Constants.Elevator.chainHeight - (Constants.Arm.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround) * 100 + 8);
-      else elavator.setRailMotor(Constants.Elevator.chainHeight - (Constants.Arm.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround) * 100 - 15);
-    }
-
-    @Override 
-    public void end(boolean interrupted){
-      System.out.println("Climb 2 ended");
-    }
-
-    @Override
-    public boolean isFinished(){
-      return elavator.isRailMotorInPosition();
-    }
   }
 }

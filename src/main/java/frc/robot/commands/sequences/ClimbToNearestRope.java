@@ -4,12 +4,12 @@
 
 package frc.robot.commands.sequences;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystem.Arm.Arm;
-import frc.robot.subsystem.Arm.climb.Elavator;
+import frc.robot.commands.climbCommands.ClimbElevator;
+import frc.robot.commands.climbCommands.MoveArmToClimbPosition;
+import frc.robot.commands.climbCommands.MoveRobotToSetPose2d;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -24,16 +24,11 @@ public class ClimbToNearestRope extends SequentialCommandGroup {
         Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope));
     
     addCommands(//TODO
-    // new InstantCommand(() -> //go in stage and face the rope closest to you
-    //  RobotContainer.driveBase.findPath(Constants.Elevator.SlidingPositions.InStageMiddleLocations_POSE2D.get(index))),
-    // new InstantCommand(() -> // move the arm to the climbing position
-    //  Arm.getInstance().moveMotorsToRotation(0.25, 0.5)),
-    // new InstantCommand(() -> // move the elavator to the climbing position
-    //  Arm.getInstance().getElavatorSub().SetClimbingHight(frc.robot.Constants.Elevator.PUSH_ELAVATER_ARM_POSTION)),
-    // new InstantCommand(() -> // move the robot to the rope
-    //  RobotContainer.driveBase.findPath(Constants.Elevator.SlidingPositions.UnderRopeMiddleLocations_POSE2D.get(index))),
-    // new InstantCommand(() -> //pull yourself up
-    // Arm.getInstance().getElavatorSub().SetClimbingHight(frc.robot.Constants.Elevator.PULL_ELAVATER_ARM_POSTION))
+    new MoveRobotToSetPose2d(Constants.Elevator.SlidingPositions.InStageMiddleLocations_POSE2D.get(index)),
+    new MoveArmToClimbPosition(),
+    new ClimbElevator(true),
+    new MoveRobotToSetPose2d(Constants.Elevator.SlidingPositions.UnderRopeMiddleLocations_POSE2D.get(index)),
+    new ClimbElevator(false)
     );
   }
 }
