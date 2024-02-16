@@ -59,23 +59,31 @@ public class ArmUtil{
       if (distanceToSpeaker <= Constants.Arm.EndOfZone1) {
         // System.out.println("1");
         Zone1_Equasion();
-        if(IsQuikShot){
-          ZaxisTarget = Constants.Arm.QuikShotPosition;
-          ArmAngle = Units.degreesToRadians(180) - ArmAngle;
-        }
-        else ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
-      }
-      else{
-        // System.out.println("2");
-        Zone2_Equasion();
+        RobotSpeedRelative_angle();
         if(IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
           ArmAngle = Units.degreesToRadians(180) - ArmAngle;
         }
         else{
-          ZaxisTarget = Constants.Arm.Zone2_ArmPosition;        }
+          ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
+          ZaxisTarget.y = Constants.Arm.armLengthMeters * Math.sin(ArmAngle);
+          ZaxisTarget.x = Constants.Arm.armLengthMeters * Math.cos(ArmAngle);
       }
-      RobotSpeedRelative_angle();
+      }
+      else{
+        // System.out.println("2");
+        Zone2_Equasion();
+        RobotSpeedRelative_angle();
+        if(IsQuikShot){
+          ZaxisTarget = Constants.Arm.QuikShotPosition;
+          ArmAngle = Units.degreesToRadians(180) - ArmAngle;
+        }
+        else{
+          ZaxisTarget = Constants.Arm.Zone2_ArmPosition;
+          ZaxisTarget.y = Constants.Arm.armLengthMeters * Math.sin(ArmAngle);
+          ZaxisTarget.x = Constants.Arm.armLengthMeters * Math.cos(ArmAngle);
+        }
+      }
     }
   
     private static void getDy(){
