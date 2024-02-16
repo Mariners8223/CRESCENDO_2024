@@ -24,11 +24,11 @@ public class SlideToTheRightEdge extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {//TODO
-    // climb = Elavator.getInstance();
-    // target = RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.ClimbConstants.SlidingPositions.SlidingPositions_MiddleRope);
-    // RopeIndex = Constants.ClimbConstants.SlidingPositions.SlidingPositions_MiddleRope.indexOf(target);
-    // target = Constants.ClimbConstants.SlidingPositions.SlidingPositions_RightEdgeRope.get(RopeIndex);
-    // climb.moveRobotOnRope(-(RobotContainer.driveBase.getPose().getTranslation().getDistance(target) * Constants.ClimbConstants.AirialMetersToRopeLength * Constants.ClimbConstants.RopeLengthToMotorRotaions));
-    // //check if right is + or - for the motor
+    climb = Arm.getInstance().getElavatorSub();
+    target = RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope);
+    RopeIndex = Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope.indexOf(target);
+    target = Constants.Elevator.SlidingPositions.SlidingPositions_RightEdgeRope.get(RopeIndex);
+    climb.setRollerMotor(-(RobotContainer.driveBase.getPose().getTranslation().getDistance(target) * Constants.Elevator.AirialMetersToRopeLength));
+    //check if right is + or - for the motor
   }
 }

@@ -10,13 +10,10 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.util.PIDFGains;
 
 public class Elavator extends SubsystemBase {
@@ -42,6 +39,7 @@ public class Elavator extends SubsystemBase {
   private TalonFX rollerMotor;
 
   private PositionDutyCycle railoutput;
+  private PositionDutyCycle rolleroutput;
 
   private ElavatorInputsAutoLogged inputs;
 
@@ -56,11 +54,17 @@ public class Elavator extends SubsystemBase {
 
     railoutput = new PositionDutyCycle(0);
     railoutput.EnableFOC = false;
+    rolleroutput = new PositionDutyCycle(0);
+    rolleroutput.EnableFOC = false;
   }
 
   public void setRailMotor(double height){
     inputs.railMotorTarget = height;
     railMotor.setControl(railoutput.withPosition(inputs.railMotorTarget));
+  }
+  public void setRollerMotor(double distance){
+    inputs.rollerMotorTarget = distance;
+    rollerMotor.setControl(rolleroutput.withPosition(inputs.rollerMotorTarget));
   }
 
   public double getRailMotorPosition(){
