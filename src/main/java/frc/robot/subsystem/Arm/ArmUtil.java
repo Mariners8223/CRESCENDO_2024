@@ -74,7 +74,7 @@ public class ArmUtil{
       else{
         // System.out.println("2");
         Zone2_Equasion();
-        RobotSpeedRelative_angle();
+        // RobotSpeedRelative_angle();
         if(IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
           ArmAngle = Units.degreesToRadians(180) - ArmAngle;
@@ -90,22 +90,30 @@ public class ArmUtil{
     private static void getDy(){
       if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.Arm.SpeakerIsCenterRatioBottomLocation) {
         IsDeadZone = true;
-            Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength;//aime to the most right corner (robot prespective)
+            Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation;//aime to the most right corner (robot prespective)
       }
       else{
         IsDeadZone = false;
-            Dy = Constants.Arm.SpeakerBottomLocationY
-       + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio * (RobotContainer.driveBase.getPose().getTranslation().getY()
-        - Constants.Arm.SpeakerIsCenterRatioBottomLocation);//aim to a point prespective to the robot location in the chosen shooting zone
+            Dy = Constants.Arm.SpeakerBottomLocationY - Constants.Arm.SpeakerIsCenterRatioBottomLocation
+       + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio * (RobotContainer.driveBase.getPose().getTranslation().getY());//aim to a point prespective to the robot location in the chosen shooting zone
       }
     }
     private static void getDx(){
-      Dx = RobotContainer.driveBase.getPose().getTranslation().getX() - Constants.SpeakerTranslation.getX();
+      if (IsQuikShot) {
+        Dx = RobotContainer.driveBase.getPose().getTranslation().getX() + RobotContainer.arm.getShooterPosition().x
+         - Constants.SpeakerTranslation.getX();
+      }
+      else{
+        Dx = RobotContainer.driveBase.getPose().getTranslation().getX() - RobotContainer.arm.getShooterPosition().x
+         - Constants.SpeakerTranslation.getX();
+      }
     }
     private static void CalcDistance_withDxDy(){//i mean, its in the name, calcs the distance to the speaker
       getDx();
       getDy();
       distanceToSpeaker = Math.hypot(Dx, Dy);
+      // System.out.println("Dx " + Dx);
+      // System.out.println("Dy " + Dy);
     }
   
     private static void getWantedDegree(){//calcs the direction in which we want the gp to fly on

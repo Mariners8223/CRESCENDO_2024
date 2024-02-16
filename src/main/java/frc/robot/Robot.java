@@ -31,6 +31,7 @@ public class Robot extends LoggedRobot {
     Logger.start();
 
     new RobotContainer();
+    SmartDashboard.putNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
   }
 
   @Override
@@ -39,6 +40,7 @@ public class Robot extends LoggedRobot {
     ArmUtil.UpdateParameters();
     SmartDashboard.putNumber("Arm angle", ArmUtil.getArmAngle());
     SmartDashboard.putNumber("Robot angle", ArmUtil.getChassisAngle());
+    Constants.Shooter.frictionPowerParameterForGPVelocity = SmartDashboard.getNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
   }
 
   @Override

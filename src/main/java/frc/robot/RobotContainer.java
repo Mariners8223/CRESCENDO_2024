@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.IntakeCommands.Collect;
+import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.ShooterCommands.QuikAim;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
@@ -33,6 +35,7 @@ public class RobotContainer {
   public static SendableChooser<Command> autoChooser;
   
   public static boolean aimingAtSpeaker = true;
+  public static boolean isQuickAiming = false;
 
   public static BooleanSupplier isBlueAllince = () -> {
     if(DriverStation.getAlliance().isEmpty()) return true;
@@ -49,6 +52,8 @@ public class RobotContainer {
     driveBase = new DriveBase();
     arm = Arm.getInstance();
     vision = new Vision();
+
+    arm.setDefaultCommand(new QuikAim());
 
     configureBindings();
     configChooser();
@@ -72,7 +77,11 @@ public class RobotContainer {
     // driveController.cross().onTrue(new MoveToFree());
     // driveController.square().onTrue(new MoveToHome());
     // driveController.cross().onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(0.5))).onFalse(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
-    driveController.cross().whileTrue(new QuikAim());
+    
+    driveController.cross().onTrue(new QuikAim());
+    // driveController.cross().onTrue(new InstantCommand(() -> isQuickAiming = !isQuickAiming));
+    driveController.square().onTrue(new IntakeToFloor());
+    driveController.circle().onTrue(new Collect());
 
     // driveController.cross().onTrue(new ClimbSequence());
     // driveController.cross().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 1)));

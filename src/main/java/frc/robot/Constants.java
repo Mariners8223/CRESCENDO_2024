@@ -48,7 +48,7 @@ public class Constants {
         public static final Translation2d[] rubbishTranslation = {new Translation2d(-20, -20)};
         public static final Pose3d rubbishPose = new Pose3d(new Pose2d(rubbishTranslation[0], new Rotation2d(69)));
 
-        public static final int numberOfCameras = 3;
+        public static final int numberOfCameras = 2;
 
             public static final Transform3d[][] cameraLocations = Constants.createCameraTransforms();
 
@@ -137,7 +137,7 @@ public class Constants {
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = true;
 
-            public static final double mainZeroOffset = 0.482;
+            public static final double mainZeroOffset = 0.482 + 0.012;
             public static final double secondaryZeroOffset = 0.033;
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
@@ -166,7 +166,7 @@ public class Constants {
 
         public static final double wheelRadius = 0.0508;
 
-        public static final double frictionPowerParameterForGPVelocity = 1;//get from exp
+        public static double frictionPowerParameterForGPVelocity = 0.6;//get from exp
 
         public static final double ShootToAmpPower = 0.4;
         public static final double ShootToAmpTime = 2;
@@ -185,7 +185,7 @@ public class Constants {
         public static final int CloseProximity = 75;
 
         public static final double secondaryIntakeAngle = 0.43;
-        public static final double mainIntakeAngle = -0.04;
+        public static final double mainIntakeAngle = -0.03;
     }
 
     public static class Elevator{
