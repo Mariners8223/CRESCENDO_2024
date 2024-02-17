@@ -75,7 +75,7 @@ public class ArmUtil{
       }
       else{
         // System.out.println("2");
-        Zone1_Equasion();
+        Zone1_Equasion();//TODO: change to zone2
         // Zone2_Equasion();
         // RobotSpeedRelative_angle();
         if(IsQuikShot){
@@ -150,6 +150,7 @@ public class ArmUtil{
     StartSpeed = RobotContainer.arm.getShooterSub().getShooterVelocity();//the speed in which the gp is leaving the shooter
     Dy = 1;//y axis of targeted point (to calc the distance from speaker)
     Dx = 1;//airial distance to speaker
+    Dz = 1;
     distanceToSpeaker = 1;//self explanatory
     ArmAngle = 45;//the angle in which the arm shell be
     IsDeadZone = true;//is this a dead zone???

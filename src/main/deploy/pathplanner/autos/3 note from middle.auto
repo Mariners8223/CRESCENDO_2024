@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "GoToQuikShotPose_FIRST note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "get 2nd row uppest note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FIRST row go to QuikShot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker to bottom 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "get 2nd row middle note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom 4 to speaker"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
