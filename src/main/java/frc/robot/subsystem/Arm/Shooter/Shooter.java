@@ -9,6 +9,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -59,6 +60,11 @@ public class Shooter {
 
         shooterMotor1.set(power);
         shooterMotor2.set(power);
+    }
+
+    public void setShooterVelocity(double rpm){
+        shooterMotor1.getPIDController().setReference(rpm, ControlType.kVelocity);
+        shooterMotor2.getPIDController().setReference(rpm, ControlType.kVelocity);
     }
 
     /**

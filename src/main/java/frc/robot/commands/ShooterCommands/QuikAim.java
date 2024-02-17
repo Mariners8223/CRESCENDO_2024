@@ -7,6 +7,7 @@ package frc.robot.commands.ShooterCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -26,7 +27,7 @@ public class QuikAim extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new IntakeToFloor(),
-      new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(0.5)),
+      new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(0.6)),
       new RepeatCommand(new QuickAim1())
     );
   }
@@ -43,13 +44,14 @@ public class QuikAim extends SequentialCommandGroup {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-      ArmUtil.ResetParameters();
+      // ArmUtil.ResetParameters();
       ArmUtil.IsQuikShot = true;
       ArmUtil.UpdateParameters();
       target = ArmUtil.getArmNeededPosition();
-      target.rotation = MathUtil.clamp(target.rotation, Units.rotationsToRadians(0.347), Units.rotationsToRadians(0.5));
+      SmartDashboard.putNumber("before clamo", Units.radiansToDegrees(target.rotation));
+      target.rotation = MathUtil.clamp(target.rotation, Units.rotationsToRadians(0.35), Units.rotationsToRadians(0.5));
       arm.moveShooterToPose(target);
-      RobotContainer.driveBase.setTargetRotation(Rotation2d.fromDegrees(ArmUtil.getChassisAngle()));
+      // RobotContainer.driveBase.setTargetRotation(Rotation2d.fromDegrees(ArmUtil.getChassisAngle()));
   }
   }
 }

@@ -10,8 +10,10 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
 
@@ -37,8 +39,13 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     ArmUtil.UpdateParameters();
-    SmartDashboard.putNumber("Arm angle", ArmUtil.getArmAngle());
+    SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
     SmartDashboard.putNumber("Robot angle", ArmUtil.getChassisAngle());
+    SmartDashboard.putNumber("dx", ArmUtil.getDx());
+    SmartDashboard.putNumber("dy", ArmUtil.getDy());
+    SmartDashboard.putNumber("Dz", ArmUtil.getDz());
+    SmartDashboard.putNumber("ArmPose z", Arm.getInstance().getShooterPosition().y);
+    SmartDashboard.putNumber("armX", Arm.getInstance().getShooterPosition().x);
     Constants.Shooter.frictionPowerParameterForGPVelocity = SmartDashboard.getNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
   }
 

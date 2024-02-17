@@ -32,7 +32,7 @@ public class Constants {
 
     public static final Pose2d AmpPose = new Pose2d(1.829, 8.46, Rotation2d.fromDegrees(90));
     public static final Pose2d RobotShootingToAMPPosition = new Pose2d(1.83, 7.71, Rotation2d.fromDegrees(-90));
-    public static final Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 5.55, 2.03);
+    // public static final Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 5.55, 2.03);
 
     public static final class Logger{
         public static final String save_location = ""; //add save lcoation (probably a usb stick so /u)
@@ -71,17 +71,18 @@ public class Constants {
 
     public static final class Speaker{
             public static final double FieldYLength = Units.inchesToMeters(323.00);
+            public static final double FieldXLength = 16.45;
 
             public static final double SpeakerLength = 1.05;
             public static final double SpeakerMiddleLocationY = Units.inchesToMeters(218.42);
             public static final double SpeakerBottomLocationY = Units.inchesToMeters(218.42) - SpeakerLength/2;
-            public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMiddleLocationY));
+            public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerMiddleLocationY));
             public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;
             public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
-            public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMiddleLocationY);
+            public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
 
             public static final Translation3d ampTranslation = new Translation3d(3, 8, 0);
-            public static final Translation3d SpeakerTranslation = new Translation3d( Units.inchesToMeters(-1.5), 5, 3);
+            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 2.03);
     }
 
     public static final class Zone1{
@@ -105,13 +106,12 @@ public class Constants {
         public static final double armHeightFromFrameMeters = 0.245;
         public static final double SecondaryMotorDistanceFromShooterMeters = 0.06;
     
-        public static final double RobotHightFromGround = 0;//TODO: robot hieght from ground
         public static final double SpeakerLength = 1.181;//done
         public static final double SpeakerBottomLocationY = 5.5642;//done
         public static final double SpeakerMidlleLocationY = SpeakerLength/2 + SpeakerBottomLocationY;//done
         public static final double FieldYLength = Units.inchesToMeters(323.00);
-        public static final double SpeakerIsCenterRatio = SpeakerLength/(2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY));
-        public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerLength/2 - SpeakerMidlleLocationY);
+        public static final double SpeakerIsCenterRatio = SpeakerLength/(2*(FieldYLength - SpeakerMidlleLocationY));
+        public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMidlleLocationY);
         public static final ArmPosition FloorPosition = new ArmPosition(0, 0, 0); // In radians
         public static final ArmPosition SourcePosition = new ArmPosition(0, 0, 0);
 
@@ -157,7 +157,7 @@ public class Constants {
         public static final int shooterMotor1ID = 19;
         public static final int shooterMotor2ID = 18;
 
-        public static final PIDFGains shooterPID = new PIDFGains(0.5, 0, 0); //TODO: get the real value
+        public static final PIDFGains shooterPID = new PIDFGains(1, 0, 0); //TODO: get the real value
 
         public static final boolean shooter1Inverted = false;
         public static final boolean shooter2Inverted = true;
@@ -184,7 +184,7 @@ public class Constants {
         public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
         public static final int CloseProximity = 75;
 
-        public static final double secondaryIntakeAngle = 0.43;
+        public static final double secondaryIntakeAngle = 0.40;
         public static final double mainIntakeAngle = -0.03;
     }
 

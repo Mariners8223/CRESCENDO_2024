@@ -18,7 +18,7 @@ public class Shoot extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     arm = Arm.getInstance();
 
-    addRequirements(arm);
+    // addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
@@ -26,7 +26,7 @@ public class Shoot extends Command {
   public void initialize() {
     if(!Arm.getInstance().getIntakeSub().isGamePieceDetected()) cancel();
 
-    arm.getShooterSub().setShooterPower(0.8);
+    arm.getShooterSub().setShooterPower(0.75);
     timer = 0;
   }
 

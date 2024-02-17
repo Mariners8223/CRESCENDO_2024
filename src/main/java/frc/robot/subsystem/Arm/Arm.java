@@ -224,7 +224,7 @@ public class Arm extends SubsystemBase{
     mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kPosition);
 
 
-    inputs.secondaryMotorTargetPostion =  (position.rotation / (Math.PI * 2)) - inputs.mainMotorTargetPostion;
+    inputs.secondaryMotorTargetPostion =  Units.radiansToRotations(position.rotation) - inputs.mainMotorTargetPostion;
     inputs.secondaryMotorTargetPostion = MathUtil.clamp(inputs.secondaryMotorTargetPostion, Constants.Arm.Motors.secondarySoftLimits[1], Constants.Arm.Motors.secondarySoftLimits[0]);
 
     secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kPosition);
@@ -275,7 +275,7 @@ public class Arm extends SubsystemBase{
   public void updateArmPostions(){
     shooterPosition.x = (Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion))) * (Constants.Arm.armLengthMeters) - Constants.Arm.mainPivotDistanceFromCenterMeters
     + (Math.sin(Units.rotationsToRadians(inputs.secondaryMotorPosition)) * Constants.Arm.SecondaryMotorDistanceFromShooterMeters);
-    shooterPosition.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * (Constants.Arm.armLengthMeters) + Constants.Arm.armHeightFromFrameMeters
+    shooterPosition.y = Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * (Constants.Arm.armLengthMeters) + Constants.Arm.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround
     - (Math.cos(Units.rotationsToRadians(inputs.secondaryMotorPosition))) * Constants.Arm.SecondaryMotorDistanceFromShooterMeters;
     shooterPosition.rotation = Units.rotationsToRadians(inputs.mainMotorPostion + inputs.secondaryMotorPosition);
 

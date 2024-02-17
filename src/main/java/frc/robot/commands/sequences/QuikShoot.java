@@ -20,7 +20,7 @@ public class QuikShoot extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(//TODO
-      new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(Constants.Arm.ShootingPowerToSpeaker)),
+      new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(0.75)),
       new QuikAim(),
       new Shoot()
     );

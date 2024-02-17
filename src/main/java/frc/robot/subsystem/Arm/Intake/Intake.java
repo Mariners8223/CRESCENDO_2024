@@ -10,6 +10,10 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 public class Intake {
     @AutoLog
     public static class IntakeInputs{
@@ -33,6 +37,8 @@ public class Intake {
         colorSensor = new ColorSensorV3(Constants.Intake.ColorSensorPort);
 
         inputs = new IntakeInputsAutoLogged();
+
+        // new Trigger(() -> !colorSensor.isConnected()).whileTrue(new RepeatCommand(new InstantCommand(() -> colorSensor = new ColorSensorV3(Constants.Intake.ColorSensorPort)).ignoringDisable(true)).ignoringDisable(true));
     }
 
     public double getProximity(){
