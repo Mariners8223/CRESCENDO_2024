@@ -79,6 +79,12 @@ public class ShootToAmp extends SequentialCommandGroup {
     public void initialize(){
       arm.moveMotorsToRotation(0.35, 0.3);
     }
+
+    @Override
+    public void end(boolean interrupted){
+      if(!interrupted) arm.lastknownPosition = Arm.knownArmPosition.Amp;
+      else arm.lastknownPosition = Arm.knownArmPosition.Unknown;
+    }
     
     @Override 
     public boolean isFinished() {

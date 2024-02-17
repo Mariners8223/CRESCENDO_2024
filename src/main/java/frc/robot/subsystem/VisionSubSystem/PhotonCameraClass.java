@@ -5,7 +5,6 @@
 package frc.robot.subsystem.VisionSubSystem;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLog;

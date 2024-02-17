@@ -12,11 +12,9 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
-import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
-import frc.robot.subsystem.Arm.Intake.Intake;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -26,7 +24,7 @@ public class QuikAim extends SequentialCommandGroup {
   public QuikAim() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(0)),
+    addCommands(
       new IntakeToFloor(),
       new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(0.5)),
       new RepeatCommand(new QuickAim1())

@@ -7,13 +7,15 @@ package frc.robot.subsystem.Arm.Shooter;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
-import com.fasterxml.jackson.core.json.DupDetector;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.util.PIDFGains;
@@ -44,6 +46,8 @@ public class Shooter {
         shooterMotor2 = configMotor(Constants.Shooter.shooterPID, Constants.Shooter.shooterMotor2ID, Constants.Shooter.shooter2Inverted);
 
         inputs = new ShooterInputsAutoLogged();
+
+        new Trigger(RobotState::isDisabled).onTrue(new InstantCommand(() -> stopMotors()).ignoringDisable(true));
     }
 
     /**

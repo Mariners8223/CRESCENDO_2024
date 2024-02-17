@@ -15,13 +15,13 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -32,6 +32,10 @@ import frc.robot.subsystem.Arm.climb.Elavator;
 import frc.util.PIDFGains;
 
 public class Arm extends SubsystemBase{
+
+  public static enum knownArmPosition{
+    Intake, Shooter, Home, Amp, Climb, Unknown
+  }
   
   public static class ArmPosition{
     public double x;
@@ -117,6 +121,8 @@ public class Arm extends SubsystemBase{
   private ArmPosition intakePosition;
   private ArmPosition shooterPosition;
 
+  public knownArmPosition lastknownPosition;
+
   private Shooter shooter;
   private Intake intake;
   private Elavator elavator;
@@ -142,6 +148,8 @@ public class Arm extends SubsystemBase{
     shooter = new Shooter();
     intake = new Intake();
     elavator = new Elavator();
+
+    lastknownPosition = knownArmPosition.Home;
   }
 
   /**
@@ -211,10 +219,14 @@ public class Arm extends SubsystemBase{
    */
   public void moveShooterToPose(ArmPosition position){
     inputs.mainMotorTargetPostion = Math.asin(position.y / Constants.Arm.armLengthMeters) / (Math.PI * 2);
+    inputs.mainMotorTargetPostion = MathUtil.clamp(inputs.mainMotorTargetPostion, Constants.Arm.Motors.mainSoftLimits[1], Constants.Arm.Motors.mainSoftLimits[0]);
+
     mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kPosition);
 
 
     inputs.secondaryMotorTargetPostion =  (position.rotation / (Math.PI * 2)) - inputs.mainMotorTargetPostion;
+    inputs.secondaryMotorTargetPostion = MathUtil.clamp(inputs.secondaryMotorTargetPostion, Constants.Arm.Motors.secondarySoftLimits[1], Constants.Arm.Motors.secondarySoftLimits[0]);
+
     secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kPosition);
   }
 

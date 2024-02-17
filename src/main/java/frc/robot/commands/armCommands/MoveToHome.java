@@ -63,6 +63,12 @@ public class MoveToHome extends SequentialCommandGroup {
     }
 
     @Override
+    public void end(boolean interrupted){
+      if(!interrupted) arm.lastknownPosition = Arm.knownArmPosition.Home;
+      else arm.lastknownPosition = Arm.knownArmPosition.Unknown;
+    }
+
+    @Override
     public boolean isFinished(){
       return arm.isArmInPosition();
     }

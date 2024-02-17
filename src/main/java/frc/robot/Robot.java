@@ -16,7 +16,6 @@ import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
-  private boolean mode;
 
   @Override
   public void robotInit() {

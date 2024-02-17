@@ -39,6 +39,13 @@ public class IntakeToFloor extends SequentialCommandGroup {
     }
 
     @Override
+    public void end(boolean interrupted){
+      System.out.println("Intake ended");
+      if(interrupted) Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Unknown;
+      else if(mainMotor) Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Intake;
+    }
+
+    @Override
     public boolean isFinished() {
       return arm.isArmInPosition();
     }

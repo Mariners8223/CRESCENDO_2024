@@ -21,6 +21,13 @@ public class MoveArmToClimbPosition extends Command {
   }
 
   @Override
+  public void end(boolean interrupted){
+    System.out.println("Climb 1 ended");
+    if(!interrupted) Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Climb;
+    else Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Unknown;
+  }
+
+  @Override
   public boolean isFinished(){
     return arm.isArmInPosition();
   }

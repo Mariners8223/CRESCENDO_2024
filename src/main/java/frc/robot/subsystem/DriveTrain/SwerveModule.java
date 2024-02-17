@@ -422,6 +422,8 @@ public class SwerveModule{
     steerMotorPostionInput = position -> sparkMax.getPIDController().setReference(position * Constants.DriveTrain.Steer.steerGearRatio, ControlType.kPosition);
     steerMotorVoltageInput = position -> sparkMax.getPIDController().setReference(steerMotorVoltagePID.calculate(steerMotorPostion.get(), position), ControlType.kVoltage);
 
+    sparkMax.setSmartCurrentLimit(30); //sets the current limit of the motor (thanks noga for reminding me)
+
     sparkMax.burnFlash(); //sometimes work
 
     return sparkMax;

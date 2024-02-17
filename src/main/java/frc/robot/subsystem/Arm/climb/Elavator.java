@@ -18,8 +18,6 @@ import frc.util.PIDFGains;
 
 public class Elavator extends SubsystemBase {
   
-  private static Elavator instance;
-
   @AutoLog
   public static class ElavatorInputs{
     double railMotorTarget;
