@@ -260,7 +260,7 @@ public class Constants {
             public static final double maxAcceleration = 40; //the max xy acceleration of the robot in meter per second squared
             public static final double maxAccelerationRotation = 40; //the max rotation acceleration of the robot in omega radians per second squard
 
-            public static final PIDFGains thetaCorrectionPID = new PIDFGains(0.4, 0.0, 0.0);
+            public static final PIDFGains thetaCorrectionPID = new PIDFGains(3, 0.0, 0.15);
 
             public static final double chassisSpeedsDeadZone = 0.05;
 

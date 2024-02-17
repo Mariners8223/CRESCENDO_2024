@@ -53,7 +53,7 @@ public class RobotContainer {
     arm = Arm.getInstance();
     vision = new Vision();
 
-    arm.setDefaultCommand(new QuikAim());
+    // arm.setDefaultCommand(new QuikAim());
 
     configureBindings();
     configChooser();
