@@ -24,8 +24,7 @@ public class AimShooter extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // ArmUtil.ResetParameters();
-    ArmUtil.IsQuikShot = false;
+    ArmUtil.SetQuikShotMode(false);
     ArmUtil.UpdateParameters();
     arm.moveShooterToPose(ArmUtil.getArmNeededPosition());
     RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()));

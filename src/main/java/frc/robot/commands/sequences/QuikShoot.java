@@ -6,7 +6,6 @@ package frc.robot.commands.sequences;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ShooterCommands.QuikAim;
 import frc.robot.commands.ShooterCommands.Shoot;

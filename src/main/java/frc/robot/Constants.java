@@ -85,7 +85,7 @@ public class Constants {
             public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 2.03);
     }
 
-    public static final class Zone1{
+    public static final class Zone1{//DIS NOT TRUE
         public static final double maxAngle = 90;
         public static final double minAngle = 60;
     }

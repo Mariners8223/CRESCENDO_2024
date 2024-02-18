@@ -19,14 +19,15 @@ public class ArmUtil{
     private static double Dz;
     private static double distanceToSpeaker;//self explanatory
     private static double ArmAngle = 45;//the angle in which the arm shell be
-    public static boolean IsDeadZone;//is this a dead zone???
-    public static boolean IsQuikShot = true;//are we using quik shot????
+    private static boolean IsDeadZone;//is this a dead zone???
+    private static boolean IsQuikShot = true;//are we using quik shot????
     //chassis parameters
     private static double YaxisWantedAngle;//the angle in which we want the gp to fly in
     private static double YaxisOffset;//oh no! speed affects our vector, lets calc the offset!
     private static double ChasisAngle;//the final angle that the robot will face
     private static double VelocityY;//field relative
     private static double VelocityX;//field relative
+    private static boolean isResetNeeded = true;
   
     private static void Zone1_Equasion(){//simple lazer for zone 1
       try {
@@ -161,26 +162,34 @@ public class ArmUtil{
       + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond + RobotContainer.driveBase.getAbsoluteChassisSpeeds().omegaRadiansPerSecond
       * RobotContainer.arm.getShooterPosition().x * Math.cos(Units.degreesToRadians(-90) + YaxisWantedAngle);
     }
-    public static void ResetParameters(){//resets the parameters for a new mode
-    ZaxisTarget = Constants.Arm.QuikShotPosition;//arm angle arm position
-    StartSpeed = RobotContainer.arm.getShooterSub().getShooterVelocity();//the speed in which the gp is leaving the shooter
-    Dy = 1;//y axis of targeted point (to calc the distance from speaker)
-    Dx = 1;//airial distance to speaker
-    Dz = 1;
-    distanceToSpeaker = 1;//self explanatory
-    ArmAngle = 45;//the angle in which the arm shell be
-    IsDeadZone = true;//is this a dead zone???
-    IsQuikShot = false;//are we using quik shot????
-    //chassis parameters
-    YaxisWantedAngle = 0;//the angle in which we want the gp to fly in
-    YaxisOffset = 1;//oh no! speed affects our vector, lets calc the offset!
-    ChasisAngle = 0;//the final angle that the robot will face
-    VelocityY = 1;//field relative
-    VelocityX = 1;//field relative
+    private static void ResetParameters(){//resets the parameters for a new mode
+      if (isResetNeeded) {
+        ZaxisTarget = Constants.Arm.QuikShotPosition;//arm angle arm position
+        StartSpeed = RobotContainer.arm.getShooterSub().getAvrageShooterVelocity();//the speed in which the gp is leaving the shooter
+        Dy = 1;//y axis of targeted point (to calc the distance from speaker)
+        Dx = 1;//airial distance to speaker
+        Dz = 1;
+        distanceToSpeaker = 1;//self explanatory
+        ArmAngle = 45;//the angle in which the arm shell be
+        IsDeadZone = true;//is this a dead zone???
+        //chassis parameters
+        YaxisWantedAngle = 0;//the angle in which we want the gp to fly in
+        YaxisOffset = 1;//oh no! speed affects our vector, lets calc the offset!
+        ChasisAngle = 0;//the final angle that the robot will face
+        VelocityY = 1;//field relative
+        VelocityX = 1;//field relative
+        isResetNeeded = false;
+      }
+    }
+    public static void SetQuikShotMode(boolean QuikShot){
+      if (IsQuikShot != QuikShot) {
+        isResetNeeded = true;
+      }
+      IsQuikShot = QuikShot;
     }
 
     public static void UpdateParameters(){//updates all the parameters so we can have our desired angles
-      StartSpeed = RobotContainer.arm.getShooterSub().getAvrageShooterVelocity();
+      ResetParameters();
       CalcDistance_withDxDy();
       getWantedDegree();
       CalcAngleZaxis();
@@ -212,5 +221,8 @@ public class ArmUtil{
     }
     public static double getDz(){
       return Dz;
+    }
+    public static boolean getIsDeadZone(){
+      return IsDeadZone;
     }
   }

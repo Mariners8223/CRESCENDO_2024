@@ -40,10 +40,10 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     ArmUtil.UpdateParameters();
     SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
-    SmartDashboard.putNumber("Robot angle", ArmUtil.getChassisAngle());
+    SmartDashboard.putNumber("Robot (chassis) angle", ArmUtil.getChassisAngle());
     SmartDashboard.putNumber("dx", ArmUtil.getDx());
     SmartDashboard.putNumber("dy", ArmUtil.getDy());
-    SmartDashboard.putNumber("Dz", ArmUtil.getDz());
+    SmartDashboard.putNumber("dz", ArmUtil.getDz());
     SmartDashboard.putNumber("ArmPose z", Arm.getInstance().getShooterPosition().y);
     SmartDashboard.putNumber("armX", Arm.getInstance().getShooterPosition().x);
     Constants.Shooter.frictionPowerParameterForGPVelocity = SmartDashboard.getNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
