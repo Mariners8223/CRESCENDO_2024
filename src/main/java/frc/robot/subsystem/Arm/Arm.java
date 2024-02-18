@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -294,6 +295,19 @@ public class Arm extends SubsystemBase{
   private double getRollOverPosition(double value){
     if(value < 0.75) return value;
     return value - 1;
+  }
+
+  public static class IsLastPosition extends Command{
+    private knownArmPosition position;
+
+    public IsLastPosition(knownArmPosition position){
+      this.position = position;
+    }
+
+    @Override
+    public void initialize() {
+      if(position == Arm.getInstance().lastknownPosition) cancel();
+    }
   }
 
   /**

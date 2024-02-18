@@ -17,12 +17,13 @@ import frc.robot.subsystem.Arm.Arm.IsLastPosition;
 public class IntakeToFloor extends ParallelRaceGroup {  
   public IntakeToFloor() {
     addCommands(
+      new IsLastPosition(Arm.knownArmPosition.Intake),
+      
       new SequentialCommandGroup(
         new MoveToFree(),
         new MoveIntakeNumber(false),
         new MoveIntakeNumber(true)
-      ),
-      new IsLastPosition(Arm.knownArmPosition.Intake)//TODO: kick eyal for doing an error
+      )
     );
   }
 
