@@ -24,7 +24,7 @@ public class AimShooter extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ArmUtil.ResetParameters();
+    // ArmUtil.ResetParameters();
     ArmUtil.IsQuikShot = false;
     ArmUtil.UpdateParameters();
     arm.moveShooterToPose(ArmUtil.getArmNeededPosition());

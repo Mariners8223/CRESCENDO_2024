@@ -90,16 +90,17 @@ public class ArmUtil{
       }
     }
   
-    private static void calcDy(){
+    private static void calcDy(){//TODO: dis shit
       if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.Arm.SpeakerIsCenterRatioBottomLocation) {
         IsDeadZone = true;
-            Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength/2 - Constants.Arm.SpeakerIsCenterRatioBottomLocation;//aime to the most right corner (robot prespective)
+            Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation;//aime to the most right corner (robot prespective)
       }
       else{
         IsDeadZone = false;
-            Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength/2 - Constants.Arm.SpeakerIsCenterRatio
+            Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio
              * (RobotContainer.driveBase.getPose().getTranslation().getY() - Constants.Arm.SpeakerIsCenterRatioBottomLocation)
-             - RobotContainer.driveBase.getPose().getTranslation().getY();//aim to a point prespective to the robot location in the chosen shooting zone
+             -(Arm.getInstance().getShooterPosition().x*Math.sin(YaxisWantedAngle)
+              + RobotContainer.driveBase.getPose().getTranslation().getY());//aim to a point prespective to the robot location in the chosen shooting zone
       }
     }
     private static void calcDx(){//TODO: include blue alaince
@@ -125,7 +126,7 @@ public class ArmUtil{
     }
   
     private static void getWantedDegree(){//calcs the direction in which we want the gp to fly on
-      YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);//TODO: include alaince
+      YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);//TODO: include blue alaince
     }
     private static void getChassisOffset(){//calcs offset do to speed
       YaxisOffset = Math.atan(VelocityY/VelocityX);

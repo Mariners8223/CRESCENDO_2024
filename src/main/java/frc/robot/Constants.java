@@ -106,18 +106,18 @@ public class Constants {
         public static final double armHeightFromFrameMeters = 0.245;
         public static final double SecondaryMotorDistanceFromShooterMeters = 0.06;
     
-        public static final double SpeakerLength = 1.181;//done
-        public static final double SpeakerBottomLocationY = 5.5642;//done
-        public static final double SpeakerMidlleLocationY = SpeakerLength/2 + SpeakerBottomLocationY;//done
-        public static final double FieldYLength = Units.inchesToMeters(323.00);
-        public static final double SpeakerIsCenterRatio = SpeakerLength/(2*(FieldYLength - SpeakerMidlleLocationY));
-        public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMidlleLocationY);
+        public static final double SpeakerLength = 1.10;//done
+        public static final double SpeakerBottomLocationY = 5.00;//done
+        public static final double SpeakerMidlleLocationY = 5.55;//done
+        public static final double FieldYLength = Units.inchesToMeters(323.00);//a little more or a little less than 8.2 meters
+        public static final double SpeakerIsCenterRatio = 11.0/53.0;//SpeakerLength/(2*(FieldYLength - SpeakerMidlleLocationY));
+        public static final double SpeakerIsCenterRatioBottomLocation = 2.9;//FieldYLength - 2*(FieldYLength - SpeakerMidlleLocationY);
         public static final ArmPosition FloorPosition = new ArmPosition(0, 0, 0); // In radians
         public static final ArmPosition SourcePosition = new ArmPosition(0, 0, 0);
 
         public static final ArmPosition freeMovementPosition = new ArmPosition(0, Math.sin(Units.rotationsToRadians(0.13)) * armLengthMeters, 0);
 
-        public static final double SpeakerHeight = 2.31;//meter
+        // public static final double SpeakerHeight = 2.31;//meter
 
         public static final ArmPosition AmpArmPosition = new ArmPosition();
         
