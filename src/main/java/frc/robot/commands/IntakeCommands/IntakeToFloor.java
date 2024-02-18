@@ -22,7 +22,7 @@ public class IntakeToFloor extends ParallelRaceGroup {
         new MoveIntakeNumber(false),
         new MoveIntakeNumber(true)
       ),
-      new IsLastPosition(Arm.knownArmPosition.Intake)
+      new IsLastPosition(Arm.knownArmPosition.Intake)//TODO: kick eyal for doing an error
     );
   }
 

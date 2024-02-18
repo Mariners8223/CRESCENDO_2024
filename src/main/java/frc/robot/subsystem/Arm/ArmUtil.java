@@ -7,7 +7,6 @@ package frc.robot.subsystem.Arm;
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
@@ -90,7 +89,7 @@ public class ArmUtil{
       }
     }
   
-    private static void calcDy(){//TODO: dis shit
+    private static void calcDy(){//TODO: dis shit D FUCKING Y SHOULD WORK
       if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.Arm.SpeakerIsCenterRatioBottomLocation) {
         IsDeadZone = true;
             Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation;//aime to the most right corner (robot prespective)
@@ -103,14 +102,26 @@ public class ArmUtil{
               + RobotContainer.driveBase.getPose().getTranslation().getY());//aim to a point prespective to the robot location in the chosen shooting zone
       }
     }
-    private static void calcDx(){//TODO: include blue alaince
-      if (IsQuikShot) {
-        Dx = RobotContainer.driveBase.getPose().getTranslation().getX() - RobotContainer.arm.getShooterPosition().x
-         - Constants.Speaker.SpeakerTranslation.getX();
+    private static void calcDx(){
+      if (RobotContainer.isBlueAllince.getAsBoolean()) {
+        if (IsQuikShot) {
+          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() + RobotContainer.arm.getShooterPosition().x
+           - Constants.Speaker.SpeakerTranslation.getX();
+        }
+        else{
+          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() - RobotContainer.arm.getShooterPosition().x
+           - Constants.Speaker.SpeakerTranslation.getX();
+        }
       }
       else{
-        Dx = RobotContainer.driveBase.getPose().getTranslation().getX() + RobotContainer.arm.getShooterPosition().x
-         - Constants.Speaker.SpeakerTranslation.getX();
+        if (IsQuikShot) {
+          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() - RobotContainer.arm.getShooterPosition().x
+           - Constants.Speaker.SpeakerTranslation.getX();
+        }
+        else{
+          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() + RobotContainer.arm.getShooterPosition().x
+           - Constants.Speaker.SpeakerTranslation.getX();
+        }
       }
     }
     private static void CalcDz(){
@@ -126,7 +137,11 @@ public class ArmUtil{
     }
   
     private static void getWantedDegree(){//calcs the direction in which we want the gp to fly on
-      YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);//TODO: include blue alaince
+      if (RobotContainer.isRedAllince.getAsBoolean()) {
+        YaxisWantedAngle = Math.atan(Dy/Dx);
+      }
+      else YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);
+      if (IsQuikShot) YaxisWantedAngle = Units.degreesToRadians(180) - YaxisWantedAngle;
     }
     private static void getChassisOffset(){//calcs offset do to speed
       YaxisOffset = Math.atan(VelocityY/VelocityX);
