@@ -14,16 +14,13 @@ import frc.robot.subsystem.Arm.Arm.IsLastPosition;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class IntakeToFloor extends ParallelRaceGroup {  
+public class IntakeToFloor extends SequentialCommandGroup {  
   public IntakeToFloor() {
     addCommands(
-      new IsLastPosition(Arm.knownArmPosition.Intake),
-      
-      new SequentialCommandGroup(
-        new MoveToFree(),
-        new MoveIntakeNumber(false),
-        new MoveIntakeNumber(true)
-      )
+      // new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake),
+      new MoveToFree(),
+      new MoveIntakeNumber(false),
+      new MoveIntakeNumber(true)
     );
   }
 
