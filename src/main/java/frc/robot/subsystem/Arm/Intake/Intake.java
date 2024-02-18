@@ -38,6 +38,8 @@ public class Intake {
 
         inputs = new IntakeInputsAutoLogged();
 
+        // new Trigger(() -> !colorSensor.isConnected()).debounce(0.5).onTrue(new InstantCommand(() -> colorSensor = new ColorSensorV3(Constants.Intake.ColorSensorPort)).ignoringDisable(true));
+
         // new Trigger(() -> !colorSensor.isConnected()).whileTrue(new RepeatCommand(new InstantCommand(() -> colorSensor = new ColorSensorV3(Constants.Intake.ColorSensorPort)).ignoringDisable(true)).ignoringDisable(true));
     }
 

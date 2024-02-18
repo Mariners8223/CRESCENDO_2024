@@ -82,7 +82,7 @@ public class Constants {
             public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
 
             public static final Translation3d ampTranslation = new Translation3d(3, 8, 0);
-            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 1.9);//z = 2.03
+            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 2.03);//z = 2.03
     }
 
     public static final class Zone1{//DIS NOT TRUE
@@ -125,7 +125,7 @@ public class Constants {
         public static final ArmPosition Zone1_ArmPosition = new ArmPosition(0, 0, 0);//main motor location for zone 1
         public static final ArmPosition Zone2_ArmPosition = new ArmPosition(0, 0, 0);//main motor location for zone 2
         public static final ArmPosition QuikShotPosition = new ArmPosition(0, 0, 0);//main motor location at flor
-        public static final double EndOfZone1 = 2.2;//TODO: the distince from the speaker right before the lazer equasion is not relevent
+        public static final double EndOfZone1 = 3.2;//TODO: the distince from the speaker right before the lazer equasion is not relevent
 
         public static class Motors{
             public static final int mainMotorID = 15;
@@ -171,7 +171,10 @@ public class Constants {
 
         public static final double ShootToAmpPower = 0.4;
         public static final double ShootToAmpTime = 2;
-        public static final double RPMforShooter = 4000;
+        // public static final double RPMforShooterZone1 = 4000;
+        // public static final double RPMforShooterZone2 = 5000;
+        public static double GPAirTimeZone1 = 0.185;
+        public static double GPAirTimeZone2 = 0.22;
     }
 
     public static final class Intake{

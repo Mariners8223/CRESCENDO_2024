@@ -45,11 +45,11 @@ public class Collect extends Command{
       intake.setPosition(intake.getMotorPosition());
     }
 
-    if (timer >= Constants.Intake.MaxStallTime){
-        intake.setMotor(-0.3);
-        Timer.delay(2);
-        intake.stopMotor();
-    }
+    // if (timer >= Constants.Intake.MaxStallTime){
+    //     intake.setMotor(-0.3);
+    //     Timer.delay(2);
+    //     intake.stopMotor();
+    // }
   }
 
   @Override

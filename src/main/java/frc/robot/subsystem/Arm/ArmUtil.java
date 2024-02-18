@@ -29,6 +29,17 @@ public class ArmUtil{
     private static double VelocityX;//field relative
     private static boolean isResetNeeded = true;
     private static boolean isZone1;
+    private static double WantedVelocity;
+
+    private static void CalcWantedSpeed(){
+      if (isZone1) {
+        WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone1;
+      }
+      else{
+        WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
+      }
+      StartSpeed = WantedVelocity;
+    }
   
     private static void Zone1_Equasion(){//simple lazer for zone 1
       try {
@@ -50,9 +61,9 @@ public class ArmUtil{
   
     private static void RobotSpeedRelative_angle(){//calcs the arm angle with speed relativity
       try {
-        ArmAngle = Math.atan(-(StartSpeed*Math.sin(ArmAngle))/(StartSpeed * Math.cos(ArmAngle)
+        ArmAngle = Math.abs(Math.atan(-(StartSpeed*Math.sin(ArmAngle))/(StartSpeed * Math.cos(ArmAngle)
         + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond * Math.cos(YaxisWantedAngle)
-        + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond * Math.sin(YaxisWantedAngle)));
+        + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond * Math.sin(YaxisWantedAngle))));
       } catch (Exception e) {
       }
     }
@@ -177,7 +188,8 @@ public class ArmUtil{
     private static void ResetParameters(){//resets the parameters for a new mode
       if (isResetNeeded) {
         ZaxisTarget = Constants.Arm.QuikShotPosition;//arm angle arm position
-        StartSpeed = RobotContainer.arm.getShooterSub().getShooterVelocity();//the speed in which the gp is leaving the shooter
+        // StartSpeed = RobotContainer.arm.getShooterSub().getShooterVelocity();//the speed in which the gp is leaving the shooter
+        WantedVelocity = 0;
         Dy = 1;//y axis of targeted point (to calc the distance from speaker)
         Dx = 1;//airial distance to speaker
         Dz = 1;//The hight of the targeted point on the speaker relative to the shooter hieght from ground
@@ -191,9 +203,7 @@ public class ArmUtil{
         VelocityY = 1;//field relative
         VelocityX = 1;//field relative
         isResetNeeded = false;
-        if (distanceToSpeaker <= Constants.Arm.EndOfZone1) {
-          isZone1 = true;
-        }
+        isZone1 = distanceToSpeaker <= Constants.Arm.EndOfZone1;
       }
     }
     public static void SetQuikShotMode(boolean QuikShot){
@@ -204,11 +214,13 @@ public class ArmUtil{
     }
 
     public static void UpdateParameters(){//updates all the parameters so we can have our desired angles
-      if (isZone1 != distanceToSpeaker <= Constants.Arm.EndOfZone1) {
-        isResetNeeded = true;
-      }
       ResetParameters();
       CalcDistance_withDxDy();
+      if (isZone1 != (distanceToSpeaker <= Constants.Arm.EndOfZone1)) {
+        isResetNeeded = true;
+      }
+      isZone1 = distanceToSpeaker <= Constants.Arm.EndOfZone1;
+      CalcWantedSpeed();
       getWantedDegree();
       CalcAngleZaxis();
       CalcVelocityXy_field();
@@ -242,5 +254,11 @@ public class ArmUtil{
     }
     public static boolean getIsDeadZone(){
       return IsDeadZone;
+    }
+    public static double getWantedSpeed(){
+      return WantedVelocity;
+    }
+    public static boolean isZone1(){
+      return isZone1;
     }
   }

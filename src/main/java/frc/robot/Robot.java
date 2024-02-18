@@ -33,6 +33,9 @@ public class Robot extends LoggedRobot {
 
     new RobotContainer();
     SmartDashboard.putNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
+    SmartDashboard.putNumber("Zone1", Constants.Shooter.GPAirTimeZone1);
+    SmartDashboard.putNumber("Zone2", Constants.Shooter.GPAirTimeZone2);
+
   }
 
   @Override
@@ -40,13 +43,19 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     ArmUtil.UpdateParameters();
     SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
-    SmartDashboard.putNumber("Robot (chassis) angle", Units.degreesToRadians(180) - Units.radiansToDegrees(ArmUtil.getChassisAngle()));
+    SmartDashboard.putNumber("Robot (chassis) angle", Units.radiansToDegrees(ArmUtil.getChassisAngle()));
     SmartDashboard.putNumber("dx", ArmUtil.getDx());
     SmartDashboard.putNumber("dy", ArmUtil.getDy());
     SmartDashboard.putNumber("dz", ArmUtil.getDz());
+    SmartDashboard.putBoolean("is zone 1", ArmUtil.isZone1());
     SmartDashboard.putNumber("ArmPose z", Arm.getInstance().getShooterPosition().y);
     SmartDashboard.putNumber("armX", Arm.getInstance().getShooterPosition().x);
+    SmartDashboard.putNumber("wanted speed", Units.radiansPerSecondToRotationsPerMinute(ArmUtil.getWantedSpeed() / Constants.Shooter.wheelRadius));
     Constants.Shooter.frictionPowerParameterForGPVelocity = SmartDashboard.getNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
+
+    Constants.Shooter.GPAirTimeZone1 = SmartDashboard.getNumber("Zone1", Constants.Shooter.GPAirTimeZone1);
+    Constants.Shooter.GPAirTimeZone2 = SmartDashboard.getNumber("Zone2", Constants.Shooter.GPAirTimeZone2);
+
   }
 
   @Override

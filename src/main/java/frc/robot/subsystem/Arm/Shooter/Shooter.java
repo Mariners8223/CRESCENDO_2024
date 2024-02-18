@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -64,11 +65,19 @@ public class Shooter {
         shooterMotor2.set(power);
     }
 
-    public void setShooterVelocity(double rpm){
+    public void setShooterRPM(double rpm){
         inputs.RPMTarget = rpm;
 
         shooterMotor1.getPIDController().setReference(rpm, ControlType.kVelocity);
         shooterMotor2.getPIDController().setReference(rpm, ControlType.kVelocity);
+    }
+
+    public void setShooterVelocity(double velocity){
+        inputs.RPMTarget = Units.radiansPerSecondToRotationsPerMinute(velocity / Constants.Shooter.wheelRadius);
+
+        SmartDashboard.putNumber("SHooter RPM", inputs.RPMTarget);
+        shooterMotor1.getPIDController().setReference(inputs.RPMTarget, ControlType.kVelocity);
+        shooterMotor2.getPIDController().setReference(inputs.RPMTarget, ControlType.kVelocity);
     }
 
     public boolean isAtSelctedVelocity(){
@@ -84,16 +93,16 @@ public class Shooter {
         shooterMotor2.stopMotor();
     }
 
-    // get shooter power
-    public double getShooterVelocity() {//dis is good
-        // return velocity in meters per second
-        return Constants.Shooter.RPMforShooter * Constants.Shooter.wheelRadius
-         * Constants.Shooter.frictionPowerParameterForGPVelocity;
-    }
+    // // get shooter power
+    // public double getShooterVelocity() {//dis is good
+    //     // return velocity in meters per second
+    //     return Constants.Shooter.RPMforShooterZone1 * Constants.Shooter.wheelRadius
+    //      * Constants.Shooter.frictionPowerParameterForGPVelocity;
+    // }
 
-    public double getTrueFullGPVelociti_SideView(){//dis is not good
-        return Math.hypot(getTrueZAxisVelocity_RobotRelative(), getTrueXAxisVelocity_RobotRelative());
-    }
+    // public double getTrueFullGPVelociti_SideView(){//dis is not good
+    //     return Math.hypot(getTrueZAxisVelocity_RobotRelative(), getTrueXAxisVelocity_RobotRelative());
+    // }
     /**
      * gets the avrage velocity of the shooter wheels
      * @return avrage velocity in meters per second
@@ -106,9 +115,9 @@ public class Shooter {
         return RobotContainer.driveBase.getChassisSpeeds().vxMetersPerSecond + getAvrageShooterVelocity();
     }
 
-    public double getTrueZAxisVelocity_RobotRelative(){//dis is not good
-        return Math.sin(RobotContainer.arm.getShooterPosition().rotation) * getShooterVelocity();
-    }
+    // public double getTrueZAxisVelocity_RobotRelative(){//dis is not good
+    //     return Math.sin(RobotContainer.arm.getShooterPosition().rotation) * getShooterVelocity();
+    // }
     
     public double getTrueYAxisVelocity_RobotRelative(){//dis is good
         return RobotContainer.driveBase.getChassisSpeeds().vyMetersPerSecond +
