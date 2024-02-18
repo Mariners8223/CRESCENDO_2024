@@ -66,7 +66,7 @@ public class DriveBase extends SubsystemBase {
   Pose2d currentPose; //the current pose2d of the robot
   Rotation2d targetRotation; //the target rotation of the robot
 
-  boolean isControlled;
+  public boolean isControlled;
 
   HolonomicPathFollowerConfig pathFollowerConfig; //the config for path following a path
   ReplanningConfig replanConfig; //the config for when to replan a path
@@ -322,7 +322,9 @@ public class DriveBase extends SubsystemBase {
   }
   
   public void setTargetRotation(Rotation2d alpha){//TODO: dis shit
-    inputs.targetRotation = alpha.plus(Rotation2d.fromRotations((int)currentPose.getRotation().getRotations()));
+    inputs.targetRotation = Rotation2d.fromRotations(alpha.getRotations() + (int)getRotation2d().getRotations());
+    // inputs.targetRotation = alpha.plus(Rotation2d.fromRotations((int)getRotation2d().getRotations()));
+    targetRotation = inputs.targetRotation;
     isControlled = true;
     //calculateTheta(alpha);//dis may work
   }

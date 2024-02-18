@@ -17,8 +17,7 @@ import frc.robot.subsystem.Arm.Arm.IsLastPosition;
 public class IntakeToFloor extends SequentialCommandGroup {  
   public IntakeToFloor() {
     addCommands(
-      // new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake),
-      new MoveToFree(),
+      new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake),
       new MoveIntakeNumber(false),
       new MoveIntakeNumber(true)
     );
@@ -44,7 +43,7 @@ public class IntakeToFloor extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted){
       System.out.println("Intake ended");
-      if(interrupted && Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake) Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Unknown;
+      if(interrupted) Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Unknown;
       else if(mainMotor) Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Intake;
     }
 

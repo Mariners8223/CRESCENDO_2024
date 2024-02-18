@@ -40,6 +40,7 @@ public class MoveToHome extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted){
       System.out.println("finished");
+      if(interrupted) Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Unknown;
     }
 
     // Returns true when the command should end.

@@ -31,7 +31,7 @@ public class MoveToFree extends Command {
     @Override
     public void end(boolean interrupted){
       System.out.println("command ended");
-      if(!interrupted) arm.lastknownPosition = Arm.knownArmPosition.Home;
+      if(!interrupted) arm.lastknownPosition = Arm.knownArmPosition.Free;
       else arm.lastknownPosition = Arm.knownArmPosition.Unknown;
     }
 

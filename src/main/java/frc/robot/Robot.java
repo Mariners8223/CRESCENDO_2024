@@ -40,7 +40,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler.getInstance().run();
     ArmUtil.UpdateParameters();
     SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
-    SmartDashboard.putNumber("Robot (chassis) angle", ArmUtil.getChassisAngle());
+    SmartDashboard.putNumber("Robot (chassis) angle", Units.degreesToRadians(180) - Units.radiansToDegrees(ArmUtil.getChassisAngle()));
     SmartDashboard.putNumber("dx", ArmUtil.getDx());
     SmartDashboard.putNumber("dy", ArmUtil.getDy());
     SmartDashboard.putNumber("dz", ArmUtil.getDz());

@@ -6,6 +6,7 @@ package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystem.Arm.Arm;
 
 public class Shoot extends Command {
@@ -26,7 +27,8 @@ public class Shoot extends Command {
   public void initialize() {
     if(!Arm.getInstance().getIntakeSub().isGamePieceDetected()) cancel();
 
-    arm.getShooterSub().setShooterPower(0.75);
+    // arm.getShooterSub().setShooterPower(0.75);
+    arm.getShooterSub().setShooterVelocity(Constants.Shooter.RPMforShooter);
     timer = 0;
   }
 
@@ -42,7 +44,7 @@ public class Shoot extends Command {
     // if(interrupted) return;
 
     arm.getIntakeSub().setMotor(1);
-    Timer.delay(0.1);
+    Timer.delay(0.3);
 
     arm.getIntakeSub().stopMotor();
     arm.getShooterSub().stopMotors();
@@ -51,6 +53,6 @@ public class Shoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer >= 50;
+    return arm.getShooterSub().isAtSelctedVelocity();
   }
 }

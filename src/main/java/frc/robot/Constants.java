@@ -28,7 +28,7 @@ public class Constants {
     public static final List<Translation2d> robotZones = new ArrayList<Translation2d>() {
         //TODO: add robot zones
     };
-    public static final double gGravity_phisics = 9.8;
+    public static final double gGravity_phisics = 9.81;
 
     public static final Pose2d AmpPose = new Pose2d(1.829, 8.46, Rotation2d.fromDegrees(90));
     public static final Pose2d RobotShootingToAMPPosition = new Pose2d(1.83, 7.71, Rotation2d.fromDegrees(-90));
@@ -82,7 +82,7 @@ public class Constants {
             public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
 
             public static final Translation3d ampTranslation = new Translation3d(3, 8, 0);
-            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 2.03);
+            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 1.9);//z = 2.03
     }
 
     public static final class Zone1{//DIS NOT TRUE
@@ -125,7 +125,7 @@ public class Constants {
         public static final ArmPosition Zone1_ArmPosition = new ArmPosition(0, 0, 0);//main motor location for zone 1
         public static final ArmPosition Zone2_ArmPosition = new ArmPosition(0, 0, 0);//main motor location for zone 2
         public static final ArmPosition QuikShotPosition = new ArmPosition(0, 0, 0);//main motor location at flor
-        public static final double EndOfZone1 = 0;//TODO: the distince from the speaker right before the lazer equasion is not relevent
+        public static final double EndOfZone1 = 2.2;//TODO: the distince from the speaker right before the lazer equasion is not relevent
 
         public static class Motors{
             public static final int mainMotorID = 15;
@@ -157,7 +157,8 @@ public class Constants {
         public static final int shooterMotor1ID = 19;
         public static final int shooterMotor2ID = 18;
 
-        public static final PIDFGains shooterPID = new PIDFGains(1, 0, 0); //TODO: get the real value
+        public static final PIDFGains shooter2PID = new PIDFGains(0.001, 0, 0.0005, 0.00015, 0, 0); //TODO: get the real value
+        public static final PIDFGains shooter1PID = new PIDFGains(0.001, 0, 0.001, 0.00015, 0.0, 0);
 
         public static final boolean shooter1Inverted = false;
         public static final boolean shooter2Inverted = true;
@@ -170,6 +171,7 @@ public class Constants {
 
         public static final double ShootToAmpPower = 0.4;
         public static final double ShootToAmpTime = 2;
+        public static final double RPMforShooter = 4000;
     }
 
     public static final class Intake{

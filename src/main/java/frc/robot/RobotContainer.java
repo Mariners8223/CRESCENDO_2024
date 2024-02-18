@@ -84,12 +84,13 @@ public class RobotContainer {
     // driveController.cross().onTrue(new MoveToFree());
     // driveController.square().onTrue(new MoveToHome());
     // driveController.cross().onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(0.5))).onFalse(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
-    
-    driveController.cross().onTrue(new QuikAim());
+    var QuickAim = new QuikAim();
+
+    driveController.cross().onTrue(QuickAim);
     // driveController.cross().onTrue(new InstantCommand(() -> isQuickAiming = !isQuickAiming));
     driveController.square().onTrue(new IntakeToFloor());
     driveController.circle().onTrue(new Collect());
-    driveController.triangle().onTrue(new Shoot());
+    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {QuickAim.cancel(); driveBase.isControlled = false;}));
 
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
 

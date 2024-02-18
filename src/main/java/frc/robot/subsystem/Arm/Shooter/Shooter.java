@@ -35,6 +35,8 @@ public class Shooter {
 
         double motor1Current;
         double motor2Current;
+
+        double RPMTarget;
     }
     // initialize motors
     private CANSparkFlex shooterMotor1;
@@ -43,8 +45,8 @@ public class Shooter {
     private ShooterInputsAutoLogged inputs;
 
     public Shooter(){
-        shooterMotor1 = configMotor(Constants.Shooter.shooterPID, Constants.Shooter.shooterMotor1ID, Constants.Shooter.shooter1Inverted);
-        shooterMotor2 = configMotor(Constants.Shooter.shooterPID, Constants.Shooter.shooterMotor2ID, Constants.Shooter.shooter2Inverted);
+        shooterMotor1 = configMotor(Constants.Shooter.shooter1PID, Constants.Shooter.shooterMotor1ID, Constants.Shooter.shooter1Inverted);
+        shooterMotor2 = configMotor(Constants.Shooter.shooter2PID, Constants.Shooter.shooterMotor2ID, Constants.Shooter.shooter2Inverted);
 
         inputs = new ShooterInputsAutoLogged();
 
@@ -63,8 +65,15 @@ public class Shooter {
     }
 
     public void setShooterVelocity(double rpm){
+        inputs.RPMTarget = rpm;
+
         shooterMotor1.getPIDController().setReference(rpm, ControlType.kVelocity);
         shooterMotor2.getPIDController().setReference(rpm, ControlType.kVelocity);
+    }
+
+    public boolean isAtSelctedVelocity(){
+        // return Math.abs((inputs.motor1RPM + inputs.motor2RPM) / 2 - inputs.RPMTarget) <= 250;
+        return Math.abs(inputs.motor1RPM - inputs.RPMTarget) <= 250 && Math.abs(inputs.motor2RPM - inputs.RPMTarget) <= 100;
     }
 
     /**
@@ -78,7 +87,7 @@ public class Shooter {
     // get shooter power
     public double getShooterVelocity() {//dis is good
         // return velocity in meters per second
-        return Units.rotationsPerMinuteToRadiansPerSecond(shooterMotor1.getEncoder().getVelocity()) * Constants.Shooter.wheelRadius
+        return Constants.Shooter.RPMforShooter * Constants.Shooter.wheelRadius
          * Constants.Shooter.frictionPowerParameterForGPVelocity;
     }
 
