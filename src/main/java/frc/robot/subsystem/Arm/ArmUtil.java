@@ -16,7 +16,7 @@ public class ArmUtil{
     private static double StartSpeed;//the speed in which the gp is leaving the shooter
     private static double Dy;//y axis of targeted point (to calc the distance from speaker)
     private static double Dx;//airial distance to speaker
-    private static double Dz;
+    private static double Dz;//The hight of the targeted point on the speaker relative to the shooter hieght from ground
     private static double distanceToSpeaker;//self explanatory
     private static double ArmAngle = 45;//the angle in which the arm shell be
     private static boolean IsDeadZone;//is this a dead zone???
@@ -169,7 +169,7 @@ public class ArmUtil{
         StartSpeed = RobotContainer.arm.getShooterSub().getAvrageShooterVelocity();//the speed in which the gp is leaving the shooter
         Dy = 1;//y axis of targeted point (to calc the distance from speaker)
         Dx = 1;//airial distance to speaker
-        Dz = 1;
+        Dz = 1;//The hight of the targeted point on the speaker relative to the shooter hieght from ground
         distanceToSpeaker = 1;//self explanatory
         ArmAngle = 45;//the angle in which the arm shell be
         IsDeadZone = true;//is this a dead zone???
