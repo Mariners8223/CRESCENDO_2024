@@ -5,19 +5,24 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.subsystem.Arm.*;
+import frc.robot.subsystem.Arm.Arm.IsLastPosition;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class IntakeToFloor extends SequentialCommandGroup {  
+public class IntakeToFloor extends ParallelRaceGroup {  
   public IntakeToFloor() {
     addCommands(
-      new MoveToFree(),
-      new MoveIntakeNumber(false),
-      new MoveIntakeNumber(true)
+      new SequentialCommandGroup(
+        new MoveToFree(),
+        new MoveIntakeNumber(false),
+        new MoveIntakeNumber(true)
+      ),
+      new IsLastPosition(Arm.knownArmPosition.Intake)
     );
   }
 
@@ -41,7 +46,7 @@ public class IntakeToFloor extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted){
       System.out.println("Intake ended");
-      if(interrupted) Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Unknown;
+      if(interrupted && Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake) Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Unknown;
       else if(mainMotor) Arm.getInstance().lastknownPosition = Arm.knownArmPosition.Intake;
     }
 
