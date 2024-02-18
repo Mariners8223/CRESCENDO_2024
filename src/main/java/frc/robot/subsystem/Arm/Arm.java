@@ -34,7 +34,7 @@ import frc.util.PIDFGains;
 public class Arm extends SubsystemBase{
 
   public static enum knownArmPosition{
-    Intake, Shooter, Home, Amp, Climb, Unknown
+    Intake, Shooter, Home, Free ,Amp, Climb, Unknown
   }
   
   public static class ArmPosition{
