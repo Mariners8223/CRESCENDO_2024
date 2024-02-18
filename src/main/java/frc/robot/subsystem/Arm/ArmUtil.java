@@ -93,34 +93,35 @@ public class ArmUtil{
     private static void calcDy(){//TODO: dis shit D FUCKING Y SHOULD WORK
       if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.Arm.SpeakerIsCenterRatioBottomLocation) {
         IsDeadZone = true;
-            Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation;//aime to the most right corner (robot prespective)
+        Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation;//aime to the most right corner (robot prespective)
       }
       else{
         IsDeadZone = false;
-            Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio
-             * (RobotContainer.driveBase.getPose().getTranslation().getY() - Constants.Arm.SpeakerIsCenterRatioBottomLocation)
-             -(Arm.getInstance().getShooterPosition().x*Math.sin(YaxisWantedAngle)
-              + RobotContainer.driveBase.getPose().getTranslation().getY());//aim to a point prespective to the robot location in the chosen shooting zone
+        Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio
+         * (RobotContainer.driveBase.getPose().getTranslation().getY() + Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
+         - Constants.Arm.SpeakerIsCenterRatioBottomLocation)
+         -(Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
+         + RobotContainer.driveBase.getPose().getTranslation().getY());//aim to a point prespective to the robot location in the chosen shooting zone
       }
     }
     private static void calcDx(){
       if (RobotContainer.isBlueAllince.getAsBoolean()) {
         if (IsQuikShot) {
-          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() + RobotContainer.arm.getShooterPosition().x
+          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() + RobotContainer.arm.getShooterPosition().x*Math.cos(ChasisAngle)
            - Constants.Speaker.SpeakerTranslation.getX();
         }
         else{
-          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() - RobotContainer.arm.getShooterPosition().x
+          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() - RobotContainer.arm.getShooterPosition().x*Math.cos(ChasisAngle)
            - Constants.Speaker.SpeakerTranslation.getX();
         }
       }
       else{
         if (IsQuikShot) {
-          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() - RobotContainer.arm.getShooterPosition().x
+          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() - RobotContainer.arm.getShooterPosition().x*Math.cos(ChasisAngle)
            - Constants.Speaker.SpeakerTranslation.getX();
         }
         else{
-          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() + RobotContainer.arm.getShooterPosition().x
+          Dx = RobotContainer.driveBase.getPose().getTranslation().getX() + RobotContainer.arm.getShooterPosition().x*Math.cos(ChasisAngle)
            - Constants.Speaker.SpeakerTranslation.getX();
         }
       }
