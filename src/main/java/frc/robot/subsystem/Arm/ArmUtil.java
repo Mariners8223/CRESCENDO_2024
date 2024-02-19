@@ -259,4 +259,10 @@ public class ArmUtil{
     public static boolean isZone1(){
       return isZone1;
     }
+    //ZONESSSS
+    public static enum ArmZones{
+      ShootingZone,
+      PickUpZone,
+      SpurceZone
+    }
   }
