@@ -37,7 +37,14 @@
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Collect"
+              }
+            }
+          ]
         }
       }
     },
@@ -47,7 +54,20 @@
       "command": {
         "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "QuikAim"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            }
+          ]
         }
       }
     }
@@ -64,7 +84,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Close notes",
+  "folder": "Notes",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

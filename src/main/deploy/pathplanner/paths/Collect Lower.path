@@ -37,7 +37,14 @@
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Collect"
+              }
+            }
+          ]
         }
       }
     }
@@ -54,7 +61,7 @@
     "rotateFast": true
   },
   "reversed": false,
-  "folder": "Close notes",
+  "folder": "Connectors",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

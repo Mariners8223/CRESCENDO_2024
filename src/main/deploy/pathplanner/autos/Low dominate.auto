@@ -8,48 +8,54 @@
         {
           "type": "path",
           "data": {
-            "pathName": "GoToQuikShotPose_FIRST note"
+            "pathName": "Start Lower shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "get 1st row middle note"
+            "pathName": "Middle 1st note"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "FIRST row go to QuikShot"
+            "pathName": "go shoot lower"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "get 1st row upper note"
+            "pathName": "Pickup low"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "FIRST row go to QuikShot"
+            "pathName": "Middle 2nd note"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "get 1st row bottom note"
+            "pathName": "go shoot lower"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "FIRST row go to QuikShot"
+            "pathName": "Pickup low"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle 3rd note"
           }
         }
       ]
     }
   },
-  "folder": "Close Notes close shot",
+  "folder": "FarShot",
   "choreoAuto": false
 }

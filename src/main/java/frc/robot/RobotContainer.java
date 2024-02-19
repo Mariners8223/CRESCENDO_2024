@@ -103,7 +103,8 @@ public class RobotContainer {
     // driveController.cross().onTrue(new InstantCommand(() -> isQuickAiming = !isQuickAiming));
     driveController.square().onTrue(new IntakeToFloor());
     driveController.circle().onTrue(new Collect());
-    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {QuickAim.cancel(); driveBase.isControlled = false;}));
+    driveController.cross().onTrue(new ShootToAmp());
+    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {QuickAim.cancel(); driveBase.isControlled = false;}));
 
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
 

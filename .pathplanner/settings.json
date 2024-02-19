@@ -3,17 +3,18 @@
   "robotLength": 0.75,
   "holonomicMode": true,
   "pathFolders": [
-    "Close notes",
+    "Connectors",
     "Da Baitor",
     "Far Notes Collection",
-    "Far Notes connections",
-    "Far Shot",
-    "Lower Middle quikshot notes",
-    "Notes"
+    "Notes",
+    "Shotting positions",
+    "starters"
   ],
   "autoFolders": [
-    "Far Notes",
-    "Close Notes"
+    "AGameOfChicken",
+    "Close Notes close shot",
+    "Far Notes close shot",
+    "FarShot"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
