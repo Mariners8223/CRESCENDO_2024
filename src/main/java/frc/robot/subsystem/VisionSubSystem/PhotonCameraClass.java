@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -195,19 +196,24 @@ public class PhotonCameraClass implements CameraInterface{
         }
       }
       else{
-        var targets = latestResult.getTargets();
+        // var targets = latestResult.getTargets();
+        var target = latestResult.getBestTarget();
 
+        inputs.distanceTobject[0] =  PhotonUtils.calculateDistanceToTargetMeters(
+        cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight, cameraToRobot[1].getRotation().getY(), target.getPitch());
+
+        inputs.angleToObjects[0] = target.getYaw(); //- Units.radiansToDegrees(cameraToRobot[1].getRotation().getZ());
         // for(int i = 0; i < targets.size() && i == 5; i++){
         //   inputs.objectsToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
         //   cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets.get(i).getPitch()),
         //   Rotation2d.fromDegrees(targets.get(i).getYaw())).plus(cameraToRobot[1].getTranslation().toTranslation2d()
         //   ).rotateBy(cameraToRobot[1].getRotation().toRotation2d());
         // }
-        for(int  i = 0; i < targets.size() && i <= 5; i++){
-          inputs.distanceTobject[i] = PhotonUtils.calculateDistanceToTargetMeters(
-            cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets.get(i).getPitch());
-          inputs.angleToObjects[i] = targets.get(i).getYaw();
-        }
+        // for(int  i = 0; i < targets.size() && i <= 5; i++){
+        //   inputs.distanceTobject[i] = PhotonUtils.calculateDistanceToTargetMeters(
+        //     cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight, cameraToRobot[1].getRotation().getY(), targets.get(i).getPitch());
+        //   inputs.angleToObjects[i] = targets.get(i).getYaw() + Units.radiansToDegrees(cameraToRobot[1].getRotation().getZ());
+        // }
       }
 
       Logger.processInputs(inputs.cameraName, inputs);

@@ -321,8 +321,9 @@ public class DriveBase extends SubsystemBase {
     return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(), getRotation2d());
   }
   
-  public void setTargetRotation(Rotation2d alpha){//TODO: dis shit
-    inputs.targetRotation = Rotation2d.fromRotations(alpha.getRotations() + (int)getRotation2d().getRotations());
+  public void setTargetRotation(Rotation2d alpha, boolean isBeyond360){//TODO: dis shit
+    if(isBeyond360) inputs.targetRotation = alpha;
+    else inputs.targetRotation = Rotation2d.fromRotations(alpha.getRotations() + (int)getRotation2d().getRotations());
     // inputs.targetRotation = alpha.plus(Rotation2d.fromRotations((int)getRotation2d().getRotations()));
     targetRotation = inputs.targetRotation;
     isControlled = true;
@@ -608,6 +609,7 @@ public class DriveBase extends SubsystemBase {
     @Override
     public void initialize() {
       RobotContainer.driveBase.drive(0, 0, 0);
+      RobotContainer.driveBase.isControlled = false;
     }
 
     public static Command getInstance(){

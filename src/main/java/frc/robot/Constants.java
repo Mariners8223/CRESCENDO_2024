@@ -57,6 +57,9 @@ public class Constants {
         public static final double[] rubbishAngle = new double[]{-1000};
         public static final Pose3d rubbishPose = new Pose3d(new Pose2d(new Translation2d(-20, -20), new Rotation2d(69)));
 
+        public static final PIDFGains aimToRingPID = new PIDFGains(0.5, 0, 0, 0, 0, 0);
+        public static final double aimToRingToleranceDegrees = 2;
+
         public static final int numberOfCameras = 2;
 
             public static final Transform3d[][] cameraLocations = Constants.createCameraTransforms();
