@@ -27,6 +27,6 @@ public class AimShooter extends InstantCommand {
     ArmUtil.SetQuikShotMode(false);
     ArmUtil.UpdateParameters();
     arm.moveShooterToPose(ArmUtil.getArmNeededPosition());
-    RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()));
+    RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()), false);
   }
 }

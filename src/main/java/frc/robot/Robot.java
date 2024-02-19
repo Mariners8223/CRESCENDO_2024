@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
+import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
@@ -42,16 +43,19 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     ArmUtil.UpdateParameters();
-    SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
-    SmartDashboard.putNumber("Robot (chassis) angle", Units.radiansToDegrees(ArmUtil.getChassisAngle()));
-    SmartDashboard.putNumber("dx", ArmUtil.getDx());
-    SmartDashboard.putNumber("dy", ArmUtil.getDy());
-    SmartDashboard.putNumber("dz", ArmUtil.getDz());
-    SmartDashboard.putBoolean("is zone 1", ArmUtil.isZone1());
-    SmartDashboard.putNumber("ArmPose z", Arm.getInstance().getShooterPosition().y);
-    SmartDashboard.putNumber("armX", Arm.getInstance().getShooterPosition().x);
-    SmartDashboard.putNumber("wanted speed", Units.radiansPerSecondToRotationsPerMinute(ArmUtil.getWantedSpeed() / Constants.Shooter.wheelRadius));
-    Constants.Shooter.frictionPowerParameterForGPVelocity = SmartDashboard.getNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
+    // SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
+    // SmartDashboard.putNumber("Robot (chassis) angle", Units.radiansToDegrees(ArmUtil.getChassisAngle()));
+    // SmartDashboard.putNumber("dx", ArmUtil.getDx());
+    // SmartDashboard.putNumber("dy", ArmUtil.getDy());
+    // SmartDashboard.putNumber("dz", ArmUtil.getDz());
+    // SmartDashboard.putBoolean("is zone 1", ArmUtil.isZone1());
+    // SmartDashboard.putNumber("ArmPose z", Arm.getInstance().getShooterPosition().y);
+    // SmartDashboard.putNumber("armX", Arm.getInstance().getShooterPosition().x);
+    // SmartDashboard.putNumber("wanted speed", Units.radiansPerSecondToRotationsPerMinute(ArmUtil.getWantedSpeed() / Constants.Shooter.wheelRadius));
+    // Constants.Shooter.frictionPowerParameterForGPVelocity = SmartDashboard.getNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
+    SmartDashboard.putNumber("angle to gp", RobotContainer.vision.getAngleToBestObject(CameraLocation.Front_Right));
+    SmartDashboard.putNumber("distance to gp", RobotContainer.vision.getDistanceToBestObject(CameraLocation.Front_Right));
+
 
     Constants.Shooter.GPAirTimeZone1 = SmartDashboard.getNumber("Zone1", Constants.Shooter.GPAirTimeZone1);
     Constants.Shooter.GPAirTimeZone2 = SmartDashboard.getNumber("Zone2", Constants.Shooter.GPAirTimeZone2);

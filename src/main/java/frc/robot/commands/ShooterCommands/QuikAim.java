@@ -51,7 +51,7 @@ public class QuikAim extends SequentialCommandGroup {
       target.rotation = MathUtil.clamp(target.rotation, Units.rotationsToRadians(0.35), Units.rotationsToRadians(0.5));
       arm.moveShooterToPose(target);
       
-      RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()));
+      RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()), false);
   }
   }
 }

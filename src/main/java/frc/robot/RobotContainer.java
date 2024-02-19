@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Test.AimToRing;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.ShooterCommands.QuikAim;
@@ -89,27 +90,17 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Main Motor", true);
     SmartDashboard.putBoolean("Quasistatic", true);
 
-    // driveController.square().onTrue(new IntakeToFloor());
-    // driveController.triangle().whileTrue(new TestShoot()).onFalse(new MoveToHome());
-
-    // driveController.cross().onTrue(new Collect());
-    // driveController.circle().onTrue(new Shoot());
-    // driveController.cross().onTrue(new MoveToFree());
-    // driveController.square().onTrue(new MoveToHome());
-    // driveController.cross().onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(0.5))).onFalse(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
     var QuickAim = new QuikAim();
+    var AimToRing = new AimToRing();
+
+    driveController.R1().onTrue(AimToRing);
 
     driveController.cross().onTrue(QuickAim);
-    // driveController.cross().onTrue(new InstantCommand(() -> isQuickAiming = !isQuickAiming));
     driveController.square().onTrue(new IntakeToFloor());
-    driveController.circle().onTrue(new Collect());
-    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {QuickAim.cancel(); driveBase.isControlled = false;}));
+    driveController.circle().onTrue(new Collect()).onFalse(new InstantCommand(() -> { AimToRing.cancel(); driveBase.isControlled = false; }));
+    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { QuickAim.cancel(); driveBase.isControlled = false; }));
 
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
-
-    // driveController.cross().onTrue(new ClimbSequence());
-    // driveController.cross().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 1)));
-    // driveController.square().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 0)));
   }
 
   private void configChooser(){
