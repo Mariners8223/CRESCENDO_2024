@@ -31,77 +31,7 @@ public class ArmUtil{
     private static boolean isZone1;
     private static double WantedVelocity;
 
-    private static void CalcWantedSpeed(){
-      if (isZone1) {
-        WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone1;
-      }
-      else{
-        WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
-      }
-      StartSpeed = WantedVelocity;
-    }
-  
-    private static void Zone1_Equasion(){//simple lazer for zone 1
-      try {
-        ArmAngle = Math.atan(Dz/distanceToSpeaker);//if there is a problem, return last angle
-      } catch (Exception e) {
-      }
-    }
-    private static void Zone2_Equasion(){//complicated for zone 2
-      try {
-        ArmAngle = Math.atan((Math.pow(StartSpeed, 2)
-       - Math.sqrt(Math.pow(StartSpeed, 4)
-        - 2*(Dz)//hieght
-        *Constants.gGravity_phisics*Math.pow(StartSpeed, 2) - Math.pow(Constants.gGravity_phisics*distanceToSpeaker, 2)))
-        /(distanceToSpeaker*Constants.gGravity_phisics)
-      );
-      } catch (Exception e) {
-      }
-    }
-  
-    private static void RobotSpeedRelative_angle(){//calcs the arm angle with speed relativity
-      try {
-        ArmAngle = Math.abs(Math.atan(-(StartSpeed*Math.sin(ArmAngle))/(StartSpeed * Math.cos(ArmAngle)
-        + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond * Math.cos(YaxisWantedAngle)
-        + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond * Math.sin(YaxisWantedAngle))));
-      } catch (Exception e) {
-      }
-    }
-  
-    private static void CalcAngleZaxis(){//chooses zone 1 or 2 or quik shot modes
-      // System.out.println("shit");
-      if (distanceToSpeaker <= Constants.Arm.EndOfZone1) {
-        // System.out.println("1");
-        Zone1_Equasion();
-        // RobotSpeedRelative_angle();
-        if(IsQuikShot){
-          ZaxisTarget = Constants.Arm.QuikShotPosition;
-          ArmAngle = Units.degreesToRadians(180) - ArmAngle;
-        }
-        else{
-          ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
-          ZaxisTarget.y = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.sin(ArmAngle), 0, Constants.Arm.armLengthMeters);
-          ZaxisTarget.x = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.cos(ArmAngle), Constants.Arm.armLengthMeters, 0);
-      }
-      }
-      else{
-        // System.out.println("2");
-        // Zone1_Equasion();
-        Zone2_Equasion();
-        // RobotSpeedRelative_angle();
-        if(IsQuikShot){
-          ZaxisTarget = Constants.Arm.QuikShotPosition;
-          ArmAngle = Units.degreesToRadians(180) - ArmAngle;
-        }
-        else{
-          ZaxisTarget = Constants.Arm.Zone2_ArmPosition;
-          ZaxisTarget.y = Constants.Arm.armLengthMeters * Math.sin(ArmAngle);
-          ZaxisTarget.x = Constants.Arm.armLengthMeters * Math.cos(ArmAngle);
-        }
-      }
-    }
-  
-    private static void calcDy(){//TODO: dis shit D FUCKING Y SHOULD WORK
+    private static void calcDy(){
       if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.Arm.SpeakerIsCenterRatioBottomLocation) {
         IsDeadZone = true;
         Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation;//aime to the most right corner (robot prespective)
@@ -156,35 +86,7 @@ public class ArmUtil{
       // System.out.println("Dx " + Dx);
       // System.out.println("Dy " + Dy);
     }
-  
-    private static void getWantedDegree(){//calcs the direction in which we want the gp to fly on
-      if (RobotContainer.isRedAllince.getAsBoolean()) {
-        YaxisWantedAngle = Math.atan(Dy/Dx);
-      }
-      else YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);
-      if (IsQuikShot) YaxisWantedAngle = Units.degreesToRadians(180) - YaxisWantedAngle;
-    }
-    private static void getChassisOffset(){//calcs offset do to speed
-      YaxisOffset = Math.atan(VelocityY/VelocityX);
-    }
-    private static void CalcYaxisAngle(){//calcs the Chassis angle to the speaker relative to the speed
-      getChassisOffset();
-      ChasisAngle =  -YaxisWantedAngle
-      //  + YaxisOffset
-       
-       
-       
-       
-       ;//once there was a *2 in here
-    }
-    private static void CalcVelocityXy_field(){//calcs the Velocity in Y and X axises
-      VelocityY = StartSpeed*Math.cos(ArmAngle)*Math.sin(YaxisWantedAngle)
-      + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond + RobotContainer.driveBase.getAbsoluteChassisSpeeds().omegaRadiansPerSecond
-      * RobotContainer.arm.getShooterPosition().x * Math.sin(Units.degreesToRadians(-90) + YaxisWantedAngle);
-      VelocityX = StartSpeed*Math.cos(ArmAngle)*(-1)*Math.cos(YaxisWantedAngle)
-      + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond + RobotContainer.driveBase.getAbsoluteChassisSpeeds().omegaRadiansPerSecond
-      * RobotContainer.arm.getShooterPosition().x * Math.cos(Units.degreesToRadians(-90) + YaxisWantedAngle);
-    }
+
     private static void ResetParameters(){//resets the parameters for a new mode
       if (isResetNeeded) {
         ZaxisTarget = Constants.Arm.QuikShotPosition;//arm angle arm position
@@ -206,11 +108,101 @@ public class ArmUtil{
         isZone1 = distanceToSpeaker <= Constants.Arm.EndOfZone1;
       }
     }
-    public static void SetQuikShotMode(boolean QuikShot){
-      if (IsQuikShot != QuikShot) {
-        isResetNeeded = true;
+
+    private static void CalcWantedSpeed(){
+      if (isZone1) {
+        WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone1;
       }
-      IsQuikShot = QuikShot;
+      else{
+        WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
+      }
+      StartSpeed = WantedVelocity;
+    }
+
+    private static void getWantedDegree(){//calcs the direction in which we want the gp to fly on
+      if (RobotContainer.isRedAllince.getAsBoolean()) {
+        YaxisWantedAngle = Math.atan(Dy/Dx);
+      }
+      else YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);
+      if (IsQuikShot) YaxisWantedAngle = Units.degreesToRadians(180) - YaxisWantedAngle;
+    }
+    private static void getChassisOffset(){//calcs offset do to speed
+      YaxisOffset = Math.atan(VelocityY/VelocityX);
+    }
+    private static void CalcYaxisAngle(){//calcs the Chassis angle to the speaker relative to the speed
+      getChassisOffset();
+      ChasisAngle =  -YaxisWantedAngle//WORKS
+      //  + YaxisOffset
+       ;//once there was a *2 in here
+    }
+  
+    private static void Zone1_Equasion(){//simple lazer for zone 1
+      try {
+        ArmAngle = Math.atan(Dz/distanceToSpeaker);//if there is a problem, return last angle
+      } catch (Exception e) {
+      }
+    }
+    private static void Zone2_Equasion(){//complicated for zone 2
+      try {
+        ArmAngle = Math.atan((Math.pow(StartSpeed, 2)
+       - Math.sqrt(Math.pow(StartSpeed, 4)
+        - 2*(Dz)//hieght
+        *Constants.gGravity_phisics*Math.pow(StartSpeed, 2) - Math.pow(Constants.gGravity_phisics*distanceToSpeaker, 2)))
+        /(distanceToSpeaker*Constants.gGravity_phisics)
+      );
+      } catch (Exception e) {
+      }
+    }
+  
+    private static void RobotSpeedRelative_angle(){//calcs the arm angle with speed relativity
+      try {
+        ArmAngle = Math.abs(Math.atan(-(StartSpeed*Math.sin(ArmAngle))/(StartSpeed * Math.cos(ArmAngle)
+        + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond * Math.cos(YaxisWantedAngle)
+        + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond * Math.sin(YaxisWantedAngle))));
+      } catch (Exception e) {
+      }
+    }
+  
+    private static void CalcAngleZaxis(){//chooses zone 1 or 2 or quik shot modes
+      // System.out.println("shit");
+      if (distanceToSpeaker <= Constants.Arm.EndOfZone1) {
+        // System.out.println("1");
+        Zone1_Equasion();
+        // RobotSpeedRelative_angle();
+        if(IsQuikShot){
+          ZaxisTarget = Constants.Arm.QuikShotPosition;
+          ArmAngle = Units.degreesToRadians(180) - ArmAngle;
+        }
+        else{
+          ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
+          ZaxisTarget.y = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.sin(ArmAngle), 0, Constants.Arm.armLengthMeters);
+          ZaxisTarget.x = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.cos(ArmAngle), Constants.Arm.armLengthMeters, 0);
+      }
+      }
+      else{
+        // System.out.println("2");
+        Zone2_Equasion();
+        // RobotSpeedRelative_angle();
+        if(IsQuikShot){
+          ZaxisTarget = Constants.Arm.QuikShotPosition;
+          ArmAngle = Units.degreesToRadians(180) - ArmAngle;
+        }
+        else{
+          ZaxisTarget = Constants.Arm.Zone2_ArmPosition;
+          ZaxisTarget.y = Constants.Arm.armLengthMeters * Math.sin(ArmAngle);
+          ZaxisTarget.x = Constants.Arm.armLengthMeters * Math.cos(ArmAngle);
+        }
+      }
+    }
+  
+    
+    private static void CalcVelocityXy_field(){//calcs the Velocity in Y and X axises
+      VelocityY = StartSpeed*Math.cos(ArmAngle)*Math.sin(YaxisWantedAngle)
+      + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond + RobotContainer.driveBase.getAbsoluteChassisSpeeds().omegaRadiansPerSecond
+      * RobotContainer.arm.getShooterPosition().x * Math.sin(Units.degreesToRadians(-90) + YaxisWantedAngle);
+      VelocityX = StartSpeed*Math.cos(ArmAngle)*(-1)*Math.cos(YaxisWantedAngle)
+      + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond + RobotContainer.driveBase.getAbsoluteChassisSpeeds().omegaRadiansPerSecond
+      * RobotContainer.arm.getShooterPosition().x * Math.cos(Units.degreesToRadians(-90) + YaxisWantedAngle);
     }
 
     public static void UpdateParameters(){//updates all the parameters so we can have our desired angles
@@ -231,6 +223,12 @@ public class ArmUtil{
         ZaxisTarget.rotation = 0;
       }
       CalcYaxisAngle();
+    }
+    public static void SetQuikShotMode(boolean QuikShot){
+      if (IsQuikShot != QuikShot) {
+        isResetNeeded = true;
+      }
+      IsQuikShot = QuikShot;
     }
     public static double getArmAngle(){
       return ArmAngle;
