@@ -20,7 +20,7 @@ public class ClimbSequence extends SequentialCommandGroup {
     addCommands(//Can be deleted
       new MoveToFree(),
       new MoveArmToClimbPosition()
-      // new Climb2(true)
+      //new Climb2(true)
       // new Climb2(false)
     );
   }

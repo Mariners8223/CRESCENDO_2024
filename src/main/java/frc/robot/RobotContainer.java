@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.ShooterCommands.QuikAim;
@@ -102,16 +103,17 @@ public class RobotContainer {
 
     // driveController.cross().onTrue(QuickAim);
     // driveController.cross().onTrue(new InstantCommand(() -> isQuickAiming = !isQuickAiming));
-    driveController.square().onTrue(new IntakeToFloor());
-    driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
-    driveController.cross().onTrue(new ShootToAmp());
+    // driveController.square().onTrue(new IntakeToFloor());
+    // driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
+    // driveController.cross().onTrue(new ShootToAmp());
     // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {QuickAim.cancel(); driveBase.isControlled = false;}));
 
-    driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
+    // driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
 
-    // driveController.cross().onTrue(new ClimbSequence());
+    driveController.cross().onTrue(new ClimbSequence());
     // driveController.cross().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 1)));
     // driveController.square().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 0)));
+
   }
 
   private void configChooser(){
