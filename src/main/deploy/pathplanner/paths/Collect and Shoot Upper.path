@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Collect GP",
+      "name": "Collect",
       "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",

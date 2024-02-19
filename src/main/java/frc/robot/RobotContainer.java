@@ -6,6 +6,8 @@ package frc.robot;
 
 import java.util.function.BooleanSupplier;
 
+import javax.print.attribute.standard.MediaSize.NA;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -25,6 +27,9 @@ import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.ShooterCommands.QuikAim;
 import frc.robot.commands.ShooterCommands.Shoot;
+import frc.robot.commands.armCommands.MoveToFree;
+import frc.robot.commands.armCommands.MoveToHome;
+import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
@@ -67,6 +72,15 @@ public class RobotContainer {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
 
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> Logger.recordOutput("allince", DriverStation.getAlliance().get().toString())).ignoringDisable(true));
+
+    //AUTOSSSSS related shit
+    NamedCommands.registerCommand("Shoot", new Shoot());
+    NamedCommands.registerCommand("QuikAim", new QuikAim());
+    NamedCommands.registerCommand("Collect", new Collect());
+    NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
+    NamedCommands.registerCommand("MoveToFree", new MoveToFree());
+    NamedCommands.registerCommand("MoveToHome", new MoveToHome());
+    NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
   }
 
   private void configureBindings() {

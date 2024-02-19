@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3949830309299174,
-        "y": 5.552382699379147
+        "x": 1.25,
+        "y": 5.550936522700434
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3949830309299145,
-        "y": 5.552382699379147
+        "x": 2.2499999999999973,
+        "y": 5.550936522700434
       },
       "isLocked": true,
-      "linkedName": null
+      "linkedName": "QuikShot auto position"
     },
     {
       "anchor": {
@@ -32,10 +32,20 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.15,
+      "name": "Collect",
+      "waypointRelativePos": 0.35,
       "command": {
         "type": "sequential",
+        "data": {
+          "commands": []
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
         "data": {
           "commands": []
         }

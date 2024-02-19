@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot to amp",
-      "waypointRelativePos": 1.0,
+      "name": "ShootToAmp",
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "sequential",
         "data": {
