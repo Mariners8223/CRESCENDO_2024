@@ -25,6 +25,13 @@ import frc.util.PIDFGains;
 
 /** Add your docs here. */
 public class Constants {
+    public static void SwapToRed(){
+        Speaker.SpeakerTranslation = new Translation3d(Speaker.FieldXLength - Speaker.SpeakerTranslation.getX(),
+         Speaker.SpeakerTranslation.getY(), Speaker.SpeakerTranslation.getZ());
+        Speaker.ampTranslation = new Translation3d(Speaker.FieldXLength - Speaker.SpeakerTranslation.getX(), 
+         Speaker.SpeakerTranslation.getY(), Speaker.SpeakerTranslation.getZ());
+        //TODO: switch climb related positions - x = fieldx - x, rotation = 180 - rotation
+    }
     public static final List<Translation2d> robotZones = new ArrayList<Translation2d>() {
         //TODO: add robot zones
     };
@@ -81,7 +88,7 @@ public class Constants {
             public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
             public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
 
-            public static final Translation3d ampTranslation = new Translation3d(3, 8, 0);
+            public static Translation3d ampTranslation = new Translation3d(3, 8, 0);
             public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 2.03);//z = 2.03
     }
 
@@ -222,26 +229,26 @@ public class Constants {
         public static final double RopeLengthToMotorRotaions = 8/84;
 
         public static class SlidingPositions{
-            public static final List<Translation2d> SlidingPositions_MiddleRope = new ArrayList<Translation2d>(
+            public static List<Translation2d> SlidingPositions_MiddleRope = new ArrayList<Translation2d>(
                 Arrays.asList(new Translation2d(4.389, 4.880),//rope 1 - top rope
                 new Translation2d(4.44, 3.26),//rope 2 - bottom rope
                 new Translation2d(5.87, 4.110)//rope 3 - middle pointing rope
             ));
-            public static final List<Translation2d> SlidingPositions_RightEdgeRope = new ArrayList<Translation2d>(//TODO: find locations
+            public static List<Translation2d> SlidingPositions_RightEdgeRope = new ArrayList<Translation2d>(//TODO: find locations
                 Arrays.asList(new Translation2d(3.607, 4.429),//rope 1 - top rope
                 new Translation2d(5.217, 2.888),//rope 2 - bottom rope
                 new Translation2d(5.87, 4.971)//rope 3 - middle pointing rope
             ));
-            public static final List<Translation2d> SlidingPositions_LeftEdgeRope = new ArrayList<Translation2d>(//TODO: find locations
+            public static List<Translation2d> SlidingPositions_LeftEdgeRope = new ArrayList<Translation2d>(//TODO: find locations
                 Arrays.asList(new Translation2d(5.171, 5.331),//rope 1 - top rope
                 new Translation2d(3.655, 3.790),//rope 2 - bottom rope
                 new Translation2d(5.87, 3.249)//rope 3 - middle pointing rope
             ));
 
-            public static final List<Pose2d> InStageMiddleLocations_POSE2D = new ArrayList<Pose2d>(
+            public static List<Pose2d> InStageMiddleLocations_POSE2D = new ArrayList<Pose2d>(
                 Arrays.asList(//TODO: find locations
             ));
-            public static final List<Pose2d> UnderRopeMiddleLocations_POSE2D = new ArrayList<>(//TODO: redo
+            public static List<Pose2d> UnderRopeMiddleLocations_POSE2D = new ArrayList<>(//TODO: redo
                 Arrays.asList(new Pose2d(SlidingPositions_MiddleRope.get(0).getX(), SlidingPositions_MiddleRope.get(0).getY(), Rotation2d.fromDegrees(-60)),//rope 1 - top rope
                 new Pose2d(SlidingPositions_MiddleRope.get(1).getX(), SlidingPositions_MiddleRope.get(1).getY(), Rotation2d.fromDegrees(60)),//rope 2 - bottom rope
                 new Pose2d(SlidingPositions_MiddleRope.get(2).getX(), SlidingPositions_MiddleRope.get(2).getY(), Rotation2d.fromDegrees(180))//rope 3 - middle pointing rope

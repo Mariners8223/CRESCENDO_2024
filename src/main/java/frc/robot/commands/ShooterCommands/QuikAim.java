@@ -44,12 +44,13 @@ public class QuikAim extends SequentialCommandGroup {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-      ArmUtil.SetQuikShotMode(true);;
+      ArmUtil.SetQuikShotMode(true);
       ArmUtil.UpdateParameters();
+
       target = ArmUtil.getArmNeededPosition();
-      SmartDashboard.putNumber("before clamo", Units.radiansToDegrees(target.rotation));
       target.rotation = MathUtil.clamp(target.rotation, Units.rotationsToRadians(0.35), Units.rotationsToRadians(0.5));
       arm.moveShooterToPose(target);
+      
       RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()));
   }
   }
