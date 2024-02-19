@@ -73,13 +73,23 @@ public class LimeLightClass implements CameraInterface{
     }
 
     @Override
-    public Translation2d getTranslationToBestTarget(){
-      return Constants.Vision.rubbishTranslation[0];
+    public double getAngleToBestTarget() {
+      return -1000;
     }
-    
+
     @Override
-    public Translation2d[] getTranslationsToTargets() {
-      return Constants.Vision.rubbishTranslation;
+    public double getDistanceToBestTarget() {
+      return -1000;
+    }
+
+    @Override
+    public double[] getDistanceToTargets() {
+      return Constants.Vision.rubbishDistance;
+    }
+
+    @Override
+    public double[] getAngleToTargets() {
+      return Constants.Vision.rubbishAngle;
     }
 
     @Override

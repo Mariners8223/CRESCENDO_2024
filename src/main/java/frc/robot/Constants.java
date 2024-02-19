@@ -52,8 +52,10 @@ public class Constants {
 
     public static final class Vision{
 
-        public static final Translation2d[] rubbishTranslation = {new Translation2d(-20, -20)};
-        public static final Pose3d rubbishPose = new Pose3d(new Pose2d(rubbishTranslation[0], new Rotation2d(69)));
+        // public static final Translation2d[] rubbishTranslation = {new Translation2d(-20, -20)};
+        public static final double[] rubbishDistance = new double[]{-1};
+        public static final double[] rubbishAngle = new double[]{-1000};
+        public static final Pose3d rubbishPose = new Pose3d(new Pose2d(new Translation2d(-20, -20), new Rotation2d(69)));
 
         public static final int numberOfCameras = 2;
 

@@ -52,7 +52,8 @@ public class PhotonCameraClass implements CameraInterface{
       public boolean hasServo;
 
       public Pose3d estimatedPose; //the estimated pose of the robot
-      public Translation2d[] objectsToRobot; //the translation from the object to the robot
+      public double[] distanceTobject = new double[5]; //the distance to the object
+      public double[] angleToObjects = new double[5]; //the angle to the object
 
       public double poseConfidence; //the confidence of the pose
       public double timeStamp; //the time stamp of the camera
@@ -91,7 +92,6 @@ public class PhotonCameraClass implements CameraInterface{
       latestResult = new PhotonPipelineResult();
 
       inputs.estimatedPose = Constants.Vision.rubbishPose;
-      inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
 
       mode = CameraMode.AprilTags;
 
@@ -115,18 +115,46 @@ public class PhotonCameraClass implements CameraInterface{
       else return Constants.Vision.rubbishPose;
     }
 
+    // @Override
+    // public Translation2d getTranslationToBestTarget(){
+    //   if(mode == CameraMode.Rings)
+    //     return inputs.objectsToRobot[0];
+    //   else return Constants.Vision.rubbishTranslation[0];
+    // }
+
+    // @Override
+    // public Translation2d[] getTranslationsToTargets(){
+    //   if(mode == CameraMode.Rings)
+    //     return inputs.objectsToRobot;
+    //   else return Constants.Vision.rubbishTranslation;
+    // }
+
     @Override
-    public Translation2d getTranslationToBestTarget(){
+    public double getDistanceToBestTarget(){
       if(mode == CameraMode.Rings)
-        return inputs.objectsToRobot[0];
-      else return Constants.Vision.rubbishTranslation[0];
+        return inputs.distanceTobject[0];
+      else return 0;
     }
 
     @Override
-    public Translation2d[] getTranslationsToTargets(){
+    public double getAngleToBestTarget(){
       if(mode == CameraMode.Rings)
-        return inputs.objectsToRobot;
-      else return Constants.Vision.rubbishTranslation;
+        return inputs.angleToObjects[0];
+      else return 0;
+    }
+
+    @Override
+    public double[] getDistanceToTargets(){
+      if(mode ==  CameraMode.Rings)
+        return inputs.distanceTobject;
+      else return Constants.Vision.rubbishDistance;
+    }
+
+    @Override
+    public double[] getAngleToTargets(){
+      if(mode ==  CameraMode.Rings)
+        return inputs.angleToObjects;
+      else return Constants.Vision.rubbishAngle;
     }
 
     @Override
@@ -143,7 +171,8 @@ public class PhotonCameraClass implements CameraInterface{
         inputs.latency = 0;
         inputs.estimatedPose = Constants.Vision.rubbishPose;
         inputs.poseConfidence = 0;
-        inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
+        inputs.angleToObjects = Constants.Vision.rubbishAngle;
+        inputs.distanceTobject = Constants.Vision.rubbishDistance;
         Logger.processInputs(inputs.cameraName, inputs);
         return;
       }
@@ -168,11 +197,16 @@ public class PhotonCameraClass implements CameraInterface{
       else{
         var targets = latestResult.getTargets();
 
-        for(int i = 0; i < targets.size() && i == 5; i++){
-          inputs.objectsToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
-          cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets.get(i).getPitch()),
-          Rotation2d.fromDegrees(targets.get(i).getYaw())).plus(cameraToRobot[1].getTranslation().toTranslation2d()
-          ).rotateBy(cameraToRobot[1].getRotation().toRotation2d());
+        // for(int i = 0; i < targets.size() && i == 5; i++){
+        //   inputs.objectsToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
+        //   cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets.get(i).getPitch()),
+        //   Rotation2d.fromDegrees(targets.get(i).getYaw())).plus(cameraToRobot[1].getTranslation().toTranslation2d()
+        //   ).rotateBy(cameraToRobot[1].getRotation().toRotation2d());
+        // }
+        for(int  i = 0; i < targets.size() && i <= 5; i++){
+          inputs.distanceTobject[i] = PhotonUtils.calculateDistanceToTargetMeters(
+            cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets.get(i).getPitch());
+          inputs.angleToObjects[i] = targets.get(i).getYaw();
         }
       }
 
@@ -207,7 +241,8 @@ public class PhotonCameraClass implements CameraInterface{
       camera.setPipelineIndex(pipeLineIndex);
       if(pipeLineIndex == 0){
         mode = CameraMode.AprilTags;
-        inputs.objectsToRobot = Constants.Vision.rubbishTranslation;
+        inputs.angleToObjects = Constants.Vision.rubbishAngle;
+        inputs.distanceTobject = Constants.Vision.rubbishDistance;
         if(servo != null)
           servo.set(0.55);
       }

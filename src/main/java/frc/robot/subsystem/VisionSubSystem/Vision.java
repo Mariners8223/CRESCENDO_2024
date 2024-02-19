@@ -17,7 +17,9 @@ public class Vision extends SubsystemBase {
   private Pose3d[] poses = new Pose3d[Constants.Vision.numberOfCameras];
   private double[] timeStamps = new double[Constants.Vision.numberOfCameras];
   private double[] latencies = new double[Constants.Vision.numberOfCameras];
-  private Translation2d[][] objectsToRobot = new Translation2d[Constants.Vision.numberOfCameras][];
+  // private Translation2d[][] objectsToRobot = new Translation2d[Constants.Vision.numberOfCameras][];
+  private double[][] distanceTOObjects = new double[Constants.Vision.numberOfCameras][5];
+  private double[][] angleToObjects = new double[Constants.Vision.numberOfCameras][5];
 
   /**
    * creates a new Vision subsystem with 4 cameras
@@ -31,7 +33,8 @@ public class Vision extends SubsystemBase {
       poses[i] = Constants.Vision.rubbishPose;
       timeStamps[i] = 0;
       latencies[i] = 0;
-      objectsToRobot[i] = Constants.Vision.rubbishTranslation;
+      distanceTOObjects[i] = new double[5];
+      angleToObjects[i] = new double[5];
     }
   }
 
@@ -83,27 +86,54 @@ public class Vision extends SubsystemBase {
     return 0;
   }
 
-  /**
-   * retruns the translation to the target from the specified camera (may be null if no target is detected or the camera is not in Rings mode)
-   * @param location the location of the camera
-   * @return the translation to the target from the specified camera
-   */
-  public Translation2d getbestObjectToCamera(CameraLocation location){
-    // return cameras[location.ordinal()].getTranslationToBestTarget();
+  // /**
+  //  * retruns the translation to the target from the specified camera (may be null if no target is detected or the camera is not in Rings mode)
+  //  * @param location the location of the camera
+  //  * @return the translation to the target from the specified camera
+  //  */
+  // public Translation2d getbestObjectToCamera(CameraLocation location){
+  //   // return cameras[location.ordinal()].getTranslationToBestTarget();
+  //   for (CameraInterface camera : cameras) {
+  //     if(camera != null)
+  //     if(camera.getCameraLocation() == location) return camera.getTranslationToBestTarget();
+  //   }
+  //   return Constants.Vision.rubbishTranslation[0];
+  // }
+
+  public double getDistanceToBestObject(CameraLocation location){
+    // return cameras[location.ordinal()].getDistanceToBestTarget();
     for (CameraInterface camera : cameras) {
       if(camera != null)
-      if(camera.getCameraLocation() == location) return camera.getTranslationToBestTarget();
+      if(camera.getCameraLocation() == location) return camera.getDistanceToBestTarget();
     }
-    return Constants.Vision.rubbishTranslation[0];
+    return -1000;
   }
 
-  public Translation2d[] getObjectsToCamera(CameraLocation location){
-    // return cameras[location.ordinal()].getTranslationsToTargets();
+  public double getAngleToBestObject(CameraLocation location){
+    // return cameras[location.ordinal()].getAngleToBestTarget();
     for (CameraInterface camera : cameras) {
       if(camera != null)
-      if(camera.getCameraLocation() == location) return camera.getTranslationsToTargets();
+      if(camera.getCameraLocation() == location) return camera.getAngleToBestTarget();
     }
-    return Constants.Vision.rubbishTranslation;
+    return -1000;
+  }
+
+  public double[] getDistanceToObjects(CameraLocation location){
+    // return cameras[location.ordinal()].getDistanceToTargets();
+    for (CameraInterface camera : cameras) {
+      if(camera != null)
+      if(camera.getCameraLocation() == location) return camera.getDistanceToTargets();
+    }
+    return Constants.Vision.rubbishDistance;
+  }
+
+  public double[] getAngleToObjects(CameraLocation location){
+    // return cameras[location.ordinal()].getAngleToTargets();
+    for (CameraInterface camera : cameras) {
+      if(camera != null)
+      if(camera.getCameraLocation() == location) return camera.getAngleToTargets();
+    }
+    return Constants.Vision.rubbishDistance;
   }
 
   /**
@@ -117,22 +147,6 @@ public class Vision extends SubsystemBase {
       if(camera.getCameraLocation() == location) return camera.hasTarget();
     }
     return false;
-  }
-
-  /**
-   * returns the best objects to the robot (may be null if no target is detected or the cameras is not in Rings mode)
-   * @return the best objects to the robot (for each camera)
-   */
-  public Translation2d[] getBestObjectsToRobot(){
-    return objectsToRobot[0];
-  }
-
-  /**
-   * returns the objects to the robot (may be null if no target is detected or the cameras is not in Rings mode)
-   * @return the objects to the robot (for each camera)
-   */
-  public Translation2d[][] getObjectsToRobot(){
-    return objectsToRobot;
   }
 
   /**
@@ -174,7 +188,8 @@ public class Vision extends SubsystemBase {
       poses[i] = cameras[i].getPose();
       timeStamps[i] = cameras[i].getTimeStamp();
       latencies[i] = cameras[i].getLatency();
-      objectsToRobot[i] = cameras[i].getTranslationsToTargets();
+      distanceTOObjects[i] = cameras[i].getDistanceToTargets();
+      angleToObjects[i] = cameras[i].getAngleToTargets();
       // System.out.println("safbjhsabgksabg sajhg");
 
       if(poses[i] != Constants.Vision.rubbishPose) RobotContainer.driveBase.addVisionMesrument(poses[i].toPose2d(), timeStamps[i]);
@@ -221,17 +236,41 @@ public class Vision extends SubsystemBase {
      */
     public void setPipeLine(int pipeLineIndex);
 
-    /**
-     * returns the translation to the target from the camera (may be null if no target is detected or the camera is not in Rings mode)
-     * @return the translation to the target from the camera
-     */
-    public Translation2d getTranslationToBestTarget();
+    // /**
+    //  * returns the translation to the target from the camera (may be null if no target is detected or the camera is not in Rings mode)
+    //  * @return the translation to the target from the camera
+    //  */
+    // public Translation2d getTranslationToBestTarget();
 
     /**
-     * returns the translations to the targets from the camera (may be null if no target is detected or the camera is not in Rings mode)
-     * @return the translations to the targets from the camera
+     * gets the distance to the best target from the camera (may be -1000 if no target is detected)
+     * @return the distance to the best target from the camera (in meters)
      */
-    public Translation2d[] getTranslationsToTargets();
+    public double getDistanceToBestTarget();
+
+    /**
+     * gets the angle to the best target from the camera (may be -1000 if no target is detected)
+     * @return the angle to the best target from the camera (in degrees)
+     */
+    public double getAngleToBestTarget();
+
+    /**
+     * gets the distance to the targets from the camera (may be null if no target is detected)
+     * @return the distance to the targets from the camera (in meters)
+     */
+    public double[] getDistanceToTargets();
+
+    /**
+     * gets the angle to the targets from the camera (may be null if no target is detected)
+     * @return the angle to the targets from the camera (in degrees)
+     */
+    public double[] getAngleToTargets();
+
+    // /**
+    //  * returns the translations to the targets from the camera (may be null if no target is detected or the camera is not in Rings mode)
+    //  * @return the translations to the targets from the camera
+    //  */
+    // public Translation2d[] getTranslationsToTargets();
 
     /**
      * returns the timestamp of the camera (may be 0 if no target is detected)
