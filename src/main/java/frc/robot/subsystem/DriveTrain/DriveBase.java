@@ -412,6 +412,34 @@ public class DriveBase extends SubsystemBase {
   }
 
   /**
+   * drives the robot relative to it self
+   * @param Xspeed the xseed of the robot (forward is positive) m/s
+   * @param Yspeed the yseed of the robot (left is positive) m/s
+   * @param rotation  the rotation of the robot (left is positive) rad/s
+   */
+  public void robotRelativeDrive(double Xspeed, double Yspeed, double rotation){
+    if(rotation == 0) rotation = calculateTheta();
+    else if(!isControlled){
+      targetRotation = getRotation2d();
+      inputs.targetRotation = targetRotation;
+    }
+
+    targetStates = driveTrainKinematics.toSwerveModuleStates(new ChassisSpeeds(Xspeed, Yspeed, rotation));
+    SwerveDriveKinematics.desaturateWheelSpeeds(currentStates, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec);
+
+    for(int i = 0; i < 4; i++){
+      targetStates[i] = SwerveModuleState.optimize(targetStates[i], currentStates[i].angle);
+      modules[i].setModuleState(targetStates[i]);
+    }
+
+    inputs.targetStates = targetStates;
+    inputs.XspeedInput = Xspeed;
+    inputs.YspeedInput = Yspeed;
+    inputs.rotationSpeedInputBeforePID = rotation;
+    Logger.processInputs(getName(), inputs);
+  }
+
+  /**
    * drives the robot with angle PID fix
    * @param Xspeed the speed in the X diraction (postive is away from the driver station)
    * @param yspeed the speed in the Y diraction (postive is left)
