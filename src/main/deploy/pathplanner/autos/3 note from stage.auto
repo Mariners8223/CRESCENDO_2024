@@ -14,19 +14,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker to bottom 4"
+            "pathName": "get 2nd row uppest note"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "get 2nd row middle note"
+            "pathName": "QuikAim from stage"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Bottom 4 to speaker"
+            "name": "QuikAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -39,6 +45,24 @@
           "type": "path",
           "data": {
             "pathName": "get 2nd row 2nd uppest note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "QuikAim from stage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "QuikAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

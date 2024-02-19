@@ -2,8 +2,16 @@
   "robotWidth": 0.75,
   "robotLength": 0.75,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "Close notes",
+    "Far Notes",
+    "Far Shot",
+    "Far Notes connections"
+  ],
+  "autoFolders": [
+    "Far Notes",
+    "Close Notes"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
