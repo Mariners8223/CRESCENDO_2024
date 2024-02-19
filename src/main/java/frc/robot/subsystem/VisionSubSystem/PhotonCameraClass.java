@@ -196,13 +196,14 @@ public class PhotonCameraClass implements CameraInterface{
         }
       }
       else{
-        // var targets = latestResult.getTargets();
-        var target = latestResult.getBestTarget();
 
-        inputs.distanceTobject[0] =  PhotonUtils.calculateDistanceToTargetMeters(
-        cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight, cameraToRobot[1].getRotation().getY(), target.getPitch());
+        calculateDistanceAndAngleFromOffset(distance, Units.degreesToRadians(latestResult.getBestTarget().getYaw()), 0);
+        
 
-        inputs.angleToObjects[0] = target.getYaw(); //- Units.radiansToDegrees(cameraToRobot[1].getRotation().getZ());
+        // inputs.distanceTobject[0] =  PhotonUtils.calculateDistanceToTargetMeters(
+        // cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight, cameraToRobot[1].getRotation().getY(), target.getPitch());
+
+        // inputs.angleToObjects[0] = target.getYaw(); //- Units.radiansToDegrees(cameraToRobot[1].getRotation().getZ());
         // for(int i = 0; i < targets.size() && i == 5; i++){
         //   inputs.objectsToRobot[i] = PhotonUtils.estimateCameraToTargetTranslation(PhotonUtils.calculateDistanceToTargetMeters(
         //   cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight / 2, cameraToRobot[1].getRotation().getY(), targets.get(i).getPitch()),
@@ -217,6 +218,13 @@ public class PhotonCameraClass implements CameraInterface{
       }
 
       Logger.processInputs(inputs.cameraName, inputs);
+    }
+
+    private void calculateDistanceAndAngleFromOffset(double distance, double angle, int index){
+      inputs.distanceTobject[index] = Math.sqrt(distance * (distance * Math.pow(Math.cos(angle), 2) +
+      distance * Math.pow(Math.sin(angle), 2) - 2 * cameraToRobot[1].getY() * Math.sin(angle)) - Math.pow(cameraToRobot[1].getY(), 2));
+
+      inputs.angleToObjects[index] = Math.acos((distance * Math.cos(angle) / inputs.distanceTobject[index]));
     }
 
     @Override
