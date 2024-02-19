@@ -197,7 +197,10 @@ public class PhotonCameraClass implements CameraInterface{
       }
       else{
 
-        calculateDistanceAndAngleFromOffset(distance, Units.degreesToRadians(latestResult.getBestTarget().getYaw()), 0);
+        calculateDistanceAndAngleFromOffset(
+        PhotonUtils.calculateDistanceToTargetMeters(cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight, cameraToRobot[1].getRotation().getY(), Units.degreesToRadians(latestResult.getBestTarget().getPitch()))
+        * Math.cos(Units.degreesToRadians(latestResult.getBestTarget().getPitch())),
+        Units.degreesToRadians(latestResult.getBestTarget().getYaw()), 0);
         
 
         // inputs.distanceTobject[0] =  PhotonUtils.calculateDistanceToTargetMeters(
@@ -221,8 +224,9 @@ public class PhotonCameraClass implements CameraInterface{
     }
 
     private void calculateDistanceAndAngleFromOffset(double distance, double angle, int index){
-      inputs.distanceTobject[index] = Math.sqrt(distance * (distance * Math.pow(Math.cos(angle), 2) +
-      distance * Math.pow(Math.sin(angle), 2) - 2 * cameraToRobot[1].getY() * Math.sin(angle)) - Math.pow(cameraToRobot[1].getY(), 2));
+      // inputs.distanceTobject[index] = Math.sqrt(distance * (distance * Math.pow(Math.cos(angle), 2) +
+      // distance * Math.pow(Math.sin(angle), 2) - 2 * cameraToRobot[1].getY() * Math.sin(angle)) - Math.pow(cameraToRobot[1].getY(), 2));
+      inputs.distanceTobject[index] = Math.sqrt(distance * (distance - 2 * cameraToRobot[1].getY() * Math.sin(angle)) - Math.pow(cameraToRobot[1].getY(), 2));
 
       inputs.angleToObjects[index] = Math.acos((distance * Math.cos(angle) / inputs.distanceTobject[index]));
     }
