@@ -14,6 +14,8 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 
 
 public class Intake {
@@ -35,7 +37,6 @@ public class Intake {
         intakeMotor.setInverted(Constants.Intake.intakeMotorIsInverted);
 
         intakeMotor.getPIDController().setP(5);
-
         proxSensor = new com.armabot.lidar.impl.vl53l1x.Vl53l1xI2c(RoboRioPort.ONBOARD);
         proxSensor.getI2c().setAddress((byte) 0x29);
         proxSensor.setTimeout(10, TimeUnit.SECONDS);
