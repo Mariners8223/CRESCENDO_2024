@@ -302,7 +302,7 @@ public class DriveBase extends SubsystemBase {
    * @return the angle of the navx
    */
   public double getNavxAngle(){
-    return -Navx.getAngle();
+    return Navx.getAngle();
   }
 
   /**
