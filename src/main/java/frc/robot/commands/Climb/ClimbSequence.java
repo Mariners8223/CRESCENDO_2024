@@ -6,6 +6,7 @@ package frc.robot.commands.Climb;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.armCommands.MoveToFree;
+import frc.robot.commands.climbCommands.ClimbElevator;
 import frc.robot.commands.climbCommands.MoveArmToClimbPosition;
 
 
@@ -19,9 +20,8 @@ public class ClimbSequence extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(//Can be deleted
       new MoveToFree(),
-      new MoveArmToClimbPosition()
-      //new Climb2(true)
-      // new Climb2(false)
+      new MoveArmToClimbPosition(),
+      new ClimbElevator(true)
     );
   }
 }

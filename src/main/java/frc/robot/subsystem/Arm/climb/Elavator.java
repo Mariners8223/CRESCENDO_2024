@@ -60,6 +60,11 @@ public class Elavator extends SubsystemBase {
     inputs.railMotorTarget = height;
     railMotor.setControl(railoutput.withPosition(inputs.railMotorTarget));
   }
+
+  public void setRollerMotorSpeed(double speed){
+    railMotor.set(speed);
+  }
+
   public void setRollerMotor(double distance){
     inputs.rollerMotorTarget = distance;
     rollerMotor.setControl(rolleroutput.withPosition(inputs.rollerMotorTarget));

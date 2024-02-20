@@ -216,7 +216,7 @@ public class Constants {
 
         public static final PIDFGains rollerMotorPIDF = new PIDFGains(0.1, 0.1, 0.1); //TODO: get the real value
 
-        public static final double railMotorConvertionFactor = 90 / (3 * Math.PI);
+        public static final double railMotorConvertionFactor = 3 * 5 * 9 * 2/ (4.65 * Math.PI); // 90 / (3 * Math.PI)
         public static final double rollerMotorConvertionFactor = 1; //TODO: get the real value
 
         public static final double railMotorTolarance = 0.1;

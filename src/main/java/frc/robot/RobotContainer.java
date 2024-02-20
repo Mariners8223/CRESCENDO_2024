@@ -30,8 +30,10 @@ import frc.robot.commands.ShooterCommands.QuikAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
+import frc.robot.commands.climbCommands.ClimbElevator;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.climb.Elavator;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
 
@@ -100,7 +102,6 @@ public class RobotContainer {
     // driveController.cross().onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(0.5))).onFalse(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
     // var QuickAim = new QuikAim();
     var collect = new Collect();
-
     // driveController.cross().onTrue(QuickAim);
     // driveController.cross().onTrue(new InstantCommand(() -> isQuickAiming = !isQuickAiming));
     // driveController.square().onTrue(new IntakeToFloor());
@@ -111,6 +112,7 @@ public class RobotContainer {
     // driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
 
     driveController.cross().onTrue(new ClimbSequence());
+    driveController.square().onTrue(new ClimbElevator(false));
     // driveController.cross().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 1)));
     // driveController.square().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 0)));
 
