@@ -16,7 +16,9 @@ public class FastAim extends ParallelCommandGroup {
   /** Creates a new FastAim. */
   public FastAim() {//this command chosses the best shooting position for the current arm position
     addCommands(
-      new QuickAim().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake),
+      new QuickAim().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake
+      && Arm.getInstance().lastknownPosition != knownArmPosition.Amp
+      && Arm.getInstance().lastknownPosition != knownArmPosition.Shooter),
       new AimRegularToSpeaker().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Intake)
     );
   }
