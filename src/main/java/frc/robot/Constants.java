@@ -31,6 +31,7 @@ public class Constants {
         Speaker.ampTranslation = new Translation3d(Speaker.FieldXLength - Speaker.SpeakerTranslation.getX(), 
          Speaker.SpeakerTranslation.getY(), Speaker.SpeakerTranslation.getZ());
         //TODO: switch climb related positions - x = fieldx - x, rotation = 180 - rotation
+        //and zones
     }
     public static final List<Translation2d> robotZones = new ArrayList<Translation2d>() {
         //TODO: add robot zones
