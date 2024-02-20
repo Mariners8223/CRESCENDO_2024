@@ -4,24 +4,22 @@
 
 package frc.robot.commands.sequences;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotContainer;
-import frc.robot.commands.ShooterCommands.QuikAim;
-import frc.robot.commands.ShooterCommands.Shoot;
+import frc.robot.commands.IntakeCommands.IntakeToFloor;
+import frc.robot.commands.ShooterCommands.QuickAim.QuickAim1;
+import frc.robot.subsystem.Arm.Arm;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class QuikShoot extends SequentialCommandGroup {
-  /** Creates a new QuikShoot. */
-  public QuikShoot() {
+public class AutoQuickAim extends SequentialCommandGroup {
+  /** Creates a new AutoQuikAim. */
+  public AutoQuickAim() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(//TODO
-      new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(0.75)),
-      new QuikAim(),
-      new Shoot()
+    addCommands(
+      new IntakeToFloor().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake),
+      new QuickAim1()
     );
   }
 }

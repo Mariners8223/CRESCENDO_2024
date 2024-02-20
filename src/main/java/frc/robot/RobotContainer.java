@@ -26,10 +26,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
-import frc.robot.commands.ShooterCommands.QuikAim;
+import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
+import frc.robot.commands.sequences.AutoQuickAim;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
@@ -76,7 +77,7 @@ public class RobotContainer {
 
     //AUTOSSSSS related shit
     NamedCommands.registerCommand("Shoot", new Shoot());
-    NamedCommands.registerCommand("QuikAim", new QuikAim());
+    NamedCommands.registerCommand("QuikAim", new AutoQuickAim());
     NamedCommands.registerCommand("Collect", new Collect());
     NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
