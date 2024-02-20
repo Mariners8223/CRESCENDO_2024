@@ -17,7 +17,7 @@ public class MoveArmToClimbPosition extends Command {
 
   @Override
   public void initialize(){
-    arm.moveMotorsToRotation(0.25, 0.5);
+    arm.moveMotorsToRotation(0.24316, 0.31750);
   }
 
   @Override

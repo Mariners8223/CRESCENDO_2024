@@ -62,7 +62,7 @@ public class Elavator extends SubsystemBase {
   }
 
   public void setRollerMotorSpeed(double speed){
-    railMotor.set(speed);
+    rollerMotor.set(speed);
   }
 
   public void setRollerMotor(double distance){

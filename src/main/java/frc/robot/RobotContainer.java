@@ -26,13 +26,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
-import frc.robot.commands.ShooterCommands.QuikAim;
+import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.commands.climbCommands.ClimbElevator;
+import frc.robot.commands.sequences.AimRegularToSpeaker;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.ArmUtil;
 import frc.robot.subsystem.Arm.climb.Elavator;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
@@ -78,7 +80,7 @@ public class RobotContainer {
 
     //AUTOSSSSS related shit
     NamedCommands.registerCommand("Shoot", new Shoot());
-    NamedCommands.registerCommand("QuikAim", new QuikAim());
+    NamedCommands.registerCommand("QuikAim", new QuickAim());
     NamedCommands.registerCommand("Collect", new Collect());
     NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
@@ -105,14 +107,30 @@ public class RobotContainer {
     // driveController.cross().onTrue(QuickAim);
     // driveController.cross().onTrue(new InstantCommand(() -> isQuickAiming = !isQuickAiming));
     // driveController.square().onTrue(new IntakeToFloor());
-    // driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
+    driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
     // driveController.cross().onTrue(new ShootToAmp());
     // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {QuickAim.cancel(); driveBase.isControlled = false;}));
 
     // driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
 
-    driveController.cross().onTrue(new ClimbSequence());
-    driveController.square().onTrue(new ClimbElevator(false));
+    var Aim = new QuickAim();
+    driveController.square().onTrue(Aim);
+    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { driveBase.isControlled = false; Aim.cancel(); }));
+    driveController.cross().onTrue(new IntakeToFloor());
+
+    SmartDashboard.putNumber("Arm Angle", ArmUtil.getArmAngle());
+    SmartDashboard.putNumber("Chassis Angle", ArmUtil.getChassisAngle());
+    SmartDashboard.putNumber("Arm Distance", Math.hypot(ArmUtil.getDx(), ArmUtil.getDy()));
+    SmartDashboard.putNumber("Dx", ArmUtil.getDx());
+    SmartDashboard.putNumber("Dy", ArmUtil.getDy());
+    SmartDashboard.putNumber("Dz", ArmUtil.getDz());
+    // driveController.cross().onTrue(new ClimbSequence());
+    // driveController.square().onTrue(new ClimbElevator(false));
+
+    // driveController.povRight().onTrue(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(-0.1))).onFalse(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0)));
+    // driveController.povLeft().onTrue(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0.1))).onFalse(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0)));
+
+    // driveController.L1().onTrue(new MoveToHome());
     // driveController.cross().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 1)));
     // driveController.square().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 0)));
 

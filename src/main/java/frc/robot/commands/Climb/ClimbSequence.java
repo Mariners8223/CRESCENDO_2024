@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.climbCommands.ClimbElevator;
 import frc.robot.commands.climbCommands.MoveArmToClimbPosition;
+import frc.robot.commands.sequences.ClimbToNearestRope;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -19,7 +20,8 @@ public class ClimbSequence extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(//Can be deleted
-      new MoveToFree(),
+      //new ClimbToNearestRope(),
+      new MoveToFree(), // remove after test
       new MoveArmToClimbPosition(),
       new ClimbElevator(true)
     );

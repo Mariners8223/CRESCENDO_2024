@@ -151,7 +151,7 @@ public class Constants {
             public static final boolean secondaryInverted = true;
 
             public static final double mainZeroOffset = 0.482 + 0.012;
-            public static final double secondaryZeroOffset = 0.033;
+            public static final double secondaryZeroOffset = 0.3346 + 0.014;
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 

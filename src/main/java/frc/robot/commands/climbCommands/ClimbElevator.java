@@ -24,7 +24,7 @@ public class ClimbElevator extends Command {
   @Override
   public void initialize(){
     if(goingUp) elavator.setRailMotor(Constants.Elevator.chainHeight - (Constants.Arm.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround) * 100 + 8);
-    else elavator.setRailMotor(Constants.Elevator.chainHeight - (Constants.Arm.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround) * 100 - 15);
+    else elavator.setRailMotor(Constants.Elevator.chainHeight - (Constants.Arm.armHeightFromFrameMeters + Constants.DriveTrain.Global.RobotHeightFromGround) * 100 - 20);
   }
 
   @Override 

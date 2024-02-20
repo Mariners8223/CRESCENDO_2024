@@ -4,6 +4,7 @@
 
 package frc.robot.commands.sequences;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -24,8 +25,10 @@ public class ClimbToNearestRope extends SequentialCommandGroup {
         Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope));
     
     addCommands(//TODO
-    new MoveRobotToSetPose2d(Constants.Elevator.SlidingPositions.InStageMiddleLocations_POSE2D.get(index)),
-    new MoveArmToClimbPosition(),
+    new ParallelCommandGroup(
+      new MoveRobotToSetPose2d(Constants.Elevator.SlidingPositions.InStageMiddleLocations_POSE2D.get(index)),
+      new MoveArmToClimbPosition()
+    ),
     new ClimbElevator(true),
     new MoveRobotToSetPose2d(Constants.Elevator.SlidingPositions.UnderRopeMiddleLocations_POSE2D.get(index)),
     new ClimbElevator(false)
