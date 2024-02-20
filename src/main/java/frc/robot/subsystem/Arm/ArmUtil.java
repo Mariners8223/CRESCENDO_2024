@@ -263,6 +263,18 @@ public class ArmUtil{
     public static enum ArmZones{
       ShootingZone,
       PickUpZone,
-      SpurceZone
+      SourceZone
+    }
+    public static ArmZones getZones(){
+      switch (Constants.robotZones.indexOf(RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.robotZones))) {
+        case 0:
+          return ArmZones.ShootingZone;
+        case 1:
+          return ArmZones.PickUpZone;
+        case 2:
+          return ArmZones.SourceZone;
+        default:
+          return ArmZones.PickUpZone;
+      }
     }
   }
