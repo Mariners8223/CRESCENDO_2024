@@ -107,19 +107,17 @@ public class RobotContainer {
     // driveController.square().onTrue(new MoveToHome());
     // driveController.cross().onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(0.5))).onFalse(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
     // var QuickAim = new QuikAim();
-    var collect = new Collect();
+  
     // driveController.cross().onTrue(QuickAim);
     // driveController.cross().onTrue(new InstantCommand(() -> isQuickAiming = !isQuickAiming));
     // driveController.square().onTrue(new IntakeToFloor());
+    
+    var collect = new Collect();
     driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
-    // driveController.cross().onTrue(new ShootToAmp());
-    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {QuickAim.cancel(); driveBase.isControlled = false;}));
-
-    // driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
-
-    var Aim = new QuickAim();
-    driveController.square().onTrue(Aim);
-    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { driveBase.isControlled = false; Aim.cancel(); }));
+    
+    // var Aim = new QuickAim();
+    driveController.square().onTrue(new MoveToHome());
+    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { driveBase.isControlled = false; Aim.cancel(); }));
     driveController.cross().onTrue(new IntakeToFloor());
 
     SmartDashboard.putNumber("Arm Angle", ArmUtil.getArmAngle());
