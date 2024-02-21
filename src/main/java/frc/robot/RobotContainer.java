@@ -35,7 +35,6 @@ import frc.robot.commands.sequences.AimRegularToSpeaker;
 import frc.robot.commands.climbCommands.SlideToTheLeftEdge;
 import frc.robot.commands.climbCommands.SlideToTheRightEdge;
 import frc.robot.commands.sequences.ClimbToNearestRope;
-import frc.robot.commands.sequences.FastAim;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
