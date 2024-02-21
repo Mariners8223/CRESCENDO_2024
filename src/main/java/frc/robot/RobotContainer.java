@@ -81,15 +81,6 @@ public class RobotContainer {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
 
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> Logger.recordOutput("allince", DriverStation.getAlliance().get().toString())).ignoringDisable(true));
-
-    //AUTOSSSSS related shit
-    NamedCommands.registerCommand("Shoot", new Shoot());
-    NamedCommands.registerCommand("QuikAim", new QuickAim());
-    NamedCommands.registerCommand("Collect", new Collect());
-    NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
-    NamedCommands.registerCommand("MoveToFree", new MoveToFree());
-    NamedCommands.registerCommand("MoveToHome", new MoveToHome());
-    NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
   }
 
   private void configureBindings() {
@@ -168,6 +159,14 @@ public class RobotContainer {
 
   private void configureNamedCommands(){
     NamedCommands.registerCommand("Do Nothing", new InstantCommand());
+    //AUTOSSSSS related shit
+    NamedCommands.registerCommand("Shoot", new Shoot());
+    NamedCommands.registerCommand("QuikAim", new QuickAim());
+    NamedCommands.registerCommand("Collect", new Collect());
+    NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
+    NamedCommands.registerCommand("MoveToFree", new MoveToFree());
+    NamedCommands.registerCommand("MoveToHome", new MoveToHome());
+    NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
   }
 
   public static double calculateJoyStickDeadBand(double value){

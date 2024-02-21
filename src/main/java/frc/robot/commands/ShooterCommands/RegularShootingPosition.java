@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -17,7 +18,7 @@ public class RegularShootingPosition extends SequentialCommandGroup {
   public RegularShootingPosition() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new MoveToFree(),
+    addCommands(new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Free),
     new MoveIntakeIn());
   }
 
