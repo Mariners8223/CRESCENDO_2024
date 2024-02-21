@@ -150,8 +150,8 @@ public class Constants {
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = true;
 
-            public static final double mainZeroOffset = 0.482 + 0.012;
-            public static final double secondaryZeroOffset = 0.3346 + 0.014;
+            public static final double mainZeroOffset = 0.4946;
+            public static final double secondaryZeroOffset = 0.3482;
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 
@@ -200,9 +200,9 @@ public class Constants {
         public static final int MaxStallTime = 20;
 
         public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
-        public static final int CloseProximity = 75;
+        public static final int CloseProximity = 30;
 
-        public static final double secondaryIntakeAngle = 0.40;
+        public static final double secondaryIntakeAngle = 0.36;
         public static final double mainIntakeAngle = -0.03;
     }
 

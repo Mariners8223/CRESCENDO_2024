@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 import frc.robot.subsystem.Arm.Intake.Intake;
 import frc.robot.subsystem.Arm.Shooter.Shooter;
 
@@ -21,8 +22,8 @@ public class ShootToAmp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveToHome(),
-      new MoveToAmp(),
+      new MoveToHome().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Unknown),
+      new MoveToAmp().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Amp),
       new MiniShoot(),
       new MoveToHome()
     );

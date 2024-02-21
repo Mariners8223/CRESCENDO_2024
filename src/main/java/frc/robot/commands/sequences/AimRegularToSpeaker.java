@@ -23,7 +23,7 @@ public class AimRegularToSpeaker extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     
   addCommands(
-  new RegularShootingPosition(),
+  new RegularShootingPosition(),//moves to free within
   new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(Constants.Arm.ShootingPowerToSpeaker)),
   new RepeatCommand(Aim)
   );

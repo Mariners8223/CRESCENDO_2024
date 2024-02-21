@@ -7,10 +7,13 @@ package frc.robot.commands.sequences;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
+import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.climbCommands.ClimbElevator;
 import frc.robot.commands.climbCommands.MoveArmToClimbPosition;
 import frc.robot.commands.climbCommands.MoveRobotToSetPose2d;
+import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.ArmUtil;
+import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -20,17 +23,16 @@ public class ClimbToNearestRope extends SequentialCommandGroup {
   public ClimbToNearestRope() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    int index = Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope.indexOf(
-      RobotContainer.driveBase.getPose().getTranslation().nearest(
-        Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope));
+    ArmUtil.UpdateParameters();
     
     addCommands(//TODO
+    new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Free),
     new ParallelCommandGroup(
-      new MoveRobotToSetPose2d(Constants.Elevator.SlidingPositions.InStageMiddleLocations_POSE2D.get(index)),
+      new MoveRobotToSetPose2d(Constants.Elevator.SlidingPositions.InStageMiddleLocations_POSE2D.get(ArmUtil.getIndexOfClimbingRope())),
       new MoveArmToClimbPosition()
     ),
     new ClimbElevator(true),
-    new MoveRobotToSetPose2d(Constants.Elevator.SlidingPositions.UnderRopeMiddleLocations_POSE2D.get(index)),
+    new MoveRobotToSetPose2d(Constants.Elevator.SlidingPositions.UnderRopeMiddleLocations_POSE2D.get(ArmUtil.getIndexOfClimbingRope())),
     new ClimbElevator(false)
     );
   }

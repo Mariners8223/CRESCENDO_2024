@@ -226,6 +226,11 @@ public class ArmUtil{
         ZaxisTarget.rotation = 0;
       }
       CalcYaxisAngle();
+
+      //Climb
+      IndexOfClimbingRope = Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope.indexOf(//gets the index of the clossest rope
+        RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope)
+      );
     }
     public static void SetQuikShotMode(boolean QuikShot){
       if (IsQuikShot != QuikShot) {
@@ -279,5 +284,11 @@ public class ArmUtil{
         default:
           return ArmZones.PickUpZone;
       }
+    }
+    //Climb Shit
+    private static int IndexOfClimbingRope;//Updated in update parameters
+
+    public static int getIndexOfClimbingRope(){
+      return IndexOfClimbingRope;
     }
   }

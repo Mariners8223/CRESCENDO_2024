@@ -80,15 +80,6 @@ public class RobotContainer {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
 
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> Logger.recordOutput("allince", DriverStation.getAlliance().get().toString())).ignoringDisable(true));
-
-    //AUTOSSSSS related shit
-    NamedCommands.registerCommand("Shoot", new Shoot());
-    NamedCommands.registerCommand("QuikAim", new QuickAim());
-    NamedCommands.registerCommand("Collect", new Collect());
-    NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
-    NamedCommands.registerCommand("MoveToFree", new MoveToFree());
-    NamedCommands.registerCommand("MoveToHome", new MoveToHome());
-    NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
   }
 
   private void configureBindings() {
@@ -106,19 +97,17 @@ public class RobotContainer {
     // driveController.square().onTrue(new MoveToHome());
     // driveController.cross().onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(0.5))).onFalse(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
     // var QuickAim = new QuikAim();
-    var collect = new Collect();
+  
     // driveController.cross().onTrue(QuickAim);
     // driveController.cross().onTrue(new InstantCommand(() -> isQuickAiming = !isQuickAiming));
     // driveController.square().onTrue(new IntakeToFloor());
+    
+    var collect = new Collect();
     driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
-    // driveController.cross().onTrue(new ShootToAmp());
-    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {QuickAim.cancel(); driveBase.isControlled = false;}));
-
-    // driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
-
-    var Aim = new QuickAim();
-    driveController.square().onTrue(Aim);
-    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { driveBase.isControlled = false; Aim.cancel(); }));
+    
+    // var Aim = new QuickAim();
+    driveController.square().onTrue(new MoveToHome());
+    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { driveBase.isControlled = false; Aim.cancel(); }));
     driveController.cross().onTrue(new IntakeToFloor());
 
     SmartDashboard.putNumber("Arm Angle", ArmUtil.getArmAngle());
@@ -169,6 +158,14 @@ public class RobotContainer {
 
   private void configureNamedCommands(){
     NamedCommands.registerCommand("Do Nothing", new InstantCommand());
+    //AUTOSSSSS related shit
+    NamedCommands.registerCommand("Shoot", new Shoot());
+    NamedCommands.registerCommand("QuikAim", new QuickAim());
+    NamedCommands.registerCommand("Collect", new Collect());
+    NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
+    NamedCommands.registerCommand("MoveToFree", new MoveToFree());
+    NamedCommands.registerCommand("MoveToHome", new MoveToHome());
+    NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
   }
 
   public static double calculateJoyStickDeadBand(double value){
