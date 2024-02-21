@@ -24,7 +24,7 @@ public class ArmUtil{
     //chassis parameters
     private static double YaxisWantedAngle;//the angle in which we want the gp to fly in
     private static double YaxisOffset;//oh no! speed affects our vector, lets calc the offset!
-    private static double ChasisAngle;//the final angle that the robot will face
+    private static double ChassisAngle;//the final angle that the robot will face
     private static double VelocityY;//field relative
     private static double VelocityX;//field relative
     private static boolean isResetNeeded = true;
@@ -34,46 +34,44 @@ public class ArmUtil{
     private static void calcDy(){
       if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.Arm.SpeakerIsCenterRatioBottomLocation) {
         IsDeadZone = true;
-        Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation;//aime to the most right corner (robot prespective)
+        Dy = -(Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation);//aime to the most right corner (robot prespective)
       }
       else{
         IsDeadZone = false;
-        Dy = Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio
+        Dy = -(Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio
          * (RobotContainer.driveBase.getPose().getTranslation().getY()// + Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
          - Constants.Arm.SpeakerIsCenterRatioBottomLocation)
          -(//Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
-         + RobotContainer.driveBase.getPose().getTranslation().getY());//aim to a point prespective to the robot location in the chosen shooting zone
+         + RobotContainer.driveBase.getPose().getTranslation().getY()));//aim to a point prespective to the robot location in the chosen shooting zone
       }
     }
     private static void calcDx(){
-      if (RobotContainer.isBlueAllince.getAsBoolean()) {
-        if (IsQuikShot) {
-          Dx = RobotContainer.driveBase.getPose().getTranslation().getX()
-          //  + RobotContainer.arm.getShooterPosition().x*Math.cos(ChasisAngle)
-           + RobotContainer.arm.getShooterPosition().x
-           - Constants.Speaker.SpeakerTranslation.getX();
-        }
-        else{
-          Dx = RobotContainer.driveBase.getPose().getTranslation().getX()
-          //  - RobotContainer.arm.getShooterPosition().x*Math.cos(ChasisAngle)
-           - RobotContainer.arm.getShooterPosition().x
-           - Constants.Speaker.SpeakerTranslation.getX();
-        }
-      }
-      else{
-        if (IsQuikShot) {
-          Dx = RobotContainer.driveBase.getPose().getTranslation().getX()
-          //  - RobotContainer.arm.getShooterPosition().x*Math.cos(ChasisAngle)
-           - RobotContainer.arm.getShooterPosition().x
-           - Constants.Speaker.SpeakerTranslation.getX();
-        }
-        else{
-          Dx = RobotContainer.driveBase.getPose().getTranslation().getX()
-          //  + RobotContainer.arm.getShooterPosition().x*Math.cos(ChasisAngle)
-           + RobotContainer.arm.getShooterPosition().x
-           - Constants.Speaker.SpeakerTranslation.getX();
-        }
-      }
+      // if (RobotContainer.isBlueAllince.getAsBoolean()) {
+      //   if (IsQuikShot) {
+      //     Dx = RobotContainer.driveBase.getPose().getTranslation().getX()
+      //      + RobotContainer.arm.getShooterPosition().x
+      //      - Constants.Speaker.SpeakerTranslation.getX();
+      //   }
+      //   else{
+      //     Dx = RobotContainer.driveBase.getPose().getTranslation().getX()
+      //      - RobotContainer.arm.getShooterPosition().x
+      //      - Constants.Speaker.SpeakerTranslation.getX();
+      //   }
+      // }
+      // else{
+      //   if (IsQuikShot) {
+      //     Dx = RobotContainer.driveBase.getPose().getTranslation().getX()
+      //      - RobotContainer.arm.getShooterPosition().x
+      //      - Constants.Speaker.SpeakerTranslation.getX();
+      //   }
+      //   else{
+      //     Dx = RobotContainer.driveBase.getPose().getTranslation().getX()
+      //      + RobotContainer.arm.getShooterPosition().x
+      //      - Constants.Speaker.SpeakerTranslation.getX();
+      //   }
+      // }
+      Dx = RobotContainer.driveBase.getPose().getTranslation().getX()
+       - Constants.Speaker.SpeakerTranslation.getX();
     }
     private static void CalcDz(){
       Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y);
@@ -83,6 +81,11 @@ public class ArmUtil{
       calcDy();
       CalcDz();
       distanceToSpeaker = Math.hypot(Dx, Dy);
+
+      if (IsQuikShot) {//adds or subtracks the distance from the center of the robot to the shotter from the distance to the speaker
+        distanceToSpeaker += Arm.getInstance().getShooterPosition().x;
+      }
+      else distanceToSpeaker -= Arm.getInstance().getShooterPosition().x;
       // System.out.println("Dx " + Dx);
       // System.out.println("Dy " + Dy);
     }
@@ -101,7 +104,7 @@ public class ArmUtil{
         //chassis parameters
         YaxisWantedAngle = 0;//the angle in which we want the gp to fly in
         YaxisOffset = 1;//oh no! speed affects our vector, lets calc the offset!
-        ChasisAngle = 0;//the final angle that the robot will face
+        ChassisAngle = 0;//the final angle that the robot will face
         VelocityY = 1;//field relative
         VelocityX = 1;//field relative
         isResetNeeded = false;
@@ -131,8 +134,8 @@ public class ArmUtil{
     }
     private static void CalcYaxisAngle(){//calcs the Chassis angle to the speaker relative to the speed
       getChassisOffset();
-      ChasisAngle =  -YaxisWantedAngle//WORKS
-      //  + YaxisOffset
+      ChassisAngle = YaxisWantedAngle//WORKS
+      //  - YaxisOffset
        ;//once there was a *2 in here
     }
   
@@ -234,7 +237,7 @@ public class ArmUtil{
       return ArmAngle;
     }
     public static double getChassisAngle(){
-      return ChasisAngle;
+      return ChassisAngle;
     }
     public static ArmPosition getArmNeededPosition(){
       return ZaxisTarget;

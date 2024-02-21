@@ -32,6 +32,10 @@ import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.commands.climbCommands.ClimbElevator;
 import frc.robot.commands.sequences.AimRegularToSpeaker;
+import frc.robot.commands.climbCommands.SlideToTheLeftEdge;
+import frc.robot.commands.climbCommands.SlideToTheRightEdge;
+import frc.robot.commands.sequences.ClimbToNearestRope;
+import frc.robot.commands.sequences.FastAim;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
@@ -133,6 +137,26 @@ public class RobotContainer {
     // driveController.L1().onTrue(new MoveToHome());
     // driveController.cross().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 1)));
     // driveController.square().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 0)));
+
+    //TODO: controls - example
+    // var Aim = new FastAim();
+
+    // driveController.square().whileTrue(Aim);//maybe we can change how it works so while you press it it aims
+    // driveController.square().onFalse(new InstantCommand(() -> {driveBase.isControlled = false; driveBase.isControlled = false;}));
+    // //or
+    // driveController.square().toggleOnTrue(Aim);
+    // driveController.square().toggleOnFalse(new InstantCommand(() -> {Aim.cancel(); driveBase.isControlled = false;}));
+
+    // driveController.triangle().onTrue(new Shoot());
+    // driveController.circle().onTrue(new Collect());
+
+    // driveController.povUp().onTrue(new ClimbToNearestRope());
+
+    // driveController.povLeft().whileTrue(new SlideToTheLeftEdge());
+    // driveController.povRight().whileTrue(new SlideToTheRightEdge());
+    // //or
+    // driveController.povLeft().whileTrue(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0.2))).onFalse(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0)));
+    // driveController.povRight().whileTrue(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(-0.2))).onFalse(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0)));
 
   }
 
