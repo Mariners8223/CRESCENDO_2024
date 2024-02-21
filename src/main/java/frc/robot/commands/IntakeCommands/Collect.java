@@ -30,7 +30,7 @@ public class Collect extends Command{
   @Override
   public void execute(){
     // Check if Motors are in stall for too much time
-    if (intake.getCurrent() > Constants.Intake.StallCurrent) timer ++;
+    if (intake.getCurrent() > Constants.Intake.StallCurrent) timer++;
     else timer = 0;
   }
 
@@ -42,7 +42,7 @@ public class Collect extends Command{
       intake.stopMotor();
     }
     else {
-      intake.setPosition(intake.getMotorPosition());
+      intake.setPosition(intake.getMotorPosition() + 7);
     }
 
     // if (timer >= Constants.Intake.MaxStallTime){
@@ -54,7 +54,7 @@ public class Collect extends Command{
 
   @Override
   public boolean isFinished(){
-    if(!wasGamePieceDetected) return intake.getProximity() > Constants.Intake.CloseProximity || timer >= Constants.Intake.MaxStallTime;
-    else return intake.getProximity() < Constants.Intake.CloseProximity || timer >= Constants.Intake.MaxStallTime;
+    if(!wasGamePieceDetected) return intake.isGamePieceDetected() || timer >= Constants.Intake.MaxStallTime;
+    else return intake.getProximity() > 200 || timer >= Constants.Intake.MaxStallTime;
   }
 }

@@ -64,7 +64,7 @@ public class Intake {
     }
 
     public boolean isGamePieceDetected(){
-        return inputs.proximity > Constants.Intake.CloseProximity;
+        return inputs.proximity <= Constants.Intake.CloseProximity;
     }
 
     public double getMotorPosition(){
