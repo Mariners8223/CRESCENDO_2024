@@ -7,6 +7,7 @@ package frc.robot;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
@@ -26,7 +27,7 @@ public class Robot extends LoggedRobot {
 
     if(isReal()){
       Logger.addDataReceiver(new NT4Publisher());
-      // Logger.addDataReceiver(new WPILOGWriter("/U/Logs"));
+      Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
     }
     else setUseTiming(false);
 

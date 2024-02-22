@@ -4,14 +4,18 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BooleanSupplier;
 
 import javax.print.attribute.standard.MediaSize.NA;
 
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Translation3d;
@@ -51,8 +55,8 @@ public class RobotContainer {
 
   public static CommandPS5Controller driveController;
   public static CommandPS5Controller armController;
-  public static SendableChooser<Command> autoChooser;
-  
+  // public static SendableChooser<Command> autoChooser;
+  public static LoggedDashboardChooser<Command> autoChooser;
   public static boolean aimingAtSpeaker = true;
   public static boolean isQuickAiming = false;
 
@@ -78,7 +82,7 @@ public class RobotContainer {
     configureBindings();
     configChooser();
     configureNamedCommands();
-    autoChooser = new SendableChooser<Command>();
+    autoChooser = new LoggedDashboardChooser<>("chooser");
 
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
@@ -115,11 +119,19 @@ public class RobotContainer {
   }
 
   private void configChooser(){
-    autoChooser = AutoBuilder.buildAutoChooser();
-    autoChooser.setDefaultOption("Do Nothing", new InstantCommand());
+    List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
+    List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
+
+    for (String autoName : namesOfAutos) {
+      PathPlannerAuto auto = new PathPlannerAuto(autoName);
+        autosOfAutos.add(auto);
+    }
+
+    autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
+    autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
     autoChooser.addOption("Do Nothing", new InstantCommand());
     autoChooser.addOption("auto path", new InstantCommand(() -> driveBase.followPath(PathPlannerPath.fromPathFile("Dedi4")).schedule()));
-    SmartDashboard.putData(autoChooser);
+    SmartDashboard.putData(autoChooser.getSendableChooser());
   }
 
   private void configureNamedCommands(){
@@ -162,7 +174,7 @@ public class RobotContainer {
   }
 
   public static Command getAutoCommand(){
-    return autoChooser.getSelected();
+    return autoChooser.get();
   }
 
    /**

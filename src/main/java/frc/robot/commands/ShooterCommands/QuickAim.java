@@ -49,8 +49,13 @@ public class QuickAim extends SequentialCommandGroup {
       target = ArmUtil.getArmNeededPosition();
       target.rotation = MathUtil.clamp(target.rotation, Units.rotationsToRadians(0.35), Units.rotationsToRadians(0.5));
       arm.moveShooterToPose(target);
-      
-      RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()), false);
+
+      if(RobotContainer.driveController.L1().debounce(0.1).getAsBoolean()){
+        RobotContainer.driveBase.isControlled = true;
+        RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()), false);
+      }
+      else RobotContainer.driveBase.isControlled = false;
+
   }
   }
 }
