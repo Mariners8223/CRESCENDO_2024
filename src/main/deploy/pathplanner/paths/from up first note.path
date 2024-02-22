@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.25,
-        "y": 5.550936522700434
+        "y": 6.945524323618622
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2617108365457819,
-        "y": 5.679755724704031
+        "x": 1.6589529362264837,
+        "y": 6.06819493537206
       },
       "isLocked": false,
       "linkedName": null
@@ -20,34 +20,17 @@
         "y": 5.550936522700434
       },
       "prevControl": {
-        "x": 2.25,
+        "x": 1.75,
         "y": 5.550936522700434
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "QuikShot auto position"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
-    {
-      "name": "IntakeToFloor",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeToFloor"
-              }
-            }
-          ]
-        }
-      }
-    },
     {
       "name": "Shoot",
       "waypointRelativePos": 1.0,

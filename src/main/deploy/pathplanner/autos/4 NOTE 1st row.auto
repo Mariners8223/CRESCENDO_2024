@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "IntakeToFloor"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         },
@@ -26,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FIRST row go to QuikShot"
+            "pathName": "near speaker"
           }
         },
         {
@@ -38,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FIRST row go to QuikShot"
+            "pathName": "near speaker"
           }
         },
         {
@@ -50,7 +56,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FIRST row go to QuikShot"
+            "pathName": "near speaker"
           }
         }
       ]

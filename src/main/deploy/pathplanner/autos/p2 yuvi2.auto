@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.2725102294988313,
+      "y": 5.550936522700434
+    },
+    "rotation": 0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -8,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "GoToQuikShotPose_FIRST note"
+            "pathName": "near speaker"
           }
         },
         {
@@ -20,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FIRST row go to QuikShot"
+            "pathName": "near speaker"
           }
         },
         {
@@ -32,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "FIRST row go to QuikShot"
+            "pathName": "near speaker"
           }
         },
         {
