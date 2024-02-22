@@ -94,7 +94,7 @@ public class RobotContainer {
 
     driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
     driveController.square().onTrue(Aim);
-    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { driveBase.isControlled = false; Aim.cancel(); }));
+    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> Aim.cancel()));//shoot now disables the control on the chassis
     driveController.cross().onTrue(new IntakeToFloor());
     driveController.povDown().onTrue(new MoveToHome());
     driveController.R1().onTrue(new ShootToAmp());

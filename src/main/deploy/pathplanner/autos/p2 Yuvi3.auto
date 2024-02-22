@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "GoToQuikShotPose_FIRST note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "get 1st row middle note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FIRST row go to QuikShot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "get 1st row bottom note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FIRST row go to QuikShot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle 3rd note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Yuvi p2",
+  "choreoAuto": false
+}

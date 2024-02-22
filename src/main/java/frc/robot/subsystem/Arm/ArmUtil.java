@@ -5,6 +5,9 @@
 package frc.robot.subsystem.Arm;
 
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
+
+import java.lang.module.ResolutionException;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
@@ -291,5 +294,30 @@ public class ArmUtil{
 
     public static int getIndexOfClimbingRope(){
       return IndexOfClimbingRope;
+    }
+
+    //Aim to amp area
+    private static double d;//the distance to the amp
+    private static double alpha;//the angle the robot should face to aim to the amp
+    private static double v;//the velocity the gp should fly in in-order to get to the wanted position near the amp
+
+    private static void CalcAimToAmp(){
+      alpha = Math.atan((Constants.AmpPose.getY() - RobotContainer.driveBase.getPose().getY())
+        /(Constants.AmpPose.getX() - RobotContainer.driveBase.getPose().getX()));
+
+      d = Math.hypot(Constants.AmpPose.getX() - RobotContainer.driveBase.getPose().getX(), 
+        Constants.AmpPose.getY() - RobotContainer.driveBase.getPose().getY());
+      
+      v = Math.sqrt((Constants.gGravity_phisics*d)
+        /(2*Math.tan(Arm.getInstance().getShooterPosition().rotation)
+        *Math.pow(Math.cos(Arm.getInstance().getShooterPosition().rotation), 2)));
+    }
+    public static double getChassisAngle_ToAmp(){
+      CalcAimToAmp();
+      return alpha;
+    }
+    public static double getWantedVelocity_ToAmp(){
+      CalcAimToAmp();
+      return v;
     }
   }

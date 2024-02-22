@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "GoToQuikShotPose_FIRST note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "get 1st row upper note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FIRST row go to QuikShot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle 5th note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Yuvi p3",
+  "choreoAuto": false
+}
