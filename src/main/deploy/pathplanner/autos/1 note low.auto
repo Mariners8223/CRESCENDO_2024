@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5753977563934778,
-      "y": 1.8591027512843834
+      "x": 0.9487339076459329,
+      "y": 1.9008803412008866
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "from low_FIRST note"
+            "pathName": "stick bottom"
           }
         }
       ]
