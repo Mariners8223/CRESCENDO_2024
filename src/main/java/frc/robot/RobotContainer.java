@@ -78,11 +78,10 @@ public class RobotContainer {
     vision = new Vision();
 
     // arm.setDefaultCommand(new QuikAim());
-
+    autoChooser = new LoggedDashboardChooser<>("chooser");
     configureBindings();
     configChooser();
     configureNamedCommands();
-    autoChooser = new LoggedDashboardChooser<>("chooser");
 
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
@@ -128,9 +127,9 @@ public class RobotContainer {
     }
 
     autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
+
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
     autoChooser.addOption("Do Nothing", new InstantCommand());
-    autoChooser.addOption("auto path", new InstantCommand(() -> driveBase.followPath(PathPlannerPath.fromPathFile("Dedi4")).schedule()));
     SmartDashboard.putData(autoChooser.getSendableChooser());
   }
 
