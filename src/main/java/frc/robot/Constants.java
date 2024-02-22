@@ -308,6 +308,7 @@ public class Constants {
 
         public static final class Steer{
             public static final double steerGearRatio = 12.5; //the gear ratio between the steer motor and the module itself
+            public static final double newGearRatio = steerGearRation * 3;
             public static final PIDFGains steerMotorPID = new PIDFGains(0.4, 0, 0.1, 0, 0.0005, 0); //the pid gains for the PID Controller of the steer motor, units are in rotations
 
             public static final double maxVelocity = 1; //the max velocity of the modules steer aspect in module rotations per minute
