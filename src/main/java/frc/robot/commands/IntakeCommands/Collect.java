@@ -42,7 +42,7 @@ public class Collect extends Command{
       intake.stopMotor();
     }
     else {
-      intake.setPosition(intake.getMotorPosition() + 7);
+      intake.setPosition(intake.getMotorPosition() + 5);
     }
 
     // if (timer >= Constants.Intake.MaxStallTime){

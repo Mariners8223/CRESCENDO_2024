@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3769542042900886,
+      "x": 1.241177037061454,
       "y": 5.550936522700434
     },
     "rotation": 0
@@ -11,18 +11,6 @@
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "path",
-          "data": {
-            "pathName": "near speaker"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "get 1st row bottom note"
-          }
-        },
         {
           "type": "path",
           "data": {

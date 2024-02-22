@@ -15,6 +15,7 @@ import frc.robot.RobotContainer;
 
 /** Add your docs here. */
 public class ArmUtil{
+  
     private static ArmPosition ZaxisTarget;//arm angle arm position
     private static double StartSpeed;//the speed in which the gp is leaving the shooter
     private static double Dy;//y axis of targeted point (to calc the distance from speaker)
