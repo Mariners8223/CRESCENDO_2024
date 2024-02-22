@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
+import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToFree;
@@ -94,7 +95,8 @@ public class RobotContainer {
 
     driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
     driveController.square().onTrue(Aim);
-    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> Aim.cancel()));//shoot now disables the control on the chassis
+    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {Aim.cancel();
+       RobotContainer.driveBase.isControlled = false;}));//shoot now disables the control on the chassis
     driveController.cross().onTrue(new IntakeToFloor());
     driveController.povDown().onTrue(new MoveToHome());
     driveController.R1().onTrue(new ShootToAmp());
@@ -120,6 +122,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
     NamedCommands.registerCommand("MoveToHome", new MoveToHome());
     NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
+    NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
   }
 
   public static double calculateJoyStickDeadBand(double value){
