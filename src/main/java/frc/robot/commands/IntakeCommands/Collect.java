@@ -24,7 +24,7 @@ public class Collect extends Command{
 
     if(!wasGamePieceDetected) intake.setMotor(Constants.Intake.intakeMotorSpeed);
     else intake.setMotor(-Constants.Intake.intakeMotorSpeed);
-    Timer.delay(0.15);
+    // Timer.delay(0.15);
   }
 
   @Override
@@ -55,6 +55,6 @@ public class Collect extends Command{
   @Override
   public boolean isFinished(){
     if(!wasGamePieceDetected) return intake.isGamePieceDetected() || timer >= Constants.Intake.MaxStallTime;
-    else return intake.getProximity() > 200 || timer >= Constants.Intake.MaxStallTime;
+    else return intake.getProximity() > 50 || timer >= Constants.Intake.MaxStallTime;
   }
 }

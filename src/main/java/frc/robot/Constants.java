@@ -95,7 +95,7 @@ public class Constants {
             public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
 
             public static Translation3d ampTranslation = new Translation3d(3, 8, 0);
-            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 2.33);//z = 2.03
+            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 2.03);//z = 2.03
     }
 
     public static final class Zone1{//DIS NOT TRUE

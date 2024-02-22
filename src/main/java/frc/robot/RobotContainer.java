@@ -90,10 +90,10 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Main Motor", true);
     SmartDashboard.putBoolean("Quasistatic", true);
     
-    var collect = new Collect();
     var Aim = new QuickAim();
 
-    driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
+    // driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
+    driveController.circle().onTrue(new Collect());
     driveController.square().onTrue(Aim);
     driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {Aim.cancel();
        RobotContainer.driveBase.isControlled = false;}));//shoot now disables the control on the chassis
