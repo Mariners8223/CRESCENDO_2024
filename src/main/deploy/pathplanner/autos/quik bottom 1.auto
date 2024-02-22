@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7711791505007954,
+      "y": 2.0262131109503945
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start Lower shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "only 1",
+  "choreoAuto": false
+}
