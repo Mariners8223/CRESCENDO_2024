@@ -19,7 +19,6 @@ public class ArmUtil{
 
   @AutoLog
   public static class ArmUtilInputs{
-    ArmPosition ZaxisTarget;//arm angle arm position
     double StartSpeed;//the speed in which the gp is leaving the shooter
     double Dy;//y axis of targeted point (to calc the distance from speaker)
     double Dx;//airial distance to speaker
@@ -45,7 +44,7 @@ public class ArmUtil{
     double v;//the velocity the gp should fly in in-order to get to the wanted position near the amp
   }
   
-
+    private static ArmPosition ZaxisTarget;//arm angle arm position
     private static ArmUtilInputsAutoLogged inputs;
 
     /**
@@ -107,7 +106,7 @@ public class ArmUtil{
      */
     private static void ResetParameters(){//resets the parameters for a new mode
       if (inputs.isResetNeeded) {
-        inputs.ZaxisTarget = Constants.Arm.QuikShotPosition;//arm angle arm position
+        ZaxisTarget = Constants.Arm.QuikShotPosition;//arm angle arm position
         // StartSpeed = RobotContainer.arm.getShooterSub().getShooterVelocity();//the speed in which the gp is leaving the shooter
         inputs.WantedVelocity = 0;
         inputs.Dy = 1;//y axis of targeted point (to calc the distance from speaker)
@@ -274,26 +273,26 @@ public class ArmUtil{
         inputs.ArmAngle = Zone1_Equasion(Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         if(inputs.IsQuikShot){
-          inputs.ZaxisTarget = Constants.Arm.QuikShotPosition;
+          ZaxisTarget = Constants.Arm.QuikShotPosition;
           inputs.ArmAngle = Units.degreesToRadians(180) - inputs.ArmAngle;
         }
         else{
-          inputs.ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
-          inputs.ZaxisTarget.y = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.sin(inputs.ArmAngle), 0, Constants.Arm.armLengthMeters);
-          inputs.ZaxisTarget.x = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.cos(inputs.ArmAngle), Constants.Arm.armLengthMeters, 0);
+          ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
+          ZaxisTarget.y = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.sin(inputs.ArmAngle), 0, Constants.Arm.armLengthMeters);
+          ZaxisTarget.x = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.cos(inputs.ArmAngle), Constants.Arm.armLengthMeters, 0);
         }
       }
       else{
         inputs.ArmAngle = Zone2_Equasion(StartSpeed, Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         if(inputs.IsQuikShot){
-          inputs.ZaxisTarget = Constants.Arm.QuikShotPosition;
+          ZaxisTarget = Constants.Arm.QuikShotPosition;
           inputs.ArmAngle = Units.degreesToRadians(180) - inputs.ArmAngle;
         }
         else{
-          inputs.ZaxisTarget = Constants.Arm.Zone2_ArmPosition;
-          inputs.ZaxisTarget.y = Constants.Arm.armLengthMeters * Math.sin(inputs.ArmAngle);
-          inputs.ZaxisTarget.x = Constants.Arm.armLengthMeters * Math.cos(inputs.ArmAngle);
+          ZaxisTarget = Constants.Arm.Zone2_ArmPosition;
+          ZaxisTarget.y = Constants.Arm.armLengthMeters * Math.sin(inputs.ArmAngle);
+          ZaxisTarget.x = Constants.Arm.armLengthMeters * Math.cos(inputs.ArmAngle);
         }
       }
       return inputs.ArmAngle;
@@ -325,10 +324,10 @@ public class ArmUtil{
       inputs.VelocityY = CalcVelocityY_field(inputs.ArmAngle, inputs.YaxisWantedAngle);
 
       if (inputs.IsQuikShot) {
-        inputs.ZaxisTarget.rotation = inputs.ArmAngle;        
+        ZaxisTarget.rotation = inputs.ArmAngle;        
       }
       else{
-        inputs.ZaxisTarget.rotation = 0;
+        ZaxisTarget.rotation = 0;
       }
 
       inputs.YaxisOffset = getChassisOffset(inputs.VelocityY, inputs.VelocityX);
@@ -374,7 +373,7 @@ public class ArmUtil{
      * @return the ArmPosition
      */
     public static ArmPosition getArmNeededPosition(){
-      return inputs.ZaxisTarget;
+      return ZaxisTarget;
     }
 
     /**
