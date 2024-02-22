@@ -74,7 +74,7 @@ public class ArmUtil{
        - Constants.Speaker.SpeakerTranslation.getX();
     }
     private static void CalcDz(){
-      Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getIntakePosition().y);
+      Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y);
     }
     private static void CalcDistance_withDxDy(){//i mean, its in the name, calcs the distance to the speaker
       calcDx();
@@ -83,9 +83,9 @@ public class ArmUtil{
       distanceToSpeaker = Math.hypot(Dx, Dy);
 
       if (IsQuikShot) {//adds or subtracks the distance from the center of the robot to the shotter from the distance to the speaker
-        distanceToSpeaker += Arm.getInstance().getIntakePosition().x;
+        distanceToSpeaker += Arm.getInstance().getShooterPosition().x;
       }
-      else distanceToSpeaker -= Arm.getInstance().getIntakePosition().x;
+      else distanceToSpeaker -= Arm.getInstance().getShooterPosition().x;
       // System.out.println("Dx " + Dx);
       // System.out.println("Dy " + Dy);
     }
