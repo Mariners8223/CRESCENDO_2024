@@ -50,6 +50,7 @@ public class RobotContainer {
   public static Vision vision;
 
   public static CommandPS5Controller driveController;
+  public static CommandPS5Controller armController;
   public static SendableChooser<Command> autoChooser;
   
   public static boolean aimingAtSpeaker = true;
@@ -66,6 +67,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     driveController = new CommandPS5Controller(0);
+    armController = new CommandPS5Controller(1);
 
     driveBase = new DriveBase();
     arm = Arm.getInstance();
@@ -86,6 +88,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
+    driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
 
     SmartDashboard.putBoolean("Main Motor", true);
     SmartDashboard.putBoolean("Quasistatic", true);
@@ -93,14 +96,21 @@ public class RobotContainer {
     var Aim = new QuickAim();
 
     // driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
-    driveController.circle().onTrue(new Collect());
-    driveController.square().onTrue(Aim);
-    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {Aim.cancel();
-       RobotContainer.driveBase.isControlled = false;}));//shoot now disables the control on the chassis
-    driveController.cross().onTrue(new IntakeToFloor());
-    driveController.povDown().onTrue(new MoveToHome());
-    driveController.R1().onTrue(new ShootToAmp());
-    driveController.L1().onTrue(new MiniShoot());
+    // driveController.circle().onTrue(new Collect());
+    // driveController.square().onTrue(Aim);
+    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {Aim.cancel();
+    //    RobotContainer.driveBase.isControlled = false;}));//shoot now disables the control on the chassis
+    // driveController.cross().onTrue(new IntakeToFloor());
+    // driveController.povDown().onTrue(new MoveToHome());
+    // driveController.R1().onTrue(new ShootToAmp());
+    // driveController.L1().onTrue(new MiniShoot());
+    armController.circle().onTrue(new Collect());
+    armController.square().onTrue(Aim);
+    armController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { Aim.cancel(); driveBase.isControlled = false;}));
+    armController.cross().onTrue(new IntakeToFloor());
+    armController.povDown().onTrue(new MoveToHome());
+    // armController.R1().onTrue(new ShootToAmp());
+    // armController.L1().onTrue(new MiniShoot());
 
   }
 
