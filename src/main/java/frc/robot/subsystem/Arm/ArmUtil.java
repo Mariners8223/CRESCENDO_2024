@@ -36,7 +36,7 @@ public class ArmUtil{
         IsDeadZone = true;
         Dy = -(Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation);//aime to the most right corner (robot prespective)
       }
-      else{
+      else{//may be changed to a single point
         IsDeadZone = false;
         Dy = -(Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio
          * (RobotContainer.driveBase.getPose().getTranslation().getY()// + Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
@@ -74,7 +74,7 @@ public class ArmUtil{
        - Constants.Speaker.SpeakerTranslation.getX();
     }
     private static void CalcDz(){
-      Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y);
+      Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getIntakePosition().y);
     }
     private static void CalcDistance_withDxDy(){//i mean, its in the name, calcs the distance to the speaker
       calcDx();
@@ -83,9 +83,9 @@ public class ArmUtil{
       distanceToSpeaker = Math.hypot(Dx, Dy);
 
       if (IsQuikShot) {//adds or subtracks the distance from the center of the robot to the shotter from the distance to the speaker
-        distanceToSpeaker += Arm.getInstance().getShooterPosition().x;
+        distanceToSpeaker += Arm.getInstance().getIntakePosition().x;
       }
-      else distanceToSpeaker -= Arm.getInstance().getShooterPosition().x;
+      else distanceToSpeaker -= Arm.getInstance().getIntakePosition().x;
       // System.out.println("Dx " + Dx);
       // System.out.println("Dy " + Dy);
     }
@@ -119,6 +119,7 @@ public class ArmUtil{
       else{
         WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
       }
+      WantedVelocity = MathUtil.clamp(WantedVelocity, 3500 * Constants.Shooter.wheelRadius, 5500 * Constants.Shooter.wheelRadius);//shooting speed clamp
       StartSpeed = WantedVelocity;
     }
 
