@@ -119,7 +119,7 @@ public class ArmUtil{
       else{
         WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
       }
-      WantedVelocity = MathUtil.clamp(WantedVelocity, 3500 * Constants.Shooter.wheelRadius, 5500 * Constants.Shooter.wheelRadius);//shooting speed clamp
+      WantedVelocity = MathUtil.clamp(WantedVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(6000) * Constants.Shooter.wheelRadius);//shooting speed clamp
       StartSpeed = WantedVelocity;
     }
 

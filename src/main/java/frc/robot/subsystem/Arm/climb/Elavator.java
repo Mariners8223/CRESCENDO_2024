@@ -33,8 +33,8 @@ public class Elavator extends SubsystemBase {
     double rollerMotorCurrent;
   }
 
-  private TalonFX railMotor;
-  private TalonFX rollerMotor;
+  // private TalonFX railMotor;
+  // private TalonFX rollerMotor;
 
   private PositionDutyCycle railoutput;
   private PositionDutyCycle rolleroutput;
@@ -43,12 +43,12 @@ public class Elavator extends SubsystemBase {
 
   /** Creates a new Elavater. */
   public Elavator() {
-    railMotor = configMotor(Constants.Elevator.railMotorID, Constants.Elevator.isRailMotorInverted, Constants.Elevator.railMotorPIDF, Constants.Elevator.railMotorConvertionFactor);
-    rollerMotor = configMotor(Constants.Elevator.rollerMotorID, Constants.Elevator.isRollerMotorInverted, Constants.Elevator.rollerMotorPIDF, Constants.Elevator.rollerMotorConvertionFactor);
+    // railMotor = configMotor(Constants.Elevator.railMotorID, Constants.Elevator.isRailMotorInverted, Constants.Elevator.railMotorPIDF, Constants.Elevator.railMotorConvertionFactor);
+    // rollerMotor = configMotor(Constants.Elevator.rollerMotorID, Constants.Elevator.isRollerMotorInverted, Constants.Elevator.rollerMotorPIDF, Constants.Elevator.rollerMotorConvertionFactor);
 
     inputs = new ElavatorInputsAutoLogged();
 
-    railMotor.setPosition(0);
+    // railMotor.setPosition(0);
 
     railoutput = new PositionDutyCycle(0);
     railoutput.EnableFOC = false;
@@ -58,16 +58,16 @@ public class Elavator extends SubsystemBase {
 
   public void setRailMotor(double height){
     inputs.railMotorTarget = height;
-    railMotor.setControl(railoutput.withPosition(inputs.railMotorTarget));
+    // railMotor.setControl(railoutput.withPosition(inputs.railMotorTarget));
   }
 
   public void setRollerMotorSpeed(double speed){
-    rollerMotor.set(speed);
+    // rollerMotor.set(speed);
   }
 
   public void setRollerMotor(double distance){
     inputs.rollerMotorTarget = distance;
-    rollerMotor.setControl(rolleroutput.withPosition(inputs.rollerMotorTarget));
+    // rollerMotor.setControl(rolleroutput.withPosition(inputs.rollerMotorTarget));
   }
 
   public double getRailMotorPosition(){
@@ -87,14 +87,18 @@ public class Elavator extends SubsystemBase {
   }
 
   public void update(){
-    inputs.railMotorPosition = railMotor.getPosition().getValueAsDouble();
-    inputs.rollerMotorPosition = rollerMotor.getPosition().getValueAsDouble();
+    // inputs.railMotorPosition = railMotor.getPosition().getValueAsDouble();
+    // inputs.rollerMotorPosition = rollerMotor.getPosition().getValueAsDouble();
+    inputs.railMotorPosition = 0;
+    inputs.rollerMotorPosition = 0;
 
     inputs.isRailMotorInPosition = isRailMotorInPosition();
     inputs.isRollerMotorInPosition = isRollerMotorInPosition();
 
-    inputs.railMotorCurrent = railMotor.getStatorCurrent().getValueAsDouble();
-    inputs.rollerMotorCurrent = rollerMotor.getStatorCurrent().getValueAsDouble();
+    // inputs.railMotorCurrent = railMotor.getStatorCurrent().getValueAsDouble();
+    // inputs.rollerMotorCurrent = rollerMotor.getStatorCurrent().getValueAsDouble();
+    inputs.railMotorCurrent = 0;
+    inputs.rollerMotorCurrent = 0;
 
     Logger.processInputs("elavator", inputs);
   }

@@ -7,6 +7,7 @@ package frc.robot.commands.sequences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Arm.knownArmPosition;
@@ -22,14 +23,12 @@ public class ShootToAmp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveToHome().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Unknown),
-      new MoveToAmp().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Amp),
-      new MiniShoot(),
-      new MoveToHome()
+      new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Unknown),
+      new MoveToAmp().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Amp)
     );
   }
 
-  private static class MiniShoot extends Command {
+  public static class MiniShoot extends Command {
     Shooter shooter;
     Intake intake;
     int timer;
@@ -43,9 +42,9 @@ public class ShootToAmp extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
-      intake.setMotor(0.4);
-      Timer.delay(0.05);
-      shooter.setShooterPower(0.4);
+      intake.setMotor(0.8);
+      Timer.delay(0.1);
+      shooter.setShooterPower(0.65);
 
       timer = 0;
     }
@@ -63,7 +62,7 @@ public class ShootToAmp extends SequentialCommandGroup {
 
     @Override
     public boolean isFinished() {
-      return timer > 8;
+      return timer >= 10;
     }
   }
 

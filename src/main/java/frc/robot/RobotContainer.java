@@ -36,6 +36,7 @@ import frc.robot.commands.climbCommands.SlideToTheLeftEdge;
 import frc.robot.commands.climbCommands.SlideToTheRightEdge;
 import frc.robot.commands.sequences.ClimbToNearestRope;
 import frc.robot.commands.sequences.ShootToAmp;
+import frc.robot.commands.sequences.ShootToAmp.MiniShoot;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.robot.subsystem.Arm.climb.Elavator;
@@ -87,64 +88,17 @@ public class RobotContainer {
 
     SmartDashboard.putBoolean("Main Motor", true);
     SmartDashboard.putBoolean("Quasistatic", true);
-
-    // driveController.square().onTrue(new IntakeToFloor());
-    // driveController.triangle().whileTrue(new TestShoot()).onFalse(new MoveToHome());
-
-    // driveController.cross().onTrue(new Collect());
-    // driveController.circle().onTrue(new Shoot());
-    // driveController.cross().onTrue(new MoveToFree());
-    // driveController.square().onTrue(new MoveToHome());
-    // driveController.cross().onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(0.5))).onFalse(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
-    // var QuickAim = new QuikAim();
-  
-    // driveController.cross().onTrue(QuickAim);
-    // driveController.cross().onTrue(new InstantCommand(() -> isQuickAiming = !isQuickAiming));
-    // driveController.square().onTrue(new IntakeToFloor());
     
     var collect = new Collect();
+    var Aim = new QuickAim();
+
     driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
-    
-    // var Aim = new QuickAim();
-    driveController.square().onTrue(new MoveToHome());
-    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { driveBase.isControlled = false; Aim.cancel(); }));
+    driveController.square().onTrue(Aim);
+    driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { driveBase.isControlled = false; Aim.cancel(); }));
     driveController.cross().onTrue(new IntakeToFloor());
-
-    SmartDashboard.putNumber("Arm Angle", ArmUtil.getArmAngle());
-    SmartDashboard.putNumber("Chassis Angle", ArmUtil.getChassisAngle());
-    SmartDashboard.putNumber("Arm Distance", Math.hypot(ArmUtil.getDx(), ArmUtil.getDy()));
-    SmartDashboard.putNumber("Dx", ArmUtil.getDx());
-    SmartDashboard.putNumber("Dy", ArmUtil.getDy());
-    SmartDashboard.putNumber("Dz", ArmUtil.getDz());
-    // driveController.cross().onTrue(new ClimbSequence());
-    // driveController.square().onTrue(new ClimbElevator(false));
-
-    // driveController.povRight().onTrue(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(-0.1))).onFalse(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0)));
-    // driveController.povLeft().onTrue(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0.1))).onFalse(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0)));
-
-    // driveController.L1().onTrue(new MoveToHome());
-    // driveController.cross().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 1)));
-    // driveController.square().onTrue(new InstantCommand(() -> vision.setPipelineIndex(CameraLocation.Back, 0)));
-
-    //TODO: controls - example
-    // var Aim = new FastAim();
-
-    // driveController.square().whileTrue(Aim);//maybe we can change how it works so while you press it it aims
-    // driveController.square().onFalse(new InstantCommand(() -> {driveBase.isControlled = false; driveBase.isControlled = false;}));
-    // //or
-    // driveController.square().toggleOnTrue(Aim);
-    // driveController.square().toggleOnFalse(new InstantCommand(() -> {Aim.cancel(); driveBase.isControlled = false;}));
-
-    // driveController.triangle().onTrue(new Shoot());
-    // driveController.circle().onTrue(new Collect());
-
-    // driveController.povUp().onTrue(new ClimbToNearestRope());
-
-    // driveController.povLeft().whileTrue(new SlideToTheLeftEdge());
-    // driveController.povRight().whileTrue(new SlideToTheRightEdge());
-    // //or
-    // driveController.povLeft().whileTrue(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0.2))).onFalse(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0)));
-    // driveController.povRight().whileTrue(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(-0.2))).onFalse(new InstantCommand(() -> Arm.getInstance().getElavatorSub().setRollerMotorSpeed(0)));
+    driveController.povDown().onTrue(new MoveToHome());
+    driveController.R1().onTrue(new ShootToAmp());
+    driveController.L1().onTrue(new MiniShoot());
 
   }
 
