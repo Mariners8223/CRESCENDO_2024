@@ -14,7 +14,7 @@ public class Collect extends Command{
   public Collect(){
     intake = Arm.getInstance().getIntakeSub();
 
-    addRequirements(Arm.getInstance());
+    // addRequirements(Arm.getInstance());
   }
 
   @Override
