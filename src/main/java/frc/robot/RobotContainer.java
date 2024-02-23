@@ -8,26 +8,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-import javax.print.attribute.standard.MediaSize.NA;
-
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
@@ -35,16 +28,8 @@ import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
-import frc.robot.commands.climbCommands.ClimbElevator;
-import frc.robot.commands.sequences.AimRegularToSpeaker;
-import frc.robot.commands.climbCommands.SlideToTheLeftEdge;
-import frc.robot.commands.climbCommands.SlideToTheRightEdge;
-import frc.robot.commands.sequences.ClimbToNearestRope;
 import frc.robot.commands.sequences.ShootToAmp;
-import frc.robot.commands.sequences.ShootToAmp.MiniShoot;
 import frc.robot.subsystem.Arm.Arm;
-import frc.robot.subsystem.Arm.ArmUtil;
-import frc.robot.subsystem.Arm.climb.Elavator;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
 

@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.climbCommands.ClimbElevator;
 import frc.robot.commands.climbCommands.MoveArmToClimbPosition;
-import frc.robot.commands.sequences.ClimbToNearestRope;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
