@@ -50,7 +50,7 @@ public class QuickAim extends SequentialCommandGroup {
       target.rotation = MathUtil.clamp(target.rotation, Units.rotationsToRadians(0.35), Units.rotationsToRadians(0.5));
       arm.moveShooterToPose(target);
 
-      if(RobotContainer.driveController.L1().debounce(0.1).getAsBoolean()){
+      if(RobotContainer.driveController.L1().getAsBoolean()){
         RobotContainer.driveBase.isControlled = true;
         RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()), false);
       }

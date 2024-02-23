@@ -20,6 +20,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.pathplanner.lib.util.GeometryUtil;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -326,7 +327,6 @@ public class DriveBase extends SubsystemBase {
     else inputs.targetRotation = Rotation2d.fromRotations(alpha.getRotations() + (int)getRotation2d().getRotations());
     // inputs.targetRotation = alpha.plus(Rotation2d.fromRotations((int)getRotation2d().getRotations()));
     targetRotation = inputs.targetRotation;
-    isControlled = true;
     //calculateTheta(alpha);//dis may work
   }
 

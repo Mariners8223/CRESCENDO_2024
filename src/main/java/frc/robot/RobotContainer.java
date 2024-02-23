@@ -78,7 +78,6 @@ public class RobotContainer {
     vision = new Vision();
 
     // arm.setDefaultCommand(new QuikAim());
-    autoChooser = new LoggedDashboardChooser<>("chooser");
     configureBindings();
     configChooser();
     configureNamedCommands();
@@ -92,9 +91,6 @@ public class RobotContainer {
   private void configureBindings() {
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
-
-    SmartDashboard.putBoolean("Main Motor", true);
-    SmartDashboard.putBoolean("Quasistatic", true);
     
     var Aim = new QuickAim();
 
@@ -121,6 +117,11 @@ public class RobotContainer {
     List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
     List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
 
+    autoChooser = new LoggedDashboardChooser<>("");
+
+
+    autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
+
     for (String autoName : namesOfAutos) {
       PathPlannerAuto auto = new PathPlannerAuto(autoName);
         autosOfAutos.add(auto);
@@ -128,7 +129,6 @@ public class RobotContainer {
 
     autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
 
-    autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
     autoChooser.addOption("Do Nothing", new InstantCommand());
     SmartDashboard.putData(autoChooser.getSendableChooser());
   }
