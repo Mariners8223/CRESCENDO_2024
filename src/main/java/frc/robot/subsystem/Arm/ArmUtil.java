@@ -43,8 +43,6 @@ public class ArmUtil{
     double alpha;//the angle the robot should face to aim to the amp
     double v;//the velocity the gp should fly in in-order to get to the wanted position near the amp
   }
-
-    private static ArmPosition ZaxisTarget;//arm angle arm position
   
     private static ArmPosition ZaxisTarget;//arm angle arm position
     private static ArmUtilInputsAutoLogged inputs;

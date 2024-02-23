@@ -78,9 +78,9 @@ public class RobotContainer {
     vision = new Vision();
 
     // arm.setDefaultCommand(new QuikAim());
+    configureNamedCommands();
     configureBindings();
     configChooser();
-    configureNamedCommands();
 
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
@@ -129,7 +129,7 @@ public class RobotContainer {
 
     autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
 
-    autoChooser.addOption("Do Nothing", new InstantCommand());
+    autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
     SmartDashboard.putData(autoChooser.getSendableChooser());
   }
 
