@@ -92,7 +92,8 @@ public class RobotContainer {
     // driveController.square().onTrue(Aim);
     // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { Aim.cancel(); driveBase.isControlled = false;}));
     driveController.cross().onTrue(new IntakeToFloor());
-    driveController.povDown().onTrue(new MoveToHome());
+    driveController.circle().onTrue(new MoveToHome());
+    driveController.square().onTrue(new MoveToFree());
     // armController.R1().onTrue(new ShootToAmp());
     // armController.L1().onTrue(new MiniShoot());
 

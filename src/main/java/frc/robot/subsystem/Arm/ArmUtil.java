@@ -45,7 +45,7 @@ public class ArmUtil{
   }
   
     private static ArmPosition ZaxisTarget;//arm angle arm position
-    private static ArmUtilInputsAutoLogged inputs;
+    private static ArmUtilInputsAutoLogged inputs = new ArmUtilInputsAutoLogged();
 
     /**
    * calculates the distance from the robot to the speaker on the y axis

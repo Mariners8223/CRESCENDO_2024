@@ -89,11 +89,11 @@ public class Arm extends SubsystemBase{
     double mainCurrent;
     double secondaryCurrent;
 
-    Mechanism2d visualArm;
-    MechanismRoot2d visualArm_Root;
-    MechanismLigament2d visualArm_MainPivot;
-    MechanismLigament2d visualArm_SeconderyPivot;
-    MechanismLigament2d visualArm_Elavator;
+    // Mechanism2d visualArm;
+    // MechanismRoot2d visualArm_Root;
+    // MechanismLigament2d visualArm_MainPivot;
+    // MechanismLigament2d visualArm_SeconderyPivot;
+    // MechanismLigament2d visualArm_Elavator;
   }
 
   public static Arm getInstance(){
@@ -156,20 +156,20 @@ public class Arm extends SubsystemBase{
     shooterPosition = new ArmPosition();
 
     shooter = new Shooter();
-    intake = new Intake();
+    intake = new Intake();  
     elavator = new Elavator();
 
     lastknownPosition = knownArmPosition.Home;
 
-    inputs.visualArm = new Mechanism2d(getMainMotorRotation(), getAngleToSpeaker()); //TODO add length\
-    inputs.visualArm_Root = inputs.visualArm.getRoot("arm root", -Constants.Arm.mainPivotDistanceFromCenterMeters, 0);
-    inputs.visualArm_MainPivot = new MechanismLigament2d("main pivot", Constants.Arm.armLengthMeters, Units.rotationsToDegrees(mainEncoder.getPosition()));
-    inputs.visualArm_SeconderyPivot = new MechanismLigament2d("secondery pivot", 0.389, Units.rotationsToDegrees(secondaryEncoder.getPosition()));
-    inputs.visualArm_Elavator = new MechanismLigament2d("elavator", 0.5, 0);
+    // inputs.visualArm = new Mechanism2d(getMainMotorRotation(), getAngleToSpeaker()); //TODO add length\
+    // inputs.visualArm_Root = inputs.visualArm.getRoot("arm root", -Constants.Arm.mainPivotDistanceFromCenterMeters, 0);
+    // inputs.visualArm_MainPivot = new MechanismLigament2d("main pivot", Constants.Arm.armLengthMeters, Units.rotationsToDegrees(mainEncoder.getPosition()));
+    // inputs.visualArm_SeconderyPivot = new MechanismLigament2d("secondery pivot", 0.389, Units.rotationsToDegrees(secondaryEncoder.getPosition()));
+    // inputs.visualArm_Elavator = new MechanismLigament2d("elavator", 0.5, 0);
 
-    inputs.visualArm_Root.append(inputs.visualArm_MainPivot);
-    inputs.visualArm_MainPivot.append(inputs.visualArm_SeconderyPivot);
-    inputs.visualArm_MainPivot.append(inputs.visualArm_Elavator);
+    // inputs.visualArm_Root.append(inputs.visualArm_MainPivot);
+    // inputs.visualArm_MainPivot.append(inputs.visualArm_SeconderyPivot);
+    // inputs.visualArm_MainPivot.append(inputs.visualArm_Elavator);
   }
 
   /**
@@ -286,9 +286,9 @@ public class Arm extends SubsystemBase{
     inputs.mainMotorAbsolutePostion = mainAbsEncoder.getPosition();
     inputs.secondaryAbsolutePostion = secondaryAbsEncoder.getPosition();
 
-    inputs.visualArm_MainPivot.setAngle(Units.rotationsToDegrees(mainEncoder.getPosition()));
-    inputs.visualArm_SeconderyPivot.setAngle(Units.rotationsToDegrees(secondaryEncoder.getPosition()));
-    inputs.visualArm_Elavator.setLength(elavator.getRailMotorPosition());
+    // inputs.visualArm_MainPivot.setAngle(Units.rotationsToDegrees(mainEncoder.getPosition()));
+    // inputs.visualArm_SeconderyPivot.setAngle(Units.rotationsToDegrees(secondaryEncoder.getPosition()));
+    // inputs.visualArm_Elavator.setLength(elavator.getRailMotorPosition());
 
     Logger.processInputs(getName(), inputs);
   }
