@@ -186,7 +186,7 @@ public class Constants {
         public static final double ShootToAmpTime = 2;
         // public static final double RPMforShooterZone1 = 4000;
         // public static final double RPMforShooterZone2 = 5000;
-        public static double GPAirTimeZone1 = 0.185;
+        public static double GPAirTimeZone1 = 0.105;
         public static double GPAirTimeZone2 = 0.22;
     }
 
@@ -252,9 +252,11 @@ public class Constants {
             ));
 
             public static List<Pose2d> InStageMiddleLocations_POSE2D = new ArrayList<Pose2d>(
-                Arrays.asList(//TODO: find locations
+                Arrays.asList(new Pose2d(4.11, 5.25, Rotation2d.fromDegrees(-60)),//rope 1 - top rope
+                new Pose2d(4.12, 2.94, Rotation2d.fromDegrees(60)),//rope 2 - bottom rope
+                new Pose2d(6.27, 4.09, Rotation2d.fromDegrees(180))//rope 3 - middle pointing rope
             ));
-            public static List<Pose2d> UnderRopeMiddleLocations_POSE2D = new ArrayList<>(//TODO: redo
+            public static List<Pose2d> UnderRopeMiddleLocations_POSE2D = new ArrayList<>(
                 Arrays.asList(new Pose2d(SlidingPositions_MiddleRope.get(0).getX(), SlidingPositions_MiddleRope.get(0).getY(), Rotation2d.fromDegrees(-60)),//rope 1 - top rope
                 new Pose2d(SlidingPositions_MiddleRope.get(1).getX(), SlidingPositions_MiddleRope.get(1).getY(), Rotation2d.fromDegrees(60)),//rope 2 - bottom rope
                 new Pose2d(SlidingPositions_MiddleRope.get(2).getX(), SlidingPositions_MiddleRope.get(2).getY(), Rotation2d.fromDegrees(180))//rope 3 - middle pointing rope
