@@ -318,8 +318,8 @@ public class Constants {
             public static final double maxAcceleration = 1; //the max acceleration of the modules steer apsect in module rotations per minute per second
 
 
-            public static final double front_left_absoluteEncoderZeroOffset = -84.638671875; // the offset between the absolute encoder reading on the front left module, in degrees
-            public static final double front_right_absoluteEncoderZeroOffset = -71.103515625; // the offset between the absolute encoder on the front left module, in degrees
+            public static final double front_left_absoluteEncoderZeroOffset = -87.36328125; // the offset between the absolute encoder reading on the front left module, in degrees
+            public static final double front_right_absoluteEncoderZeroOffset = -81.826171875; // the offset between the absolute encoder on the front left module, in degrees
             public static final double back_left_absoluteEncoderZeroOffset = 126.03515625; // the offset between the absolute encoder on the back left module, in degrees
             public static final double back_right_absoluteEncoderZeroOffset = 88.505859375; // the offset between the absolute encoder on the back right module, in degrees
 
