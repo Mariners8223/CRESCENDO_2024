@@ -94,6 +94,7 @@ public class Robot extends LoggedRobot {
     }
     
     // Arm.getInstance().setDefaultCommand(new ManualAim());
+    RobotContainer.driveBase.resetOnlyDirection();
   }
 
   @Override

@@ -145,15 +145,15 @@ public class Constants {
             public static final int secondaryMotorID = 16;
 
             public static final PIDFGains mainPID = new PIDFGains(3.1, 0.01, 0, 1, 0.005, 0.02);
-            public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0.1, 0.01, 0.002);
+            public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0, 0.01, 0.002);
 
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = true;
 
-            public static final double mainZeroOffset = 0.4946;
-            public static final double secondaryZeroOffset = 0;
+            public static final double mainZeroOffset = 0.4647;
+             public static final double secondaryZeroOffset = 0.153;
             // public static final double mainZeroOffset = 0;
-            // public static final double secondaryZeroOffset = 0;
+            //public static final double secondaryZeroOffset = 0;
 
             public static final double[] mainSoftLimits = new double[]{0.35, -0.04};
             public static final double[] secondarySoftLimits = new double[]{0.5, 0.01};
@@ -307,8 +307,8 @@ public class Constants {
         }
 
         public static final class Steer{
-            public static final double steerGearRatio = 12.5; //the gear ratio between the steer motor and the module itself
-            public static final double newGearRatio = steerGearRatio * 3;
+            public static final double steerGearRatio = 12.5 * 3; //the gear ratio between the steer motor and the module itself
+            // public static final double newGearRatio = steerGearRatio * 3;
             public static final PIDFGains steerMotorPID = new PIDFGains(0.4, 0, 0.1, 0, 0.0005, 0); //the pid gains for the PID Controller of the steer motor, units are in rotations
 
             public static final double maxVelocity = 1; //the max velocity of the modules steer aspect in module rotations per minute
@@ -316,10 +316,10 @@ public class Constants {
             public static final double maxAcceleration = 1; //the max acceleration of the modules steer apsect in module rotations per minute per second
 
 
-            public static final double front_left_absoluteEncoderZeroOffset = -130.95703125; // the offset between the absolute encoder reading on the front left module, in degrees
-            public static final double front_right_absoluteEncoderZeroOffset = -153.193359375; // the offset between the absolute encoder on the front left module, in degrees
-            public static final double back_left_absoluteEncoderZeroOffset = -56.07421875; // the offset between the absolute encoder on the back left module, in degrees
-            public static final double back_right_absoluteEncoderZeroOffset = 104.326171875; // the offset between the absolute encoder on the back right module, in degrees
+            public static final double front_left_absoluteEncoderZeroOffset = 96.15234375 - 90; // the offset between the absolute encoder reading on the front left module, in degrees
+            public static final double front_right_absoluteEncoderZeroOffset = -68.73046875 - 90; // the offset between the absolute encoder on the front left module, in degrees
+            public static final double back_left_absoluteEncoderZeroOffset = -80.419921875 - 90; // the offset between the absolute encoder on the back left module, in degrees
+            public static final double back_right_absoluteEncoderZeroOffset = -91.142578125 - 90; // the offset between the absolute encoder on the back right module, in degrees
 
             // public static final double front_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
             // public static final double front_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets

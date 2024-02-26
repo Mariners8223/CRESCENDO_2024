@@ -103,11 +103,11 @@ public class RobotContainer {
     // driveController.povDown().onTrue(new MoveToHome());
     // driveController.R1().onTrue(new ShootToAmp());
     // driveController.L1().onTrue(new MiniShoot());
-    armController.circle().onTrue(new Collect());
-    armController.square().onTrue(Aim);
-    armController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { Aim.cancel(); driveBase.isControlled = false;}));
-    armController.cross().onTrue(new IntakeToFloor());
-    armController.povDown().onTrue(new MoveToHome());
+    // driveController.circle().onTrue(new Collect());
+    // driveController.square().onTrue(Aim);
+    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { Aim.cancel(); driveBase.isControlled = false;}));
+    driveController.cross().onTrue(new IntakeToFloor());
+    driveController.povDown().onTrue(new MoveToHome());
     // armController.R1().onTrue(new ShootToAmp());
     // armController.L1().onTrue(new MiniShoot());
 
