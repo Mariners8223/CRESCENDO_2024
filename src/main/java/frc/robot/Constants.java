@@ -144,8 +144,8 @@ public class Constants {
             public static final int mainMotorID = 15;
             public static final int secondaryMotorID = 16;
 
-            public static final PIDFGains mainPID = new PIDFGains(2, 0.01, 0.26, 0, 0.005, 0.02);
-            public static final PIDFGains secondaryPID = new PIDFGains(1, 0, 0, 0, 0.01, 0.002);
+            public static final PIDFGains mainPID = new PIDFGains(10, 0.02, 0, 0, 0.005, 0.02);
+            public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0, 0.01, 0.002);
 
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = false;
@@ -163,21 +163,21 @@ public class Constants {
 
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 121.5;
-            public static final boolean mainEncoderInverted = true;
-            public static final boolean secondaryEncoderInverted = true;
+            public static final boolean mainEncoderInverted = false;
+            public static final boolean secondaryEncoderInverted = false;
 
         }
     }
 
-    public static class Shooter{
+    public static class Shooter {
         public static final int shooterMotor1ID = 19;
         public static final int shooterMotor2ID = 18;
 
         public static final PIDFGains shooter2PID = new PIDFGains(0.001, 0, 0.0005, 0.00015, 0, 0); //TODO: get the real value
         public static final PIDFGains shooter1PID = new PIDFGains(0.001, 0, 0.001, 0.00015, 0.0, 0);
 
-        public static final boolean shooter1Inverted = false;
-        public static final boolean shooter2Inverted = true;
+        public static final boolean shooter1Inverted = true;
+        public static final boolean shooter2Inverted = false;
 
         public static final double shooterMaxPower = 0.9;
 
@@ -195,12 +195,12 @@ public class Constants {
 
     public static final class Intake{
         public static final int intakeMotorID = 17;
-        public static final boolean intakeMotorIsInverted = false;
+        public static final boolean intakeMotorIsInverted = true;
 
         public static final double intakeMotorSpeed = 0.8;
 
         public static final double StallCurrent = 15;
-        public static final int MaxStallTime = 20;
+        public static final int MaxStallTime = 30;
 
         public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
         public static final int CloseProximity = 30;
@@ -320,16 +320,15 @@ public class Constants {
             public static final double minVelocity = 0.1; //the min velocity of the modules steer aspect in module rotation per minute
             public static final double maxAcceleration = 1; //the max acceleration of the modules steer apsect in module rotations per minute per second
 
+            // public static final double front_left_absoluteEncoderZeroOffset = -100.458984375; // the offset between the absolute encoder reading on the front left module, in degrees
+            // public static final double front_right_absoluteEncoderZeroOffset = -92.197265625; // the offset between the absolute encoder on the front left module, in degrees
+            // public static final double back_left_absoluteEncoderZeroOffset = 94.39453125; // the offset between the absolute encoder on the back left module, in degrees
+            // public static final double back_right_absoluteEncoderZeroOffset = 92.900390625; // the offset between the absolute encoder on the back right module, in degrees
 
-            public static final double front_left_absoluteEncoderZeroOffset = -81.298828125 - 90; // the offset between the absolute encoder reading on the front left module, in degrees
-            public static final double front_right_absoluteEncoderZeroOffset = -96.064453125 - 90; // the offset between the absolute encoder on the front left module, in degrees
-            public static final double back_left_absoluteEncoderZeroOffset = 95.009765625 - 90; // the offset between the absolute encoder on the back left module, in degrees
-            public static final double back_right_absoluteEncoderZeroOffset = 88.857421875 - 90; // the offset between the absolute encoder on the back right module, in degrees
-
-            // public static final double front_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
-            // public static final double front_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
-            // public static final double back_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
-            // public static final double back_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
+            public static final double front_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
+            public static final double front_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
+            public static final double back_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
+            public static final double back_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
 
         }
 
@@ -379,13 +378,13 @@ public class Constants {
             }
         }
 
-        public static final SwerveModule front_left = new SwerveModule(ModuleName.Front_Left, 2, 3, 10, Steer.front_left_absoluteEncoderZeroOffset, false, false, false);
+        public static final SwerveModule front_left = new SwerveModule(ModuleName.Front_Left, 2, 3, 10, Steer.front_left_absoluteEncoderZeroOffset, false, false, true);
         //^the constants of the front left module
-        public static final SwerveModule front_right = new SwerveModule(ModuleName.Front_Right, 4, 5, 11, Steer.front_right_absoluteEncoderZeroOffset, false, false, false);
+        public static final SwerveModule front_right = new SwerveModule(ModuleName.Front_Right, 4, 5, 11, Steer.front_right_absoluteEncoderZeroOffset, false, false, true);
         //^the constants of the front right module
-        public static final SwerveModule back_left = new SwerveModule(ModuleName.Back_Left, 6, 7, 12, Steer.back_left_absoluteEncoderZeroOffset, false, false, false);
+        public static final SwerveModule back_left = new SwerveModule(ModuleName.Back_Left, 6, 7, 12, Steer.back_left_absoluteEncoderZeroOffset, false, false, true);
         //^the constants of the back left module
-        public static final SwerveModule back_right = new SwerveModule(ModuleName.Back_Right, 8, 9, 13, Steer.back_right_absoluteEncoderZeroOffset, false, false, false);
+        public static final SwerveModule back_right = new SwerveModule(ModuleName.Back_Right, 8, 9, 13, Steer.back_right_absoluteEncoderZeroOffset, false, false, true);
         //^the constants of the back right module
         
     }

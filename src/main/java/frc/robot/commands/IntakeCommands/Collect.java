@@ -19,11 +19,14 @@ public class Collect extends Command{
 
   @Override
   public void initialize(){
-    wasGamePieceDetected = intake.isGamePieceDetected();
+    // wasGamePieceDetected = intake.isGamePieceDetected();
     timer = 0;
 
-    if(!wasGamePieceDetected) intake.setMotor(Constants.Intake.intakeMotorSpeed);
-    else intake.setMotor(-Constants.Intake.intakeMotorSpeed);
+    // if(!wasGamePieceDetected)
+
+    intake.setMotor(Constants.Intake.intakeMotorSpeed);
+
+    // else intake.setMotor(-Constants.Intake.intakeMotorSpeed);
     // Timer.delay(0.15);
   }
 
@@ -54,7 +57,6 @@ public class Collect extends Command{
 
   @Override
   public boolean isFinished(){
-    if(!wasGamePieceDetected) return intake.isGamePieceDetected() || timer >= Constants.Intake.MaxStallTime;
-    else return intake.getProximity() > 50 || timer >= Constants.Intake.MaxStallTime;
+    return timer >= Constants.Intake.MaxStallTime;
   }
 }

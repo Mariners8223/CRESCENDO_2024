@@ -14,6 +14,7 @@ public class Shoot extends Command {
   /** Creates a new Shoot. */
 
   private Arm arm;
+  private int timer;
 
   public Shoot() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,14 +31,20 @@ public class Shoot extends Command {
     //   return;
     // }
 
-    // arm.getShooterSub().setShooterPower(0.75);
+    arm.getShooterSub().setShooterPower(0.75);
+    timer = 0;
     // if(ArmUtil.getDx() <= Constants.Arm.EndOfZone1)
 
     //   arm.getShooterSub().setShooterVelocity(Constants.Shooter.RPMforShooterZone1);
     // else
     //   arm.getShooterSub().setShooterVelocity(Constants.Shooter.RPMforShooterZone2);
 
-    arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedSpeed());
+    // arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedSpeed());
+  }
+
+  @Override
+  public void execute() {
+    timer++;
   }
 
   // Called once the command ends or is interrupted.
@@ -59,6 +66,7 @@ public class Shoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.getShooterSub().isAtSelctedVelocity();
+    // return arm.getShooterSub().isAtSelctedVelocity();
+    return timer >= 10;
   }
 }

@@ -415,7 +415,8 @@ public class SwerveModule{
 
     sparkMax.getEncoder().setPositionConversionFactor(1); //sets the gear ratio for the module
 
-    sparkMax.getEncoder().setPosition(absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.DriveTrain.Steer.steerGearRatio); //place holder, place getabsencoder postion
+    // sparkMax.getEncoder().setPosition(absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.DriveTrain.Steer.steerGearRatio); //place holder, place getabsencoder postion
+    sparkMax.getEncoder().setPosition(0);
 
     steerMotorCurrent = () -> sparkMax.getOutputCurrent();
     steerMotorVoltage = () -> sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();
@@ -424,7 +425,7 @@ public class SwerveModule{
     steerMotorPostionInput = position -> sparkMax.getPIDController().setReference(position * Constants.DriveTrain.Steer.steerGearRatio, ControlType.kPosition);
     steerMotorVoltageInput = position -> sparkMax.getPIDController().setReference(steerMotorVoltagePID.calculate(steerMotorPostion.get(), position), ControlType.kVoltage);
 
-    sparkMax.setSmartCurrentLimit(30); //sets the current limit of the motor (thanks noga for reminding me)
+    sparkMax.setSmartCurrentLimit(25); //sets the current limit of the motor (thanks noga for reminding me)
 
     sparkMax.burnFlash(); //sometimes work
 

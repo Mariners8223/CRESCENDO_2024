@@ -20,9 +20,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
+import frc.robot.commands.IntakeCommands.RollOut;
 import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToFree;
@@ -39,6 +41,8 @@ public class RobotContainer {
 
   public static CommandPS5Controller driveController;
   public static CommandPS5Controller armController;
+  public static CommandXboxController tempController;
+
   // public static SendableChooser<Command> autoChooser;
   public static LoggedDashboardChooser<Command> autoChooser;
   public static boolean aimingAtSpeaker = true;
@@ -77,6 +81,7 @@ public class RobotContainer {
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
     
     var Aim = new QuickAim();
+    var collect = new Collect();
 
     // driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
     // driveController.circle().onTrue(new Collect());
@@ -90,9 +95,13 @@ public class RobotContainer {
     // driveController.circle().onTrue(new Collect());
     // driveController.square().onTrue(Aim);
     // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { Aim.cancel(); driveBase.isControlled = false;}));
+
     driveController.cross().onTrue(new IntakeToFloor());
-    driveController.circle().onTrue(new MoveToHome());
+    driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
     driveController.square().onTrue(new MoveToFree());
+    driveController.triangle().onTrue(new Shoot());
+
+    driveController.L1().onTrue(new RollOut());
     // armController.R1().onTrue(new ShootToAmp());
     // armController.L1().onTrue(new MiniShoot());
 
