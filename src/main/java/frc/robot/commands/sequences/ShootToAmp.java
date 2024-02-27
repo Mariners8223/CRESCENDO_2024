@@ -76,7 +76,7 @@ public class ShootToAmp extends SequentialCommandGroup {
 
     @Override
     public void initialize(){
-      arm.moveMotorsToRotation(0.35, 0.3);
+      arm.moveMotorsToRotation(0.3, 0.33);
     }
 
     @Override

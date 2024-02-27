@@ -67,6 +67,6 @@ public class Shoot extends Command {
   @Override
   public boolean isFinished() {
     // return arm.getShooterSub().isAtSelctedVelocity();
-    return timer >= 10;
+    return timer >= 20;
   }
 }

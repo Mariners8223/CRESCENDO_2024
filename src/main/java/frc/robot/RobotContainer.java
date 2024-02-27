@@ -29,7 +29,9 @@ import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
+import frc.robot.commands.autonomous.ShootNote;
 import frc.robot.commands.sequences.ShootToAmp;
+import frc.robot.commands.sequences.ShootToAmp.MiniShoot;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
@@ -98,10 +100,11 @@ public class RobotContainer {
 
     driveController.cross().onTrue(new IntakeToFloor());
     driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
-    driveController.square().onTrue(new MoveToFree());
+    driveController.square().onTrue(new ShootToAmp());
     driveController.triangle().onTrue(new Shoot());
 
     driveController.L1().onTrue(new RollOut());
+    driveController.R1().onTrue(new MiniShoot());
     // armController.R1().onTrue(new ShootToAmp());
     // armController.L1().onTrue(new MiniShoot());
 
@@ -124,6 +127,7 @@ public class RobotContainer {
     autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
 
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
+    autoChooser.addOption("Shoot Note", new ShootNote());
     SmartDashboard.putData(autoChooser.getSendableChooser());
   }
 
