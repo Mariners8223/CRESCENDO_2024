@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
-import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToFree;
@@ -129,7 +128,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
     NamedCommands.registerCommand("MoveToHome", new MoveToHome());
     NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
-    NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
+    // NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
   }
 
   public static double calculateJoyStickDeadBand(double value){
