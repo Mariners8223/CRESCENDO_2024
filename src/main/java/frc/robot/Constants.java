@@ -144,14 +144,14 @@ public class Constants {
             public static final int mainMotorID = 15;
             public static final int secondaryMotorID = 16;
 
-            public static final PIDFGains mainPID = new PIDFGains(3.1, 0.01, 0, 1, 0.005, 0.02);
+            public static final PIDFGains mainPID = new PIDFGains(2, 0.01, 0.26, 0, 0.005, 0.02);
             public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0, 0.01, 0.002);
 
             public static final boolean mainInverted = false;
-            public static final boolean secondaryInverted = true;
+            public static final boolean secondaryInverted = false;
 
             public static final double mainZeroOffset = 0.4647;
-             public static final double secondaryZeroOffset = 0.1529541015625;
+             public static final double secondaryZeroOffset = 0.1551197;
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 
@@ -163,6 +163,9 @@ public class Constants {
 
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 121.5;
+            public static final boolean mainEncoderInverted = true;
+            public static final boolean secondaryEncoderInverted = false;
+
         }
     }
 
@@ -318,10 +321,10 @@ public class Constants {
             public static final double maxAcceleration = 1; //the max acceleration of the modules steer apsect in module rotations per minute per second
 
 
-            public static final double front_left_absoluteEncoderZeroOffset = -87.36328125; // the offset between the absolute encoder reading on the front left module, in degrees
-            public static final double front_right_absoluteEncoderZeroOffset = -81.826171875; // the offset between the absolute encoder on the front left module, in degrees
-            public static final double back_left_absoluteEncoderZeroOffset = 126.03515625; // the offset between the absolute encoder on the back left module, in degrees
-            public static final double back_right_absoluteEncoderZeroOffset = 88.505859375; // the offset between the absolute encoder on the back right module, in degrees
+            public static final double front_left_absoluteEncoderZeroOffset = 99.22851; // the offset between the absolute encoder reading on the front left module, in degrees
+            public static final double front_right_absoluteEncoderZeroOffset = 91.23046875; // the offset between the absolute encoder on the front left module, in degrees
+            public static final double back_left_absoluteEncoderZeroOffset = -97.8222; // the offset between the absolute encoder on the back left module, in degrees
+            public static final double back_right_absoluteEncoderZeroOffset = -92.4609; // the offset between the absolute encoder on the back right module, in degrees
 
             // public static final double front_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
             // public static final double front_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets

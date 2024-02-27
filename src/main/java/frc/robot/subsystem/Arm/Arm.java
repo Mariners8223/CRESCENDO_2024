@@ -147,8 +147,8 @@ public class Arm extends SubsystemBase{
     mainAbsEncoder = configAbsoluteEncoder(mainMotor, true, Constants.Arm.Motors.mainZeroOffset);
     secondaryAbsEncoder = configAbsoluteEncoder(secondaryMotor, true, Constants.Arm.Motors.secondaryZeroOffset);
 
-    mainEncoder = configEncoder(mainMotor, 8192, false, getRollOverPosition(mainAbsEncoder.getPosition()));
-    secondaryEncoder = configEncoder(secondaryMotor, 8192, false, getRollOverPosition(secondaryAbsEncoder.getPosition()));
+    mainEncoder = configEncoder(mainMotor, 8192, Constants.Arm.Motors.mainEncoderInverted, getRollOverPosition(mainAbsEncoder.getPosition()));
+    secondaryEncoder = configEncoder(secondaryMotor, 8192, Constants.Arm.Motors.secondaryEncoderInverted, getRollOverPosition(secondaryAbsEncoder.getPosition()));
 
     inputs = new ArmInputsAutoLogged();
 
