@@ -14,7 +14,10 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
-/** Add your docs here. */
+/** Add your docs here.
+ * ArmUtil is the aiming mechanizem of the robot
+ * it aims and calculates every thing that has to do with the arm of our 2024 robot
+ */
 public class ArmUtil{
 
   @AutoLog
@@ -45,7 +48,7 @@ public class ArmUtil{
   }
   
     private static ArmPosition ZaxisTarget;//arm angle arm position
-    private static ArmUtilInputsAutoLogged inputs;
+    private static ArmUtilInputsAutoLogged inputs = new ArmUtilInputsAutoLogged();
 
     /**
    * calculates the distance from the robot to the speaker on the y axis
@@ -82,7 +85,13 @@ public class ArmUtil{
    * @return returns dz - the distance between the robot and the speaker on z axis
    */
     private static double CalcDz(){
-      inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y);
+      if(inputs.IsQuikShot){
+        inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y);
+      }
+      else{
+        inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Constants.Arm.armHeightFromFrameMeters
+         - Constants.DriveTrain.Global.RobotHeightFromGround);
+      }
       return inputs.Dz;
     }
     /**
@@ -97,7 +106,7 @@ public class ArmUtil{
       if (inputs.IsQuikShot) {//adds or subtracks the distance from the center of the robot to the shotter from the distance to the speaker
         inputs.distanceToSpeaker += Arm.getInstance().getShooterPosition().x;
       }
-      else inputs.distanceToSpeaker -= Arm.getInstance().getShooterPosition().x;
+      else inputs.distanceToSpeaker += Constants.Arm.mainPivotDistanceFromCenterMeters;
       return inputs.distanceToSpeaker;
     }
 

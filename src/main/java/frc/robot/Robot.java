@@ -24,16 +24,16 @@ public class Robot extends LoggedRobot {
 
     if(isReal()){
       Logger.addDataReceiver(new NT4Publisher());
-      Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
+      //Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
     }
     else setUseTiming(false);
 
     Logger.start();
 
     new RobotContainer();
-    SmartDashboard.putNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
-    SmartDashboard.putNumber("Zone1", Constants.Shooter.GPAirTimeZone1);
-    SmartDashboard.putNumber("Zone2", Constants.Shooter.GPAirTimeZone2);
+    // SmartDashboard.putNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
+    // SmartDashboard.putNumber("Zone1", Constants.Shooter.GPAirTimeZone1);
+    // SmartDashboard.putNumber("Zone2", Constants.Shooter.GPAirTimeZone2);
 
   }
 
@@ -91,6 +91,7 @@ public class Robot extends LoggedRobot {
     }
     
     // Arm.getInstance().setDefaultCommand(new ManualAim());
+    RobotContainer.driveBase.resetOnlyDirection();
   }
 
   @Override

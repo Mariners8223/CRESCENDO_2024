@@ -14,7 +14,6 @@ public class MoveToFree extends Command {
     private Arm arm;
     private ArmPosition target;
 
-
     public MoveToFree() {
       arm = Arm.getInstance();
       // Use addRequirements() here to declare subsystem dependencies.
@@ -26,6 +25,7 @@ public class MoveToFree extends Command {
     public void initialize() {
       target.rotation = arm.getShooterPosition().rotation - Units.rotationsToRadians(arm.getMainMotorRotation()) + Units.rotationsToRadians(0.14);
       arm.moveShooterToPose(target);
+      System.out.println(target);
     }
 
     @Override

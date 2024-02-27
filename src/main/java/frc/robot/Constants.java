@@ -144,25 +144,28 @@ public class Constants {
             public static final int mainMotorID = 15;
             public static final int secondaryMotorID = 16;
 
-            public static final PIDFGains mainPID = new PIDFGains(3.1, 0.01, 0, 1, 0.005, 0.02);
-            public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0.1, 0.01, 0.002);
+            public static final PIDFGains mainPID = new PIDFGains(2, 0.01, 0.26, 0, 0.005, 0.02);
+            public static final PIDFGains secondaryPID = new PIDFGains(1, 0, 0, 0, 0.01, 0.002);
 
             public static final boolean mainInverted = false;
-            public static final boolean secondaryInverted = true;
+            public static final boolean secondaryInverted = false;
 
-            public static final double mainZeroOffset = 0.4946;
-            public static final double secondaryZeroOffset = 0;
+            public static final double mainZeroOffset = 0.4647;
+             public static final double secondaryZeroOffset = 0.1473289;
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 
-            public static final double[] mainSoftLimits = new double[]{0.35, -0.04};
-            public static final double[] secondarySoftLimits = new double[]{0.5, 0.01};
+            public static final double[] mainSoftLimits = new double[]{0.3206787109375, -0.0224609375};//was 0.35, -0.04
+            public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.01};
 
             public static final double[] mainMaxOutputs = new double[]{0.15, -0.05};
             public static final double[] secondaryMaxOutputs = new double[]{0.1, -0.05};
 
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 121.5;
+            public static final boolean mainEncoderInverted = true;
+            public static final boolean secondaryEncoderInverted = true;
+
         }
     }
 
@@ -186,7 +189,7 @@ public class Constants {
         public static final double ShootToAmpTime = 2;
         // public static final double RPMforShooterZone1 = 4000;
         // public static final double RPMforShooterZone2 = 5000;
-        public static double GPAirTimeZone1 = 0.185;
+        public static double GPAirTimeZone1 = 0.105;
         public static double GPAirTimeZone2 = 0.22;
     }
 
@@ -252,9 +255,11 @@ public class Constants {
             ));
 
             public static List<Pose2d> InStageMiddleLocations_POSE2D = new ArrayList<Pose2d>(
-                Arrays.asList(//TODO: find locations
+                Arrays.asList(new Pose2d(4.11, 5.25, Rotation2d.fromDegrees(-60)),//rope 1 - top rope
+                new Pose2d(4.12, 2.94, Rotation2d.fromDegrees(60)),//rope 2 - bottom rope
+                new Pose2d(6.27, 4.09, Rotation2d.fromDegrees(180))//rope 3 - middle pointing rope
             ));
-            public static List<Pose2d> UnderRopeMiddleLocations_POSE2D = new ArrayList<>(//TODO: redo
+            public static List<Pose2d> UnderRopeMiddleLocations_POSE2D = new ArrayList<>(
                 Arrays.asList(new Pose2d(SlidingPositions_MiddleRope.get(0).getX(), SlidingPositions_MiddleRope.get(0).getY(), Rotation2d.fromDegrees(-60)),//rope 1 - top rope
                 new Pose2d(SlidingPositions_MiddleRope.get(1).getX(), SlidingPositions_MiddleRope.get(1).getY(), Rotation2d.fromDegrees(60)),//rope 2 - bottom rope
                 new Pose2d(SlidingPositions_MiddleRope.get(2).getX(), SlidingPositions_MiddleRope.get(2).getY(), Rotation2d.fromDegrees(180))//rope 3 - middle pointing rope
@@ -307,8 +312,8 @@ public class Constants {
         }
 
         public static final class Steer{
-            public static final double steerGearRatio = 12.5; //the gear ratio between the steer motor and the module itself
-            public static final double newGearRatio = steerGearRatio * 3;
+            public static final double steerGearRatio = 12.5 * 3; //the gear ratio between the steer motor and the module itself
+            // public static final double newGearRatio = steerGearRatio * 3;
             public static final PIDFGains steerMotorPID = new PIDFGains(0.4, 0, 0.1, 0, 0.0005, 0); //the pid gains for the PID Controller of the steer motor, units are in rotations
 
             public static final double maxVelocity = 1; //the max velocity of the modules steer aspect in module rotations per minute
@@ -316,10 +321,10 @@ public class Constants {
             public static final double maxAcceleration = 1; //the max acceleration of the modules steer apsect in module rotations per minute per second
 
 
-            public static final double front_left_absoluteEncoderZeroOffset = -130.95703125; // the offset between the absolute encoder reading on the front left module, in degrees
-            public static final double front_right_absoluteEncoderZeroOffset = -153.193359375; // the offset between the absolute encoder on the front left module, in degrees
-            public static final double back_left_absoluteEncoderZeroOffset = -56.07421875; // the offset between the absolute encoder on the back left module, in degrees
-            public static final double back_right_absoluteEncoderZeroOffset = 104.326171875; // the offset between the absolute encoder on the back right module, in degrees
+            public static final double front_left_absoluteEncoderZeroOffset = -81.298828125 - 90; // the offset between the absolute encoder reading on the front left module, in degrees
+            public static final double front_right_absoluteEncoderZeroOffset = -96.064453125 - 90; // the offset between the absolute encoder on the front left module, in degrees
+            public static final double back_left_absoluteEncoderZeroOffset = 95.009765625 - 90; // the offset between the absolute encoder on the back left module, in degrees
+            public static final double back_right_absoluteEncoderZeroOffset = 88.857421875 - 90; // the offset between the absolute encoder on the back right module, in degrees
 
             // public static final double front_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
             // public static final double front_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets

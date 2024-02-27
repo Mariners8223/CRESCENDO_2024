@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
-import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToFree;
@@ -88,11 +87,12 @@ public class RobotContainer {
     // driveController.povDown().onTrue(new MoveToHome());
     // driveController.R1().onTrue(new ShootToAmp());
     // driveController.L1().onTrue(new MiniShoot());
-    armController.circle().onTrue(new Collect());
-    armController.square().onTrue(Aim);
-    armController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { Aim.cancel(); driveBase.isControlled = false;}));
-    armController.cross().onTrue(new IntakeToFloor());
-    armController.povDown().onTrue(new MoveToHome());
+    // driveController.circle().onTrue(new Collect());
+    // driveController.square().onTrue(Aim);
+    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { Aim.cancel(); driveBase.isControlled = false;}));
+    driveController.cross().onTrue(new IntakeToFloor());
+    driveController.circle().onTrue(new MoveToHome());
+    driveController.square().onTrue(new MoveToFree());
     // armController.R1().onTrue(new ShootToAmp());
     // armController.L1().onTrue(new MiniShoot());
 
@@ -128,7 +128,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
     NamedCommands.registerCommand("MoveToHome", new MoveToHome());
     NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
-    NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
+    // NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
   }
 
   public static double calculateJoyStickDeadBand(double value){

@@ -399,7 +399,7 @@ public class SwerveModule{
     sparkMax.restoreFactoryDefaults();
 
     sparkMax.enableVoltageCompensation(12); //sets voltage compensation to 12V
-    sparkMax.setInverted(true); //sets wether the motor is inverted or not
+    sparkMax.setInverted(moduleConstants.isSteerInverted); //sets wether the motor is inverted or not
 
     sparkMax.setIdleMode(IdleMode.kCoast); //sets the idle mode to coat (automaticlly goes to brakes once the robot is enabled)
 
