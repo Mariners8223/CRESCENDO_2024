@@ -305,10 +305,12 @@ public class SwerveModule{
     CANcoderConfiguration config = new CANcoderConfiguration();
 
     config.FutureProofConfigs = false; //disables future proof config (everything should be updated)
+    
 
     config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 
-    config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+    if(!moduleConstants.isAbsEncoderInverted) config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive; //if the encoder is inverted
+    else config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive; //if the encoder is not inverted
 
     config.MagnetSensor.MagnetOffset = moduleConstants.absoluteEncoderZeroOffset / -360; //sets the offset of the cancoder from the zero postion of the module (devided by zero because of the offset input from the user is in degrees)
 

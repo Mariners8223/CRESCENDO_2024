@@ -351,12 +351,13 @@ public class Constants {
 
             public boolean isSteerInverted; //wheter the steer motor output should be revesed
             public boolean isDriveInverted; //wheter the drive motor output should be reversed
+            public boolean isAbsEncoderInverted; //wheter the absolute encoder output should be reversed
 
             public double absoluteEncoderZeroOffset; //the offset between the cancoder and the module zero angle in degrees
 
             public Translation2d moduleTranslation; //the translation of the module realetive to the center of the robot
 
-            public SwerveModule(ModuleName moduleName, int driveMotorID, int steerMotorID, int absoluteEncoderID, double absoluteEncoderZeroOffset, boolean isSteerInverted, boolean isDriveInverted){
+            public SwerveModule(ModuleName moduleName, int driveMotorID, int steerMotorID, int absoluteEncoderID, double absoluteEncoderZeroOffset, boolean isSteerInverted, boolean isDriveInverted, boolean isAbsEncoderInverted){
                 this.moduleName = moduleName;
 
                 this.driveMotorID = driveMotorID;
@@ -364,7 +365,8 @@ public class Constants {
                 this.absoluteEncoderID = absoluteEncoderID;
 
                 this.isDriveInverted = isDriveInverted;
-                this.isSteerInverted = isDriveInverted;
+                this.isSteerInverted = isSteerInverted;
+                this.isAbsEncoderInverted = isAbsEncoderInverted;
 
                 this.absoluteEncoderZeroOffset = absoluteEncoderZeroOffset;
 
@@ -372,13 +374,13 @@ public class Constants {
             }
         }
 
-        public static final SwerveModule front_left = new SwerveModule(ModuleName.Front_Left, 2, 3, 10, Steer.front_left_absoluteEncoderZeroOffset, false, false);
+        public static final SwerveModule front_left = new SwerveModule(ModuleName.Front_Left, 2, 3, 10, Steer.front_left_absoluteEncoderZeroOffset, false, false, false);
         //^the constants of the front left module
-        public static final SwerveModule front_right = new SwerveModule(ModuleName.Front_Right, 4, 5, 11, Steer.front_right_absoluteEncoderZeroOffset, false, false);
+        public static final SwerveModule front_right = new SwerveModule(ModuleName.Front_Right, 4, 5, 11, Steer.front_right_absoluteEncoderZeroOffset, false, false, false);
         //^the constants of the front right module
-        public static final SwerveModule back_left = new SwerveModule(ModuleName.Back_Left, 6, 7, 12, Steer.back_left_absoluteEncoderZeroOffset, false, false);
+        public static final SwerveModule back_left = new SwerveModule(ModuleName.Back_Left, 6, 7, 12, Steer.back_left_absoluteEncoderZeroOffset, false, false, false);
         //^the constants of the back left module
-        public static final SwerveModule back_right = new SwerveModule(ModuleName.Back_Right, 8, 9, 13, Steer.back_right_absoluteEncoderZeroOffset, false, false);
+        public static final SwerveModule back_right = new SwerveModule(ModuleName.Back_Right, 8, 9, 13, Steer.back_right_absoluteEncoderZeroOffset, false, false, false);
         //^the constants of the back right module
         
     }
