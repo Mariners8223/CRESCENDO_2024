@@ -145,13 +145,13 @@ public class Constants {
             public static final int secondaryMotorID = 16;
 
             public static final PIDFGains mainPID = new PIDFGains(2, 0.01, 0.26, 0, 0.005, 0.02);
-            public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0, 0.01, 0.002);
+            public static final PIDFGains secondaryPID = new PIDFGains(1, 0, 0, 0, 0.01, 0.002);
 
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = false;
 
             public static final double mainZeroOffset = 0.4647;
-             public static final double secondaryZeroOffset = 0.1551197;
+             public static final double secondaryZeroOffset = 0.1473289;
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 
@@ -164,7 +164,7 @@ public class Constants {
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 121.5;
             public static final boolean mainEncoderInverted = true;
-            public static final boolean secondaryEncoderInverted = false;
+            public static final boolean secondaryEncoderInverted = true;
 
         }
     }
