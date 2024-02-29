@@ -61,7 +61,7 @@ public class SwerveModule{
   private TalonFX driveMotor; //the drive motor
   private TalonFXConfiguration driveMotorConfig; //the config of the drive motor (used to set the neutral mode of the motor)
 
-  private CANcoder absEncoder; //the absolute encoder
+  // private CANcoder absEncoder; //the absolute encoder
   private CANSparkMax steerMotor; //the steer motor
 
   private SwerveModuleInputsAutoLogged inputs;
@@ -94,7 +94,7 @@ public class SwerveModule{
     currentState = targetState;
     modulePostion = new SwerveModulePosition(0, new Rotation2d());
 
-    absEncoder = configCanCoder();
+    // absEncoder = configCanCoder();
 
     driveMotorConfig = getTalonFXConfiguration();
     driveMotor = configTalonFX(driveMotorConfig);
@@ -237,7 +237,7 @@ public class SwerveModule{
     inputs.steerMotorVoltage = steerMotorVoltage.get(); //updates the voltage output of the steer motor
     inputs.steerMotorPosition = steerMotorPostion.get();
 
-    inputs.absEncoderPostion = absEncoder.getAbsolutePosition().getValueAsDouble() * 360;
+    // inputs.absEncoderPostion = absEncoder.getAbsolutePosition().getValueAsDouble() * 360;
 
     Logger.processInputs(moduleConstants.moduleName.name(), inputs); //updates the logger
   }
@@ -278,7 +278,7 @@ public class SwerveModule{
    * @param newOffset the new offset of the cancoder in rotations
    */
   public void resetCancoderOffset(double newOffset){
-    absEncoder.getConfigurator().apply(new MagnetSensorConfigs().withMagnetOffset(newOffset));
+    // absEncoder.getConfigurator().apply(new MagnetSensorConfigs().withMagnetOffset(newOffset));
   }
 
   /**
@@ -286,7 +286,8 @@ public class SwerveModule{
    * @return the absolute postion of the cancoder in rotations
    */
   public double getAbsolutePosition(){
-    return absEncoder.getAbsolutePosition().getValueAsDouble();
+    // return absEncoder.getAbsolutePosition().getValueAsDouble();
+    return 0;
   }
 
   /**

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
@@ -32,6 +33,7 @@ import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.commands.armCommands.MoveToStow;
 import frc.robot.commands.autonomous.ShootNote;
+import frc.robot.commands.climbCommands.ClimbElevator;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.commands.sequences.ShootToAmp.MiniShoot;
 import frc.robot.subsystem.Arm.Arm;
@@ -93,12 +95,14 @@ public class RobotContainer {
     //drive
     armController.povLeft().onTrue(new MoveToAlphaPose_close());
 
-    
+
     armController.povDown().onTrue(new MoveToHome());
     //drive
     armController.L1().onTrue(new RollOut());
     armController.R1().onTrue(new MiniShoot());
     armController.povUp().onTrue(new MoveToStow());
+
+    driveController.cross().onTrue(new ClimbSequence());
     // armController.R1().onTrue(new ShootToAmp());
     // armController.L1().onTrue(new MiniShoot());
 

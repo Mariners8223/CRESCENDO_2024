@@ -11,6 +11,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -35,6 +37,7 @@ public class Elavator extends SubsystemBase {
 
   // private TalonFX railMotor;
   // private TalonFX rollerMotor;
+  // private CANSparkMax railMotor;
 
   private PositionDutyCycle railoutput;
   private PositionDutyCycle rolleroutput;
@@ -127,4 +130,13 @@ public class Elavator extends SubsystemBase {
 
     return motor;
   }
+
+  // private CANSparkMax configSparkMax(){
+  //   CANSparkMax sparkMax = new CANSparkMax(Constants.Elevator.railMotorID, MotorType.kBrushless);
+
+  //   sparkMax.getPIDController().setP(Constants.Elevator.railMotorPIDF.getP());
+  //   sparkMax.getPIDController().setI(Constants.Elevator.railMotorPIDF.getI());
+  //   sparkMax.getPIDController().setD(Constants.Elevator.railMotorPIDF.getD());
+  //   sparkMax.getPIDController().setIZone(Constants.Elevator.railMotorPIDF.getTolerance());
+  // }
 }
