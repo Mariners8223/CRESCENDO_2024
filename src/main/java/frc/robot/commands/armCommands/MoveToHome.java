@@ -60,7 +60,7 @@ public class MoveToHome extends SequentialCommandGroup {
 
     @Override
     public void initialize(){
-      arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.09);
+      arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.031);
     }
 
     @Override

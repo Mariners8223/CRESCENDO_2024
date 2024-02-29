@@ -31,7 +31,7 @@ public class Shoot extends Command {
     //   return;
     // }
 
-    arm.getShooterSub().setShooterPower(0.75);
+    arm.getShooterSub().setShooterRPM(4500);;
     timer = 0;
     // if(ArmUtil.getDx() <= Constants.Arm.EndOfZone1)
 
@@ -51,10 +51,10 @@ public class Shoot extends Command {
   @Override
   public void end(boolean interrupted) {
     // if(interrupted) return;
-    Timer.delay(0.1);
+    // Timer.delay(0.1);
 
     arm.getIntakeSub().setMotor(1);
-    Timer.delay(0.3);
+    Timer.delay(0.4);
 
     arm.getIntakeSub().stopMotor();
     arm.getShooterSub().stopMotors();
@@ -66,7 +66,7 @@ public class Shoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return arm.getShooterSub().isAtSelctedVelocity();
-    return timer >= 20;
+    return arm.getShooterSub().isAtSelctedVelocity();
+    // return timer >= 20;
   }
 }

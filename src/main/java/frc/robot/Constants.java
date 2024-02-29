@@ -159,12 +159,12 @@ public class Constants {
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 
-            public static final double[] mainSoftLimits = new double[]{0.3206787109375, -0.0224609375};//was 0.35, -0.04
-            public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.01};
+            public static final double[] mainSoftLimits = new double[]{0.3206787109375, -0.03125};//was 0.35, -0.04 // 0.3206787109375
+            public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.03};
 
             public static final double[] mainMaxOutputs = new double[]{0.15, -0.05};
-            public static final double[] secondaryMaxOutputs = new double[]{0.1, -0.05};
-
+            public static final double[] secondaryMaxOutputs = new double[]{0.2, -0.1};
+ 
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 121.5;
             public static final boolean mainEncoderInverted = false;
@@ -209,8 +209,8 @@ public class Constants {
         public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
         public static final int CloseProximity = 30;
 
-        public static final double secondaryIntakeAngle = 0.36;
-        public static final double mainIntakeAngle = -0.03;
+        public static final double secondaryIntakeAngle = 0.405;
+        public static final double mainIntakeAngle = -0.029;
     }
 
     public static class Elevator{

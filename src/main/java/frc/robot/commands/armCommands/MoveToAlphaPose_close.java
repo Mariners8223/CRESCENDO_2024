@@ -28,7 +28,9 @@ public class MoveToAlphaPose_close extends Command {
     // target = Constants.Arm.AlphaFromClose.copyArmPostion();
     // arm.moveShooterToPose(target);
 
-    arm.moveMotorsToRotation(Units.degreesToRotations(57.7), 0);
+    arm.moveMotorsToRotation(Units.degreesToRotations(40.65), 0.05);
+
+    
   }
 
   // Called once the command ends or is interrupted.
