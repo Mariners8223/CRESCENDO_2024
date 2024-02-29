@@ -27,6 +27,7 @@ import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
 import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
+import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.commands.autonomous.ShootNote;
@@ -65,7 +66,7 @@ public class RobotContainer {
 
     driveBase = new DriveBase();
     arm = Arm.getInstance();
-    vision = new Vision();
+    // vision = new Vision();
 
     // arm.setDefaultCommand(new QuikAim());
     configureNamedCommands();
@@ -84,6 +85,18 @@ public class RobotContainer {
     
     var Aim = new QuickAim();
     var collect = new Collect();
+    driveController.cross().onTrue(new IntakeToFloor());
+    driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
+    driveController.square().onTrue(new ShootToAmp());
+    driveController.triangle().onTrue(new Shoot());
+
+    driveController.povUp().onTrue(new MoveToAlphaPose_close());
+    driveController.povDown().onTrue(new MoveToHome());
+
+    driveController.L1().onTrue(new RollOut());
+    driveController.R1().onTrue(new MiniShoot());
+    // armController.R1().onTrue(new ShootToAmp());
+    // armController.L1().onTrue(new MiniShoot());
 
     // driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
     // driveController.circle().onTrue(new Collect());
@@ -97,16 +110,6 @@ public class RobotContainer {
     // driveController.circle().onTrue(new Collect());
     // driveController.square().onTrue(Aim);
     // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { Aim.cancel(); driveBase.isControlled = false;}));
-
-    driveController.cross().onTrue(new IntakeToFloor());
-    driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
-    driveController.square().onTrue(new ShootToAmp());
-    driveController.triangle().onTrue(new Shoot());
-
-    driveController.L1().onTrue(new RollOut());
-    driveController.R1().onTrue(new MiniShoot());
-    // armController.R1().onTrue(new ShootToAmp());
-    // armController.L1().onTrue(new MiniShoot());
 
   }
 

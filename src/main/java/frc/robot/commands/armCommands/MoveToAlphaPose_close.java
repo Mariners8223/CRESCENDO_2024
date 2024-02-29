@@ -4,6 +4,7 @@
 
 package frc.robot.commands.armCommands;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystem.Arm.Arm;
@@ -17,14 +18,17 @@ public class MoveToAlphaPose_close extends Command {
   public MoveToAlphaPose_close() {
     // Use addRequirements() here to declare subsystem dependencies.
     arm = Arm.getInstance();
+    
     addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    target = Constants.Arm.AlphaFromClose.copyArmPostion();
-    arm.moveShooterToPose(target);
+    // target = Constants.Arm.AlphaFromClose.copyArmPostion();
+    // arm.moveShooterToPose(target);
+
+    arm.moveMotorsToRotation(Units.degreesToRotations(57.7), 0);
   }
 
   // Called once the command ends or is interrupted.

@@ -24,9 +24,9 @@ public class Vision extends SubsystemBase {
    * creates a new Vision subsystem with 4 cameras
    */
   public Vision() {
-    cameras[0] = new PhotonCameraClass("back", CameraLocation.Back, 9, false, Constants.Vision.cameraLocations[0]);
+    cameras[0] = new PhotonCameraClass("back", CameraLocation.Back, 0, false, Constants.Vision.cameraLocations[0]);
     // cameras[1] = new LimeLightClass("limelight", CameraLocation.Front_Right, Constants.Vision.cameraLocations[1]);
-    cameras[1] = new PhotonCameraClass("front-right", CameraLocation.Front_Right, true, Constants.Vision.cameraLocations[2]);
+    // cameras[1] = new PhotonCameraClass("front-right", CameraLocation.Front_Right, true, Constants.Vision.cameraLocations[2]);
 
     for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
       poses[i] = Constants.Vision.rubbishPose;

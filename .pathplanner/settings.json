@@ -6,19 +6,22 @@
     "Connectors",
     "Da Baitor",
     "Far Notes Collection",
+    "move out of line",
     "Notes",
     "Shotting positions",
     "starters"
   ],
   "autoFolders": [
+    "1 note and out",
     "AGameOfChicken",
     "Close Notes close shot",
     "Far Notes close shot",
     "FarShot",
-    "only 1",
+    "move out",
     "Yuvi p1",
     "Yuvi p2",
-    "Yuvi p3"
+    "Yuvi p3",
+    "only 1"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

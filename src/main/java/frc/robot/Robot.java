@@ -13,6 +13,7 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
 
@@ -47,6 +48,7 @@ public class Robot extends LoggedRobot {
     // SmartDashboard.putNumber("dy", ArmUtil.getDy());
     // SmartDashboard.putNumber("dz", ArmUtil.getDz());
     SmartDashboard.putBoolean("is zone 1", ArmUtil.isZone1());
+    SmartDashboard.putBoolean("is arm in position", Arm.getInstance().isArmInPosition());
     // SmartDashboard.putNumber("ArmPose z", Arm.getInstance().getShooterPosition().y);
     // // SmartDashboard.putNumber("armX", Arm.getInstance().getShooterPosition().x);
     // SmartDashboard.putNumber("wanted speed", Units.radiansPerSecondToRotationsPerMinute(ArmUtil.getWantedSpeed() / Constants.Shooter.wheelRadius));
@@ -91,7 +93,7 @@ public class Robot extends LoggedRobot {
     }
     
     // Arm.getInstance().setDefaultCommand(new ManualAim());
-    RobotContainer.driveBase.resetOnlyDirection();
+    // RobotContainer.driveBase.resetOnlyDirection();
   }
 
   @Override
