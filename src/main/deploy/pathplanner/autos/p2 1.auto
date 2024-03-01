@@ -2,19 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7711791505007954,
-      "y": 2.0262131109503945
+      "x": 1.3140196323188638,
+      "y": 5.527514849608872
     },
-    "rotation": 0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Start Lower shoot"
+            "name": "IntakeToFloor"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

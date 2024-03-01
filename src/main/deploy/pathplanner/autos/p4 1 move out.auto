@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.9626945359454185,
-      "y": 7.026501927468906
+      "x": 1.0,
+      "y": 2.0
     },
     "rotation": 0
   },
@@ -14,30 +14,24 @@
         {
           "type": "path",
           "data": {
-            "pathName": "from up first note"
+            "pathName": "Start Lower shoot"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "get 1st row upper note"
+            "name": "QuikAim"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "near speaker"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle 5th note"
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": "Yuvi p3",
+  "folder": "only 1",
   "choreoAuto": false
 }

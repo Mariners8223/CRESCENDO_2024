@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.491842576560472,
-      "y": 7.049968298409879
+      "x": 0.7518994781213513,
+      "y": 6.581490138729208
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "QuikAim"
+            "name": "IntakeToFloor"
           }
         },
         {
