@@ -2,7 +2,6 @@ package frc.robot.subsystem.Arm.Intake;
 
 import frc.robot.Constants;
 
-import java.util.concurrent.TimeUnit;
 
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
@@ -13,7 +12,6 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DriverStation;
 
 
 public class Intake {

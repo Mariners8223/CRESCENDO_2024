@@ -31,6 +31,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
 
 public class SwerveModule{
@@ -62,6 +63,7 @@ public class SwerveModule{
   private TalonFXConfiguration driveMotorConfig; //the config of the drive motor (used to set the neutral mode of the motor)
 
   // private CANcoder absEncoder; //the absolute encoder
+  private DutyCycleEncoder absEncoder; //the absolute encoder
   private CANSparkMax steerMotor; //the steer motor
 
   private SwerveModuleInputsAutoLogged inputs;
@@ -95,6 +97,7 @@ public class SwerveModule{
     modulePostion = new SwerveModulePosition(0, new Rotation2d());
 
     // absEncoder = configCanCoder();
+    absEncoder = configDutyCycleEncoder();
 
     driveMotorConfig = getTalonFXConfiguration();
     driveMotor = configTalonFX(driveMotorConfig);
@@ -238,6 +241,7 @@ public class SwerveModule{
     inputs.steerMotorPosition = steerMotorPostion.get();
 
     // inputs.absEncoderPostion = absEncoder.getAbsolutePosition().getValueAsDouble() * 360;
+    inputs.absEncoderPostion = absEncoder.get() * 360;
 
     Logger.processInputs(moduleConstants.moduleName.name(), inputs); //updates the logger
   }
@@ -279,6 +283,7 @@ public class SwerveModule{
    */
   public void resetCancoderOffset(double newOffset){
     // absEncoder.getConfigurator().apply(new MagnetSensorConfigs().withMagnetOffset(newOffset));
+    absEncoder.setPositionOffset(newOffset);
   }
 
   /**
@@ -287,7 +292,8 @@ public class SwerveModule{
    */
   public double getAbsolutePosition(){
     // return absEncoder.getAbsolutePosition().getValueAsDouble();
-    return 0;
+    // return 0;
+    return absEncoder.get();
   }
 
   /**
@@ -295,6 +301,13 @@ public class SwerveModule{
    */
   public void resetSteerEncoder(){
     steerMotor.getEncoder().setPosition(0);
+  }
+
+  private DutyCycleEncoder configDutyCycleEncoder(){
+    DutyCycleEncoder encoder = new DutyCycleEncoder(moduleConstants.absoluteEncoderID);
+    encoder.setPositionOffset(moduleConstants.absoluteEncoderZeroOffset);
+
+    return encoder;
   }
 
 
