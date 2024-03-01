@@ -26,6 +26,7 @@ import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
+import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
@@ -143,7 +144,7 @@ public class RobotContainer {
   }
 
   private void configureNamedCommands(){
-    NamedCommands.registerCommand("Do Nothing", new InstantCommand());
+    // NamedCommands.registerCommand("Do Nothing", new InstantCommand());
     //AUTOSSSSS related shit
     NamedCommands.registerCommand("Shoot", new Shoot());
     NamedCommands.registerCommand("QuikAim", new QuickAim());
@@ -153,7 +154,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("MoveToHome", new MoveToHome());
     NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
     NamedCommands.registerCommand("MoveToAlpha", new MoveToAlphaPose_close());
-    // NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
+    NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
   }
 
   public static double calculateJoyStickDeadBand(double value){
