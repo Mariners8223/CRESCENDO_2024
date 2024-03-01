@@ -24,7 +24,7 @@ public class Robot extends LoggedRobot {
     Pathfinding.setPathfinder(new LocalADStarAK());
 
     if(isReal()){
-      // Logger.addDataReceiver(new NT4Publisher());
+      Logger.addDataReceiver(new NT4Publisher());
       Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
     }
     else setUseTiming(false);
