@@ -32,6 +32,7 @@ public class AimAndShootToAmpArea_Auto extends Command {
       ArmUtil.UpdateParameters();
       RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle_ToAmp()), false);
       shooter.setShooterVelocity(ArmUtil.getWantedVelocity_ToAmp());
+      RobotContainer.driveBase.isControlled = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -58,7 +59,7 @@ public class AimAndShootToAmpArea_Auto extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer >= 10 || RobotContainer.driveBase.getPose().getRotation().getRadians() == ArmUtil.getChassisAngle_ToAmp()
+    return timer >= 15 || RobotContainer.driveBase.getPose().getRotation().getRadians() == ArmUtil.getChassisAngle_ToAmp()
      && shooter.isAtSelctedVelocity();
   }
 }

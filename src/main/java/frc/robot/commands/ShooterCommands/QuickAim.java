@@ -33,11 +33,12 @@ public class QuickAim extends SequentialCommandGroup {
 
   public static class QuickAim1 extends InstantCommand{
     private static Arm arm;
-    private static ArmPosition target;
+    private static ArmPosition Armtarget;
+    private static double target;
     public QuickAim1() {
       // Use addRequirements() here to declare subsystem dependencies.
       arm = Arm.getInstance();
-      target = new ArmPosition();
+      Armtarget = new ArmPosition();
       addRequirements(arm);
     }
     // Called when the command is initially scheduled.
@@ -46,9 +47,12 @@ public class QuickAim extends SequentialCommandGroup {
       ArmUtil.SetQuikShotMode(true);
       ArmUtil.UpdateParameters();
 
-      target = ArmUtil.getArmNeededPosition();
-      target.rotation = MathUtil.clamp(target.rotation, Units.rotationsToRadians(0.35), Units.rotationsToRadians(0.5));
-      arm.moveShooterToPose(target);
+      // Armtarget = ArmUtil.getArmNeededPosition();
+      // Armtarget.rotation = MathUtil.clamp(Armtarget.rotation, Units.rotationsToRadians(0.35), Units.rotationsToRadians(0.5));
+      // arm.moveShooterToPose(Armtarget);
+
+      target = MathUtil.clamp(ArmUtil.getArmAngle(), Units.rotationsToRadians(0.35), Units.rotationsToRadians(0.5));
+      arm.moveMotorsToRotation(0, Units.radiansToRotations(target));
 
       if(RobotContainer.driveController.L1().getAsBoolean()){
         RobotContainer.driveBase.isControlled = true;
