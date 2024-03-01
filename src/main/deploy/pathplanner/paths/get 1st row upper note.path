@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9571067811865475,
-        "y": 6.258043303886982
+        "x": 1.978804590633432,
+        "y": 6.279741113333866
       },
       "isLocked": true,
       "linkedName": "QuikShot auto position"
@@ -20,8 +20,8 @@
         "y": 6.7470807715152326
       },
       "prevControl": {
-        "x": 2.116623420954809,
-        "y": 6.1155964316234765
+        "x": 2.0283806616115356,
+        "y": 6.206743369264199
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,25 +30,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "Collect",
-      "waypointRelativePos": 0.5,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Collect"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
