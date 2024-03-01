@@ -17,11 +17,11 @@
     "Close Notes close shot",
     "Far Notes close shot",
     "FarShot",
+    "p2",
     "Yuvi p3",
-    "Yuvi p2",
-    "p1",
     "move out",
-    "only 1"
+    "only 1",
+    "p1"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
