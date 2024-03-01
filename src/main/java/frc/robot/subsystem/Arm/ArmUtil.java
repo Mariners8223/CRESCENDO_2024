@@ -87,6 +87,7 @@ public class ArmUtil{
     private static double CalcDz(){
       if(inputs.IsQuikShot){
         inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y);
+        // TODO: check if its better to do the calc with just minus 0.4 meters - the arm hieght
       }
       else{
         inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Constants.Arm.armHeightFromFrameMeters
@@ -106,8 +107,8 @@ public class ArmUtil{
       if (inputs.IsQuikShot) {//adds or subtracks the distance from the center of the robot to the shotter from the distance to the speaker
         inputs.distanceToSpeaker += Arm.getInstance().getShooterPosition().x;
       }
-      else inputs.distanceToSpeaker += Constants.Arm.mainPivotDistanceFromCenterMeters;
-      return inputs.distanceToSpeaker;
+      else inputs.distanceToSpeaker += Constants.Arm.mainPivotDistanceFromCenterMeters;// Constants.Speaker.AlphaShootOffset_distance;
+      return inputs.distanceToSpeaker;// TODO: check if the comment works
     }
 
     /**

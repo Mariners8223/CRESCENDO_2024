@@ -83,19 +83,25 @@ public class Constants {
     //     public static ArmPostion FastShootPose = new ArmPostion();
 
     public static final class Speaker{
-            public static final double FieldYLength = Units.inchesToMeters(323.00);
-            public static final double FieldXLength = 16.45;
+            public static final double FieldYLength = Units.inchesToMeters(323.00);//meter about 8.2
+            public static final double FieldXLength = 16.45;//meter
 
-            public static final double SpeakerLength = 1.05;
-            public static final double SpeakerMiddleLocationY = Units.inchesToMeters(218.42);
-            public static final double SpeakerBottomLocationY = Units.inchesToMeters(218.42) - SpeakerLength/2;
-            public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerMiddleLocationY));
-            public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;
-            public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);
-            public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
+            // FOR SOME REASON THIS IS ALSO IN ARM
+
+            // public static final double SpeakerLength = 1.1;//meter
+            // public static final double SpeakerMiddleLocationY = Units.inchesToMeters(218.42);//meter
+            // public static final double SpeakerBottomLocationY = Units.inchesToMeters(218.42) - SpeakerLength/2;//meter
+            // public static final double SpeakerIsCenterRatioReverse = 1 - SpeakerLength/(2*(FieldYLength - SpeakerMiddleLocationY));
+            // public static final double SpeakerCenterLocationX = Units.inchesToMeters(-1.5);// - 0.75;
+            // public static final double RatioFieldToSpeakerReverse = 1 - (SpeakerLength/FieldYLength);//meter
+            // public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
 
             public static Translation3d ampTranslation = new Translation3d(3, 8, 0);
             public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 2.03);//z = 2.03
+            //x is about 0.0381, y is about 5.547868 METER
+            //z may be 1.628768995 meter through calculations
+            public static final double AlphaShootOffset_distance = 0.618398323;//or just add this
+
     }
 
     public static final class Zone1{//DIS NOT TRUE
@@ -119,9 +125,9 @@ public class Constants {
         public static final double armHeightFromFrameMeters = 0.245;
         public static final double SecondaryMotorDistanceFromShooterMeters = 0.06;
     
-        public static final double SpeakerLength = 1.10;//done
-        public static final double SpeakerBottomLocationY = 5.00;//done
-        public static final double SpeakerMidlleLocationY = 5.55;//done
+        public static final double SpeakerLength = 1.10;//meter
+        public static final double SpeakerBottomLocationY = 5.00;//meter
+        public static final double SpeakerMidlleLocationY = 5.55;//meter
         public static final double FieldYLength = Units.inchesToMeters(323.00);//a little more or a little less than 8.2 meters
         public static final double SpeakerIsCenterRatio = 11.0/53.0;//SpeakerLength/(2*(FieldYLength - SpeakerMidlleLocationY));
         public static final double SpeakerIsCenterRatioBottomLocation = 2.9;//FieldYLength - 2*(FieldYLength - SpeakerMidlleLocationY);
