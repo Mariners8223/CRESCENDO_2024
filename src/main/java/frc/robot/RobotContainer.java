@@ -153,7 +153,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
     NamedCommands.registerCommand("MoveToAlpha", new MoveToAlphaPose_close());
     NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
-    
+
     NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
      {Arm.getInstance().getShooterSub().setShooterPower(0.5); Arm.getInstance().getIntakeSub().setMotor(0.8);}));
     NamedCommands.registerCommand("Stop Intake and Shoter motors",  new InstantCommand(() ->
