@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.842988609054142,
+        "x": 5.1128348410542985,
         "y": 6.837791367890429
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.6160489244055425,
-        "y": 6.82792442507962
+        "x": 7.021701198016685,
+        "y": 5.725261896041185
       },
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "amp shooting pose"
     },
     {
       "anchor": {
-        "x": 5.1128348410542985,
-        "y": 6.837791367890429
+        "x": 8.012618136505887,
+        "y": 4.403274541213847
       },
       "prevControl": {
-        "x": 5.3799721817547095,
-        "y": 6.837791367890429
+        "x": 7.567606347766189,
+        "y": 5.000527205048703
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "amp shooting pose"
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -38,12 +38,12 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0,
-    "rotateFast": false
+    "velocity": 0.0,
+    "rotation": -45.0,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Shotting positions",
+  "folder": "Connectors",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
