@@ -1,0 +1,87 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.0,
+      "y": 2
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "get middle notes_bottom"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "IntakeToFloor"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Start Intake and Shoter motors"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "get middle notes_bottom"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Collect from Lowest Middle LowerMiddle"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Collect from lower Middle MiddleNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Collect from MiddleNote Upper Middle"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Collect from Upper Middle Uppest"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Intake and Shoter motors"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "p4",
+  "choreoAuto": false
+}

@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 5.1128348410542985,
+        "x": 4.487656336225653,
         "y": 6.837791367890429
       },
       "prevControl": {
-        "x": 5.3799721817547095,
+        "x": 4.754793676926064,
         "y": 6.837791367890429
       },
       "nextControl": null,
@@ -46,7 +46,7 @@
   "folder": "Shotting positions",
   "previewStartingState": {
     "rotation": 0,
-    "velocity": 0
+    "velocity": 2.0
   },
   "useDefaultConstraints": true
 }

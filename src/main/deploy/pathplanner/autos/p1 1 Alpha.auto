@@ -1,20 +1,26 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.7284778050297884,
+      "y": 6.604911811820771
+    },
+    "rotation": -120.0
+  },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Collect and Shoot Upper"
+            "name": "MoveToAlpha"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Shoot Upper Note To AMP"
+            "name": "Shoot"
           }
         }
       ]

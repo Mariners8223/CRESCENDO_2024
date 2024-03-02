@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7636103146671328,
-      "y": 6.581490138729208
+      "x": 0.7518994781213513,
+      "y": 4.520382906671662
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Front 3rd note"
+                  "pathName": "Middle 1st note"
                 }
               },
               {
@@ -45,7 +45,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "near speaker"
+            "pathName": "go shoot lower"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "QuikAim"
           }
         },
         {
@@ -61,7 +67,26 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle 5th note"
+                  "pathName": "Lower pickup 2nd"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeToFloor"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle 2nd note"
                 }
               },
               {
@@ -76,7 +101,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "go shoot high"
+            "pathName": "Lower to Lower shooting pose"
           }
         },
         {
@@ -94,6 +119,6 @@
       ]
     }
   },
-  "folder": "p1",
+  "folder": "p3",
   "choreoAuto": false
 }
