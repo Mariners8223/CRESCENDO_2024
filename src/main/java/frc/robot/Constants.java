@@ -324,15 +324,15 @@ public class Constants {
             public static final double minVelocity = 0.1; //the min velocity of the modules steer aspect in module rotation per minute
             public static final double maxAcceleration = 1; //the max acceleration of the modules steer apsect in module rotations per minute per second
 
-            // public static final double front_left_absoluteEncoderZeroOffset = -100.458984375; // the offset between the absolute encoder reading on the front left module, in degrees
-            // public static final double front_right_absoluteEncoderZeroOffset = -92.197265625; // the offset between the absolute encoder on the front left module, in degrees
-            // public static final double back_left_absoluteEncoderZeroOffset = 94.39453125; // the offset between the absolute encoder on the back left module, in degrees
-            // public static final double back_right_absoluteEncoderZeroOffset = 92.900390625; // the offset between the absolute encoder on the back right module, in degrees
+            public static final double front_left_absoluteEncoderZeroOffset = 212.8; // the offset between the absolute encoder reading on the front left module, in degrees
+            public static final double front_right_absoluteEncoderZeroOffset = 106.3; // the offset between the absolute encoder on the front left module, in degrees
+            public static final double back_left_absoluteEncoderZeroOffset = 320.2; // the offset between the absolute encoder on the back left module, in degrees
+            public static final double back_right_absoluteEncoderZeroOffset = 205; // the offset between the absolute encoder on the back right module, in degrees
 
-            public static final double front_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
-            public static final double front_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
-            public static final double back_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
-            public static final double back_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
+            // public static final double front_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
+            // public static final double front_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
+            // public static final double back_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
+            // public static final double back_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
 
         }
 
@@ -382,13 +382,13 @@ public class Constants {
             }
         }
 
-        public static final SwerveModule front_left = new SwerveModule(ModuleName.Front_Left, 2, 3, 10, Steer.front_left_absoluteEncoderZeroOffset, false, false, true);
+        public static final SwerveModule front_left = new SwerveModule(ModuleName.Front_Left, 2, 3, 3, Steer.front_left_absoluteEncoderZeroOffset, false, false, true);
         //^the constants of the front left module
-        public static final SwerveModule front_right = new SwerveModule(ModuleName.Front_Right, 4, 5, 11, Steer.front_right_absoluteEncoderZeroOffset, false, false, true);
+        public static final SwerveModule front_right = new SwerveModule(ModuleName.Front_Right, 4, 5, 0, Steer.front_right_absoluteEncoderZeroOffset, false, false, true);
         //^the constants of the front right module
-        public static final SwerveModule back_left = new SwerveModule(ModuleName.Back_Left, 6, 7, 12, Steer.back_left_absoluteEncoderZeroOffset, false, false, true);
+        public static final SwerveModule back_left = new SwerveModule(ModuleName.Back_Left, 6, 7, 1, Steer.back_left_absoluteEncoderZeroOffset, false, false, true);
         //^the constants of the back left module
-        public static final SwerveModule back_right = new SwerveModule(ModuleName.Back_Right, 8, 9, 13, Steer.back_right_absoluteEncoderZeroOffset, false, false, true);
+        public static final SwerveModule back_right = new SwerveModule(ModuleName.Back_Right, 8, 9, 2, Steer.back_right_absoluteEncoderZeroOffset, false, false, true);
         //^the constants of the back right module
         
     }
