@@ -44,6 +44,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Start Intake and Shoter motors"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "get middle notes_bottom"
