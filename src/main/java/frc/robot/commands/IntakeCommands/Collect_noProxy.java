@@ -43,6 +43,6 @@ public class Collect_noProxy extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer >= 30; //check if we can use current to detect it
+    return false; 
   }
 }

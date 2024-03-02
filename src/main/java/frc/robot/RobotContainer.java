@@ -88,37 +88,15 @@ public class RobotContainer {
     var Aim = new QuickAim();
     var collect = new Collect();
     armController.cross().onTrue(new IntakeToFloor());
-    armController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
+    armController.circle().onTrue(collect);
     armController.square().onTrue(new ShootToAmp());
     armController.triangle().onTrue(new Shoot());
-    //drive
     armController.povLeft().onTrue(new MoveToAlphaPose_close());
 
-    
-
     armController.povDown().onTrue(new MoveToHome());
-    //drive
     armController.L1().onTrue(new RollOut());
     armController.R1().onTrue(new MiniShoot());
     armController.povUp().onTrue(new MoveToStow());
-
-    driveController.cross().onTrue(new ClimbSequence());
-    // armController.R1().onTrue(new ShootToAmp());
-    // armController.L1().onTrue(new MiniShoot());
-
-    // driveController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
-    // driveController.circle().onTrue(new Collect());
-    // driveController.square().onTrue(Aim);  
-    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> {Aim.cancel();
-    //    RobotContainer.driveBase.isControlled = false;}));//shoot now disables the control on the chassis
-    // driveController.cross().onTrue(new IntakeToFloor());
-    // driveController.povDown().onTrue(new MoveToHome());
-    // driveController.R1().onTrue(new ShootToAmp());
-    // driveController.L1().onTrue(new MiniShoot());
-    // driveController.circle().onTrue(new Collect());
-    // driveController.square().onTrue(Aim);
-    // driveController.triangle().onTrue(new Shoot()).onFalse(new InstantCommand(() -> { Aim.cancel(); driveBase.isControlled = false;}));
-
   }
 
   private void configChooser(){

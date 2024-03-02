@@ -23,7 +23,7 @@ public class ShootToAmp extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Unknown),
-      new MoveToAmp().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Amp)
+      new SequentialCommandGroup(new MoveToAmp(true), new MoveToAmp(false)).onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Amp)
     );
   }
 
@@ -67,16 +67,21 @@ public class ShootToAmp extends SequentialCommandGroup {
 
   private static class MoveToAmp extends Command {
     Arm arm;
+    boolean isMain;
 
-    public MoveToAmp() {
+    public MoveToAmp(boolean isMain) {
       arm = Arm.getInstance();
+      this.isMain = isMain;
 
       addRequirements(arm);
     }
 
     @Override
     public void initialize(){
-      arm.moveMotorsToRotation(0.3, 0.33);
+      if(this.isMain){
+      arm.moveMotorsToRotation(0.3, arm.getSecondaryMotorRotation());
+      }
+      else arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.33);
     }
 
     @Override
