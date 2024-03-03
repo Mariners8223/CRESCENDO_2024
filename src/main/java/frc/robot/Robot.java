@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystem.Arm.Arm;
@@ -45,18 +46,23 @@ public class Robot extends LoggedRobot {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     ArmUtil.UpdateParameters();
-    // SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
+    SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
     // SmartDashboard.putNumber("Robot (chassis) angle", Units.radiansToDegrees(ArmUtil.getChassisAngle()));
+    SmartDashboard.putNumber("zone 1 angle", Units.radiansToDegrees(ArmUtil.getZone1()));
+    SmartDashboard.putNumber("zone 2 angle", Units.radiansToDegrees(ArmUtil.getZone2()));
+    SmartDashboard.putNumber("diff between zone 1 and 2", Units.radiansToDegrees(ArmUtil.getZone2() - ArmUtil.getZone1()));
     // SmartDashboard.putNumber("dx", ArmUtil.getDx());
     // SmartDashboard.putNumber("dy", ArmUtil.getDy());
     // SmartDashboard.putNumber("dz", ArmUtil.getDz());
-    SmartDashboard.putBoolean("is zone 1", ArmUtil.isZone1());
+    SmartDashboard.putBoolean("is in zone 1", ArmUtil.isZone1());
     SmartDashboard.putBoolean("is arm in position", Arm.getInstance().isArmInPosition());
-    SmartDashboard.putNumber("angle to ring", RobotContainer.vision.getAngleToObjects(CameraLocation.Front_Arm)[0]);
-    SmartDashboard.putNumber("Chassis angle", RobotContainer.driveBase.getAngle());
+    // SmartDashboard.putNumber("distance to speaker", ArmUtil.get)
+    // SmartDashboard.putNumber("arm x", Arm.getInstance().getShooterPosition().x);
+    // SmartDashboard.putNumber("angle to ring", RobotContainer.vision.getAngleToObjects(CameraLocation.Front_Arm)[0]);
+    // SmartDashboard.putNumber("Chassis angle", RobotContainer.driveBase.getAngle());
     // SmartDashboard.putNumber("ArmPose z", Arm.getInstance().getShooterPosition().y);
     // // SmartDashboard.putNumber("armX", Arm.getInstance().getShooterPosition().x);
-    // SmartDashboard.putNumber("wanted speed", Units.radiansPerSecondToRotationsPerMinute(ArmUtil.getWantedSpeed() / Constants.Shooter.wheelRadius));
+    SmartDashboard.putNumber("wanted speed", Units.radiansPerSecondToRotationsPerMinute(ArmUtil.getWantedSpeed() / Constants.Shooter.wheelRadius));
     // // Constants.Shooter.frictionPowerParameterForGPVelocity = SmartDashboard.getNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
     // SmartDashboard.putNumber("angle to gp", RobotContainer.vision.getAngleToBestObject(CameraLocation.Front_Right));
     // SmartDashboard.putNumber("distance to gp", RobotContainer.vision.getDistanceToBestObject(CameraLocation.Front_Right));

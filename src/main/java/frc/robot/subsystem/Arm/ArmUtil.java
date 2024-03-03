@@ -29,14 +29,14 @@ public class ArmUtil{
     double distanceToSpeaker;//self explanatory
     double ArmAngle = 45;//the angle in which the arm shell be
     boolean IsDeadZone;//is this a dead zone???
-    boolean IsQuikShot = true;//are we using quik shot????
+    boolean IsQuikShot;//are we using quik shot????
     //chassis parameters
     double YaxisWantedAngle;//the angle in which we want the gp to fly in
     double YaxisOffset;//oh no! speed affects our vector, lets calc the offset!
     double ChassisAngle;//the final angle that the robot will face
     double VelocityY;//field relative
     double VelocityX;//field relative
-    boolean isResetNeeded = true;
+    boolean isResetNeeded;
     boolean isZone1;
     double WantedVelocity;
 
@@ -102,12 +102,12 @@ public class ArmUtil{
      * @return returns the arial distance between the robot and the speaker
      */
     private static double CalcDistance_withDxDy(double Dy, double Dx){
-      inputs.distanceToSpeaker = Math.hypot(Dx, Dy);
+      inputs.distanceToSpeaker = Math.sqrt(Math.pow(Dx, 2) + Math.pow(Dy, 2));
 
       if (inputs.IsQuikShot) {//adds or subtracks the distance from the center of the robot to the shotter from the distance to the speaker
-        inputs.distanceToSpeaker += Arm.getInstance().getShooterPosition().x;
+        inputs.distanceToSpeaker += Math.abs(Arm.getInstance().getShooterPosition().x);
       }
-      else inputs.distanceToSpeaker += Constants.Arm.mainPivotDistanceFromCenterMeters;// Constants.Speaker.AlphaShootOffset_distance;
+      // else inputs.distanceToSpeaker += Constants.Arm.mainPivotDistanceFromCenterMeters;// Constants.Speaker.AlphaShootOffset_distance;
       return inputs.distanceToSpeaker;// TODO: check if the comment works
     }
 
@@ -165,6 +165,7 @@ public class ArmUtil{
       }
       else inputs.YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);
       if (inputs.IsQuikShot) inputs.YaxisWantedAngle = Units.degreesToRadians(180) - inputs.YaxisWantedAngle;
+      else inputs.YaxisWantedAngle = -inputs.YaxisWantedAngle;
       return inputs.YaxisWantedAngle;
     }
 
@@ -318,11 +319,11 @@ public class ArmUtil{
       inputs.Dy = calcDy();
       inputs.Dz = CalcDz();
 
-      inputs.distanceToSpeaker = CalcDistance_withDxDy(inputs.Dy, inputs.Dy);
+      inputs.distanceToSpeaker = CalcDistance_withDxDy(inputs.Dy, inputs.Dx);
 
-      if (inputs.isZone1 != (inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1)) {
-        inputs.isResetNeeded = true;
-      }
+      // if (inputs.isZone1 != (inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1)) {
+      //   inputs.isResetNeeded = true;
+      // }
       inputs.isZone1 = inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1;
 
       inputs.WantedVelocity = CalcWantedSpeed(inputs.distanceToSpeaker);
@@ -433,6 +434,14 @@ public class ArmUtil{
     public static boolean isZone1(){
       return inputs.isZone1;
     }
+
+    /**
+     * return if the robot is in quick shot mode
+     */
+    public static boolean isQuickShot(){
+      return inputs.IsQuikShot;
+    }
+
     //ZONESSSS
     public static enum ArmZones{
       ShootingZone,
@@ -497,5 +506,19 @@ public class ArmUtil{
     public static double getWantedVelocity_ToAmp(){
       CalcAimToAmp();
       return inputs.v;
+    }
+
+    /**
+     * returns the arm angle if it in was zone 1
+     */
+    public static double getZone1(){
+      return Zone1_Equasion(inputs.Dz, inputs.distanceToSpeaker);
+    }
+
+    /**
+     * returns the arm angle if it in was zone 2
+     */
+    public static double getZone2(){
+      return Zone2_Equasion(inputs.StartSpeed, inputs.Dz, inputs.distanceToSpeaker);
     }
   }

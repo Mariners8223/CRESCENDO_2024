@@ -9,6 +9,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
@@ -31,10 +32,10 @@ public class AimShooter extends InstantCommand {
     ArmUtil.SetQuikShotMode(false);
     ArmUtil.UpdateParameters();
     // arm.moveShooterToPose(ArmUtil.getArmNeededPosition());
-    target = MathUtil.clamp(ArmUtil.getArmAngle(), Units.degreesToRadians(20), Units.degreesToRadians(65));
-    arm.moveMotorsToRotation(Units.radiansToRotations(target - 0.05), 0.05);
+    target = MathUtil.clamp(ArmUtil.getArmAngle(), Units.degreesToRadians(20), Units.degreesToRadians(80));
+    arm.moveMotorsToRotation(Units.radiansToRotations(target + Constants.Arm.Motors.secondarySoftLimits[1]), Constants.Arm.Motors.secondarySoftLimits[1]);
 
-    if(RobotContainer.driveController.L1().getAsBoolean()){
+    if(RobotContainer.driveController.R1().getAsBoolean()){
       RobotContainer.driveBase.isControlled = true;
       RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()), false);
     }

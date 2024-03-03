@@ -50,23 +50,26 @@ public class Shoot extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    // Timer.delay(0.1);
     // if(interrupted) return;
     // Timer.delay(0.1);
 
     arm.getIntakeSub().setMotor(1);
-    Timer.delay(0.4);
+    Timer.delay(0.6);
 
     arm.getIntakeSub().stopMotor();
     arm.getShooterSub().stopMotors();
 
     //just in case, ends the control of aim
     RobotContainer.driveBase.isControlled = false;
+
+    RobotContainer.aimCommand.cancel();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.getShooterSub().isAtSelctedVelocity();
+    return arm.getShooterSub().isAtSelctedVelocity() && timer > 40;
     // return timer >= 20;
   }
 }

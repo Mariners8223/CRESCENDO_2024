@@ -11,6 +11,9 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ShooterCommands.AimShooter;
 import frc.robot.commands.ShooterCommands.RegularShootingPosition;
+import frc.robot.commands.armCommands.MoveToHome;
+import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -22,10 +25,9 @@ public class AimRegularToSpeaker extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     
-  addCommands(
-  new RegularShootingPosition(),//moves to free within
-  new InstantCommand(() -> RobotContainer.arm.getShooterSub().setShooterPower(Constants.Arm.ShootingPowerToSpeaker)),
-  new RepeatCommand(Aim)
-  );
+    addCommands(
+      new MoveToHome().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Home),//moves to free within
+      new RepeatCommand(Aim)
+    );
   }
 }

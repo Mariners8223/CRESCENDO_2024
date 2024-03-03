@@ -36,7 +36,7 @@ public class AimToRing extends SequentialCommandGroup {
       new ParallelRaceGroup(
         new AimToRing2(),
         new Collect()
-      )
+      ).onlyIf(() -> RobotContainer.vision.hasTarget(CameraLocation.Front_Arm))
       );
   }
 

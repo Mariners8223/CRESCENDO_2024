@@ -160,13 +160,13 @@ public class Constants {
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = false;
 
-            public static final double mainZeroOffset = 0.4647;
+            public static final double mainZeroOffset = 0.7092497 - 0.25;//0.4647;
             public static final double secondaryZeroOffset = 0.24099403619766235 + 0.5;
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 
             public static final double[] mainSoftLimits = new double[]{0.3206787109375, -0.03125};//was 0.35, -0.04 // 0.3206787109375
-            public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.03};
+            public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.007};
 
             public static final double[] mainMaxOutputs = new double[]{0.15, -0.05};
             public static final double[] secondaryMaxOutputs = new double[]{0.2, -0.1};
@@ -183,8 +183,8 @@ public class Constants {
         public static final int shooterMotor1ID = 19;
         public static final int shooterMotor2ID = 18;
 
-        public static final PIDFGains shooter2PID = new PIDFGains(0.001, 0, 0.0005, 0.00015, 0, 0); //TODO: get the real value
-        public static final PIDFGains shooter1PID = new PIDFGains(0.001, 0, 0.001, 0.00015, 0.0, 0);
+        public static final PIDFGains shooter2PID = new PIDFGains(0.0007, 0, 0, 0.00018, 0, 0); //TODO: get the real value
+        public static final PIDFGains shooter1PID = new PIDFGains(0.0007, 0, 0, 0.00018, 0.0, 0);
 
         public static final boolean shooter1Inverted = true;
         public static final boolean shooter2Inverted = false;
@@ -195,12 +195,13 @@ public class Constants {
 
         public static double frictionPowerParameterForGPVelocity = 0.6;//get from exp
 
+
         public static final double ShootToAmpPower = 0.4;
         public static final double ShootToAmpTime = 2;
         // public static final double RPMforShooterZone1 = 4000;
         // public static final double RPMforShooterZone2 = 5000;
         public static double GPAirTimeZone1 = 0.105;
-        public static double GPAirTimeZone2 = 0.22;
+        public static double GPAirTimeZone2 = 0.15;
     }
 
     public static final class Intake{

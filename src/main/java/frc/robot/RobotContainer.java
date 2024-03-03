@@ -27,6 +27,7 @@ import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
 import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
+import frc.robot.commands.ShooterCommands.AimShooter;
 import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
@@ -34,6 +35,7 @@ import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.commands.armCommands.MoveToStow;
 import frc.robot.commands.autonomous.ShootNote;
+import frc.robot.commands.sequences.AimRegularToSpeaker;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.commands.sequences.ShootToAmp.MiniShoot;
 import frc.robot.subsystem.Arm.Arm;
@@ -47,6 +49,8 @@ public class RobotContainer {
 
   public static CommandPS5Controller driveController;
   public static CommandPS5Controller armController;
+
+  public static Command aimCommand;
   // public static CommandXboxController tempController;
 
   // public static SendableChooser<Command> autoChooser;
@@ -90,8 +94,12 @@ public class RobotContainer {
     // driveController.cross().onTrue(ringAim).onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; }));
     driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
     
-    var Aim = new QuickAim();
+    aimCommand = new AimRegularToSpeaker();
     var collect = new Collect();
+
+    driveController.square().onTrue(aimCommand);
+    driveController.triangle().onTrue(new Shoot());
+
     armController.cross().onTrue(new IntakeToFloor());
     armController.circle().onTrue(collect);
     armController.square().onTrue(new ShootToAmp());

@@ -10,11 +10,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
+import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 
 public class MoveToHome extends SequentialCommandGroup {
 
   public MoveToHome(){
     addCommands(
+      new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Free),
       new MoveToHome1(),
       new MoveToHome2()
     );
