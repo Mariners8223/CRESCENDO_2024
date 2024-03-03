@@ -57,9 +57,12 @@ public class AimToRing extends SequentialCommandGroup {
     public void execute() {
       angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
 
-      if(angleToRing == -1000) cancel();
-
-      driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
+      if(angleToRing == -1000){
+        RobotContainer.driveBase.isControlled = false;
+        cancel();
+      }
+      else
+        driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
 
       // RobotContainer.driveBase.drive(
       //   -RobotContainer.calculateJoyStickDeadBand(controller.getLeftY()) *

@@ -87,7 +87,7 @@ public class RobotContainer {
 
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
-    driveController.L1().onTrue(ringAim).onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; }));
+    driveController.cross().onTrue(ringAim).onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; }));
     
     var Aim = new QuickAim();
     var collect = new Collect();

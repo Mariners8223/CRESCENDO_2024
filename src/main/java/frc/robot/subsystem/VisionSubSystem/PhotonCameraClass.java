@@ -170,7 +170,8 @@ public class PhotonCameraClass implements CameraInterface{
         inputs.latency = 0;
         inputs.estimatedPose = Constants.Vision.rubbishPose;
         inputs.poseConfidence = 0;
-        inputs.angleToObjects = Constants.Vision.rubbishAngle;
+        // inputs.angleToObjects = Constants.Vision.rubbishAngle;
+        inputs.angleToObjects[0] = -1000;
         inputs.distanceTobject = Constants.Vision.rubbishDistance;
         Logger.processInputs(inputs.cameraName, inputs);
         return;
