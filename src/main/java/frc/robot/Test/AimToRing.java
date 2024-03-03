@@ -9,11 +9,13 @@ import com.pathplanner.lib.util.GeometryUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
@@ -30,8 +32,12 @@ public class AimToRing extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       // new IntakeToFloor().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake),
-      new RepeatCommand(new AimToRing1())
-    );
+      new AimToRing1(),
+      new ParallelRaceGroup(
+        new AimToRing2(),
+        new Collect()
+      )
+      );
   }
 
   public static class AimToRing1 extends Command {
@@ -86,4 +92,47 @@ public class AimToRing extends SequentialCommandGroup {
       return angleToRing <= Constants.Vision.aimToRingToleranceDegrees;
     }
   }
+
+  public static class AimToRing2 extends Command{
+    DriveBase driveBase;
+    CommandPS5Controller controller;
+    Vision vision;
+    double angleToRing;
+
+    public AimToRing2(){
+      driveBase = RobotContainer.driveBase;
+      vision = RobotContainer.vision;
+      controller = RobotContainer.driveController;
+
+      addRequirements(driveBase);
+    }
+
+    @Override
+    public void initialize(){
+      driveBase.isControlled = true;
+    }
+
+    @Override
+    public void execute() {
+      angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
+
+      if(angleToRing == -1000){
+      }
+      else
+        driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
+
+      driveBase.robotRelativeDrive(1, 0, 0);
+    }
+
+    @Override
+    public void end(boolean interrupt) {
+      driveBase.isControlled = false;
+      driveBase.drive(0, 0, 0);
+    }
+
+    @Override
+    public boolean isFinished() {
+      return Arm.getInstance().getIntakeSub().isGamePieceDetected();
+    }
+} 
 }

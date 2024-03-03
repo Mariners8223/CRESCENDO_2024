@@ -173,7 +173,7 @@ public class PhotonCameraClass implements CameraInterface{
         // inputs.angleToObjects = Constants.Vision.rubbishAngle;
         inputs.angleToObjects[0] = -1000;
         inputs.distanceTobject = Constants.Vision.rubbishDistance;
-        Logger.processInputs(inputs.cameraName, inputs);
+        Logger.processInputs(inputs.cameraName + " camera", inputs);
         return;
       }
 
@@ -219,7 +219,7 @@ public class PhotonCameraClass implements CameraInterface{
         // }
       }
 
-      Logger.processInputs(inputs.cameraName, inputs);
+      Logger.processInputs(inputs.cameraName + " camera", inputs);
     }
 
     private void calculateDistanceAndAngleFromOffset(double distance, double angle, int index){

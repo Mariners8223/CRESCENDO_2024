@@ -31,7 +31,7 @@ public class Shoot extends Command {
     //   return;
     // }
 
-    arm.getShooterSub().setShooterRPM(4500);;
+    arm.getShooterSub().setShooterRPM(4000);;
     timer = 0;
     // if(ArmUtil.getDx() <= Constants.Arm.EndOfZone1)
 

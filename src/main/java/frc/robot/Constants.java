@@ -396,48 +396,48 @@ public class Constants {
 
     private static Transform3d[][] createCameraTransforms(){
         return new Transform3d[][]{
-                {new Transform3d( // back-right camera 
-                0.3,
-                0.35,
-                0.26,
+                {new Transform3d( // back right
+                -0.3,
+                -0.335,
+                0.13,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(30),
-                Math.PI + Units.degreesToRadians(38))),
+                Units.degreesToRadians(-30),
+                Units.degreesToRadians(-16) + Math.PI)), // 16 + pi
 
-                new Transform3d( // front-left camera
-                0.4,
-                0.34,
-                0.26,
+                new Transform3d( // back right
+                -0.3,
+                -0.35,
+                0.13,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(30),
-                Units.degreesToRadians(15)
-                )
-                )},
+                Units.degreesToRadians(-30),
+                Math.PI + Units.degreesToRadians(16)))},
 
                 {
-                new Transform3d( // front-arm camera
-                0,
-                0,
-                0,
+                new Transform3d( // front LEFT
+                0.295,
+                0.33,
+                0.13,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(0),
-                Units.degreesToRadians(0))),
+                Units.degreesToRadians(-30),
+                Units.degreesToRadians(-15)
+                )),
                 
-                new Transform3d( //camera 2 aprilTag postion
-                0.45,
-                0.33
-                ,0.18,
+                new Transform3d( // front-left camera
+                0.295,
+                0.33,
+                0.13,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(18),
-                Units.degreesToRadians(-30)))
+                Units.degreesToRadians(-30),
+                Units.degreesToRadians(-15)
+                ))
                 },
                 
                 {
-                new Transform3d( //camera 3 aprilTag postion
+                new Transform3d( //Arm camera
                 0.35,
                 -0.35,
                 0.15,

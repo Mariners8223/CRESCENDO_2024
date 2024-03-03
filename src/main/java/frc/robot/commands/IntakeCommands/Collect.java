@@ -59,7 +59,7 @@ public class Collect extends SequentialCommandGroup{
       intake.stopMotor();
     }
     else {
-      intake.setPosition(intake.getMotorPosition() + 3);
+      intake.setPosition(intake.getMotorPosition() + 8);
     }
   }
 
