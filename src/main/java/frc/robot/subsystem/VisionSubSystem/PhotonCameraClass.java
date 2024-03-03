@@ -195,10 +195,11 @@ public class PhotonCameraClass implements CameraInterface{
       }
       else{
 
-        calculateDistanceAndAngleFromOffset(
-        PhotonUtils.calculateDistanceToTargetMeters(cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight, cameraToRobot[1].getRotation().getY(), Units.degreesToRadians(latestResult.getBestTarget().getPitch())),
-        Units.degreesToRadians(latestResult.getBestTarget().getYaw()), 0);
+        // calculateDistanceAndAngleFromOffset(
+        // PhotonUtils.calculateDistanceToTargetMeters(cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight, cameraToRobot[1].getRotation().getY(), Units.degreesToRadians(latestResult.getBestTarget().getPitch())),
+        // Units.degreesToRadians(latestResult.getBestTarget().getYaw()), 0);
         
+        inputs.angleToObjects[0] = latestResult.getBestTarget().getYaw();
 
         // inputs.distanceTobject[0] =  PhotonUtils.calculateDistanceToTargetMeters(
         // cameraToRobot[1].getZ(), Constants.Vision.gamePieceHeight, cameraToRobot[1].getRotation().getY(), target.getPitch());

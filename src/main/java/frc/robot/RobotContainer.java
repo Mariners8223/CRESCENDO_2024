@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Test.AimToRing;
 import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
@@ -68,7 +69,7 @@ public class RobotContainer {
 
     driveBase = new DriveBase();
     arm = Arm.getInstance();
-    // vision = new Vision();
+    vision = new Vision();
 
     // arm.setDefaultCommand(new QuikAim());
     configureNamedCommands();
@@ -82,8 +83,11 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    var ringAim = new AimToRing();
+
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
+    driveController.L1().onTrue(ringAim).onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; }));
     
     var Aim = new QuickAim();
     var collect = new Collect();

@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
+import frc.robot.subsystem.VisionSubSystem.Vision;
+import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
+import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraMode;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
@@ -49,6 +52,8 @@ public class Robot extends LoggedRobot {
     // SmartDashboard.putNumber("dz", ArmUtil.getDz());
     SmartDashboard.putBoolean("is zone 1", ArmUtil.isZone1());
     SmartDashboard.putBoolean("is arm in position", Arm.getInstance().isArmInPosition());
+    SmartDashboard.putNumber("angle to ring", RobotContainer.vision.getAngleToObjects(CameraLocation.Front_Arm)[0]);
+    SmartDashboard.putNumber("Chassis angle", RobotContainer.driveBase.getAngle());
     // SmartDashboard.putNumber("ArmPose z", Arm.getInstance().getShooterPosition().y);
     // // SmartDashboard.putNumber("armX", Arm.getInstance().getShooterPosition().x);
     // SmartDashboard.putNumber("wanted speed", Units.radiansPerSecondToRotationsPerMinute(ArmUtil.getWantedSpeed() / Constants.Shooter.wheelRadius));

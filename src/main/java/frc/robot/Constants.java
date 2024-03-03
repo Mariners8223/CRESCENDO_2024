@@ -61,7 +61,7 @@ public class Constants {
         public static final PIDFGains aimToRingPID = new PIDFGains(0.5, 0, 0, 0, 0, 0);
         public static final double aimToRingToleranceDegrees = 2;
 
-        public static final int numberOfCameras = 2;
+        public static final int numberOfCameras = 3;
 
             public static final Transform3d[][] cameraLocations = Constants.createCameraTransforms();
 
@@ -213,7 +213,7 @@ public class Constants {
         public static final int MaxStallTime = 30;
 
         public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
-        public static final int CloseProximity = 30;
+        public static final int CloseProximity = 40;
 
         public static final double secondaryIntakeAngle = 0.405;
         public static final double mainIntakeAngle = -0.029;
@@ -396,35 +396,35 @@ public class Constants {
 
     private static Transform3d[][] createCameraTransforms(){
         return new Transform3d[][]{
-                {new Transform3d( //camera 1 aprilTag postion
-                -0.27,
-                -0.13,
-                0.06,
+                {new Transform3d( // back-right camera 
+                0,
+                0,
+                0,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(19),
+                Units.degreesToRadians(0),
                 Math.PI)),
 
-                new Transform3d( //camera 1 ring postion
-                -0.27,
-                -0.13,
-                0.06,
+                new Transform3d( // front-left camera
+                0,
+                0,
+                0,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(-14),
-                Math.PI
+                Units.degreesToRadians(0),
+                0
                 )
                 )},
 
                 {
-                new Transform3d( //camera 2 aprilTag postion
-                0.45,
-                0.33
-                ,0.18,
+                new Transform3d( // front-arm camera
+                0,
+                0,
+                0,
                 new Rotation3d(
                 0,
-                Units.degreesToRadians(18),
-                Units.degreesToRadians(-30))),
+                Units.degreesToRadians(0),
+                Units.degreesToRadians(0))),
                 
                 new Transform3d( //camera 2 aprilTag postion
                 0.45,

@@ -5,7 +5,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Intake.Intake;
 import frc.robot.Constants;
@@ -13,9 +12,9 @@ import frc.robot.Constants;
 public class Collect extends SequentialCommandGroup{
 
   public Collect(){
-    addCommands(new Collect1(),
-    new WaitCommand(0.25)
-    ,new Collect2()
+    addCommands(new Collect1()
+    // new WaitCommand(0.25)
+    // ,new Collect2()
     );
   }
 
@@ -23,7 +22,7 @@ public class Collect extends SequentialCommandGroup{
   private static class Collect1 extends Command{
 
   private Intake intake;
-  private int timer;
+  private int stallTimer;
   private boolean wasGamePieceDetected;
 
   public Collect1(){
@@ -35,7 +34,7 @@ public class Collect extends SequentialCommandGroup{
   @Override
   public void initialize(){
     wasGamePieceDetected = intake.isGamePieceDetected();
-    timer = 0;
+    stallTimer = 0;
 
     if(!wasGamePieceDetected)
       intake.setMotor(Constants.Intake.intakeMotorSpeed);
@@ -48,8 +47,8 @@ public class Collect extends SequentialCommandGroup{
   @Override
   public void execute(){
     // Check if Motors are in stall for too much time
-    if (intake.getCurrent() > Constants.Intake.StallCurrent) timer++;
-    else timer = 0;
+    if (intake.getCurrent() > Constants.Intake.StallCurrent) stallTimer++;
+    else stallTimer = 0;
   }
 
   @Override
@@ -60,19 +59,13 @@ public class Collect extends SequentialCommandGroup{
       intake.stopMotor();
     }
     else {
-      intake.setPosition(intake.getMotorPosition() + 7);
+      intake.setPosition(intake.getMotorPosition() + 3);
     }
-
-    // if (timer >= Constants.Intake.MaxStallTime){
-    //     intake.setMotor(-0.3);
-    //     Timer.delay(2);
-    //     intake.stopMotor();
-    // }
   }
 
   @Override
   public boolean isFinished(){
-    return timer >= Constants.Intake.MaxStallTime || wasGamePieceDetected != intake.isGamePieceDetected();
+    return stallTimer >= Constants.Intake.MaxStallTime || wasGamePieceDetected != intake.isGamePieceDetected();
   }
 
 }

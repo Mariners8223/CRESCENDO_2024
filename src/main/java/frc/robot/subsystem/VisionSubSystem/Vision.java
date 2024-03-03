@@ -24,9 +24,9 @@ public class Vision extends SubsystemBase {
    * creates a new Vision subsystem with 4 cameras
    */
   public Vision() {
-    cameras[0] = new PhotonCameraClass("back", CameraLocation.Back, 0, false, Constants.Vision.cameraLocations[0]);
-    // cameras[1] = new LimeLightClass("limelight", CameraLocation.Front_Right, Constants.Vision.cameraLocations[1]);
-    // cameras[1] = new PhotonCameraClass("front-right", CameraLocation.Front_Right, true, Constants.Vision.cameraLocations[2]);
+    cameras[0] = new PhotonCameraClass("Back_Right", CameraLocation.Back, false, Constants.Vision.cameraLocations[0]);
+    cameras[1] = new PhotonCameraClass("Front_Left", CameraLocation.Front_Left, false, Constants.Vision.cameraLocations[1]);
+    cameras[2] = new PhotonCameraClass("Front_Arm" , CameraLocation.Front_Arm, true, Constants.Vision.cameraLocations[2]);
 
     for(int i = 0; i < Constants.Vision.numberOfCameras; i++){
       poses[i] = Constants.Vision.rubbishPose;
@@ -129,10 +129,10 @@ public class Vision extends SubsystemBase {
   public double[] getAngleToObjects(CameraLocation location){
     // return cameras[location.ordinal()].getAngleToTargets();
     for (CameraInterface camera : cameras) {
-      if(camera != null)
+      if(camera != null) 
       if(camera.getCameraLocation() == location) return camera.getAngleToTargets();
     }
-    return Constants.Vision.rubbishDistance;
+    return Constants.Vision.rubbishAngle;
   }
 
   /**
@@ -202,7 +202,7 @@ public class Vision extends SubsystemBase {
   public interface CameraInterface {
     public enum CameraLocation{
       Front_Left,
-      Front_Right,
+      Front_Arm,
       Right,
       Back,
       Left

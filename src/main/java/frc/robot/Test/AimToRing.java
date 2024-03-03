@@ -29,7 +29,7 @@ public class AimToRing extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new IntakeToFloor().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake),
+      // new IntakeToFloor().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake),
       new RepeatCommand(new AimToRing1())
     );
   }
@@ -46,7 +46,6 @@ public class AimToRing extends SequentialCommandGroup {
       driveBase = RobotContainer.driveBase;
       controller = RobotContainer.driveController;
       vision = RobotContainer.vision;
-      pidController = Constants.Vision.aimToRingPID.createPIDController();
     }
 
     @Override
@@ -56,26 +55,28 @@ public class AimToRing extends SequentialCommandGroup {
 
     @Override
     public void execute() {
-      angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Right);
+      angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
 
       if(angleToRing == -1000) cancel();
 
       driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
 
-      RobotContainer.driveBase.drive(
-        -RobotContainer.calculateJoyStickDeadBand(controller.getLeftY()) *
-        GeometryUtil.doubleLerp(1, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec, 1 - RobotContainer.calculateTriggerDeadBand(controller.getR2Axis())),
+      // RobotContainer.driveBase.drive(
+      //   -RobotContainer.calculateJoyStickDeadBand(controller.getLeftY()) *
+      //   GeometryUtil.doubleLerp(1, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec, 1 - RobotContainer.calculateTriggerDeadBand(controller.getR2Axis())),
 
-        -RobotContainer.calculateJoyStickDeadBand(controller.getLeftX()) *
-        GeometryUtil.doubleLerp(1, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec, 1 - RobotContainer.calculateTriggerDeadBand(controller.getR2Axis())),
+      //   -RobotContainer.calculateJoyStickDeadBand(controller.getLeftX()) *
+      //   GeometryUtil.doubleLerp(1, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec, 1 - RobotContainer.calculateTriggerDeadBand(controller.getR2Axis())),
 
-        -RobotContainer.calculateJoyStickDeadBand(controller.getRightX()) *
-        GeometryUtil.doubleLerp(1, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec, 1 - RobotContainer.calculateTriggerDeadBand(controller.getR2Axis())) 
-        );
+      //   -RobotContainer.calculateJoyStickDeadBand(controller.getRightX()) *
+      //   GeometryUtil.doubleLerp(1, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec, 1 - RobotContainer.calculateTriggerDeadBand(controller.getR2Axis())) 
+      //   );
     }
 
     @Override
-    public void end(boolean interrupt){}
+    public void end(boolean interrupt) {
+      driveBase.isControlled = false;
+    }
 
     @Override
     public boolean isFinished() {
