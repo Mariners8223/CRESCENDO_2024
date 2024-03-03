@@ -159,7 +159,7 @@ public class Arm extends SubsystemBase{
     intake = new Intake();  
     elavator = new Elavator();
 
-    lastknownPosition = knownArmPosition.Home;
+    lastknownPosition = knownArmPosition.Unknown;
 
     // inputs.visualArm = new Mechanism2d(getMainMotorRotation(), getAngleToSpeaker()); //TODO add length\
     // inputs.visualArm_Root = inputs.visualArm.getRoot("arm root", -Constants.Arm.mainPivotDistanceFromCenterMeters, 0);
