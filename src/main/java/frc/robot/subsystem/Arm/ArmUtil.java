@@ -91,7 +91,8 @@ public class ArmUtil{
       }
       else{
         inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Constants.Arm.armHeightFromFrameMeters
-         - Constants.DriveTrain.Global.RobotHeightFromGround);
+         - Constants.DriveTrain.Global.RobotHeightFromGround)
+         + Constants.Arm.DistanceFromMainArmToShooterOutput;//adds the distance between the main arm and where the gp is flying out of
       }
       return inputs.Dz;
     }
@@ -107,7 +108,7 @@ public class ArmUtil{
       if (inputs.IsQuikShot) {//adds or subtracks the distance from the center of the robot to the shotter from the distance to the speaker
         inputs.distanceToSpeaker += Math.abs(Arm.getInstance().getShooterPosition().x);
       }
-      // else inputs.distanceToSpeaker += Constants.Arm.mainPivotDistanceFromCenterMeters;// Constants.Speaker.AlphaShootOffset_distance;
+      else inputs.distanceToSpeaker += Constants.Arm.mainPivotDistanceFromCenterMeters;// Constants.Speaker.AlphaShootOffset_distance;
       return inputs.distanceToSpeaker;// TODO: check if the comment works
     }
 

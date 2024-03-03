@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
 import frc.util.PIDFGains;
@@ -124,6 +125,8 @@ public class Constants {
         public static final double mainPivotDistanceFromCenterMeters = 0.113;
         public static final double armHeightFromFrameMeters = 0.245;
         public static final double SecondaryMotorDistanceFromShooterMeters = 0.06;
+
+        public static final double DistanceFromMainArmToShooterOutput = 0.0;// TODO: measure
     
         public static final double SpeakerLength = 1.10;//meter
         public static final double SpeakerBottomLocationY = 5.00;//meter
