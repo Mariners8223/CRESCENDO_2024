@@ -36,24 +36,24 @@ public class Intake {
         intakeMotor.setInverted(Constants.Intake.intakeMotorIsInverted);
 
         intakeMotor.getPIDController().setP(5);
-        proxSensor = new com.armabot.lidar.impl.vl53l1x.Vl53l1xI2c(RoboRioPort.ONBOARD);
-        proxSensor.getI2c().setAddress((byte) 0x29);
-        proxSensor.setTimeout(10, TimeUnit.SECONDS);
-        while (true) {
-            var error = proxSensor.initialize();
-            error.ifPresent(err ->
-                DriverStation.reportError("Unable to initialize VL53L1X: " + err, false)
-            );
-            if (error.isEmpty()) {
-                break;
-            }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-            }
-        }
-        proxSensor.setDistanceMode(DistanceMode.SHORT);
-        proxSensor.startContinuous(100);
+        // proxSensor = new com.armabot.lidar.impl.vl53l1x.Vl53l1xI2c(RoboRioPort.ONBOARD);
+        // proxSensor.getI2c().setAddress((byte) 0x29);
+        // proxSensor.setTimeout(20, TimeUnit.SECONDS);
+        // while (true) {
+        //     var error = proxSensor.initialize();
+        //     error.ifPresent(err ->
+        //         DriverStation.reportError("Unable to initialize VL53L1X: " + err, false)
+        //     );
+        //     if (error.isEmpty()) {
+        //         break;
+        //     }
+        //     try {
+        //         Thread.sleep(100);
+        //     } catch (InterruptedException e) {
+        //     }
+        // }
+        // proxSensor.setDistanceMode(DistanceMode.SHORT);
+        // proxSensor.startContinuous(100);
 
         inputs = new IntakeInputsAutoLogged();
     }
@@ -91,7 +91,7 @@ public class Intake {
         inputs.motorPosition = intakeMotor.getEncoder().getPosition();
         inputs.current = intakeMotor.getOutputCurrent();
 
-        if(proxSensor.dataReady() && !proxSensor.timeoutOccurred()) inputs.proximity = proxSensor.read();
+        // if(proxSensor.dataReady() && !proxSensor.timeoutOccurred()) inputs.proximity = proxSensor.read();
 
         Logger.processInputs("intake", inputs);
     }

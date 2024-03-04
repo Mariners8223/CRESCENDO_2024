@@ -56,6 +56,7 @@ public class Robot extends LoggedRobot {
     // SmartDashboard.putNumber("dz", ArmUtil.getDz());
     SmartDashboard.putBoolean("is in zone 1", ArmUtil.isZone1());
     SmartDashboard.putBoolean("is arm in position", Arm.getInstance().isArmInPosition());
+    SmartDashboard.putNumber("main real Angle", 360 * RobotContainer.arm.getMainMotorRotation());
     // SmartDashboard.putNumber("distance to speaker", ArmUtil.get)
     // SmartDashboard.putNumber("arm x", Arm.getInstance().getShooterPosition().x);
     // SmartDashboard.putNumber("angle to ring", RobotContainer.vision.getAngleToObjects(CameraLocation.Front_Arm)[0]);

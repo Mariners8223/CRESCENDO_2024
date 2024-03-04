@@ -126,7 +126,7 @@ public class Constants {
         public static final double armHeightFromFrameMeters = 0.245;
         public static final double SecondaryMotorDistanceFromShooterMeters = 0.06;
 
-        public static final double DistanceFromMainArmToShooterOutput = 0.45;// TODO: measure
+        public static final double DistanceFromMainArmToShooterOutput = 0.065;// TODO: measure
     
         public static final double SpeakerLength = 1.10;//meter
         public static final double SpeakerBottomLocationY = 5.00;//meter
@@ -420,13 +420,13 @@ public class Constants {
 
                 {
                 new Transform3d( // front LEFT
-                0.295,
+                0.3,
                 0.33,
                 0.13,
                 new Rotation3d(
                 0,
                 Units.degreesToRadians(-30),
-                Units.degreesToRadians(-15)
+                Units.degreesToRadians(2)
                 )),
                 
                 new Transform3d( // front-left camera
@@ -436,7 +436,7 @@ public class Constants {
                 new Rotation3d(
                 0,
                 Units.degreesToRadians(-30),
-                Units.degreesToRadians(-15)
+                Units.degreesToRadians(2)
                 ))
                 },
                 

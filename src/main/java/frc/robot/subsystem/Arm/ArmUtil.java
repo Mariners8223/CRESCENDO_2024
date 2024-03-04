@@ -92,11 +92,22 @@ public class ArmUtil{
       else{
         inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Constants.Arm.armHeightFromFrameMeters
          - Constants.DriveTrain.Global.RobotHeightFromGround)
-         - Arm.getInstance().getShooterPosition().y;
-         //Constants.Arm.DistanceFromMainArmToShooterOutput;//adds the distance between the main arm and where the gp is flying out of
+        + Constants.Arm.DistanceFromMainArmToShooterOutput
+        + CalcAlphaOffset(inputs.ArmAngle);//adds the distance between the main arm and where the gp is flying out of
+        // inputs.Dz = Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y;
       }
       return inputs.Dz;
     }
+
+    /**
+     * calculates the offset duo to the the angle of the arm
+     * @param MainAngle the angle that the main arm should face
+     * @return the offset of the the angle of the arm adds to the hieght of the speaker
+     */
+    public static double CalcAlphaOffset(double MainAngle){
+      return (Constants.Arm.armLengthMeters*Math.sin(Constants.Arm.Motors.secondarySoftLimits[1]))/(Math.cos(MainAngle));
+    }
+    
     /**
      * calculates the arial distance between the robot and the speaker (xy axis)
      * @param Dy the distance between the robot and the speaker on y axis
@@ -104,12 +115,12 @@ public class ArmUtil{
      * @return returns the arial distance between the robot and the speaker
      */
     private static double CalcDistance_withDxDy(double Dy, double Dx){
-      inputs.distanceToSpeaker = Math.sqrt(Math.pow(Dx, 2) + Math.pow(Dy, 2));
+      inputs.distanceToSpeaker = Math.hypot(Dy, Dx);
 
       if (inputs.IsQuikShot) {//adds or subtracks the distance from the center of the robot to the shotter from the distance to the speaker
         inputs.distanceToSpeaker += Math.abs(Arm.getInstance().getShooterPosition().x);
       }
-      else inputs.distanceToSpeaker += Constants.Arm.mainPivotDistanceFromCenterMeters;// Constants.Speaker.AlphaShootOffset_distance;
+      // else inputs.distanceToSpeaker += Constants.Arm.mainPivotDistanceFromCenterMeters;// Constants.Speaker.AlphaShootOffset_distance;
       return inputs.distanceToSpeaker;// TODO: check if the comment works
     }
 
@@ -351,7 +362,7 @@ public class ArmUtil{
         RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope)
       );
 
-      Logger.processInputs("ArmUtl", inputs);
+      Logger.processInputs("ArmUtil", inputs);
     }
 
     /**

@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Test.AimToRing;
 import frc.robot.commands.Climb.ClimbSequence;
 import frc.robot.commands.IntakeCommands.Collect;
+import frc.robot.commands.IntakeCommands.Collect_noProxy;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
 import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
@@ -95,13 +96,13 @@ public class RobotContainer {
     driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
     
     aimCommand = new AimRegularToSpeaker();
-    var collect = new Collect();
+    var collect = new Collect_noProxy();
 
     driveController.square().onTrue(aimCommand);
     driveController.triangle().onTrue(new Shoot());
 
     armController.cross().onTrue(new IntakeToFloor());
-    armController.circle().onTrue(collect);
+    armController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
     armController.square().onTrue(new ShootToAmp());
     armController.triangle().onTrue(new Shoot());
     armController.povLeft().onTrue(new MoveToAlphaPose_close());
