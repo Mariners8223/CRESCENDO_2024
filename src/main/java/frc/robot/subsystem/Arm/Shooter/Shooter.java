@@ -82,7 +82,7 @@ public class Shooter {
 
     public boolean isAtSelctedVelocity(){
         // return Math.abs((inputs.motor1RPM + inputs.motor2RPM) / 2 - inputs.RPMTarget) <= 250;
-        return Math.abs(inputs.motor1RPM - inputs.RPMTarget) <= 100 && Math.abs(inputs.motor2RPM - inputs.RPMTarget) <= 100;
+        return Math.abs(inputs.motor1RPM - inputs.RPMTarget) <= 120 && Math.abs(inputs.motor2RPM - inputs.RPMTarget) <= 120;
     }
 
     /**
