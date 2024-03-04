@@ -126,7 +126,7 @@ public class Constants {
         public static final double armHeightFromFrameMeters = 0.245;
         public static final double SecondaryMotorDistanceFromShooterMeters = 0.06;
 
-        public static final double DistanceFromMainArmToShooterOutput = 0.0;// TODO: measure
+        public static final double DistanceFromMainArmToShooterOutput = 0.45;// TODO: measure
     
         public static final double SpeakerLength = 1.10;//meter
         public static final double SpeakerBottomLocationY = 5.00;//meter
