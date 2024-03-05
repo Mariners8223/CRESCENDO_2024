@@ -49,6 +49,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "QuikAim from stage"
@@ -102,6 +108,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
           }
         },
         {

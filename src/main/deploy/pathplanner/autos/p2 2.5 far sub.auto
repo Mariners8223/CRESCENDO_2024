@@ -49,6 +49,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Bottom 4 to speaker"
@@ -83,6 +89,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
           }
         }
       ]

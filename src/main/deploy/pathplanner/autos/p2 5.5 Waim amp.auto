@@ -45,6 +45,12 @@
         {
           "type": "named",
           "data": {
+            "name": "RollOut"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "QuikAim"
           }
         },
@@ -89,6 +95,12 @@
         {
           "type": "named",
           "data": {
+            "name": "RollOut"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "QuikAim"
           }
         },
@@ -128,6 +140,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
           }
         },
         {
@@ -181,6 +199,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "go shoot high"
@@ -228,6 +252,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
           }
         }
       ]
