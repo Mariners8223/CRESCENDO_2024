@@ -171,8 +171,8 @@ public class Constants {
             public static final double[] mainSoftLimits = new double[]{0.3206787109375, -0.03125};//was 0.35, -0.04 // 0.3206787109375
             public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.007};
 
-            public static final double[] mainMaxOutputs = new double[]{0.15, -0.05};
-            public static final double[] secondaryMaxOutputs = new double[]{0.2, -0.1};
+            public static final double[] mainMaxOutputs = new double[]{0.35, -0.15};
+            public static final double[] secondaryMaxOutputs = new double[]{0.35, -0.2};
  
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 121.5;
@@ -186,8 +186,8 @@ public class Constants {
         public static final int shooterMotor1ID = 19;
         public static final int shooterMotor2ID = 18;
 
-        public static final PIDFGains shooter2PID = new PIDFGains(0.0007, 0, 0, 0.00018, 0, 0); //TODO: get the real value
-        public static final PIDFGains shooter1PID = new PIDFGains(0.0007, 0, 0, 0.000195, 0.0, 0);
+        public static final PIDFGains shooter1PID = new PIDFGains(0.0007, 0, 0, 0.00018, 0.0, 0);
+        public static final PIDFGains shooter2PID = new PIDFGains(0.0007, 0, 0, 0.000195, 0, 0); //TODO: get the real value
 
         public static final boolean shooter1Inverted = true;
         public static final boolean shooter2Inverted = false;

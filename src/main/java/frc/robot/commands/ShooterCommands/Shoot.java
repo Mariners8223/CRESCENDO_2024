@@ -69,7 +69,7 @@ public class Shoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.getShooterSub().isAtSelctedVelocity() || timer > 40;
+    return arm.getShooterSub().isAtSelctedVelocity() && timer > 40;
     // return timer >= 20;
   }
 }
