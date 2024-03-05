@@ -2,10 +2,6 @@
   "robotWidth": 0.75,
   "robotLength": 0.75,
   "holonomicMode": true,
-<<<<<<< HEAD
-  "pathFolders": [],
-  "autoFolders": [],
-=======
   "pathFolders": [
     "Connectors",
     "Da Baitor",
@@ -21,7 +17,6 @@
     "p3",
     "p4"
   ],
->>>>>>> AutoWork
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

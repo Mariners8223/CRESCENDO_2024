@@ -120,10 +120,6 @@ public class RobotContainer {
     List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
 
     autoChooser = new LoggedDashboardChooser<>("");
-
-
-    autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
-
     for (String autoName : namesOfAutos) {
       PathPlannerAuto auto = new PathPlannerAuto(autoName);
         autosOfAutos.add(auto);
