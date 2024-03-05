@@ -59,7 +59,7 @@ public class AimAndShootToAmpArea_Auto extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer >= 15 || RobotContainer.driveBase.getPose().getRotation().getRadians() == ArmUtil.getChassisAngle_ToAmp()
+    return timer >= 50 || RobotContainer.driveBase.getPose().getRotation().getRadians()%(2*Math.PI) == ArmUtil.getChassisAngle_ToAmp()
      && shooter.isAtSelctedVelocity();
   }
 }
