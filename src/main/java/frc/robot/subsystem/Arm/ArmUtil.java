@@ -57,16 +57,17 @@ public class ArmUtil{
     private static double calcDy(){
       if (RobotContainer.driveBase.getPose().getTranslation().getY() <= Constants.Arm.SpeakerIsCenterRatioBottomLocation) {
         inputs.IsDeadZone = true;
-        inputs.Dy = -(Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation);//aime to the most right corner (robot prespective)
+        // inputs.Dy = -(Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatioBottomLocation);//aime to the most right corner (robot prespective)
       }
       else{//may be changed to a single point
         inputs.IsDeadZone = false;
-        inputs.Dy = -(Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio
-         * (RobotContainer.driveBase.getPose().getTranslation().getY()// + Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
-         - Constants.Arm.SpeakerIsCenterRatioBottomLocation)
-         -(//Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
-         + RobotContainer.driveBase.getPose().getTranslation().getY()));//aim to a point prespective to the robot location in the chosen shooting zone
+        // inputs.Dy = -(Constants.Arm.SpeakerBottomLocationY + Constants.Arm.SpeakerLength - Constants.Arm.SpeakerIsCenterRatio
+        //  * (RobotContainer.driveBase.getPose().getTranslation().getY()// + Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
+        //  - Constants.Arm.SpeakerIsCenterRatioBottomLocation)
+        //  -(//Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
+        //  + RobotContainer.driveBase.getPose().getTranslation().getY()));//aim to a point prespective to the robot location in the chosen shooting zone
       }
+      inputs.Dy = -(Constants.Arm.SpeakerMidlleLocationY - RobotContainer.driveBase.getPose().getY());
       return inputs.Dy;
     }
 
@@ -136,7 +137,7 @@ public class ArmUtil{
         inputs.Dx = 1;//airial distance to speaker
         inputs.Dz = 1;//The hight of the targeted point on the speaker relative to the shooter hieght from ground
         inputs.distanceToSpeaker = 1;//self explanatory
-        inputs.ArmAngle = 45;//the angle in which the arm shell be
+        // inputs.ArmAngle = 45;//the angle in which the arm shell be
         inputs.IsDeadZone = true;//is this a dead zone???
         //chassis parameters
         inputs.YaxisWantedAngle = 0;//the angle in which we want the gp to fly in

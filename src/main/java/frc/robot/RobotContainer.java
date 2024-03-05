@@ -61,7 +61,7 @@ public class RobotContainer {
 
   public static BooleanSupplier isBlueAllince = () -> {
     if(DriverStation.getAlliance().isEmpty()) return true;
-    return DriverStation.getAlliance().get().equals(DriverStation.Alliance.Blue);
+    return DriverStation.getAlliance().get() == DriverStation.Alliance.Blue;
   };
 
   public static BooleanSupplier isRedAllince = () -> {

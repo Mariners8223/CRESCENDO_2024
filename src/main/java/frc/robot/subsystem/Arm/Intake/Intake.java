@@ -35,6 +35,8 @@ public class Intake {
         intakeMotor = new CANSparkFlex(Constants.Intake.intakeMotorID, MotorType.kBrushless);
         intakeMotor.setInverted(Constants.Intake.intakeMotorIsInverted);
 
+        intakeMotor.enableVoltageCompensation(12);
+
         intakeMotor.getPIDController().setP(5);
         // proxSensor = new com.armabot.lidar.impl.vl53l1x.Vl53l1xI2c(RoboRioPort.ONBOARD);
         // proxSensor.getI2c().setAddress((byte) 0x29);

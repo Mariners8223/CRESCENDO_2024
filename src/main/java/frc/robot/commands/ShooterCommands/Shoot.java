@@ -31,7 +31,8 @@ public class Shoot extends Command {
     //   return;
     // }
 
-    arm.getShooterSub().setShooterRPM(4000);;
+    // arm.getShooterSub().setShooterRPM(4000);;
+    arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedSpeed());
     timer = 0;
     // if(ArmUtil.getDx() <= Constants.Arm.EndOfZone1)
 
@@ -69,7 +70,7 @@ public class Shoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.getShooterSub().isAtSelctedVelocity() && timer > 40;
+    return arm.getShooterSub().isAtSelctedVelocity() && timer > 100;
     // return timer >= 20;
   }
 }

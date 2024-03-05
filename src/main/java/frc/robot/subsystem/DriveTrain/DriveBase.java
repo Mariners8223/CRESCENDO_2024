@@ -20,6 +20,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.pathplanner.lib.util.GeometryUtil;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -30,6 +31,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -320,10 +322,30 @@ public class DriveBase extends SubsystemBase {
   public ChassisSpeeds getAbsoluteChassisSpeeds(){
     return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(), getRotation2d());
   }
+
+  /**
+   * gets the new wanted angle including the current angle of the robot
+   * @param wantedAngle the wanted angle (in radians)
+   * @return the wanted angle in the current angle of the robot (in radians)
+   */
+  public double getWantedAngleInCurrentRobotAngle(double wantedAngle){
+    return Units.degreesToRadians(getAngle() - (getAngle()%360 - Units.radiansToDegrees(wantedAngle)));
+  }
+
+  /**
+   * gets the new wanted angle including the current angle of the robot
+   * @param wantedAngle the wanted angle
+   * @return the wanted angle in the current angle of the robot
+   */
+  public Rotation2d getWantedAngleInCurrentRobotAngle(Rotation2d wantedAngle){
+    return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 - wantedAngle.getDegrees()));
+    // return Rotation2d.fromRadians(getRotation2d().getRadians() - (MathUtil.angleModulus(getRotation2d().getRadians()) - wantedAngle.getRadians()));
+  }
   
   public void setTargetRotation(Rotation2d alpha, boolean isBeyond360){//TODO: dis shit
     if(isBeyond360) inputs.targetRotation = alpha;
-    else inputs.targetRotation = Rotation2d.fromRotations(alpha.getRotations() + (int)getRotation2d().getRotations());
+    // else inputs.targetRotation = Rotation2d.fromRotations(alpha.getRotations() + (int)getRotation2d().getRotations());
+    else inputs.targetRotation = getWantedAngleInCurrentRobotAngle(alpha);
     // inputs.targetRotation = alpha.plus(Rotation2d.fromRotations((int)getRotation2d().getRotations()));
     targetRotation = inputs.targetRotation;
     //calculateTheta(alpha);//dis may work

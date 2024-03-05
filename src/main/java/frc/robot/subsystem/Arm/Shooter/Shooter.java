@@ -82,7 +82,10 @@ public class Shooter {
 
     public boolean isAtSelctedVelocity(){
         // return Math.abs((inputs.motor1RPM + inputs.motor2RPM) / 2 - inputs.RPMTarget) <= 250;
-        return Math.abs(inputs.motor1RPM - inputs.RPMTarget) <= 100 && Math.abs(inputs.motor2RPM - inputs.RPMTarget) <= 100;
+        return Math.abs(inputs.motor1RPM - inputs.RPMTarget) <= 80 && Math.abs(inputs.motor2RPM - inputs.RPMTarget) <= 80;
+    }
+    public boolean isMotorsAtSameSpeed(){
+        return Math.abs(inputs.motor1RPM - inputs.motor2RPM) <= 80;
     }
 
     /**
@@ -91,6 +94,8 @@ public class Shooter {
     public void stopMotors(){
         shooterMotor1.stopMotor();
         shooterMotor2.stopMotor();
+        inputs.RPMTarget = 0;
+        Logger.processInputs("shooter", inputs);
     }
 
     // // get shooter power
@@ -159,6 +164,8 @@ public class Shooter {
         motor.restoreFactoryDefaults();
 
         motor.setInverted(isInverted);
+
+        motor.enableVoltageCompensation(12);
         
         SparkPIDController pidController = motor.getPIDController();
         pidController.setP(pidGains.getP());
