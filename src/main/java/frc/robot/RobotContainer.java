@@ -11,6 +11,7 @@ import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import com.fasterxml.jackson.core.sym.Name;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -34,6 +35,7 @@ import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
+import frc.robot.commands.armCommands.MoveToStartShootPose_Auto;
 import frc.robot.commands.armCommands.MoveToStow;
 import frc.robot.commands.autonomous.ShootNote;
 import frc.robot.commands.sequences.AimRegularToSpeaker;
@@ -146,6 +148,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootToAmp", new ShootToAmp());
     NamedCommands.registerCommand("MoveToAlpha", new MoveToAlphaPose_close());
     NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
+    NamedCommands.registerCommand("StartPosition", new MoveToStartShootPose_Auto());
+
+    NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
+     {Arm.getInstance().getShooterSub().setShooterPower(0.5); Arm.getInstance().getIntakeSub().setMotor(0.8);}));
+    NamedCommands.registerCommand("Stop Intake and Shoter motors",  new InstantCommand(() ->
+     {Arm.getInstance().getShooterSub().stopMotors(); Arm.getInstance().getIntakeSub().stopMotor();}));
   }
 
   public static double calculateJoyStickDeadBand(double value){
