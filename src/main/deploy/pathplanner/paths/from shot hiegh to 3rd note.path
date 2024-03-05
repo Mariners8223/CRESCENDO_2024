@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.3965226931880395,
-        "y": 5.725261896041185
+        "x": 6.436471720215054,
+        "y": 5.701978720780042
       },
       "isLocked": true,
       "linkedName": "amp shooting pose"
@@ -20,8 +20,8 @@
         "y": 4.403274541213847
       },
       "prevControl": {
-        "x": 7.567606347766189,
-        "y": 5.000527205048703
+        "x": 6.837042082635236,
+        "y": 6.5128384888598765
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,10 +32,10 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularVelocity": 100.0,
+    "maxAngularAcceleration": 500.0
   },
   "goalEndState": {
     "velocity": 0.0,

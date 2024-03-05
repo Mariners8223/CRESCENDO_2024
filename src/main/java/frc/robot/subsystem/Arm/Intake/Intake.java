@@ -58,6 +58,7 @@ public class Intake {
         // proxSensor.startContinuous(100);
 
         inputs = new IntakeInputsAutoLogged();
+        inputs.proximity = 200;
     }
 
     public double getProximity(){

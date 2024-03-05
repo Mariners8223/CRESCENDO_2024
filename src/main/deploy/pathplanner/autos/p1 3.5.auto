@@ -43,6 +43,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "p1 shooting pose"
@@ -71,6 +77,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
           }
         },
         {
@@ -121,6 +133,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
           }
         }
       ]

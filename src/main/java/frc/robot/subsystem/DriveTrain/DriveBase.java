@@ -176,7 +176,7 @@ public class DriveBase extends SubsystemBase {
       DriveBase.DriveCommand.getInstance().cancel();
     }).ignoringDisable(true));
 
-    new Trigger(RobotState::isAutonomous).onTrue(new InstantCommand(() -> this.resetOnlyDirection()).ignoringDisable(true));
+    // new Trigger(RobotState::isAutonomous).onTrue(new InstantCommand(() -> this.resetOnlyDirection()).ignoringDisable(true));
 
     orchestra = new Orchestra(); //creats a new orchestra
 

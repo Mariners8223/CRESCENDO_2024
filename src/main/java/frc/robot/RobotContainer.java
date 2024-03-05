@@ -31,7 +31,9 @@ import frc.robot.commands.IntakeCommands.RollOut;
 import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.ShooterCommands.AimShooter;
 import frc.robot.commands.ShooterCommands.QuickAim;
+import frc.robot.commands.ShooterCommands.QuikAim_Auto;
 import frc.robot.commands.ShooterCommands.Shoot;
+import frc.robot.commands.ShooterCommands.QuickAim.QuickAim1;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
@@ -119,7 +121,7 @@ public class RobotContainer {
     List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
     List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
 
-    autoChooser = new LoggedDashboardChooser<>("");
+    autoChooser = new LoggedDashboardChooser<>("Chooser");
     for (String autoName : namesOfAutos) {
       PathPlannerAuto auto = new PathPlannerAuto(autoName);
         autosOfAutos.add(auto);
@@ -136,7 +138,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("Do Nothing", new InstantCommand());
     //AUTOSSSSS related shit
     NamedCommands.registerCommand("Shoot", new Shoot());
-    NamedCommands.registerCommand("QuikAim", new QuickAim());
+    NamedCommands.registerCommand("QuikAim", new QuikAim_Auto());
     NamedCommands.registerCommand("Collect", new Collect());
     NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
@@ -145,6 +147,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("MoveToAlpha", new MoveToAlphaPose_close());
     NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
     NamedCommands.registerCommand("StartPosition", new MoveToStartShootPose_Auto());
+    NamedCommands.registerCommand("RollOut", new RollOut());
 
     NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
      {Arm.getInstance().getShooterSub().setShooterPower(0.5); Arm.getInstance().getIntakeSub().setMotor(0.8);}));

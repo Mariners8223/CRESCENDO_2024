@@ -20,11 +20,11 @@
         "y": 7.439712682401977
       },
       "prevControl": {
-        "x": 6.900996326443399,
-        "y": 7.439712682401977
+        "x": 6.291055622491293,
+        "y": 7.507313826979199
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "MiddleNotes_UppestNote"
     }
   ],
@@ -32,10 +32,10 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularVelocity": 100.0,
+    "maxAngularAcceleration": 500.0
   },
   "goalEndState": {
     "velocity": 0,
