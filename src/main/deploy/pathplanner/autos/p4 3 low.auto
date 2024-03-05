@@ -75,6 +75,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "go shoot lower"
@@ -128,6 +134,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RollOut"
           }
         },
         {
