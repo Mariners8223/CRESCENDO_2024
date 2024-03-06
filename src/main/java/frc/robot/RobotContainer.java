@@ -39,11 +39,13 @@ import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.commands.armCommands.MoveToStartShootPose_Auto;
 import frc.robot.commands.armCommands.MoveToStow;
+import frc.robot.commands.autonomous.BetaAim_Auto;
 import frc.robot.commands.autonomous.ShootNote;
 import frc.robot.commands.sequences.AimRegularToSpeaker;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.commands.sequences.ShootToAmp.MiniShoot;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
 
@@ -96,14 +98,14 @@ public class RobotContainer {
 
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
-    // driveController.cross().onTrue(ringAim).onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; }));
-    driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
+    driveController.cross().onTrue(ringAim.onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake)).onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
+    // driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
     
     aimCommand = new AimRegularToSpeaker();
     var collect = new Collect_noProxy();
 
-    driveController.square().onTrue(aimCommand);
-    driveController.triangle().onTrue(new Shoot());
+    // driveController.square().onTrue(aimCommand);
+    // driveController.triangle().onTrue(new Shoot());
 
     armController.cross().onTrue(new IntakeToFloor());
     armController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
@@ -138,7 +140,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("Do Nothing", new InstantCommand());
     //AUTOSSSSS related shit
     NamedCommands.registerCommand("Shoot", new Shoot());
-    NamedCommands.registerCommand("QuikAim", new QuikAim_Auto());
+    NamedCommands.registerCommand("QuikAim", new BetaAim_Auto());
     NamedCommands.registerCommand("Collect", new Collect());
     NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
