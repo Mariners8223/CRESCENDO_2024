@@ -4,6 +4,7 @@
 
 package frc.robot.commands.ShooterCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
@@ -32,7 +33,10 @@ public class Shoot extends Command {
     // }
 
     // arm.getShooterSub().setShooterRPM(4000);;
-    arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedSpeed());
+    if (DriverStation.isAutonomous() && ArmUtil.isZone1()) {
+      arm.getShooterSub().setShooterRPM(4000);
+    }
+    else arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedSpeed());
     timer = 0;
     // if(ArmUtil.getDx() <= Constants.Arm.EndOfZone1)
 
@@ -62,7 +66,8 @@ public class Shoot extends Command {
     arm.getShooterSub().stopMotors();
 
     //just in case, ends the control of aim
-    RobotContainer.driveBase.isControlled = false;
+    // RobotContainer.driveBase.isControlled = false;
+    RobotContainer.driveBase.setIsControlled(false);
 
     RobotContainer.AlphaAimCommand.cancel();
     RobotContainer.BetaAimCommand.cancel();

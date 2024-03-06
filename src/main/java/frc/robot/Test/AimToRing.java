@@ -56,7 +56,7 @@ public class AimToRing extends SequentialCommandGroup {
 
     @Override
     public void initialize(){
-      driveBase.isControlled = true;
+      driveBase.setIsControlled(true);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class AimToRing extends SequentialCommandGroup {
       angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
 
       if(angleToRing == -1000){
-        RobotContainer.driveBase.isControlled = false;
+        RobotContainer.driveBase.setIsControlled(false);
         cancel();
       }
       else
@@ -84,7 +84,7 @@ public class AimToRing extends SequentialCommandGroup {
 
     @Override
     public void end(boolean interrupt) {
-      driveBase.isControlled = false;
+      RobotContainer.driveBase.setIsControlled(false);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class AimToRing extends SequentialCommandGroup {
 
     @Override
     public void initialize(){
-      driveBase.isControlled = true;
+      driveBase.setIsControlled(true);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class AimToRing extends SequentialCommandGroup {
 
     @Override
     public void end(boolean interrupt) {
-      driveBase.isControlled = false;
+      driveBase.setIsControlled(false);
       driveBase.drive(0, 0, 0);
     }
 

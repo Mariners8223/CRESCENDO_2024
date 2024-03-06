@@ -18,12 +18,12 @@ public class RollOut extends InstantCommand {
     // Use addRequirements() here to declare subsystem dependencies.
     intake = Arm.getInstance().getIntakeSub();
 
-    addRequirements(Arm.getInstance());
+    // addRequirements(Arm.getInstance());
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intake.setPosition(intake.getMotorPosition() - 5);
+    intake.setPosition(intake.getMotorPosition() - 2.5);
   }
 }

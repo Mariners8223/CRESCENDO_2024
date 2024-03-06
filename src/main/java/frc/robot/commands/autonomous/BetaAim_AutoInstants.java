@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
@@ -37,9 +38,11 @@ public class BetaAim_AutoInstants extends InstantCommand {
       target = MathUtil.clamp(ArmUtil.getArmAngle(), Units.rotationsToRadians(0.35), Units.rotationsToRadians(0.5));
       arm.moveMotorsToRotation(0, Units.radiansToRotations(target));
 
-      RobotContainer.driveBase.isControlled = true;
+      // RobotContainer.driveBase.isControlled = true;
+      RobotContainer.driveBase.setIsControlled(true);
       RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()), false);
       
-      RobotContainer.driveBase.isControlled = false;
+      // RobotContainer.driveBase.isControlled = false;
+      RobotContainer.driveBase.setIsControlled(false);
   }
 }

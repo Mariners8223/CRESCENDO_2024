@@ -99,7 +99,7 @@ public class RobotContainer {
 
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
-    driveController.cross().onTrue(ringAim.onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake)).onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
+    driveController.cross().whileTrue(ringAim.onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake)).onFalse(new RollOut()); //.onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
     // driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
     
     AlphaAimCommand = new AimRegularToSpeaker();

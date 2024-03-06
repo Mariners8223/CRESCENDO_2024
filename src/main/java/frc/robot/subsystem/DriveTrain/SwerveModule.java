@@ -77,10 +77,12 @@ public class SwerveModule{
     double driveMotorVoltage;
     double driveMotorPostion;
     double driveMotorVelocity;
+    double driveMotorTempture;
 
     double steerMotorCurrent;
     double steerMotorVoltage;
     double steerMotorPosition;
+    double steerMotorTempture;
 
     double absEncoderPostion;
   }
@@ -235,10 +237,13 @@ public class SwerveModule{
     inputs.driveMotorCurrent = driveMotorCurrent.get(); //updates the current output of the drive motor
     inputs.driveMotorVoltage = driveMotorVoltage.get(); //updates the voltage output of the drive motor
     inputs.driveMotorVelocity = driveMotorVelocity.get();
+    inputs.driveMotorTempture = driveMotor.getDeviceTemp().getValueAsDouble();
+    
 
     inputs.steerMotorCurrent = steerMotorCurrent.get(); //updates the current output of the steer motor
     inputs.steerMotorVoltage = steerMotorVoltage.get(); //updates the voltage output of the steer motor
     inputs.steerMotorPosition = steerMotorPostion.get();
+    inputs.steerMotorTempture = steerMotor.getMotorTemperature();
 
     // inputs.absEncoderPostion = absEncoder.getAbsolutePosition().getValueAsDouble() * 360;
     inputs.absEncoderPostion = (absEncoder.getAbsolutePosition() - absEncoder.getPositionOffset()) * 360;
@@ -352,6 +357,7 @@ public class SwerveModule{
     talonFX.getVelocity().setUpdateFrequency(50); //sets as default
     talonFX.getMotorVoltage().setUpdateFrequency(50); //sets as default
     talonFX.getStatorCurrent().setUpdateFrequency(50); //sets as default
+    talonFX.getDeviceTemp().setUpdateFrequency(50);
 
     driveMotorVelocity = talonFX.getVelocity().asSupplier(); //sets the new velocity supplier
     driveMotorPostion = talonFX.getPosition().asSupplier(); //sets the new postion supplier
@@ -441,8 +447,8 @@ public class SwerveModule{
     steerMotorPostionInput = position -> sparkMax.getPIDController().setReference(position * Constants.DriveTrain.Steer.steerGearRatio, ControlType.kPosition);
     steerMotorVoltageInput = position -> sparkMax.getPIDController().setReference(steerMotorVoltagePID.calculate(steerMotorPostion.get(), position), ControlType.kVoltage);
 
-    sparkMax.setSmartCurrentLimit(25); //sets the current limit of the motor (thanks noga for reminding m)
-    sparkMax.setSecondaryCurrentLimit(40); 
+    sparkMax.setSmartCurrentLimit(30); //sets the current limit of the motor (thanks noga for reminding m)
+    sparkMax.setSecondaryCurrentLimit(50); 
     sparkMax.burnFlash(); //sometimes work
 
     return sparkMax;

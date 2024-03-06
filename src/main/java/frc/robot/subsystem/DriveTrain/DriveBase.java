@@ -68,8 +68,6 @@ public class DriveBase extends SubsystemBase {
   Pose2d currentPose; //the current pose2d of the robot
   Rotation2d targetRotation; //the target rotation of the robot
 
-  public boolean isControlled;
-
   HolonomicPathFollowerConfig pathFollowerConfig; //the config for path following a path
   ReplanningConfig replanConfig; //the config for when to replan a path
   PathConstraints pathConstraints; //the constraints for pathPlanner
@@ -102,6 +100,8 @@ public class DriveBase extends SubsystemBase {
 
     SwerveModuleState[] currentStates = new SwerveModuleState[4]; //the current states of the modules
     SwerveModuleState[] targetStates = new SwerveModuleState[4]; //the target states of the modules
+
+    boolean isControlled;
   }
 
 
@@ -132,8 +132,6 @@ public class DriveBase extends SubsystemBase {
     thetaCorrectionController = Constants.DriveTrain.Global.thetaCorrectionPID.createPIDController(); //creates the pid controller of the robots angle
 
     targetRotation = new Rotation2d(); //creates a new target rotation
-
-    isControlled = false;
 
     replanConfig = new ReplanningConfig(Constants.DriveTrain.PathPlanner.planPathTostartingPointIfNotAtIt, Constants.DriveTrain.PathPlanner.enableDynamicReplanning, Constants.DriveTrain.PathPlanner.pathErrorTolerance, Constants.DriveTrain.PathPlanner.pathErrorSpikeTolerance);
     //^how pathplanner reacts to postion error
@@ -192,6 +190,7 @@ public class DriveBase extends SubsystemBase {
 
     field = new Field2d();
     SmartDashboard.putData(field);
+    inputs.isControlled = false;
   }
 
 
@@ -269,6 +268,15 @@ public class DriveBase extends SubsystemBase {
     inputs.chassisAngle = getRotation2d();
 
     Logger.processInputs(getName(), inputs);
+  }
+
+  public void setIsControlled(boolean isControlled){
+    inputs.isControlled = isControlled;
+    Logger.processInputs(getName(), inputs);
+  }
+
+  public boolean isControlled(){
+    return inputs.isControlled;
   }
 
   private void resetCancoderOffsets(double[] newOffsets){
@@ -413,7 +421,7 @@ public class DriveBase extends SubsystemBase {
     //   inputs.targetRotation = targetRotation;
     // }
     if(rotation == 0) rotation = calculateTheta();
-    else if(!isControlled){
+    else if(!isControlled()){
       targetRotation = getRotation2d();
       inputs.targetRotation = targetRotation;
     }
@@ -441,7 +449,7 @@ public class DriveBase extends SubsystemBase {
    */
   public void robotRelativeDrive(double Xspeed, double Yspeed, double rotation){
     if(rotation == 0) rotation = calculateTheta();
-    else if(!isControlled){
+    else if(!isControlled()){
       targetRotation = getRotation2d();
       inputs.targetRotation = targetRotation;
     }
@@ -630,7 +638,7 @@ public class DriveBase extends SubsystemBase {
     @Override
     public void initialize() {
       RobotContainer.driveBase.drive(0, 0, 0);
-      RobotContainer.driveBase.isControlled = false;
+      RobotContainer.driveBase.setIsControlled(false);;
     }
 
     public static Command getInstance(){
