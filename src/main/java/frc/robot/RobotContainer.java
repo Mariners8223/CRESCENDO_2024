@@ -114,10 +114,10 @@ public class RobotContainer {
     armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
     armController.triangle().onTrue(new Shoot());
     //check if still necesery
-    armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
+    // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
 
-    armController.L2().onTrue(AlphaAimCommand);//ilan choose key
-    armController.R2().onTrue(BetaAimCommand);
+    armController.povLeft().onTrue(AlphaAimCommand);
+    armController.povRight().onTrue(BetaAimCommand);
 
     armController.povDown().onTrue(new MoveToHome()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
     armController.L1().onTrue(new RollOut());
