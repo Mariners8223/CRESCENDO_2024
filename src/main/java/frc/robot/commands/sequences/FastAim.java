@@ -6,6 +6,7 @@ package frc.robot.commands.sequences;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.ShooterCommands.QuickAim;
+import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 
@@ -17,8 +18,8 @@ public class FastAim extends ParallelCommandGroup {
   public FastAim() {//this command chosses the best shooting position for the current arm position
     addCommands(
       new QuickAim().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake
-      && Arm.getInstance().lastknownPosition != knownArmPosition.Amp
-      && Arm.getInstance().lastknownPosition != knownArmPosition.Shooter),
+      && Arm.getInstance().lastknownPosition != knownArmPosition.Unknown),
+      new MoveToHome().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Intake),
       new AimRegularToSpeaker().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Intake)
     );
   }
