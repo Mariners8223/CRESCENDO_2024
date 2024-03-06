@@ -7,17 +7,37 @@ package frc.robot.commands.ShooterCommands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 
-public class Shoot extends Command {
+public class Shoot extends SequentialCommandGroup {
+  public Shoot(){
+    addCommands(
+    new Shoot1(),
+    new WaitCommand(0.6),
+    new InstantCommand(() -> {
+      Arm.getInstance().getIntakeSub().stopMotor();
+      Arm.getInstance().getShooterSub().stopMotors();
+
+      //just in case, ends the control of aim
+      // RobotContainer.driveBase.isControlled = false;
+      RobotContainer.driveBase.setIsControlled(false);
+
+      RobotContainer.AlphaAimCommand.cancel();
+      RobotContainer.BetaAimCommand.cancel();
+    }));
+  }
   /** Creates a new Shoot. */
 
+  private static class Shoot1 extends Command{
   private Arm arm;
   private int timer;
 
-  public Shoot() {
+  public Shoot1() {
     // Use addRequirements() here to declare subsystem dependencies.
     arm = Arm.getInstance();
 
@@ -60,23 +80,13 @@ public class Shoot extends Command {
     // Timer.delay(0.1);
 
     arm.getIntakeSub().setMotor(1);
-    Timer.delay(0.6);
-
-    arm.getIntakeSub().stopMotor();
-    arm.getShooterSub().stopMotors();
-
-    //just in case, ends the control of aim
-    // RobotContainer.driveBase.isControlled = false;
-    RobotContainer.driveBase.setIsControlled(false);
-
-    RobotContainer.AlphaAimCommand.cancel();
-    RobotContainer.BetaAimCommand.cancel();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return arm.getShooterSub().isAtSelctedVelocity() && timer > 60;
+    return (arm.getShooterSub().isAtSelctedVelocity() && timer > 60) || timer > 120;
     // return timer >= 20;
   }
+}
 }

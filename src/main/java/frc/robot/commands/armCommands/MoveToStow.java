@@ -33,11 +33,13 @@ public class MoveToStow extends SequentialCommandGroup {
 
     @Override
     public void initialize(){
+      System.out.println("stow started");
       arm.moveMotorsToRotation(0.0325, arm.getSecondaryMotorRotation());
     }
 
     @Override
     public void end(boolean interrupted){
+      System.out.println("stow finished");
       if(!interrupted) arm.lastknownPosition = Arm.knownArmPosition.Stow;
       else arm.lastknownPosition = Arm.knownArmPosition.Unknown;
     }
