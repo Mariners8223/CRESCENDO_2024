@@ -29,7 +29,7 @@ public class Robot extends LoggedRobot {
     Pathfinding.setPathfinder(new LocalADStarAK());
 
     if(isReal()){
-      Logger.addDataReceiver(new NT4Publisher());
+      // Logger.addDataReceiver(new NT4Publisher());
       Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
     }
     else setUseTiming(false);
@@ -64,6 +64,9 @@ public class Robot extends LoggedRobot {
     // SmartDashboard.putNumber("Chassis angle", RobotContainer.driveBase.getAngle());
     // SmartDashboard.putNumber("ArmPose z", Arm.getInstance().getShooterPosition().y);
     // // SmartDashboard.putNumber("armX", Arm.getInstance().getShooterPosition().x);
+
+    SmartDashboard.putBoolean("is at selected velocity", Arm.getInstance().getShooterSub().isAtSelctedVelocity());
+    
     SmartDashboard.putNumber("wanted speed", Units.radiansPerSecondToRotationsPerMinute(ArmUtil.getWantedSpeed() / Constants.Shooter.wheelRadius));
     // // Constants.Shooter.frictionPowerParameterForGPVelocity = SmartDashboard.getNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
     // SmartDashboard.putNumber("angle to gp", RobotContainer.vision.getAngleToBestObject(CameraLocation.Front_Right));

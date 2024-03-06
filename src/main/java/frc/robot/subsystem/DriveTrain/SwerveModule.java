@@ -120,7 +120,7 @@ public class SwerveModule{
   public boolean isAtRequestedPostion(){
     return Math.abs(currentState.speedMetersPerSecond - targetState.speedMetersPerSecond) <= Constants.DriveTrain.Drive.driveMotorPID.getTolerance() //checks if the speed is within tolarnce
     && Math.abs(currentState.angle.getRotations() - targetState.angle.getRotations()) <= Constants.DriveTrain.Steer.steerMotorPID.getTolerance(); //checks if the rotation is within tolarnce
-  }
+  } 
 
   /**
    * sets the module to point to the center of the robot
@@ -227,6 +227,9 @@ public class SwerveModule{
    * @return the updated state of the module
    */
   public void update(){
+    //eyal
+    steerMotor.getEncoder().setPosition(absEncoder.get() * Constants.DriveTrain.Steer.steerGearRatio);
+    //eyal
     currentState.angle = Rotation2d.fromRotations(steerMotorPostion.get());
     currentState.speedMetersPerSecond = driveMotorVelocity.get();
 
@@ -238,7 +241,7 @@ public class SwerveModule{
     inputs.driveMotorVoltage = driveMotorVoltage.get(); //updates the voltage output of the drive motor
     inputs.driveMotorVelocity = driveMotorVelocity.get();
     inputs.driveMotorTempture = driveMotor.getDeviceTemp().getValueAsDouble();
-    
+
 
     inputs.steerMotorCurrent = steerMotorCurrent.get(); //updates the current output of the steer motor
     inputs.steerMotorVoltage = steerMotorVoltage.get(); //updates the voltage output of the steer motor
@@ -246,7 +249,7 @@ public class SwerveModule{
     inputs.steerMotorTempture = steerMotor.getMotorTemperature();
 
     // inputs.absEncoderPostion = absEncoder.getAbsolutePosition().getValueAsDouble() * 360;
-    inputs.absEncoderPostion = (absEncoder.getAbsolutePosition() - absEncoder.getPositionOffset()) * 360;
+    inputs.absEncoderPostion = absEncoder.get() * 360;
 
     Logger.processInputs(moduleConstants.moduleName.name(), inputs); //updates the logger
   }
@@ -298,7 +301,7 @@ public class SwerveModule{
   public double getAbsolutePosition(){
     // return absEncoder.getAbsolutePosition().getValueAsDouble();
     // return 0;
-    return (absEncoder.getAbsolutePosition() - absEncoder.getPositionOffset());
+    return absEncoder.get() ;
   }
 
   /**
@@ -361,7 +364,8 @@ public class SwerveModule{
 
     driveMotorVelocity = talonFX.getVelocity().asSupplier(); //sets the new velocity supplier
     driveMotorPostion = talonFX.getPosition().asSupplier(); //sets the new postion supplier
-    driveMotorCurrent = talonFX.getStatorCurrent().asSupplier(); //sets a supplior of the applied current of the motor for logging
+    driveMotorCurrent = talonFX.getSupplyCurrent().asSupplier(); //sets a supplior of the applied current of the motor for logging
+    // driveMotorCurrent = () -> return talonFX.getDutyCycle().getValueAsDouble() * talonFX.getSupplyVoltage().get
     driveMotorVoltage = talonFX.getMotorVoltage().asSupplier(); //sets a supplior of the applied voltage of the motor for logging
 
     VelocityDutyCycle velocityDutyCycle = new VelocityDutyCycle(0);
@@ -438,7 +442,7 @@ public class SwerveModule{
 
     // sparkMax.getEncoder().setPosition(absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.DriveTrain.Steer.steerGearRatio); //place holder, place getabsencoder postion
     // sparkMax.getEncoder().setPosition(0);
-    sparkMax.getEncoder().setPosition((absEncoder.getAbsolutePosition() - absEncoder.getPositionOffset()) * Constants.DriveTrain.Steer.steerGearRatio);
+    sparkMax.getEncoder().setPosition(absEncoder.get() * Constants.DriveTrain.Steer.steerGearRatio);
 
     steerMotorCurrent = () -> sparkMax.getOutputCurrent();
     steerMotorVoltage = () -> sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();
@@ -447,8 +451,8 @@ public class SwerveModule{
     steerMotorPostionInput = position -> sparkMax.getPIDController().setReference(position * Constants.DriveTrain.Steer.steerGearRatio, ControlType.kPosition);
     steerMotorVoltageInput = position -> sparkMax.getPIDController().setReference(steerMotorVoltagePID.calculate(steerMotorPostion.get(), position), ControlType.kVoltage);
 
-    sparkMax.setSmartCurrentLimit(30); //sets the current limit of the motor (thanks noga for reminding m)
-    sparkMax.setSecondaryCurrentLimit(50); 
+    sparkMax.setSmartCurrentLimit(40); //sets the current limit of the motor (thanks noga for reminding m)
+    sparkMax.setSecondaryCurrentLimit(70); 
     sparkMax.burnFlash(); //sometimes work
 
     return sparkMax;
