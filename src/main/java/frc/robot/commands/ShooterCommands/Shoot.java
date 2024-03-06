@@ -64,7 +64,8 @@ public class Shoot extends Command {
     //just in case, ends the control of aim
     RobotContainer.driveBase.isControlled = false;
 
-    RobotContainer.aimCommand.cancel();
+    RobotContainer.AlphaAimCommand.cancel();
+    RobotContainer.BetaAimCommand.cancel();
   }
 
   // Returns true when the command should end.
