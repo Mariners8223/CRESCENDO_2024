@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Test.AimToRing;
@@ -116,7 +118,7 @@ public class RobotContainer {
     //check if still necesery
     // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
 
-    armController.povLeft().onTrue(AlphaAimCommand);
+    // armController.povLeft().onTrue(AlphaAimCommand);
     armController.povRight().onTrue(BetaAimCommand);
 
     armController.povDown().onTrue(new MoveToHome()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
@@ -147,7 +149,7 @@ public class RobotContainer {
     //AUTOSSSSS related shit
     NamedCommands.registerCommand("Shoot", new Shoot());
     NamedCommands.registerCommand("QuikAim", new BetaAim_Auto());
-    NamedCommands.registerCommand("Collect", new Collect());
+    NamedCommands.registerCommand("Collect", new SequentialCommandGroup(new IntakeToFloor(), new Collect_noProxy()));
     NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
     NamedCommands.registerCommand("MoveToHome", new MoveToHome());

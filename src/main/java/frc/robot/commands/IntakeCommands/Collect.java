@@ -28,7 +28,7 @@ public class Collect extends SequentialCommandGroup{
   public Collect1(){
     intake = Arm.getInstance().getIntakeSub();
 
-    addRequirements(Arm.getInstance());
+    // addRequirements(Arm.getInstance());
   }
 
   @Override

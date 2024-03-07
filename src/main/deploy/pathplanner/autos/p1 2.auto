@@ -20,6 +20,12 @@
         {
           "type": "named",
           "data": {
+            "name": "QuikAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         },

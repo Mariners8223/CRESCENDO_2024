@@ -12,6 +12,7 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
+import frc.robot.subsystem.DriveTrain.DriveBase;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,10 +20,13 @@ import frc.robot.subsystem.Arm.ArmUtil;
 public class BetaAim_AutoInstants extends InstantCommand {
   private static double target;
   private static Arm arm;
+   private static DriveBase driveBase;
   public BetaAim_AutoInstants() {
     // Use addRequirements() here to declare subsystem dependencies.
     arm = Arm.getInstance();
-    addRequirements(arm);
+    driveBase = RobotContainer.driveBase;
+
+    addRequirements(arm, driveBase);
   }
 
   // Called when the command is initially scheduled.
@@ -41,6 +45,8 @@ public class BetaAim_AutoInstants extends InstantCommand {
       // RobotContainer.driveBase.isControlled = true;
       RobotContainer.driveBase.setIsControlled(true);
       RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()), false);
+      driveBase.drive(0, 0, 0);
+
       
       // RobotContainer.driveBase.isControlled = false;
       RobotContainer.driveBase.setIsControlled(false);

@@ -307,7 +307,7 @@ public class Constants {
 
         public static final class Drive{
             public static final PIDFGains driveMotorPID = new PIDFGains(0.4, 0.001, 0.001, 0.0, 0.22, 0); //the pid gains for the PID Controller of the drive motor, units are in 2048 per rotation
-            public static final double freeWheelSpeedMetersPerSec = 4.75; //the max speed of the drive wheel in meters per second
+            public static final double freeWheelSpeedMetersPerSec = 3.75; //the max speed of the drive wheel in meters per second
 
             public static final double driveMotorMaxAcceleration = 4; //the max Acceleration of the wheel in meters / second squard
             public static final double driveMotorMaxJerk = 4.4; //the max jerk of the wheel in meters / second cubed
