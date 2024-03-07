@@ -24,7 +24,7 @@
         "y": 6.837791367890429
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "amp shooting pose"
     }
   ],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 15.79,
     "rotateFast": false
   },
   "reversed": false,
