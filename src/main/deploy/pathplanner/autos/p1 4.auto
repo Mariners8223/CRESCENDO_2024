@@ -114,22 +114,9 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "IntakeToFloor"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Collect"
-                      }
-                    }
-                  ]
+                  "name": "Collect"
                 }
               }
             ]
