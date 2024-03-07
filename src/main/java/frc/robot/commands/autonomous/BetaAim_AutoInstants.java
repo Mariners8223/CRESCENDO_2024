@@ -20,13 +20,11 @@ import frc.robot.subsystem.DriveTrain.DriveBase;
 public class BetaAim_AutoInstants extends InstantCommand {
   private static double target;
   private static Arm arm;
-   private static DriveBase driveBase;
   public BetaAim_AutoInstants() {
     // Use addRequirements() here to declare subsystem dependencies.
     arm = Arm.getInstance();
-    driveBase = RobotContainer.driveBase;
 
-    addRequirements(arm, driveBase);
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
