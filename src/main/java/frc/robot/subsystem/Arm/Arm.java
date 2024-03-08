@@ -29,7 +29,6 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Intake.Intake;
 import frc.robot.subsystem.Arm.Shooter.Shooter;
-import frc.robot.subsystem.Arm.climb.Elavator;
 import frc.util.PIDFGains;
 
 public class Arm extends SubsystemBase{
@@ -98,10 +97,6 @@ public class Arm extends SubsystemBase{
     return instance;
   }
 
-  public Elavator getElavatorSub(){
-    return elavator;
-  }
-
   public Intake getIntakeSub(){
     return intake;
   }
@@ -132,7 +127,6 @@ public class Arm extends SubsystemBase{
 
   private Shooter shooter;
   private Intake intake;
-  private Elavator elavator;
 
   private Arm() {
     mainMotor = configureMotors(Constants.Arm.Motors.mainMotorID ,Constants.Arm.Motors.mainPID,
@@ -154,7 +148,6 @@ public class Arm extends SubsystemBase{
 
     shooter = new Shooter();
     intake = new Intake();  
-    elavator = new Elavator();
 
     lastknownPosition = knownArmPosition.Unknown;
 
@@ -267,7 +260,6 @@ public class Arm extends SubsystemBase{
     updateArmPostions();
     shooter.update();
     intake.update();
-    elavator.update();
   }
 
   /**
