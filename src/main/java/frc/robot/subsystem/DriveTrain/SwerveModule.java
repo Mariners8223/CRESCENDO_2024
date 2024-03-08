@@ -31,6 +31,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.Constants;
 
 public class SwerveModule{
@@ -61,7 +62,8 @@ public class SwerveModule{
   private TalonFX driveMotor; //the drive motor
   private TalonFXConfiguration driveMotorConfig; //the config of the drive motor (used to set the neutral mode of the motor)
 
-  private CANcoder absEncoder; //the absolute encoder
+  // private CANcoder absEncoder; //the absolute encoder
+  private DutyCycleEncoder absEncoder; //the absolute encoder
   private CANSparkMax steerMotor; //the steer motor
 
   private SwerveModuleInputsAutoLogged inputs;
@@ -75,10 +77,12 @@ public class SwerveModule{
     double driveMotorVoltage;
     double driveMotorPostion;
     double driveMotorVelocity;
+    double driveMotorTempture;
 
     double steerMotorCurrent;
     double steerMotorVoltage;
     double steerMotorPosition;
+    double steerMotorTempture;
 
     double absEncoderPostion;
   }
@@ -94,7 +98,8 @@ public class SwerveModule{
     currentState = targetState;
     modulePostion = new SwerveModulePosition(0, new Rotation2d());
 
-    absEncoder = configCanCoder();
+    // absEncoder = configCanCoder();
+    absEncoder = configDutyCycleEncoder();
 
     driveMotorConfig = getTalonFXConfiguration();
     driveMotor = configTalonFX(driveMotorConfig);
@@ -115,7 +120,7 @@ public class SwerveModule{
   public boolean isAtRequestedPostion(){
     return Math.abs(currentState.speedMetersPerSecond - targetState.speedMetersPerSecond) <= Constants.DriveTrain.Drive.driveMotorPID.getTolerance() //checks if the speed is within tolarnce
     && Math.abs(currentState.angle.getRotations() - targetState.angle.getRotations()) <= Constants.DriveTrain.Steer.steerMotorPID.getTolerance(); //checks if the rotation is within tolarnce
-  }
+  } 
 
   /**
    * sets the module to point to the center of the robot
@@ -222,6 +227,9 @@ public class SwerveModule{
    * @return the updated state of the module
    */
   public void update(){
+    //eyal
+    steerMotor.getEncoder().setPosition(absEncoder.get() * Constants.DriveTrain.Steer.steerGearRatio);
+    //eyal
     currentState.angle = Rotation2d.fromRotations(steerMotorPostion.get());
     currentState.speedMetersPerSecond = driveMotorVelocity.get();
 
@@ -232,12 +240,16 @@ public class SwerveModule{
     inputs.driveMotorCurrent = driveMotorCurrent.get(); //updates the current output of the drive motor
     inputs.driveMotorVoltage = driveMotorVoltage.get(); //updates the voltage output of the drive motor
     inputs.driveMotorVelocity = driveMotorVelocity.get();
+    inputs.driveMotorTempture = driveMotor.getDeviceTemp().getValueAsDouble();
+
 
     inputs.steerMotorCurrent = steerMotorCurrent.get(); //updates the current output of the steer motor
     inputs.steerMotorVoltage = steerMotorVoltage.get(); //updates the voltage output of the steer motor
     inputs.steerMotorPosition = steerMotorPostion.get();
+    inputs.steerMotorTempture = steerMotor.getMotorTemperature();
 
-    inputs.absEncoderPostion = absEncoder.getAbsolutePosition().getValueAsDouble() * 360;
+    // inputs.absEncoderPostion = absEncoder.getAbsolutePosition().getValueAsDouble() * 360;
+    inputs.absEncoderPostion = absEncoder.get() * 360;
 
     Logger.processInputs(moduleConstants.moduleName.name(), inputs); //updates the logger
   }
@@ -278,7 +290,8 @@ public class SwerveModule{
    * @param newOffset the new offset of the cancoder in rotations
    */
   public void resetCancoderOffset(double newOffset){
-    absEncoder.getConfigurator().apply(new MagnetSensorConfigs().withMagnetOffset(newOffset));
+    // absEncoder.getConfigurator().apply(new MagnetSensorConfigs().withMagnetOffset(newOffset));
+    absEncoder.setPositionOffset(newOffset);
   }
 
   /**
@@ -286,7 +299,9 @@ public class SwerveModule{
    * @return the absolute postion of the cancoder in rotations
    */
   public double getAbsolutePosition(){
-    return absEncoder.getAbsolutePosition().getValueAsDouble();
+    // return absEncoder.getAbsolutePosition().getValueAsDouble();
+    // return 0;
+    return absEncoder.get() ;
   }
 
   /**
@@ -294,6 +309,14 @@ public class SwerveModule{
    */
   public void resetSteerEncoder(){
     steerMotor.getEncoder().setPosition(0);
+  }
+
+
+  private DutyCycleEncoder configDutyCycleEncoder(){
+    DutyCycleEncoder encoder = new DutyCycleEncoder(moduleConstants.absoluteEncoderID);
+    encoder.setPositionOffset(moduleConstants.absoluteEncoderZeroOffset / 360);
+
+    return encoder;
   }
 
 
@@ -305,10 +328,12 @@ public class SwerveModule{
     CANcoderConfiguration config = new CANcoderConfiguration();
 
     config.FutureProofConfigs = false; //disables future proof config (everything should be updated)
+    
 
     config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 
-    config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+    if(!moduleConstants.isAbsEncoderInverted) config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive; //if the encoder is inverted
+    else config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive; //if the encoder is not inverted
 
     config.MagnetSensor.MagnetOffset = moduleConstants.absoluteEncoderZeroOffset / -360; //sets the offset of the cancoder from the zero postion of the module (devided by zero because of the offset input from the user is in degrees)
 
@@ -335,10 +360,12 @@ public class SwerveModule{
     talonFX.getVelocity().setUpdateFrequency(50); //sets as default
     talonFX.getMotorVoltage().setUpdateFrequency(50); //sets as default
     talonFX.getStatorCurrent().setUpdateFrequency(50); //sets as default
+    talonFX.getDeviceTemp().setUpdateFrequency(50);
 
     driveMotorVelocity = talonFX.getVelocity().asSupplier(); //sets the new velocity supplier
     driveMotorPostion = talonFX.getPosition().asSupplier(); //sets the new postion supplier
-    driveMotorCurrent = talonFX.getStatorCurrent().asSupplier(); //sets a supplior of the applied current of the motor for logging
+    driveMotorCurrent = talonFX.getSupplyCurrent().asSupplier(); //sets a supplior of the applied current of the motor for logging
+    // driveMotorCurrent = () -> return talonFX.getDutyCycle().getValueAsDouble() * talonFX.getSupplyVoltage().get
     driveMotorVoltage = talonFX.getMotorVoltage().asSupplier(); //sets a supplior of the applied voltage of the motor for logging
 
     VelocityDutyCycle velocityDutyCycle = new VelocityDutyCycle(0);
@@ -372,6 +399,9 @@ public class SwerveModule{
     if(moduleConstants.isDriveInverted) config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //if the motor is inverted 
     else config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //if motor is not inverted
 
+    config.CurrentLimits.SupplyCurrentLimit = 70;
+    config.CurrentLimits.SupplyCurrentLimitEnable = true;
+
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast; //sets it to coast (changed when the robot is enabled)
 
     config.Slot0.kP = Constants.DriveTrain.Drive.driveMotorPID.getP(); //sets the P
@@ -397,7 +427,7 @@ public class SwerveModule{
     sparkMax.restoreFactoryDefaults();
 
     sparkMax.enableVoltageCompensation(12); //sets voltage compensation to 12V
-    sparkMax.setInverted(true); //sets wether the motor is inverted or not
+    sparkMax.setInverted(moduleConstants.isSteerInverted); //sets wether the motor is inverted or not
 
     sparkMax.setIdleMode(IdleMode.kCoast); //sets the idle mode to coat (automaticlly goes to brakes once the robot is enabled)
 
@@ -413,7 +443,9 @@ public class SwerveModule{
 
     sparkMax.getEncoder().setPositionConversionFactor(1); //sets the gear ratio for the module
 
-    sparkMax.getEncoder().setPosition(absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.DriveTrain.Steer.steerGearRatio); //place holder, place getabsencoder postion
+    // sparkMax.getEncoder().setPosition(absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.DriveTrain.Steer.steerGearRatio); //place holder, place getabsencoder postion
+    // sparkMax.getEncoder().setPosition(0);
+    sparkMax.getEncoder().setPosition(absEncoder.get() * Constants.DriveTrain.Steer.steerGearRatio);
 
     steerMotorCurrent = () -> sparkMax.getOutputCurrent();
     steerMotorVoltage = () -> sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();
@@ -422,6 +454,8 @@ public class SwerveModule{
     steerMotorPostionInput = position -> sparkMax.getPIDController().setReference(position * Constants.DriveTrain.Steer.steerGearRatio, ControlType.kPosition);
     steerMotorVoltageInput = position -> sparkMax.getPIDController().setReference(steerMotorVoltagePID.calculate(steerMotorPostion.get(), position), ControlType.kVoltage);
 
+    sparkMax.setSmartCurrentLimit(40); //sets the current limit of the motor (thanks noga for reminding m)
+    sparkMax.setSecondaryCurrentLimit(70); 
     sparkMax.burnFlash(); //sometimes work
 
     return sparkMax;

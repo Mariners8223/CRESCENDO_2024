@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.9143586253154081,
+        "y": 1.9770060234663343
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.9143586253154066,
+        "y": 1.9770060234663343
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.018221791227425,
+        "y": 1.0626473981509263
+      },
+      "prevControl": {
+        "x": 7.351559221023613,
+        "y": 1.8080070546183573
+      },
+      "nextControl": null,
+      "isLocked": true,
+      "linkedName": "MiddleNotes_BottmNote"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 200.0,
+    "maxAngularAcceleration": 550.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -48.19,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Connectors",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

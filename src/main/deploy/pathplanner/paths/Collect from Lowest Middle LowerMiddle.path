@@ -1,0 +1,64 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.018221791227425,
+        "y": 1.0626473981509263
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 9.018221791227425,
+        "y": 1.0626473981509261
+      },
+      "isLocked": true,
+      "linkedName": "MiddleNotes_BottmNote"
+    },
+    {
+      "anchor": {
+        "x": 8.018221791227425,
+        "y": 2.7038039051273004
+      },
+      "prevControl": {
+        "x": 6.018062392419323,
+        "y": 2.456939070647738
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "MiddleNotes_UpperBottmNote"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.7,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 100.0,
+        "maxAngularAcceleration": 500.0
+      }
+    }
+  ],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 200.0,
+    "maxAngularAcceleration": 550.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -40.94999999999999,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Connectors",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.487656336225653,
+        "y": 6.837791367890429
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.436471720215054,
+        "y": 5.701978720780042
+      },
+      "isLocked": true,
+      "linkedName": "amp shooting pose"
+    },
+    {
+      "anchor": {
+        "x": 8.012618136505887,
+        "y": 4.403274541213847
+      },
+      "prevControl": {
+        "x": 6.837042082635236,
+        "y": 6.5128384888598765
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 200.0,
+    "maxAngularAcceleration": 550.0
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": -45.0,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": "Connectors",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

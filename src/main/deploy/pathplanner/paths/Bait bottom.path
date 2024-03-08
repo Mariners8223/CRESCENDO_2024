@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.0279205173794976,
+        "y": 1.9733885621617402
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.027920517379498,
+        "y": 1.9733885621617402
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.661944862351264,
+        "y": 0.7400207108106523
+      },
+      "prevControl": {
+        "x": 5.45630455564593,
+        "y": 0.927564758520371
+      },
+      "nextControl": {
+        "x": 8.437994568296826,
+        "y": 0.4637463121080083
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.2215077494288,
+        "y": 2.4276897959971695
+      },
+      "prevControl": {
+        "x": 7.3137490108344005,
+        "y": 2.4079559103755543
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 200.0,
+    "maxAngularAcceleration": 550.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Da Baitor",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

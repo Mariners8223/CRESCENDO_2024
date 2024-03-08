@@ -2,11 +2,24 @@
   "robotWidth": 0.75,
   "robotLength": 0.75,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "Connectors",
+    "Da Baitor",
+    "Far Notes Collection",
+    "move out of line",
+    "Notes",
+    "Shotting positions",
+    "starters"
+  ],
+  "autoFolders": [
+    "p1",
+    "p2",
+    "p3",
+    "p4"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
-  "defaultMaxAngVel": 540.0,
-  "defaultMaxAngAccel": 720.0,
-  "maxModuleSpeed": 4.75
+  "defaultMaxAngVel": 200.0,
+  "defaultMaxAngAccel": 550.0,
+  "maxModuleSpeed": 3.7
 }
