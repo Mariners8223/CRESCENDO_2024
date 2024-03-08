@@ -214,10 +214,13 @@ public class Constants {
         public static final int MaxStallTime = 30;
 
         public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
-        public static final int CloseProximity = 40;
+        // public static final int CloseProximity = 40;
 
         public static final double secondaryIntakeAngle = 0.405;
         public static final double mainIntakeAngle = -0.029;
+
+        public static final int intakeTime = 15;//in ticks
+        public static final int LaserChanel = 2;
     }
 
     public static class Elevator{

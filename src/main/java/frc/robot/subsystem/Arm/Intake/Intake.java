@@ -9,6 +9,8 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+
 
 
 
@@ -17,11 +19,12 @@ public class Intake {
     public static class IntakeInputs{
         double motorPower;
         double motorPosition;
-        double proximity;
+        boolean WasGamePieceDetected;
         double current;
     }
 
     private CANSparkFlex intakeMotor;
+    private DigitalInput laser;
     
     private IntakeInputsAutoLogged inputs;
 
@@ -29,20 +32,25 @@ public class Intake {
         intakeMotor = new CANSparkFlex(Constants.Intake.intakeMotorID, MotorType.kBrushless);
         intakeMotor.setInverted(Constants.Intake.intakeMotorIsInverted);
 
+        laser = new DigitalInput(Constants.Intake.LaserChanel);
+
         intakeMotor.enableVoltageCompensation(12);
 
         intakeMotor.getPIDController().setP(5);
 
         inputs = new IntakeInputsAutoLogged();
-        inputs.proximity = 200;
+        inputs.WasGamePieceDetected = false;
     }
 
-    public double getProximity(){
-        return inputs.proximity;
+    public boolean getLaserReading(){
+        return laser.get();
+    }
+    public void setWasGamePieceDetected(boolean Detected){
+        inputs.WasGamePieceDetected = Detected;
     }
 
     public boolean isGamePieceDetected(){
-        return inputs.proximity <= Constants.Intake.CloseProximity;
+        return inputs.WasGamePieceDetected;
     }
 
     public double getMotorPosition(){
