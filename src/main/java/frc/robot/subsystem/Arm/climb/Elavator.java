@@ -7,14 +7,11 @@ package frc.robot.subsystem.Arm.climb;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
+
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.util.PIDFGains;
 
 public class Elavator extends SubsystemBase {
   
@@ -104,30 +101,30 @@ public class Elavator extends SubsystemBase {
     Logger.processInputs("elavator", inputs);
   }
 
-  private TalonFX configMotor(int motorID, boolean isInverted, PIDFGains pidGains, double convertionFactor){
-    TalonFX motor = new TalonFX(motorID);
+  // private TalonFX configMotor(int motorID, boolean isInverted, PIDFGains pidGains, double convertionFactor){
+  //   TalonFX motor = new TalonFX(motorID);
 
-    TalonFXConfiguration config = new TalonFXConfiguration();
+  //   TalonFXConfiguration config = new TalonFXConfiguration();
 
-    config.Slot0.kP = pidGains.getP();
-    config.Slot0.kI = pidGains.getI();
-    config.Slot0.kD = pidGains.getD();
-    config.Slot0.kS = pidGains.getF();
+  //   config.Slot0.kP = pidGains.getP();
+  //   config.Slot0.kI = pidGains.getI();
+  //   config.Slot0.kD = pidGains.getD();
+  //   config.Slot0.kS = pidGains.getF();
 
-    config.Feedback.SensorToMechanismRatio = convertionFactor;
+  //   config.Feedback.SensorToMechanismRatio = convertionFactor;
 
-    config.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+  //   config.MotorOutput.Inverted = isInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
 
-    motor.getConfigurator().apply(config);
+  //   motor.getConfigurator().apply(config);
 
-    motor.optimizeBusUtilization();
+  //   motor.optimizeBusUtilization();
 
-    motor.getVelocity().setUpdateFrequency(50);
-    motor.getStatorCurrent().setUpdateFrequency(50);
-    motor.getPosition().setUpdateFrequency(50);
+  //   motor.getVelocity().setUpdateFrequency(50);
+  //   motor.getStatorCurrent().setUpdateFrequency(50);
+  //   motor.getPosition().setUpdateFrequency(50);
 
-    return motor;
-  }
+  //   return motor;
+  // }
 
   // private CANSparkMax configSparkMax(){
   //   CANSparkMax sparkMax = new CANSparkMax(Constants.Elevator.railMotorID, MotorType.kBrushless);

@@ -16,7 +16,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
 import frc.util.PIDFGains;
@@ -54,8 +53,6 @@ public class Constants {
 
     public static final class Vision{
 
-        // public static final Translation2d[] rubbishTranslation = {new Translation2d(-20, -20)};
-        public static final double[] rubbishDistance = new double[]{-1};
         public static final double[] rubbishAngle = new double[]{-1000};
         public static final Pose3d rubbishPose = new Pose3d(new Pose2d(new Translation2d(-20, -20), new Rotation2d(69)));
 

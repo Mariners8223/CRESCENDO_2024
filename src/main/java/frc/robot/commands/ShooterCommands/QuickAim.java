@@ -14,7 +14,6 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
-import frc.robot.subsystem.Arm.Arm.ArmPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -33,12 +32,10 @@ public class QuickAim extends SequentialCommandGroup {
 
   public static class QuickAim1 extends InstantCommand{
     private static Arm arm;
-    private static ArmPosition Armtarget;
     private static double target;
     public QuickAim1() {
       // Use addRequirements() here to declare subsystem dependencies.
       arm = Arm.getInstance();
-      Armtarget = new ArmPosition();
       addRequirements(arm);
     }
     // Called when the command is initially scheduled.

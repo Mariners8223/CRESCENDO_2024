@@ -10,18 +10,13 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -317,34 +312,6 @@ public class SwerveModule{
     encoder.setPositionOffset(moduleConstants.absoluteEncoderZeroOffset / 360);
 
     return encoder;
-  }
-
-
-  /**
-   * creates a cancoder with the params of the constants
-   * @return the configed cancoder
-   */
-  private CANcoder configCanCoder(){
-    CANcoderConfiguration config = new CANcoderConfiguration();
-
-    config.FutureProofConfigs = false; //disables future proof config (everything should be updated)
-    
-
-    config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-
-    if(!moduleConstants.isAbsEncoderInverted) config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive; //if the encoder is inverted
-    else config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive; //if the encoder is not inverted
-
-    config.MagnetSensor.MagnetOffset = moduleConstants.absoluteEncoderZeroOffset / -360; //sets the offset of the cancoder from the zero postion of the module (devided by zero because of the offset input from the user is in degrees)
-
-    CANcoder canCoder = new CANcoder(moduleConstants.absoluteEncoderID); //creates a new cancoder
-    canCoder.getConfigurator().apply(config); //applys the config
-
-    canCoder.getAbsolutePosition().setUpdateFrequency(50);
-
-    canCoder.optimizeBusUtilization(); //optimizes the canbus util
-
-    return canCoder; //returns the configed cancoder
   }
 
   /**

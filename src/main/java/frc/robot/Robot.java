@@ -14,12 +14,8 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.Shooter;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
-import frc.robot.subsystem.VisionSubSystem.Vision;
-import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
-import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraMode;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
@@ -29,7 +25,7 @@ public class Robot extends LoggedRobot {
     Pathfinding.setPathfinder(new LocalADStarAK());
 
     if(isReal()){
-      // Logger.addDataReceiver(new NT4Publisher());
+      Logger.addDataReceiver(new NT4Publisher());
       Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
     }
     else setUseTiming(false);
@@ -37,10 +33,6 @@ public class Robot extends LoggedRobot {
     Logger.start();
 
     new RobotContainer();
-    // SmartDashboard.putNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
-    // SmartDashboard.putNumber("Zone1", Constants.Shooter.GPAirTimeZone1);
-    // SmartDashboard.putNumber("Zone2", Constants.Shooter.GPAirTimeZone2);
-
   }
 
   @Override
@@ -108,9 +100,6 @@ public class Robot extends LoggedRobot {
     if (RobotContainer.getAutoCommand() != null) {
       RobotContainer.getAutoCommand().cancel();
     }
-    
-    // Arm.getInstance().setDefaultCommand(new ManualAim());
-    // RobotContainer.driveBase.resetOnlyDirection();
   }
 
   @Override
