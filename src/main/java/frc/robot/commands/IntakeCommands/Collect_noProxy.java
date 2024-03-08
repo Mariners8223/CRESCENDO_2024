@@ -11,7 +11,6 @@ import frc.robot.subsystem.Arm.Intake.Intake;
 
 public class Collect_noProxy extends Command {
   /** Creates a new Collect_noProxy. */
-  private static int timer;
   private static Intake intake;
   public Collect_noProxy() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -20,7 +19,6 @@ public class Collect_noProxy extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer = 0;
     intake = Arm.getInstance().getIntakeSub();
     intake.setMotor(0.8);
   }
@@ -28,7 +26,6 @@ public class Collect_noProxy extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    timer++;
   }
 
   // Called once the command ends or is interrupted.
