@@ -5,7 +5,7 @@
 package frc.robot.commands.sequences;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.IntakeCommands.Collect;
+import frc.robot.commands.IntakeCommands.Collect.Collect;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
