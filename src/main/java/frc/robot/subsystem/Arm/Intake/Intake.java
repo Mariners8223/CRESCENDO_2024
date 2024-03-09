@@ -45,7 +45,7 @@ public class Intake {
     public boolean getLaserReading(){
         return laser.get();
     }
-    public void setWasGamePieceDetected(boolean Detected){
+    public void setIsGamePieceDetected(boolean Detected){
         inputs.WasGamePieceDetected = Detected;
     }
 

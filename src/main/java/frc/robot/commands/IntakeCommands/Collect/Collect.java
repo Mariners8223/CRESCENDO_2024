@@ -17,8 +17,11 @@ public class Collect extends SequentialCommandGroup {
   public Collect() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new Collect1(),
-     new WaitCommand(0.6),
-      new InstantCommand(() -> {Arm.getInstance().getShooterSub().stopMotors(); Arm.getInstance().getIntakeSub().stopMotor();}));
+    // addCommands(new Collect_1stDraft(),
+    //  new WaitCommand(0.6),
+    //   new InstantCommand(() -> {Arm.getInstance().getShooterSub().stopMotors(); Arm.getInstance().getIntakeSub().stopMotor();}));
+    addCommands(new Collect1().onlyIf(() -> !Arm.getInstance().getIntakeSub().isGamePieceDetected()),// maybe it shouldbe !Arm.getInstance().getIntakeSub().getLaserReading();
+    new Collect2().onlyIf(() -> !Arm.getInstance().getIntakeSub().isGamePieceDetected()),
+    new Collect3().onlyIf(() -> !Arm.getInstance().getIntakeSub().isGamePieceDetected()));
   }
 }
