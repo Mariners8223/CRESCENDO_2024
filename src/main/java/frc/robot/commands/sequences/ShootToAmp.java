@@ -64,6 +64,7 @@ public class ShootToAmp extends SequentialCommandGroup {
     public void end(boolean interrupted){
       intake.stopMotor();
       shooter.stopMotors();
+      intake.setIsGamePieceDetected(false);
     }
 
     @Override

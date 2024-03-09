@@ -75,6 +75,7 @@ public class Shoot extends SequentialCommandGroup {
   @Override
   public void end(boolean interrupted) {
     arm.getIntakeSub().setMotor(1);
+    Arm.getInstance().getIntakeSub().setIsGamePieceDetected(false);
   }
 
   // Returns true when the command should end.
