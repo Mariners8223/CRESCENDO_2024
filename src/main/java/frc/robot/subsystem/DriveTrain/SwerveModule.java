@@ -361,7 +361,7 @@ public class SwerveModule{
     TalonFXConfiguration config = new TalonFXConfiguration(); //creates a new talonFX config
 
     config.FutureProofConfigs = false; //disables futre proof
-    config.Audio.AllowMusicDurDisable = true;
+    config.Audio.AllowMusicDurDisable = false;
 
     if(moduleConstants.isDriveInverted) config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //if the motor is inverted 
     else config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //if motor is not inverted

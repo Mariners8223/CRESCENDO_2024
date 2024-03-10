@@ -7,17 +7,37 @@ package frc.robot.commands.ShooterCommands;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.robot.subsystem.Arm.Shooter.Shooter;
 
-public class AimAndShootToAmpArea_Auto extends Command {
+public class AimAndShootToAmpArea_Auto extends SequentialCommandGroup {
+
+  public AimAndShootToAmpArea_Auto() {
+    addCommands(
+      new AimAndShootToAmpArea_Auto1(),
+      new WaitCommand(0.1),
+      new InstantCommand(() -> Arm.getInstance().getIntakeSub().setMotor(1)),
+      new WaitCommand(0.3),
+      new InstantCommand(() -> {
+        Arm.getInstance().getIntakeSub().stopMotor();
+        Arm.getInstance().getShooterSub().stopMotors();
+        //just in case, ends the control of aim
+        // RobotContainer.driveBase.isControlled = false;
+        RobotContainer.driveBase.setIsControlled(false);
+      }) 
+    );
+  }
+  private static class AimAndShootToAmpArea_Auto1 extends Command {
   /** Creates a new AimAndShootToAmpArea_Auto. */
   private static Arm arm;
   private static Shooter shooter;
   private static int timer;
-  public AimAndShootToAmpArea_Auto() {
+  public AimAndShootToAmpArea_Auto1() {
     // Use addRequirements() here to declare subsystem dependencies.
     arm = Arm.getInstance();
     shooter = arm.getShooterSub();
@@ -45,17 +65,6 @@ public class AimAndShootToAmpArea_Auto extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Timer.delay(0.1);
-
-    arm.getIntakeSub().setMotor(1);
-    Timer.delay(0.3);
-
-    arm.getIntakeSub().stopMotor();
-    shooter.stopMotors();
-
-    //just in case, ends the control of aim
-    // RobotContainer.driveBase.isControlled = false;
-    RobotContainer.driveBase.setIsControlled(false);
   }
 
   // Returns true when the command should end.
@@ -64,4 +73,5 @@ public class AimAndShootToAmpArea_Auto extends Command {
     return timer >= 50 || RobotContainer.driveBase.getPose().getRotation().getRadians()%(2*Math.PI) == ArmUtil.getChassisAngle_ToAmp()
      && shooter.isAtSelctedVelocity();
   }
+}
 }

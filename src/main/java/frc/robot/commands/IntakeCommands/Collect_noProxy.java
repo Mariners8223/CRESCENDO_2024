@@ -4,15 +4,29 @@
 
 package frc.robot.commands.IntakeCommands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Intake.Intake;
 
-public class Collect_noProxy extends Command {
+public class Collect_noProxy extends SequentialCommandGroup {
+
+  public Collect_noProxy() {
+    addCommands(
+      new CollectNoProxy1(),
+      new WaitCommand(0.05),
+      new InstantCommand(() -> Arm.getInstance().getIntakeSub().setMotor(-1)),
+      new WaitCommand(0.05),
+      new InstantCommand(() -> Arm.getInstance().getIntakeSub().stopMotor()));
+  }
+
+
+  private static class CollectNoProxy1 extends Command{
   /** Creates a new Collect_noProxy. */
   private static Intake intake;
-  public Collect_noProxy() {
+  public CollectNoProxy1() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -31,10 +45,6 @@ public class Collect_noProxy extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Timer.delay(0.05);
-    intake.setMotor(-1);
-    Timer.delay(0.05);
-    intake.stopMotor();
   }
 
   // Returns true when the command should end.
@@ -42,4 +52,5 @@ public class Collect_noProxy extends Command {
   public boolean isFinished() {
     return false; 
   }
+}
 }

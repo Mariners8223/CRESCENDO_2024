@@ -74,10 +74,6 @@ public class Shoot extends SequentialCommandGroup {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // Timer.delay(0.1);
-    // if(interrupted) return;
-    // Timer.delay(0.1);
-
     arm.getIntakeSub().setMotor(1);
   }
 

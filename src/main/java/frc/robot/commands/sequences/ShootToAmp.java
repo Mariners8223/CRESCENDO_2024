@@ -4,9 +4,10 @@
 
 package frc.robot.commands.sequences;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Arm.knownArmPosition;
@@ -27,22 +28,28 @@ public class ShootToAmp extends SequentialCommandGroup {
     );
   }
 
-  public static class MiniShoot extends Command {
+  public static class MiniShoot extends SequentialCommandGroup {
+
+    public MiniShoot() {
+      addCommands(
+        new InstantCommand(() -> Arm.getInstance().getIntakeSub().setMotor(0.8)),
+        new WaitCommand(0.1),
+        new MiniShoot1()
+        );
+    }
+
+    private static class MiniShoot1 extends Command{
     Shooter shooter;
     Intake intake;
     int timer;
 
-    public MiniShoot() {
+    public MiniShoot1() {
       shooter = Arm.getInstance().getShooterSub();
       intake = Arm.getInstance().getIntakeSub();
-
-      addRequirements(Arm.getInstance());
     }
 
     @Override
     public void initialize() {
-      intake.setMotor(0.8);
-      Timer.delay(0.1);
       shooter.setShooterPower(0.65);
 
       timer = 0;
@@ -63,6 +70,7 @@ public class ShootToAmp extends SequentialCommandGroup {
     public boolean isFinished() {
       return timer >= 10;
     }
+  }
   }
 
   private static class MoveToAmp extends Command {
