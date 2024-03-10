@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommands.Collect_noProxy;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
+import frc.robot.commands.IntakeCommands.Collect.Collect;
 import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
@@ -180,6 +181,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
     NamedCommands.registerCommand("StartPosition", new MoveToStartShootPose_Auto());
     NamedCommands.registerCommand("RollOut", new RollOut());
+    NamedCommands.registerCommand("AutoCollect", new Collect());
 
     NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
      {Arm.getInstance().getShooterSub().setShooterPower(0.5); Arm.getInstance().getIntakeSub().setMotor(0.8);}));
