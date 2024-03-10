@@ -366,8 +366,10 @@ public class SwerveModule{
     if(moduleConstants.isDriveInverted) config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //if the motor is inverted 
     else config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //if motor is not inverted
 
-    config.CurrentLimits.SupplyCurrentLimit = 70;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
+    config.CurrentLimits.SupplyCurrentLimit = 50;
+    config.CurrentLimits.SupplyCurrentThreshold = 70;
+    config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast; //sets it to coast (changed when the robot is enabled)
 
