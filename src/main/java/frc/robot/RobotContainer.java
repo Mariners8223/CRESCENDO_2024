@@ -26,7 +26,6 @@ import frc.robot.commands.IntakeCommands.Collect_noProxy;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
 import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
-import frc.robot.commands.ShooterCommands.QuickAim;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
@@ -98,26 +97,26 @@ public class RobotContainer {
     // driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
     
     AlphaAimCommand = new AimRegularToSpeaker();
-    BetaAimCommand = new QuickAim();
+    //BetaAimCommand = new QuickAim();
     var collect = new Collect_noProxy();
 
     // driveController.square().onTrue(aimCommand);
     // driveController.triangle().onTrue(new Shoot());
 
-    armController.cross().onTrue(new IntakeToFloor()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
+    armController.cross().onTrue(new IntakeToFloor()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
-    armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
+    armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.triangle().onTrue(new Shoot());
     //check if still necesery
     // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
 
-    // armController.povLeft().onTrue(AlphaAimCommand);
-    armController.povRight().onTrue(BetaAimCommand);
+    armController.povLeft().onTrue(AlphaAimCommand);
+    //armController.povRight().onTrue(BetaAimCommand);
 
-    armController.povDown().onTrue(new MoveToHome()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
+    armController.povDown().onTrue(new MoveToHome()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.L1().onTrue(new RollOut());
     armController.R1().onTrue(new MiniShoot());
-    armController.povUp().onTrue(new MoveToStow()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
+    armController.povUp().onTrue(new MoveToStow()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
   }
 
   private void configChooser(){
