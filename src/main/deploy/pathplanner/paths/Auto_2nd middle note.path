@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.625633325446393,
-        "y": 6.722020177278586
+        "x": 6.829823645381955,
+        "y": 2.389010655339427
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6256333254463935,
-        "y": 6.722020177278586
+        "x": 7.064040376297585,
+        "y": 2.5529623669803687
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.5085249599885775,
-        "y": 5.562647359246215
+        "x": 7.4622088188541555,
+        "y": 2.389010655339427
       },
       "prevControl": {
-        "x": 0.30470407734164784,
-        "y": 5.615860732909115
+        "x": 7.212082452695573,
+        "y": 2.3849589667795597
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,19 +29,7 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.75,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 100.0,
-        "maxAngularAcceleration": 500.0
-      }
-    }
-  ],
+  "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
@@ -55,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Connectors",
+  "folder": "Auto notes",
   "previewStartingState": {
-    "rotation": 45.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

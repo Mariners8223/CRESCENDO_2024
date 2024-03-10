@@ -181,7 +181,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
     NamedCommands.registerCommand("StartPosition", new MoveToStartShootPose_Auto());
     NamedCommands.registerCommand("RollOut", new RollOut());
-    NamedCommands.registerCommand("AutoCollect", new Collect());
+    NamedCommands.registerCommand("AutoCollect", new SequentialCommandGroup(new IntakeToFloor(), new Collect()));
+
+    //Aiming positions
+    NamedCommands.registerCommand("lower aim", AlphaAimCommand);// TODO: dis commands
+    NamedCommands.registerCommand("higher aim", getAutoCommand());
 
     NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
      {Arm.getInstance().getShooterSub().setShooterPower(0.5); Arm.getInstance().getIntakeSub().setMotor(0.8);}));
