@@ -18,11 +18,11 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -36,9 +36,6 @@ public class SwerveModule{
   private SwerveModuleState currentState; //the current state of this module
   private SwerveModulePosition modulePostion; //the current postion of this module (no need for target postion)
 
-  private PIDController driveMotorVoltagePID;
-  private PIDController steerMotorVoltagePID;
-
   private Supplier<Double> driveMotorVelocity; //a supplier of the drive motor velocity
   private Supplier<Double> driveMotorPostion; //a supplier of the drive motor postion
   private Supplier<Double> driveMotorCurrent; //a supplier of the drive motor output current
@@ -50,8 +47,6 @@ public class SwerveModule{
 
   private Consumer<Double> steerMotorPostionInput; //a consumer for the new target of the steer motor postion loop (including the gear ratio)
   private Consumer<Double> driveMotorVelocityInput; //a consumer for the new speed target of the drive motor velocity loop (including the gear ratio and circufrance)
-  private Consumer<Double> driveMotorVoltageInput;
-  private Consumer<Double> steerMotorVoltageInput;
   
 
   private TalonFX driveMotor; //the drive motor
@@ -60,6 +55,7 @@ public class SwerveModule{
   // private CANcoder absEncoder; //the absolute encoder
   private DutyCycleEncoder absEncoder; //the absolute encoder
   private CANSparkMax steerMotor; //the steer motor
+  private RelativeEncoder steerEncoder;
 
   private SwerveModuleInputsAutoLogged inputs;
 
@@ -100,9 +96,6 @@ public class SwerveModule{
     driveMotor = configTalonFX(driveMotorConfig);
 
     steerMotor = configCanSparkMax();
-
-    driveMotorVoltagePID = Constants.DriveTrain.Drive.driveMotorPID.createPIDController();
-    steerMotorVoltagePID = Constants.DriveTrain.Steer.steerMotorPID.createPIDController();
 
     inputs = new SwerveModuleInputsAutoLogged();
   }
@@ -202,29 +195,10 @@ public class SwerveModule{
   }
 
   /**
-   * sets the module state by using a voltage based pid controller insted of the normal
-   * @param targetState the target state of the module
-   */
-  public void setModuleStateWithVoltage(SwerveModuleState targetState){
-    this.targetState = targetState;
-
-    driveMotorVoltageInput.accept(this.targetState.speedMetersPerSecond);
-    steerMotorVoltageInput.accept(this.targetState.angle.getRotations());
-
-    inputs.driveMotorInput = this.targetState.speedMetersPerSecond; //updates the input given (for logger)
-    inputs.steerMotorInput = this.targetState.angle.getRotations(); //udpats the input given (for logger)
-
-    Logger.processInputs(moduleConstants.moduleName.name(), inputs); //updaes logger
-  }
-
-  /**
    * this updates the module state and the module postion, run this function peridocaly
    * @return the updated state of the module
    */
   public void update(){
-    //eyal
-    steerMotor.getEncoder().setPosition(absEncoder.get() * Constants.DriveTrain.Steer.steerGearRatio);
-    //eyal
     currentState.angle = Rotation2d.fromRotations(steerMotorPostion.get());
     currentState.speedMetersPerSecond = driveMotorVelocity.get();
 
@@ -289,6 +263,11 @@ public class SwerveModule{
     absEncoder.setPositionOffset(newOffset);
   }
 
+  private void resetSteerEncoderByAbsEncoder(){
+    // steerMotor.getEncoder().setPosition(absEncoder.get() * Constants.DriveTrain.Steer.steerGearRatio);
+    steerEncoder.setPosition(absEncoder.get() - absEncoder.getPositionOffset());
+  }
+
   /**
    * gets the absolute postion of the cancoder
    * @return the absolute postion of the cancoder in rotations
@@ -343,8 +322,6 @@ public class SwerveModule{
 
     VoltageOut voltageOut = new VoltageOut(0);
     voltageOut.EnableFOC = false;
-
-    driveMotorVoltageInput = velocity -> talonFX.setControl(voltageOut.withOutput(driveMotorVoltagePID.calculate(driveMotorVelocity.get(), velocity)));
 
     talonFX.optimizeBusUtilization(); //optimizes canbus util
 
@@ -412,14 +389,20 @@ public class SwerveModule{
 
     // sparkMax.getEncoder().setPosition(absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.DriveTrain.Steer.steerGearRatio); //place holder, place getabsencoder postion
     // sparkMax.getEncoder().setPosition(0);
-    sparkMax.getEncoder().setPosition(absEncoder.get() * Constants.DriveTrain.Steer.steerGearRatio);
+    // sparkMax.getEncoder().setPosition(absEncoder.get() * Constants.DriveTrain.Steer.steerGearRatio);
+    steerEncoder = sparkMax.getAlternateEncoder(8192);
+    steerEncoder.setPositionConversionFactor(1);
+    steerEncoder.setPosition(absEncoder.getAbsolutePosition() - absEncoder.getPositionOffset());
+    sparkMax.getPIDController().setFeedbackDevice(steerEncoder);
 
     steerMotorCurrent = () -> sparkMax.getOutputCurrent();
     steerMotorVoltage = () -> sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();
-    steerMotorPostion = () -> sparkMax.getEncoder().getPosition() / Constants.DriveTrain.Steer.steerGearRatio;
+    // steerMotorPostion = () -> sparkMax.getEncoder().getPosition() / Constants.DriveTrain.Steer.steerGearRatio;
+    steerMotorPostion = () -> steerEncoder.getPosition();
 
-    steerMotorPostionInput = position -> sparkMax.getPIDController().setReference(position * Constants.DriveTrain.Steer.steerGearRatio, ControlType.kPosition);
-    steerMotorVoltageInput = position -> sparkMax.getPIDController().setReference(steerMotorVoltagePID.calculate(steerMotorPostion.get(), position), ControlType.kVoltage);
+    // steerMotorPostionInput = position -> sparkMax.getPIDController().setReference(position * Constants.DriveTrain.Steer.steerGearRatio, ControlType.kPosition);
+    steerMotorPostionInput = position -> sparkMax.getPIDController().setReference(position, ControlType.kPosition);
+
 
     sparkMax.setSmartCurrentLimit(40); //sets the current limit of the motor (thanks noga for reminding m)
     sparkMax.setSecondaryCurrentLimit(70); 
