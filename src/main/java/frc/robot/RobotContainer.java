@@ -164,38 +164,6 @@ public class RobotContainer {
      {Arm.getInstance().getShooterSub().stopMotors(); Arm.getInstance().getIntakeSub().stopMotor();}));
   }
 
-
-  public static class Mechanism{
-    private static Mechanism2d mechanism;
-    private static MechanismRoot2d rootPivot1;
-    private static MechanismLigament2d Pivot1;
-    private static MechanismLigament2d Pivot2;
-
-    public Mechanism(){
-      mechanism = new Mechanism2d(75, 120);
-
-      rootPivot1 = mechanism.getRoot("Pivot 1", 50, 24);
-
-      Pivot1 = rootPivot1.append(new MechanismLigament2d("Pivot 1", 45, 180, 10, new Color8Bit(Color.kRed)));
-      Pivot2 = Pivot1.append(new MechanismLigament2d("Pivot 2", 40, 10, 10, new Color8Bit(Color.kDeepSkyBlue)));
-
-      SmartDashboard.putData("Pivots", mechanism);
-    }
-
-    public static void movePivotsInterval(double interval){
-      if (Pivot1.getAngle() > 180){Pivot1.setAngle(0);}
-      if (Pivot2.getAngle() > 180){Pivot2.setAngle(0);}
-
-      Pivot1.setAngle(Pivot1.getAngle() + interval);
-      Pivot2.setAngle(Pivot2.getAngle() + interval);
-    }
-
-    public static void UpdatePivots(){
-      Pivot1.setAngle(Units.rotationsToDegrees(arm.getMainMotorRotation()));
-      Pivot2.setAngle(Units.rotationsToDegrees(arm.getSecondaryMotorRotation()));
-    }
-  }
-
   public static double calculateJoyStickDeadBand(double value){
     if(Math.abs(value) <= Constants.Controllers.joyStickDeadBand) return 0;
     return value;
