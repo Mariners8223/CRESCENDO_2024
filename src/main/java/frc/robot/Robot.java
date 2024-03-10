@@ -14,6 +14,7 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.RobotContainer.Mechanism;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
@@ -33,6 +34,7 @@ public class Robot extends LoggedRobot {
     Logger.start();
 
     new RobotContainer();
+    Mechanism mechanism = new Mechanism();
   }
 
   @Override
@@ -69,6 +71,8 @@ public class Robot extends LoggedRobot {
     // Constants.Shooter.GPAirTimeZone2 = SmartDashboard.getNumber("Zone2", Constants.Shooter.GPAirTimeZone2);
 
     SmartDashboard.putBoolean("isAtSelctedVelocity", Arm.getInstance().getShooterSub().isAtSelctedVelocity());
+
+    Mechanism.UpdatePivots();
   }
 
   @Override
