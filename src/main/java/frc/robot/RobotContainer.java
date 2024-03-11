@@ -14,7 +14,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 
@@ -57,9 +56,7 @@ public class RobotContainer {
 
   public static Command AlphaAimCommand;
   public static Command BetaAimCommand;
-  // public static CommandXboxController tempController;
 
-  // public static SendableChooser<Command> autoChooser;
   public static LoggedDashboardChooser<Command> autoChooser;
   public static boolean aimingAtSpeaker = true;
   public static boolean isQuickAiming = false;
@@ -81,7 +78,6 @@ public class RobotContainer {
     arm = Arm.getInstance();
     vision = new Vision();
 
-    // arm.setDefaultCommand(new QuikAim());
     configureNamedCommands();
     configureBindings();
     configChooser();
@@ -159,7 +155,10 @@ public class RobotContainer {
     for (String name : AutoBuilder.getAllAutoNames()) {
       if(name.equals(autoName)) DoesExsit = true;      
     }
-    if(!DoesExsit) return;
+    if(!DoesExsit){
+      driveBase.getField2d().getObject("AutoPath").setPoses();
+      return;
+    }
     PathPlannerAuto.getPathGroupFromAutoFile(autoName).forEach(path -> {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) path = path.flipPath();
       path.getPathPoses().forEach(pose -> poses.add(pose));
