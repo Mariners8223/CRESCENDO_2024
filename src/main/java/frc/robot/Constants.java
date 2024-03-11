@@ -327,8 +327,8 @@ public class Constants {
 
             public static final double front_left_absoluteEncoderZeroOffset = 214.65;//212.8; // the offset between the absolute encoder reading on the front left module, in degrees
             public static final double front_right_absoluteEncoderZeroOffset = 337.27;//253.1; // the offset between the absolute encoder on the front left module, in degrees
-            public static final double back_left_absoluteEncoderZeroOffset = 321.41;//320.2; // the offset between the absolute encoder on the back left module, in degrees
-            public static final double back_right_absoluteEncoderZeroOffset = 212.88;//205; // the offset between the absolute encoder on the back right module, in degrees
+            public static final double back_left_absoluteEncoderZeroOffset = 81.47;//320.2; // the offset between the absolute encoder on the back left module, in degrees
+            public static final double back_right_absoluteEncoderZeroOffset = 270.1;//205; // the offset between the absolute encoder on the back right module, in degrees
 
             // public static final double front_left_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets
             // public static final double front_right_absoluteEncoderZeroOffset = 0; // use this to calibrate zero offsets

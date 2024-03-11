@@ -244,7 +244,8 @@ public class SwerveModule{
     inputs.steerMotorTempture = steerMotor.getMotorTemperature();
 
     // inputs.absEncoderPostion = absEncoder.getAbsolutePosition().getValueAsDouble() * 360;
-    inputs.absEncoderPostion = absEncoder.get() * 360;
+    inputs.absEncoderPostion = (absEncoder.getAbsolutePosition() - absEncoder.getPositionOffset()) * 360;
+    // inputs.absEncoderPostion = absEncoder.get() * 360;
 
     Logger.processInputs(moduleConstants.moduleName.name(), inputs); //updates the logger
   }
@@ -367,7 +368,7 @@ public class SwerveModule{
 
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimit = 50;
-    config.CurrentLimits.SupplyCurrentThreshold = 70;
+    config.CurrentLimits.SupplyCurrentThreshold = 60;
     config.CurrentLimits.SupplyTimeThreshold = 0.1;
 
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast; //sets it to coast (changed when the robot is enabled)
