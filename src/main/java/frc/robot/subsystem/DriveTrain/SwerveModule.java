@@ -326,13 +326,12 @@ public class SwerveModule{
 
     talonFX.getVelocity().setUpdateFrequency(50); //sets as default
     talonFX.getMotorVoltage().setUpdateFrequency(50); //sets as default
-    talonFX.getStatorCurrent().setUpdateFrequency(50); //sets as default
+    talonFX.getSupplyCurrent().setUpdateFrequency(50); //sets as default
     talonFX.getDeviceTemp().setUpdateFrequency(50);
 
     driveMotorVelocity = talonFX.getVelocity().asSupplier(); //sets the new velocity supplier
     driveMotorPostion = talonFX.getPosition().asSupplier(); //sets the new postion supplier
     driveMotorCurrent = talonFX.getSupplyCurrent().asSupplier(); //sets a supplior of the applied current of the motor for logging
-    // driveMotorCurrent = () -> return talonFX.getDutyCycle().getValueAsDouble() * talonFX.getSupplyVoltage().get
     driveMotorVoltage = talonFX.getMotorVoltage().asSupplier(); //sets a supplior of the applied voltage of the motor for logging
 
     VelocityDutyCycle velocityDutyCycle = new VelocityDutyCycle(0);
