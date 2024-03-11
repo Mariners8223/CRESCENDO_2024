@@ -90,6 +90,9 @@ public class Arm extends SubsystemBase{
     double mainCurrent;
     double secondaryCurrent;
 
+    Mechanism2d mechanism;
+
+
     // Mechanism2d visualArm;
     // MechanismRoot2d visualArm_Root;
     // MechanismLigament2d visualArm_MainPivot;
@@ -129,6 +132,7 @@ public class Arm extends SubsystemBase{
   private ArmPosition shooterPosition;
 
   public knownArmPosition lastknownPosition;
+  private Mechanism mechanism;
 
   private Shooter shooter;
   private Intake intake;
@@ -155,6 +159,7 @@ public class Arm extends SubsystemBase{
     intake = new Intake();  
 
     lastknownPosition = knownArmPosition.Unknown;
+    mechanism = new Mechanism();
 
     // inputs.visualArm = new Mechanism2d(getMainMotorRotation(), getAngleToSpeaker()); //TODO add length\
     // inputs.visualArm_Root = inputs.visualArm.getRoot("arm root", -Constants.Arm.mainPivotDistanceFromCenterMeters, 0);
@@ -279,6 +284,8 @@ public class Arm extends SubsystemBase{
 
     inputs.mainMotorAbsolutePostion = mainAbsEncoder.getPosition();
     inputs.secondaryAbsolutePostion = secondaryAbsEncoder.getPosition();
+
+    mechanism.UpdatePivots();
 
     // inputs.visualArm_MainPivot.setAngle(Units.rotationsToDegrees(mainEncoder.getPosition()));
     // inputs.visualArm_SeconderyPivot.setAngle(Units.rotationsToDegrees(secondaryEncoder.getPosition()));
@@ -417,24 +424,23 @@ public class Arm extends SubsystemBase{
     return encoder;
   }
 
-  public static class Mechanism{
-    private static Mechanism2d mechanism;
-    private static MechanismRoot2d rootPivot1;
-    private static MechanismLigament2d Pivot1;
-    private static MechanismLigament2d Pivot2;
+  private class Mechanism{
+    private MechanismRoot2d rootPivot1;
+    private MechanismLigament2d Pivot1;
+    private MechanismLigament2d Pivot2;
 
-    public Mechanism(){
-      mechanism = new Mechanism2d(75, 120);
+    private Mechanism(){
+      inputs.mechanism = new Mechanism2d(75, 120);
       // 2d Canvas of the Mechansim (side of robot)
 
-      rootPivot1 = mechanism.getRoot("Pivot 1", 50, 24);
+      rootPivot1 = inputs.mechanism.getRoot("Pivot 1", 50, 24);
       // Where Pivot 1 is connected to the robot
 
       Pivot1 = rootPivot1.append(new MechanismLigament2d("Pivot 1", 45, 180, 10, new Color8Bit(Color.kRed)));
       Pivot2 = Pivot1.append(new MechanismLigament2d("Pivot 2", 40, 10, 10, new Color8Bit(Color.kDeepSkyBlue)));
       // The pivots as vectors
 
-      SmartDashboard.putData("Pivots", mechanism);
+      SmartDashboard.putData("Pivots", inputs.mechanism);
     }
 
     // public static void movePivotsInterval(double interval){
@@ -445,10 +451,9 @@ public class Arm extends SubsystemBase{
     //   Pivot2.setAngle(Pivot2.getAngle() + interval);
     // }
 
-    public static void UpdatePivots(){
+    public void UpdatePivots(){
       // Pivot1.setAngle(Units.rotationsToDegrees(getMainMotorRotation()));
       // Pivot2.setAngle(Units.rotationsToDegrees(getSecondaryMotorRotation()));
-      ArmInputsAutoLogged inputs = new ArmInputsAutoLogged();
 
       Pivot1.setAngle(Units.rotationsToDegrees(inputs.mainMotorPostion));
       Pivot2.setAngle(Units.rotationsToDegrees(inputs.secondaryMotorPosition));

@@ -33,7 +33,6 @@ public class Robot extends LoggedRobot {
     Logger.start();
 
     new RobotContainer();
-    Arm.Mechanism mechanism = new Arm.Mechanism();
   }
 
   @Override
@@ -70,8 +69,6 @@ public class Robot extends LoggedRobot {
     // Constants.Shooter.GPAirTimeZone2 = SmartDashboard.getNumber("Zone2", Constants.Shooter.GPAirTimeZone2);
 
     SmartDashboard.putBoolean("isAtSelctedVelocity", Arm.getInstance().getShooterSub().isAtSelctedVelocity());
-
-    Arm.Mechanism.UpdatePivots();
   }
 
   @Override
