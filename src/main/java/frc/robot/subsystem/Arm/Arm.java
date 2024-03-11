@@ -5,6 +5,7 @@
 package frc.robot.subsystem.Arm;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.CANSparkFlex;
@@ -89,9 +90,6 @@ public class Arm extends SubsystemBase{
 
     double mainCurrent;
     double secondaryCurrent;
-
-    Mechanism2d mechanism;
-
 
     // Mechanism2d visualArm;
     // MechanismRoot2d visualArm_Root;
@@ -286,6 +284,7 @@ public class Arm extends SubsystemBase{
     inputs.secondaryAbsolutePostion = secondaryAbsEncoder.getPosition();
 
     mechanism.UpdatePivots();
+    Logger.recordOutput("ArmMechanism", mechanism.getMechanism());
 
     // inputs.visualArm_MainPivot.setAngle(Units.rotationsToDegrees(mainEncoder.getPosition()));
     // inputs.visualArm_SeconderyPivot.setAngle(Units.rotationsToDegrees(secondaryEncoder.getPosition()));
@@ -425,22 +424,25 @@ public class Arm extends SubsystemBase{
   }
 
   private class Mechanism{
+    private Mechanism2d mechanism;
     private MechanismRoot2d rootPivot1;
     private MechanismLigament2d Pivot1;
     private MechanismLigament2d Pivot2;
 
     private Mechanism(){
-      inputs.mechanism = new Mechanism2d(75, 120);
+      mechanism = new Mechanism2d(1.20, 1.20);
       // 2d Canvas of the Mechansim (side of robot)
 
-      rootPivot1 = inputs.mechanism.getRoot("Pivot 1", 50, 24);
+      rootPivot1 = mechanism.getRoot("Pivot 1", 0.50, 0.24);
       // Where Pivot 1 is connected to the robot
 
-      Pivot1 = rootPivot1.append(new MechanismLigament2d("Pivot 1", 45, 180, 10, new Color8Bit(Color.kRed)));
-      Pivot2 = Pivot1.append(new MechanismLigament2d("Pivot 2", 40, 10, 10, new Color8Bit(Color.kDeepSkyBlue)));
+      Pivot1 = rootPivot1.append(new MechanismLigament2d("Pivot 1", 0.45, 180, 10, new Color8Bit(Color.kRed)));
+      Pivot2 = Pivot1.append(new MechanismLigament2d("Pivot 2", 0.40, 10, 10, new Color8Bit(Color.kDeepSkyBlue)));
       // The pivots as vectors
+    }
 
-      SmartDashboard.putData("Pivots", inputs.mechanism);
+    public Mechanism2d getMechanism(){
+      return mechanism;
     }
 
     // public static void movePivotsInterval(double interval){

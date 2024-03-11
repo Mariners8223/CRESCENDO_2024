@@ -29,6 +29,7 @@ public class Robot extends LoggedRobot {
       Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
     }
     else setUseTiming(false);
+    Logger.addDataReceiver(new NT4Publisher());
 
     Logger.start();
 

@@ -1,6 +1,7 @@
 {
   "NTProvider": {
     "types": {
+      "/AdvantageKit/RealOutputs/ArmMechanism": "Mechanism2d",
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
@@ -9,10 +10,27 @@
       "/SmartDashboard/navX-Sensor[4]": "Gyro"
     },
     "windows": {
+      "/SmartDashboard/Chooser": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Pivots": {
         "window": {
           "visible": true
         }
+      },
+      "/SmartDashboard/SendableChooser[0]": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "AdvantageKit": {
+        "open": true
       }
     }
   },
