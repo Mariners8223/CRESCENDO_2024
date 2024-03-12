@@ -18,7 +18,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -29,6 +31,7 @@ import frc.robot.commands.IntakeCommands.Collect_noProxy;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
 import frc.robot.commands.IntakeCommands.Collect.Collect;
+import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
 import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
@@ -99,13 +102,15 @@ public class RobotContainer {
     
     AlphaAimCommand = new AimRegularToSpeaker();
     //BetaAimCommand = new QuickAim();
-    var collect = new Collect_noProxy();
+    // var collect = new Collect_noProxy();
 
     // driveController.square().onTrue(aimCommand);
     // driveController.triangle().onTrue(new Shoot());
 
     armController.cross().onTrue(new IntakeToFloor()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
-    armController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
+    // armController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
+    // armController.circle().whileTrue(new Collect_noProxy());
+    armController.circle().whileTrue(new CollectFloor());
     armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.triangle().onTrue(new Shoot());
     //check if still necesery
@@ -136,10 +141,13 @@ public class RobotContainer {
     autoChooser.addOption("Shoot Note", new ShootNote());
     SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
 
-    String[] lastAutoName = new String[]{"Do Nothing"};
+    String[] lastAutoName = new String[]{"InstantCommand"};
 
-    new Trigger(DriverStation::isDSAttached).and(() -> autoChooser.get().getName() != lastAutoName[0]).onTrue(
+    // Timer.delay(0.5);
+
+    new Trigger(() -> autoChooser.get() != null).and(() -> autoChooser.get().getName() != lastAutoName[0]).onTrue(
       new InstantCommand(() -> {
+        System.out.println("changed");
         lastAutoName[0] = autoChooser.get().getName();
         updateFieldFromAuto(autoChooser.get().getName());
       }).ignoringDisable(true)
@@ -157,6 +165,7 @@ public class RobotContainer {
       if(name.equals(autoName)) DoesExsit = true;      
     }
     if(!DoesExsit){
+      System.out.print("doesn't exsit");
       driveBase.getField2d().getObject("AutoPath").setPoses();
       return;
     }
@@ -164,6 +173,7 @@ public class RobotContainer {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) path = path.flipPath();
       path.getPathPoses().forEach(pose -> poses.add(pose));
     });
+    System.out.println("does exsit");
     driveBase.getField2d().getObject("AutoPath").setPoses(poses);
   }
 
@@ -184,8 +194,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoCollect", new SequentialCommandGroup(new IntakeToFloor(), new Collect()));
 
     //Aiming positions
-    NamedCommands.registerCommand("lower aim", AlphaAimCommand);// TODO: dis commands
-    NamedCommands.registerCommand("higher aim", getAutoCommand());
+    NamedCommands.registerCommand("lower aim", new InstantCommand());// TODO: and your entire fameliy
+    NamedCommands.registerCommand("higher aim", new InstantCommand()); //TODO I will kill you
 
     NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
      {Arm.getInstance().getShooterSub().setShooterPower(0.5); Arm.getInstance().getIntakeSub().setMotor(0.8);}));

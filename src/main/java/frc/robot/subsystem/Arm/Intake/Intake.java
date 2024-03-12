@@ -21,6 +21,7 @@ public class Intake {
         double motorPosition;
         boolean WasGamePieceDetected;
         double current;
+        boolean laserOutput;
     }
 
     private CANSparkFlex intakeMotor;
@@ -43,7 +44,8 @@ public class Intake {
     }
 
     public boolean getLaserReading(){
-        return laser.get();
+        // return laser.get();
+        return inputs.laserOutput;
     }
     public void setIsGamePieceDetected(boolean Detected){
         inputs.WasGamePieceDetected = Detected;
@@ -77,6 +79,8 @@ public class Intake {
         inputs.motorPower = intakeMotor.getAppliedOutput();
         inputs.motorPosition = intakeMotor.getEncoder().getPosition();
         inputs.current = intakeMotor.getOutputCurrent();
+
+        inputs.laserOutput = laser.get();
 
         Logger.processInputs("intake", inputs);
     }
