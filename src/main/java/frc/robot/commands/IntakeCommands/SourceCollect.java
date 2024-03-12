@@ -19,7 +19,7 @@ public class SourceCollect extends SequentialCommandGroup {
   public SourceCollect() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new MoveToSourceCollection(), new InnerSourceCollect1(), new InnerSourceCollect2(), new InnerSourceCollect3(),
+    addCommands(new InnerSourceCollect1(), new InnerSourceCollect2(), new InnerSourceCollect3(),
      new InnerSourceCollect4());
   }
 

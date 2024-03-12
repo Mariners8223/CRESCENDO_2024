@@ -11,7 +11,8 @@ import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 
 public class MoveToSourceCollection extends SequentialCommandGroup {
   public MoveToSourceCollection(){
-    addCommands(new MoveToSourceCollection_main(), new MoveToSourceCollection_secondary());
+    addCommands(new MoveToHome().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Home),
+     new MoveToSourceCollection_main(), new MoveToSourceCollection_secondary());
   }
 
   private class MoveToSourceCollection_main extends Command {
