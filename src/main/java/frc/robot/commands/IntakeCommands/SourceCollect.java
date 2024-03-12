@@ -38,6 +38,15 @@ public class SourceCollect extends SequentialCommandGroup {
       intake.setMotor(-0.6);
     }
 
+    @Override
+    public void end(boolean interrupted) {
+      System.out.println("Note is in");
+      if (interrupted) {
+        intake.stopMotor();
+        shooter.stopMotors(); 
+      }
+    }
+
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
@@ -46,15 +55,21 @@ public class SourceCollect extends SequentialCommandGroup {
   }
   public class InnerSourceCollect2 extends Command {
     private static Intake intake;
+    private static Shooter shooter;
 
     public InnerSourceCollect2(){
       intake = Arm.getInstance().getIntakeSub();
+      shooter = Arm.getInstance().getShooterSub();
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
       System.out.println("Note is in");
+      if (interrupted){
+        intake.stopMotor();
+        shooter.stopMotors();
+      }
     }
 
     // Returns true when the command should end.
@@ -65,15 +80,21 @@ public class SourceCollect extends SequentialCommandGroup {
   }
   public class InnerSourceCollect3 extends Command {
     private static Intake intake;
+    private static Shooter shooter;
 
     public InnerSourceCollect3(){
       intake = Arm.getInstance().getIntakeSub();
+      shooter = Arm.getInstance().getShooterSub();
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
       System.out.println("Note is in 2");
+      if (interrupted) {
+        intake.stopMotor();
+        shooter.stopMotors();
+      }
     }
 
     // Returns true when the command should end.
@@ -102,7 +123,12 @@ public class SourceCollect extends SequentialCommandGroup {
       System.out.println("Note is in position");
       intake.stopMotor();
       shooter.stopMotors();
+      intake.setPosition(intake.getMotorPosition());
       intake.setIsGamePieceDetected(true);
+      if (interrupted) {
+        intake.stopMotor();
+        shooter.stopMotors();
+      }
     }
 
     // Returns true when the command should end.
