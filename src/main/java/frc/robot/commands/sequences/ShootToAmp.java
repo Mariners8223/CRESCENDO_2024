@@ -32,8 +32,8 @@ public class ShootToAmp extends SequentialCommandGroup {
 
     public MiniShoot() {
       addCommands(
-        new InstantCommand(() -> Arm.getInstance().getIntakeSub().setMotor(0.8)),
-        new WaitCommand(0.1),
+        new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(0.2)),
+        new WaitCommand(0.2),
         new MiniShoot1()
         );
     }
@@ -50,7 +50,8 @@ public class ShootToAmp extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
-      shooter.setShooterPower(0.65);
+      // shooter.setShooterPower(0.65);
+      intake.setMotor(0.6);
 
       timer = 0;
     }
@@ -69,7 +70,7 @@ public class ShootToAmp extends SequentialCommandGroup {
 
     @Override
     public boolean isFinished() {
-      return timer >= 10;
+      return timer >= 20;
     }
   }
   }

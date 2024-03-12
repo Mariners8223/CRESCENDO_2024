@@ -33,6 +33,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -116,10 +117,11 @@ public class DriveBase extends SubsystemBase {
       currentPostions[i] = new SwerveModulePosition(); //creates the zerod postions
     }
 
-    Navx = new AHRS(); //creates a new gyro
+    // Navx = new AHRS(SerialPort.Port.kMXP);
+    Navx = new AHRS();
     Navx.reset(); //resets the gyro at the start 
 
-    SmartDashboard.putData(Navx);
+    SmartDashboard.putData("Navx", Navx);
 
     driveTrainKinematics = new SwerveDriveKinematics(Constants.DriveTrain.SwerveModule.moduleTranslations);
 
@@ -426,11 +428,11 @@ public class DriveBase extends SubsystemBase {
     //   targetRotation = getRotation2d();
     //   inputs.targetRotation = targetRotation;
     // }
-    if(rotation == 0) rotation = calculateTheta();
-    else if(!isControlled()){
-      targetRotation = getRotation2d();
-      inputs.targetRotation = targetRotation;
-    }
+    // if(rotation == 0) rotation = calculateTheta();
+    // else if(!isControlled()){
+    //   targetRotation = getRotation2d();
+    //   inputs.targetRotation = targetRotation;
+    // }
 
     targetStates = driveTrainKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(Xspeed, Yspeed, rotation, getRotation2d()), centerOfRotation); //calulates the target states
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec); //desaturates the wheel speeds (to make sure none of the wheel exceed the max speed)
