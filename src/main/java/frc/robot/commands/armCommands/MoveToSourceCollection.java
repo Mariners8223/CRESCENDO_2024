@@ -26,7 +26,7 @@ public class MoveToSourceCollection extends SequentialCommandGroup {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-      arm.moveMotorsToRotation(0.25, arm.getSecondaryMotorRotation());
+      arm.moveMotorsToRotation(0.1260986328125, arm.getSecondaryMotorRotation());
     }
     // Returns true when the command should end.
     @Override
@@ -46,7 +46,7 @@ public class MoveToSourceCollection extends SequentialCommandGroup {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-      arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.125);
+      arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.0401611328125);
     }
     
     @Override
