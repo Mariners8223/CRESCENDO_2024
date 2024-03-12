@@ -330,6 +330,14 @@ public class DriveBase extends SubsystemBase {
   }
 
   /**
+   * gets the field object of the drivebase
+   * @return the field object
+   */
+  public Field2d getField2d(){
+    return field;
+  }
+
+  /**
    * gets the new wanted angle including the current angle of the robot
    * @param wantedAngle the wanted angle (in radians)
    * @return the wanted angle in the current angle of the robot (in radians)
@@ -605,8 +613,8 @@ public class DriveBase extends SubsystemBase {
     currentPose = poseEstimator.getEstimatedPosition();
     field.setRobotPose(currentPose);
 
-    SmartDashboard.putData(field);
-    SmartDashboard.putData(Navx);
+    // SmartDashboard.putData(field);
+    // SmartDashboard.putData(Navx);
 
     inputs.currentPose = currentPose;
 

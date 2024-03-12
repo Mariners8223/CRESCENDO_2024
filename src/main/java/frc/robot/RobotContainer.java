@@ -15,7 +15,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Pose2d;
+
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -53,9 +56,7 @@ public class RobotContainer {
 
   public static Command AlphaAimCommand;
   public static Command BetaAimCommand;
-  // public static CommandXboxController tempController;
 
-  // public static SendableChooser<Command> autoChooser;
   public static LoggedDashboardChooser<Command> autoChooser;
   public static boolean aimingAtSpeaker = true;
   public static boolean isQuickAiming = false;
@@ -77,7 +78,6 @@ public class RobotContainer {
     arm = Arm.getInstance();
     vision = new Vision();
 
-    // arm.setDefaultCommand(new QuikAim());
     configureNamedCommands();
     configureBindings();
     configChooser();
@@ -85,7 +85,7 @@ public class RobotContainer {
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
 
-    new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> Logger.recordOutput("allince", DriverStation.getAlliance().get().toString())).ignoringDisable(true));
+    new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> Logger.recordOutput("allince", DriverStation.getAlliance().get().toString())).ignoringDisable(true)); 
   }
 
   private void configureBindings() {
@@ -123,7 +123,7 @@ public class RobotContainer {
     List<String> namesOfAutos = AutoBuilder.getAllAutoNames();
     List<PathPlannerAuto> autosOfAutos = new ArrayList<>();
 
-    autoChooser = new LoggedDashboardChooser<>("Chooser");
+    autoChooser = new LoggedDashboardChooser<>("chooser");
     for (String autoName : namesOfAutos) {
       PathPlannerAuto auto = new PathPlannerAuto(autoName);
         autosOfAutos.add(auto);
@@ -133,7 +133,37 @@ public class RobotContainer {
 
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
     autoChooser.addOption("Shoot Note", new ShootNote());
-    SmartDashboard.putData(autoChooser.getSendableChooser());
+    SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
+
+    String[] lastAutoName = new String[]{"Do Nothing"};
+
+    new Trigger(DriverStation::isDSAttached).and(() -> autoChooser.get().getName() != lastAutoName[0]).onTrue(
+      new InstantCommand(() -> {
+        lastAutoName[0] = autoChooser.get().getName();
+        updateFieldFromAuto(autoChooser.get().getName());
+      }).ignoringDisable(true)
+    );
+
+    new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> driveBase.getField2d().getObject("AutoPath").setPoses()).ignoringDisable(true));
+    
+  }
+
+
+  private void updateFieldFromAuto(String autoName){
+    List<Pose2d> poses = new ArrayList<>();
+    boolean DoesExsit = false;
+    for (String name : AutoBuilder.getAllAutoNames()) {
+      if(name.equals(autoName)) DoesExsit = true;      
+    }
+    if(!DoesExsit){
+      driveBase.getField2d().getObject("AutoPath").setPoses();
+      return;
+    }
+    PathPlannerAuto.getPathGroupFromAutoFile(autoName).forEach(path -> {
+      if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) path = path.flipPath();
+      path.getPathPoses().forEach(pose -> poses.add(pose));
+    });
+    driveBase.getField2d().getObject("AutoPath").setPoses(poses);
   }
 
   private void configureNamedCommands(){
