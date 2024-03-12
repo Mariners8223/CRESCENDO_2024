@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommands.Collect_noProxy;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
+import frc.robot.commands.IntakeCommands.SourceCollect;
 import frc.robot.commands.IntakeCommands.Collect.Collect;
 import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
 import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
@@ -37,6 +38,7 @@ import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
+import frc.robot.commands.armCommands.MoveToSourceCollection;
 import frc.robot.commands.armCommands.MoveToStartShootPose_Auto;
 import frc.robot.commands.armCommands.MoveToStow;
 import frc.robot.commands.autonomous.BetaAim_Auto;
@@ -111,12 +113,14 @@ public class RobotContainer {
     // armController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
     // armController.circle().whileTrue(new Collect_noProxy());
     armController.circle().whileTrue(new CollectFloor());
-    armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
+    armController.povLeft().onTrue(new MoveToSourceCollection());
+    armController.square().whileTrue(new SourceCollect());
+    // armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.triangle().onTrue(new Shoot());
     //check if still necesery
     // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
 
-    armController.povLeft().onTrue(AlphaAimCommand);
+    // armController.povLeft().onTrue(AlphaAimCommand);
     //armController.povRight().onTrue(BetaAimCommand);
 
     armController.povDown().onTrue(new MoveToHome()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
