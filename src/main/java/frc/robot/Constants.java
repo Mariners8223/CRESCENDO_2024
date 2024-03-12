@@ -220,7 +220,7 @@ public class Constants {
         public static final double mainIntakeAngle = -0.029;
 
         public static final int intakeTime = 15;//in ticks
-        public static final int LaserChanel = 2;
+        public static final int laserPort = 4;
     }
 
     public static class Elevator{

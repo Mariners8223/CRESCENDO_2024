@@ -32,7 +32,7 @@ public class Intake {
         intakeMotor = new CANSparkFlex(Constants.Intake.intakeMotorID, MotorType.kBrushless);
         intakeMotor.setInverted(Constants.Intake.intakeMotorIsInverted);
 
-        laser = new DigitalInput(Constants.Intake.LaserChanel);
+        laser = new DigitalInput(Constants.Intake.laserPort);
 
         intakeMotor.enableVoltageCompensation(12);
 
