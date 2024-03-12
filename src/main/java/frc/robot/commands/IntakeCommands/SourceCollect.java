@@ -34,8 +34,8 @@ public class SourceCollect extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
-      shooter.setShooterPower(-0.5);
-      intake.setMotor(-0.6);
+      shooter.setShooterPower(-0.3);
+      intake.setMotor(-0.4);
     }
 
     @Override
