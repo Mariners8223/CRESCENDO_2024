@@ -167,7 +167,7 @@ public class ArmUtil{
       // else{
       //   inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
       // }
-      inputs.WantedVelocity = Math.hypot(CalcVelocityX_GP(inputs.Dz + 0.01, inputs.Dz, distanceToSpeaker), ClacVelocityZ_GP(distanceToSpeaker));
+      inputs.WantedVelocity = Math.hypot(CalcVelocityX_GP(inputs.Dz, inputs.Dz, distanceToSpeaker), ClacVelocityZ_GP(distanceToSpeaker));
 
       inputs.WantedVelocity = MathUtil.clamp(inputs.WantedVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(5500) * Constants.Shooter.wheelRadius);//shooting speed clamp
       inputs.StartSpeed = inputs.WantedVelocity;
@@ -578,5 +578,9 @@ public class ArmUtil{
      */
     public static double getZone2(){
       return Zone2_Equasion(inputs.StartSpeed, inputs.Dz, inputs.distanceToSpeaker);
+    }
+
+    public static double getNEWZone2(){
+      return Zone2_Equasion_NEW(inputs.Dz, inputs.Dz, inputs.distanceToSpeaker);
     }
   }
