@@ -40,6 +40,9 @@ public class ArmUtil{
     boolean isZone1;
     double WantedVelocity;
 
+    double GamePieceVelocityX;
+    double GamePieceVelocityZ;
+
     int IndexOfClimbingRope;//Updated in update parameters
 
     double d;//the distance to the amp
@@ -156,13 +159,15 @@ public class ArmUtil{
      * @return the wanted velocity
      */
     private static double CalcWantedSpeed(double distanceToSpeaker){
-      if (inputs.isZone1) {
-        inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone1;
-      }
-      else{
-        inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
-      }
-      inputs.WantedVelocity = MathUtil.clamp(inputs.WantedVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(6000) * Constants.Shooter.wheelRadius);//shooting speed clamp
+      // if (inputs.isZone1) {
+      //   inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone1;
+      // }
+      // else{
+      //   inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
+      // }
+      inputs.WantedVelocity = Math.hypot(CalcVelocityX_GP(inputs.Dz + 0.01, inputs.Dz, distanceToSpeaker), ClacVelocityZ_GP(distanceToSpeaker));
+
+      inputs.WantedVelocity = MathUtil.clamp(inputs.WantedVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(5500) * Constants.Shooter.wheelRadius);//shooting speed clamp
       inputs.StartSpeed = inputs.WantedVelocity;
       return inputs.WantedVelocity;
     }
@@ -266,6 +271,43 @@ public class ArmUtil{
       }
       return inputs.ArmAngle;
     }
+
+    /**
+     * calculates the needed Arm Angle to reach the targetted place
+     * @param MaxHieght the max hieght the game piece is allowed to get *IN METERS*
+     * @param TargetHieght the hieght in which you wish the game piece to finigh at *IN METERS*
+     * @param distanceToSpeaker the starting distance between the game piece and the speaker *IN METERS*
+     * @return the Arm angle
+     */
+    public static double Zone2_Equasion_NEW(double MaxHieght, double TargetHieght, double distanceToSpeaker){
+      inputs.GamePieceVelocityX = CalcVelocityX_GP(MaxHieght, TargetHieght, distanceToSpeaker);
+      inputs.GamePieceVelocityZ = ClacVelocityZ_GP(MaxHieght);
+      return Math.atan(inputs.GamePieceVelocityZ/inputs.GamePieceVelocityX);
+    }
+
+    /**
+     * calculates the needed velocity on the z axis in order to get to the targeted hieght 
+     * @param MaxHieght the max hieght the game piece is allowed to get *IN METERS*
+     * @return the velocity in the z axis
+     */
+    public static double ClacVelocityZ_GP(double MaxHieght){
+      if (MaxHieght >= 0) return Math.sqrt(2*MaxHieght* Constants.gGravity_phisics);
+      return 0;
+    }
+
+    /**
+     * calculates the needed velocity on the x axis in order to get to the targeted distance
+     * @param MaxHieght the max hieght the game piece is allowed to get *IN METERS*
+     * @param TargetHieght the hieght in which you wish the game piece to finigh at *IN METERS*
+     * @param distanceToSpeaker the starting distance between the game piece and the speaker *IN METERS*
+     * @return the velocity in the x axis
+     */
+    public static double CalcVelocityX_GP(double MaxHieght, double TargetHieght, double distanceToSpeaker){
+      if (MaxHieght >= TargetHieght && TargetHieght >= 0)
+      return (Constants.gGravity_phisics * distanceToSpeaker)
+        /(Math.sqrt(2* Constants.gGravity_phisics*MaxHieght) + Math.sqrt(2*Constants.gGravity_phisics*(MaxHieght - TargetHieght)));
+      return 0;
+    }
   
     /**
      * calculates the angle that the arm should have with consideration of the robots momeentom (velocity)
@@ -308,7 +350,8 @@ public class ArmUtil{
         }
       }
       else{
-        inputs.ArmAngle = Zone2_Equasion(StartSpeed, Dz, distanceToSpeaker);
+        // inputs.ArmAngle = Zone2_Equasion(StartSpeed, Dz, distanceToSpeaker);
+        inputs.ArmAngle = Zone2_Equasion_NEW(Dz + 0.01, Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         if(inputs.IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
