@@ -85,6 +85,12 @@ public class Arm extends SubsystemBase{
     double mainCurrent;
     double secondaryCurrent;
 
+    double mainTempture;
+    double secondaryTempture;
+
+    double mainOutput;
+    double secondaryOutput;
+
     // Mechanism2d visualArm;
     // MechanismRoot2d visualArm_Root;
     // MechanismLigament2d visualArm_MainPivot;
@@ -274,6 +280,12 @@ public class Arm extends SubsystemBase{
 
     inputs.mainMotorAbsolutePostion = mainAbsEncoder.getPosition();
     inputs.secondaryAbsolutePostion = secondaryAbsEncoder.getPosition();
+
+    inputs.mainTempture = mainMotor.getMotorTemperature();
+    inputs.secondaryTempture = secondaryMotor.getMotorTemperature();
+
+    inputs.mainOutput = mainMotor.getAppliedOutput();
+    inputs.secondaryOutput = secondaryMotor.getAppliedOutput();
 
     // inputs.visualArm_MainPivot.setAngle(Units.rotationsToDegrees(mainEncoder.getPosition()));
     // inputs.visualArm_SeconderyPivot.setAngle(Units.rotationsToDegrees(secondaryEncoder.getPosition()));

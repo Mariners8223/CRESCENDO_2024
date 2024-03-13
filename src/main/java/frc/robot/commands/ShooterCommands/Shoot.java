@@ -25,9 +25,10 @@ public class Shoot extends SequentialCommandGroup {
       //just in case, ends the control of aim
       // RobotContainer.driveBase.isControlled = false;
       RobotContainer.driveBase.setIsControlled(false);
+      Arm.getInstance().getIntakeSub().setIsGamePieceDetected(false);
 
       RobotContainer.AlphaAimCommand.cancel();
-      RobotContainer.BetaAimCommand.cancel();
+      // RobotContainer.BetaAimCommand.cancel();
     }));
   }
   /** Creates a new Shoot. */
@@ -76,6 +77,10 @@ public class Shoot extends SequentialCommandGroup {
   public void end(boolean interrupted) {
     arm.getIntakeSub().setMotor(1);
     Arm.getInstance().getIntakeSub().setIsGamePieceDetected(false);
+    if(interrupted){
+      Arm.getInstance().getShooterSub().stopMotors();
+      Arm.getInstance().getIntakeSub().stopMotor();
+    }
   }
 
   // Returns true when the command should end.

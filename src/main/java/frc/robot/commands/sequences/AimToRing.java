@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.IntakeCommands.Collect.Collect;
+import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
@@ -32,7 +33,7 @@ public class AimToRing extends SequentialCommandGroup {
       new AimToRing1(),
       new ParallelRaceGroup(
         new AimToRing2(),
-        new Collect()
+        new CollectFloor()
       ).onlyIf(() -> RobotContainer.vision.hasTarget(CameraLocation.Front_Arm))
       );
   }

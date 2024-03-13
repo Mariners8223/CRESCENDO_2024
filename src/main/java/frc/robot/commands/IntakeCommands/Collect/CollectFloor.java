@@ -24,8 +24,8 @@ public class CollectFloor extends Command {
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
     WasGamePieceDetected = intake.isGamePieceDetected();
-    if(!WasGamePieceDetected) intake.setMotor(0.8);
-    else intake.setMotor(-0.6);
+    if(!WasGamePieceDetected) intake.setMotor(1);
+    else intake.setMotor(-0.8);
   }
 
   // Called once the command ends or is interrupted.

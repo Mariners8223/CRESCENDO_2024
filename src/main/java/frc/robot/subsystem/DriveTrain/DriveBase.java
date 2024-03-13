@@ -428,11 +428,11 @@ public class DriveBase extends SubsystemBase {
     //   targetRotation = getRotation2d();
     //   inputs.targetRotation = targetRotation;
     // }
-    // if(rotation == 0) rotation = calculateTheta();
-    // else if(!isControlled()){
-    //   targetRotation = getRotation2d();
-    //   inputs.targetRotation = targetRotation;
-    // }
+    if(rotation == 0) rotation = calculateTheta();
+    else if(!isControlled()){
+      targetRotation = getRotation2d();
+      inputs.targetRotation = targetRotation;
+    }
 
     targetStates = driveTrainKinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(Xspeed, Yspeed, rotation, getRotation2d()), centerOfRotation); //calulates the target states
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec); //desaturates the wheel speeds (to make sure none of the wheel exceed the max speed)

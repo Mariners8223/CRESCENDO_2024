@@ -34,6 +34,7 @@ import frc.robot.commands.IntakeCommands.Collect.Collect;
 import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
 import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.ShooterCommands.Shoot;
+import frc.robot.commands.ShooterCommands.Shoot_Auto;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
@@ -60,7 +61,6 @@ public class RobotContainer {
   public static CommandPS5Controller armController;
 
   public static Command AlphaAimCommand;
-  public static Command BetaAimCommand;
 
   public static LoggedDashboardChooser<Command> autoChooser;
   public static boolean aimingAtSpeaker = true;
@@ -94,11 +94,11 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    var ringAim = new AimToRing();
+    // var ringAim = new AimToRing();
 
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
-    driveController.cross().whileTrue(ringAim.onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake)).onFalse(new RollOut()); //.onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
+    driveController.cross().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake)); //.onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
     // driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
     
     AlphaAimCommand = new AimRegularToSpeaker();
@@ -119,7 +119,7 @@ public class RobotContainer {
     //check if still necesery
     // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
 
-    // armController.povLeft().onTrue(AlphaAimCommand);
+    armController.povRight().onTrue(AlphaAimCommand);
     //armController.povRight().onTrue(BetaAimCommand);
 
     armController.povDown().onTrue(new MoveToHome()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
@@ -168,7 +168,7 @@ public class RobotContainer {
   private void configureNamedCommands(){
     // NamedCommands.registerCommand("Do Nothing", new InstantCommand());
     //AUTOSSSSS related shit
-    NamedCommands.registerCommand("Shoot", new Shoot());
+    NamedCommands.registerCommand("Shoot", new Shoot_Auto());
     NamedCommands.registerCommand("QuikAim", new BetaAim_Auto());
     NamedCommands.registerCommand("Collect", new SequentialCommandGroup(new IntakeToFloor(), new Collect_noProxy()));
     NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
