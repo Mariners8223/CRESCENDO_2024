@@ -18,9 +18,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -88,6 +86,17 @@ public class RobotContainer {
     configureBindings();
     configChooser();
 
+    String[] lastAutoName = new String[]{"InstantCommand"};
+
+    new Trigger(() -> autoChooser.get() != null).and(() -> autoChooser.get().getName() != lastAutoName[0]).onTrue(
+      new InstantCommand(() -> {
+        lastAutoName[0] = autoChooser.get().getName();
+        updateFieldFromAuto(autoChooser.get().getName());
+      }).ignoringDisable(true)
+    );
+
+    new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> driveBase.getField2d().getObject("AutoPath").setPoses()).ignoringDisable(true));
+
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
 
@@ -144,21 +153,6 @@ public class RobotContainer {
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
     autoChooser.addOption("Shoot Note", new ShootNote());
     SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
-
-    String[] lastAutoName = new String[]{"InstantCommand"};
-
-    // Timer.delay(0.5);
-
-    new Trigger(() -> autoChooser.get() != null).and(() -> autoChooser.get().getName() != lastAutoName[0]).onTrue(
-      new InstantCommand(() -> {
-        System.out.println("changed");
-        lastAutoName[0] = autoChooser.get().getName();
-        updateFieldFromAuto(autoChooser.get().getName());
-      }).ignoringDisable(true)
-    );
-
-    new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> driveBase.getField2d().getObject("AutoPath").setPoses()).ignoringDisable(true));
-    
   }
 
 
@@ -169,7 +163,6 @@ public class RobotContainer {
       if(name.equals(autoName)) DoesExsit = true;      
     }
     if(!DoesExsit){
-      System.out.print("doesn't exsit");
       driveBase.getField2d().getObject("AutoPath").setPoses();
       return;
     }
@@ -177,7 +170,6 @@ public class RobotContainer {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) path = path.flipPath();
       path.getPathPoses().forEach(pose -> poses.add(pose));
     });
-    System.out.println("does exsit");
     driveBase.getField2d().getObject("AutoPath").setPoses(poses);
   }
 
