@@ -150,6 +150,8 @@ public class ArmUtil{
         inputs.VelocityX = 1;//field relative
         inputs.isResetNeeded = false;
         inputs.isZone1 = inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1;
+        inputs.GamePieceVelocityX = 1;
+        inputs.GamePieceVelocityZ = 1;
       }
     }
 
@@ -280,9 +282,7 @@ public class ArmUtil{
      * @return the Arm angle
      */
     public static double Zone2_Equasion_NEW(double MaxHieght, double TargetHieght, double distanceToSpeaker){
-      inputs.GamePieceVelocityX = CalcVelocityX_GP(MaxHieght, TargetHieght, distanceToSpeaker);
-      inputs.GamePieceVelocityZ = ClacVelocityZ_GP(MaxHieght);
-      return Math.atan(inputs.GamePieceVelocityZ/inputs.GamePieceVelocityX);
+      return Math.atan(ClacVelocityZ_GP(MaxHieght)/CalcVelocityX_GP(MaxHieght, TargetHieght, distanceToSpeaker));
     }
 
     /**
@@ -291,8 +291,8 @@ public class ArmUtil{
      * @return the velocity in the z axis
      */
     public static double ClacVelocityZ_GP(double MaxHieght){
-      if (MaxHieght >= 0) return Math.sqrt(2*MaxHieght* Constants.gGravity_phisics);
-      return 0;
+      if (MaxHieght >= 0) inputs.GamePieceVelocityZ = Math.sqrt(2*MaxHieght* Constants.gGravity_phisics);
+      return inputs.GamePieceVelocityZ;
     }
 
     /**
@@ -304,9 +304,9 @@ public class ArmUtil{
      */
     public static double CalcVelocityX_GP(double MaxHieght, double TargetHieght, double distanceToSpeaker){
       if (MaxHieght >= TargetHieght && TargetHieght >= 0)
-      return (Constants.gGravity_phisics * distanceToSpeaker)
+      inputs.GamePieceVelocityX = (Constants.gGravity_phisics * distanceToSpeaker)
         /(Math.sqrt(2* Constants.gGravity_phisics*MaxHieght) + Math.sqrt(2*Constants.gGravity_phisics*(MaxHieght - TargetHieght)));
-      return 0;
+      return inputs.GamePieceVelocityX;
     }
   
     /**
