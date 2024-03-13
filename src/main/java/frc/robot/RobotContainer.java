@@ -14,9 +14,10 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
-
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -86,17 +87,6 @@ public class RobotContainer {
     configureBindings();
     configChooser();
 
-    String[] lastAutoName = new String[]{"InstantCommand"};
-
-    new Trigger(() -> autoChooser.get() != null).and(() -> autoChooser.get().getName() != lastAutoName[0]).onTrue(
-      new InstantCommand(() -> {
-        lastAutoName[0] = autoChooser.get().getName();
-        updateFieldFromAuto(autoChooser.get().getName());
-      }).ignoringDisable(true)
-    );
-
-    new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> driveBase.getField2d().getObject("AutoPath").setPoses()).ignoringDisable(true));
-
     new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> {
       if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
 
@@ -153,10 +143,12 @@ public class RobotContainer {
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
     autoChooser.addOption("Shoot Note", new ShootNote());
     SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
+
+    new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> driveBase.getField2d().getObject("AutoPath").setPoses()).ignoringDisable(true));
   }
 
 
-  private void updateFieldFromAuto(String autoName){
+  public static void updateFieldFromAuto(String autoName){
     List<Pose2d> poses = new ArrayList<>();
     boolean DoesExsit = false;
     for (String name : AutoBuilder.getAllAutoNames()) {

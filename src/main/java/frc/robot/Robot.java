@@ -19,6 +19,7 @@ import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
+  String lastAutoName = "InstantCommand";
 
   @Override
   public void robotInit() {
@@ -76,7 +77,12 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if(RobotContainer.getAutoCommand() != null && RobotContainer.getAutoCommand().getName() != lastAutoName){
+      lastAutoName = RobotContainer.getAutoCommand().getName();
+      RobotContainer.updateFieldFromAuto(lastAutoName);
+    }
+  }
 
   @Override
   public void disabledExit() {
