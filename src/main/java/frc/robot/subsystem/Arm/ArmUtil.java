@@ -381,8 +381,8 @@ public class ArmUtil{
       // if (inputs.isZone1 != (inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1)) {
       //   inputs.isResetNeeded = true;
       // }
-      // inputs.isZone1 = inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1;
-      inputs.isZone1 = CalcWantedSpeed(inputs.distanceToSpeaker) < 18.6;
+      inputs.isZone1 = inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1;
+      // inputs.isZone1 = CalcWantedSpeed(inputs.distanceToSpeaker) < 18.6;
 
       inputs.WantedVelocity = CalcWantedSpeed(inputs.distanceToSpeaker);
       inputs.YaxisWantedAngle = getWantedDegree(inputs.Dy, inputs.Dx);
