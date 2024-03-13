@@ -336,7 +336,7 @@ public class ArmUtil{
      * @return the angle using a more complex equasion - phizics
      */
     private static double CalcAngleZaxis(double StartSpeed, double Dz, double distanceToSpeaker, double YaxisWantedAngle){
-      if (inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1) {
+      if (inputs.isZone1) {
         inputs.ArmAngle = Zone1_Equasion(Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         if(inputs.IsQuikShot){
@@ -381,7 +381,8 @@ public class ArmUtil{
       // if (inputs.isZone1 != (inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1)) {
       //   inputs.isResetNeeded = true;
       // }
-      inputs.isZone1 = inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1;
+      // inputs.isZone1 = inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1;
+      inputs.isZone1 = CalcWantedSpeed(inputs.distanceToSpeaker) < 18.6;
 
       inputs.WantedVelocity = CalcWantedSpeed(inputs.distanceToSpeaker);
       inputs.YaxisWantedAngle = getWantedDegree(inputs.Dy, inputs.Dx);
