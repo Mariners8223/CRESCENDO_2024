@@ -5,9 +5,7 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.armCommands.MoveToSourceCollection;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Intake.Intake;
@@ -21,12 +19,8 @@ public class SourceCollect extends SequentialCommandGroup {
   public SourceCollect() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new InnerSourceCollect1(), new InnerSourceCollect2(),
-    // new InstantCommand(() -> {Arm.getInstance().getIntakeSub().stopMotor(); Arm.getInstance().getShooterSub().stopMotors();}),
-    new WaitCommand(0.05),
-    new InnerSourceCollect3(),
-    new InnerSourceCollect4());
-    // new InnerSourceCollect5());
+    addCommands(new InnerSourceCollect1(), new InnerSourceCollect2(), new InnerSourceCollect3(),
+     new InnerSourceCollect4());
   }
 
   public class InnerSourceCollect1 extends Command {
@@ -40,8 +34,8 @@ public class SourceCollect extends SequentialCommandGroup {
 
     @Override
     public void initialize() {
-      shooter.setShooterPower(-0.25);
-      intake.setMotor(-0.2);
+      shooter.setShooterPower(-0.3);
+      // intake.setMotor(-0.4);
     }
 
     @Override
@@ -49,8 +43,7 @@ public class SourceCollect extends SequentialCommandGroup {
       System.out.println("Note is in");
       if (interrupted) {
         intake.stopMotor();
-        shooter.stopMotors();
-        intake.setIsGamePieceDetected(false);
+        shooter.stopMotors(); 
       }
     }
 
@@ -63,7 +56,6 @@ public class SourceCollect extends SequentialCommandGroup {
   public class InnerSourceCollect2 extends Command {
     private static Intake intake;
     private static Shooter shooter;
-    private double timer;
 
     public InnerSourceCollect2(){
       intake = Arm.getInstance().getIntakeSub();
@@ -72,35 +64,23 @@ public class SourceCollect extends SequentialCommandGroup {
 
     @Override
     public void initialize(){
-      shooter.setShooterPower(-0.4);
-      // shooter.stopMotors();
-      intake.setMotor(-0.2);
-      timer = 0;
+      intake.setMotor(-0.4);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-      System.out.println("Note is in 1");
+      System.out.println("Note is in");
       if (interrupted){
         intake.stopMotor();
         shooter.stopMotors();
-        intake.setIsGamePieceDetected(false);
       }
-      // intake.setPosition(intake.getMotorPosition() - 7);
-      // shooter.stopMotors();
-    }
-
-    @Override
-    public void execute(){
-      timer ++;
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-      return !intake.getLaserReading()
-      ; 
+      return !intake.getLaserReading(); 
     }
   }
   public class InnerSourceCollect3 extends Command {
@@ -112,13 +92,6 @@ public class SourceCollect extends SequentialCommandGroup {
       shooter = Arm.getInstance().getShooterSub();
     }
 
-    @Override
-    public void initialize(){
-      intake.setMotor(-0.2);
-      // shooter.setShooterPower(-0.2);
-      // shooter.stopMotors();
-    }
-
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
@@ -126,7 +99,6 @@ public class SourceCollect extends SequentialCommandGroup {
       if (interrupted) {
         intake.stopMotor();
         shooter.stopMotors();
-        intake.setIsGamePieceDetected(false);
       }
     }
 
@@ -145,26 +117,22 @@ public class SourceCollect extends SequentialCommandGroup {
       shooter = Arm.getInstance().getShooterSub();
     }
 
-    
-
     @Override
     public void initialize() {
-      // shooter.setShooterPower(-0.5);
-      // shooter.stopMotors();
-      // intake.setMotor(-0.3);
+      shooter.setShooterPower(-0.5);
+      intake.setMotor(-0.6);
     }
 
     @Override
     public void end(boolean interrupted) {
       System.out.println("Note is in position");
+      intake.stopMotor();
       shooter.stopMotors();
-      // intake.stopMotor();
       intake.setPosition(intake.getMotorPosition());
       intake.setIsGamePieceDetected(true);
       if (interrupted) {
         intake.stopMotor();
         shooter.stopMotors();
-        intake.setIsGamePieceDetected(false);
       }
     }
 
@@ -172,35 +140,6 @@ public class SourceCollect extends SequentialCommandGroup {
     @Override
     public boolean isFinished() {
       return !intake.getLaserReading(); 
-    }
-  }
-
-  private class InnerSourceCollect5 extends Command{
-    private Intake intake;
-
-    private InnerSourceCollect5(){
-      intake = Arm.getInstance().getIntakeSub();
-    }
-
-    @Override
-    public void initialize(){
-      // intake.setMotor(0.2);
-    }
-
-    @Override
-    public void end(boolean interrupted){
-      intake.setPosition(intake.getMotorPosition() - 2);
-      Arm.getInstance().getShooterSub().stopMotors();
-      intake.setIsGamePieceDetected(true);
-      if(interrupted){
-        intake.stopMotor();
-        intake.setIsGamePieceDetected(false);
-      }
-    }
-
-    @Override
-    public boolean isFinished(){
-      return intake.getLaserReading();
     }
   }
 }
