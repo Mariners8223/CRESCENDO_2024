@@ -36,7 +36,7 @@ public class Constants {
     public static final List<Translation2d> robotZones = new ArrayList<Translation2d>() {
         //TODO: add robot zones
     };
-    public static final double gGravity_phisics = 9.81;
+    public static final double gGravity_phisics = 9.8066;
 
     public static final Pose2d AmpPose = new Pose2d(1.829, 8.46, Rotation2d.fromDegrees(90));
     public static final Pose2d RobotShootingToAMPPosition = new Pose2d(1.83, 7.71, Rotation2d.fromDegrees(-90));
