@@ -42,6 +42,7 @@ import frc.robot.commands.armCommands.MoveToSourceCollection;
 import frc.robot.commands.armCommands.MoveToStartShootPose_Auto;
 import frc.robot.commands.armCommands.MoveToStow;
 import frc.robot.commands.autonomous.BetaAim_Auto;
+import frc.robot.commands.autonomous.LowerAim_Auto;
 import frc.robot.commands.autonomous.ShootNote;
 import frc.robot.commands.sequences.AimRegularToSpeaker;
 import frc.robot.commands.sequences.AimToRing;
@@ -182,7 +183,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AutoCollect", new SequentialCommandGroup(new IntakeToFloor(), new Collect()));
 
     //Aiming positions
-    NamedCommands.registerCommand("lower aim", new InstantCommand());// TODO: and your entire fameliy
+    NamedCommands.registerCommand("lower aim", new LowerAim_Auto());// TODO: and your entire fameliy
     NamedCommands.registerCommand("higher aim", new InstantCommand()); //TODO I will kill you
 
     NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
