@@ -40,6 +40,7 @@ import frc.robot.commands.armCommands.MoveToStartShootPose_Auto;
 import frc.robot.commands.armCommands.MoveToStow;
 import frc.robot.commands.autonomous.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.autonomous.BetaAim_Auto;
+import frc.robot.commands.autonomous.HigherAim_Auto;
 import frc.robot.commands.autonomous.LowerAim_Auto;
 import frc.robot.commands.autonomous.ShootNote;
 import frc.robot.commands.autonomous.Shoot_Auto;
@@ -185,7 +186,7 @@ public class RobotContainer {
 
     //Aiming positions
     NamedCommands.registerCommand("lower aim", new LowerAim_Auto());
-    NamedCommands.registerCommand("higher aim", new InstantCommand()); //TODO: dis thing
+    NamedCommands.registerCommand("higher aim", new HigherAim_Auto());
 
     NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
      {Arm.getInstance().getShooterSub().setShooterPower(0.5); Arm.getInstance().getIntakeSub().setMotor(0.8);}));
