@@ -2,17 +2,20 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.sequences;
-
+package frc.robot.commands.autonomous;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
+import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
 import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
@@ -20,66 +23,78 @@ import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AimToRing extends SequentialCommandGroup {
-  /** Creates a new AimToRing. */
-  public AimToRing() {
+public class AimToRingAuto extends SequentialCommandGroup {
+  /** Creates a new AimToRingAuto. */
+  public AimToRingAuto() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      // new IntakeToFloor().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake),
-      new AimToRing1(),
+      new SequentialCommandGroup(
+        new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Home || Arm.getInstance().lastknownPosition != knownArmPosition.Free),
+        new IntakeToFloor()
+      ).onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Intake),
+      new AimToRingAuto1(),
       new ParallelRaceGroup(
-        new AimToRing2(),
+        new AimToRingAuto2(),
         new CollectFloor()
-      ).onlyIf(() -> RobotContainer.vision.hasTarget(CameraLocation.Front_Arm))
-      );
+      )
+    );
   }
 
-  public static class AimToRing1 extends Command {
-
+  public static class AimToRingAuto1 extends Command{
     DriveBase driveBase;
     Vision vision;
     double angleToRing;
+    double startTime;
 
-    public AimToRing1() {
+
+    public AimToRingAuto1(){
       driveBase = RobotContainer.driveBase;
       vision = RobotContainer.vision;
+      angleToRing = 0;
+
+      addRequirements(driveBase);
     }
 
     @Override
     public void initialize(){
+      startTime = Timer.getFPGATimestamp();
       driveBase.setIsControlled(true);
     }
 
     @Override
-    public void execute() {
+    public void execute(){
       angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
 
       if(angleToRing == -1000){
-        RobotContainer.driveBase.setIsControlled(false);
-        cancel();
+        //TODO add what to do if no gp is detected
       }
-      else
-        driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
+
+      driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
+
+      driveBase.robotRelativeDrive(0, 0, 0);
     }
 
     @Override
-    public void end(boolean interrupt) {
-      RobotContainer.driveBase.setIsControlled(false);
+    public void end(boolean interrupted){
+      driveBase.setIsControlled(false);
+      driveBase.robotRelativeDrive(0, 0, 0);
     }
 
     @Override
-    public boolean isFinished() {
-      return angleToRing <= Constants.Vision.aimToRingToleranceDegrees;
+    public boolean isFinished(){
+      return angleToRing <= Constants.Vision.aimToRingToleranceDegrees || Timer.getFPGATimestamp() - startTime >= 5;
     }
+
   }
 
-  public static class AimToRing2 extends Command{
+  public static class AimToRingAuto2 extends Command{
     DriveBase driveBase;
     Vision vision;
     double angleToRing;
+    double startTime;
 
-    public AimToRing2(){
+    public AimToRingAuto2(){
       driveBase = RobotContainer.driveBase;
       vision = RobotContainer.vision;
 
@@ -89,29 +104,31 @@ public class AimToRing extends SequentialCommandGroup {
     @Override
     public void initialize(){
       driveBase.setIsControlled(true);
+      startTime = Timer.getFPGATimestamp();
     }
 
     @Override
-    public void execute() {
+    public void execute(){
       angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
 
       if(angleToRing == -1000){
+        //TODO add no gp detcted shit
       }
-      else
-        driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
+
+      driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
 
       driveBase.robotRelativeDrive(1, 0, 0);
     }
 
     @Override
-    public void end(boolean interrupt) {
+    public void end(boolean interrupted){
       driveBase.setIsControlled(false);
-      driveBase.drive(0, 0, 0);
+      driveBase.robotRelativeDrive(0, 0, 0);
     }
 
     @Override
-    public boolean isFinished() {
-      return Arm.getInstance().getIntakeSub().isGamePieceDetected();
+    public boolean isFinished(){
+      return Arm.getInstance().getIntakeSub().isGamePieceDetected() || Timer.getFPGATimestamp() - startTime >= 5;
     }
-} 
+  }
 }
