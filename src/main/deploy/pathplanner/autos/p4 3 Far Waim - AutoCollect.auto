@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "shooter starter"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -62,6 +68,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "shooter starter"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -109,6 +121,12 @@
           "type": "named",
           "data": {
             "name": "AutoCollect"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shooter starter"
           }
         },
         {

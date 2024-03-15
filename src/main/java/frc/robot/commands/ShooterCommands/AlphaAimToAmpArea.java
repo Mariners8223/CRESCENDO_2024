@@ -31,8 +31,7 @@ public class AlphaAimToAmpArea extends InstantCommand {
     ArmUtil.UpdateParameters_AMPAim();
 
     arm.moveMotorsToRotation(
-      MathUtil.clamp(
-        ArmUtil.getArmAngle_ToAMP(), Units.degreesToRadians(20), Units.degreesToRadians(80))
+      MathUtil.clamp(ArmUtil.getArmAngle_ToAMP(), Units.degreesToRadians(20), Units.degreesToRadians(80))
          - Constants.Arm.Motors.secondarySoftLimits[1], Constants.Arm.Motors.secondarySoftLimits[1]);
     
     arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedVelocity_ToAmp());
