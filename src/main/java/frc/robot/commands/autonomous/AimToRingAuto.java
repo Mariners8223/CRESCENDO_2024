@@ -29,10 +29,7 @@ public class AimToRingAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new SequentialCommandGroup(
-        new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Home || Arm.getInstance().lastknownPosition != knownArmPosition.Free),
-        new IntakeToFloor()
-      ).onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Intake),
+      new IntakeToFloor().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Intake),
       new AimToRingAuto1(),
       new ParallelRaceGroup(
         new AimToRingAuto2(),
