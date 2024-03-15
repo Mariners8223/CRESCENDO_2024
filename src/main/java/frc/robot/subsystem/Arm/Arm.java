@@ -18,6 +18,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
@@ -285,6 +286,8 @@ public class Arm extends SubsystemBase{
 
     mechanism.UpdatePivots();
     Logger.recordOutput("ArmMechanism", mechanism.getMechanism());
+    Logger.recordOutput("0 3d", new Pose3d());
+    Logger.recordOutput("0 2d", new Pose2d());
 
     // inputs.visualArm_MainPivot.setAngle(Units.rotationsToDegrees(mainEncoder.getPosition()));
     // inputs.visualArm_SeconderyPivot.setAngle(Units.rotationsToDegrees(secondaryEncoder.getPosition()));
