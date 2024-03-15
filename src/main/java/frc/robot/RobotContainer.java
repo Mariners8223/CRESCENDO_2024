@@ -115,8 +115,8 @@ public class RobotContainer {
     // armController.circle().whileTrue(new Collect_noProxy());
     armController.circle().whileTrue(new CollectFloor());
     armController.povLeft().onTrue(new MoveToSourceCollection());
-    armController.square().whileTrue(new SourceCollect());
-    // armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
+    // armController.square().whileTrue(new SourceCollect());
+    armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.triangle().onTrue(new Shoot());
     //check if still necesery
     // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
