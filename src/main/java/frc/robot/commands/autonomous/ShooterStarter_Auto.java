@@ -4,7 +4,9 @@
 
 package frc.robot.commands.autonomous;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.robot.subsystem.Arm.Shooter.Shooter;
@@ -13,6 +15,7 @@ import frc.robot.subsystem.Arm.Shooter.Shooter;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShooterStarter_Auto extends InstantCommand {
+  public static Trigger trigger = new Trigger(RobotState::isTeleop).onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
   private static Shooter shooter;
   public ShooterStarter_Auto() {
     // Use addRequirements() here to declare subsystem dependencies.
