@@ -2,9 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ShooterCommands;
+package frc.robot.commands.autonomous;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -47,11 +48,12 @@ public class AimAndShootToAmpArea_Auto extends SequentialCommandGroup {
   @Override
   public void initialize() {
     timer = 0;
-    ArmUtil.SetQuikShotMode(true);
-      ArmUtil.UpdateParameters();
-      RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle_ToAmp()), false);
+    ArmUtil.setIsBetaShoot_amp(true);
+      ArmUtil.UpdateParameters_AMPAim();
+      arm.moveMotorsToRotation(0, MathUtil.clamp(ArmUtil.getArmAngle_ToAMP(), Units.degreesToRadians(115), Units.degreesToRadians(180)));
+      // RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle_ToAmp()), false);
       shooter.setShooterVelocity(ArmUtil.getWantedVelocity_ToAmp());
-      RobotContainer.driveBase.setIsControlled(false);
+      // RobotContainer.driveBase.setIsControlled(false);
       // RobotContainer.driveBase.isControlled = false;
   }
 
@@ -64,6 +66,7 @@ public class AimAndShootToAmpArea_Auto extends SequentialCommandGroup {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    arm.getShooterSub().stopMotors();
   }
 
   // Returns true when the command should end.

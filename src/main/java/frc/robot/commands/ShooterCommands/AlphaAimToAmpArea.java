@@ -16,30 +16,32 @@ import frc.robot.subsystem.Arm.ArmUtil;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AimShooter extends InstantCommand {
+public class AlphaAimToAmpArea extends InstantCommand {
   private static Arm arm;
-  private static double target;
-  
-  public AimShooter() {
+  public AlphaAimToAmpArea() {
     // Use addRequirements() here to declare subsystem dependencies.
     arm = Arm.getInstance();
     addRequirements(arm);
   }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ArmUtil.SetQuikShotMode(false);
-    ArmUtil.UpdateParameters_SpeakerAim();
-    // arm.moveShooterToPose(ArmUtil.getArmNeededPosition());
-    target = MathUtil.clamp(ArmUtil.getArmAngle(), Units.degreesToRadians(20), Units.degreesToRadians(80));
-    arm.moveMotorsToRotation(Units.radiansToRotations(target - Constants.Arm.Motors.secondarySoftLimits[1]), Constants.Arm.Motors.secondarySoftLimits[1]);
+    ArmUtil.setIsBetaShoot_amp(false);
+    ArmUtil.UpdateParameters_AMPAim();
+
+    arm.moveMotorsToRotation(
+      MathUtil.clamp(
+        ArmUtil.getArmAngle_ToAMP(), Units.degreesToRadians(20), Units.degreesToRadians(80))
+         - Constants.Arm.Motors.secondarySoftLimits[1], Constants.Arm.Motors.secondarySoftLimits[1]);
+    
+    arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedVelocity_ToAmp());
 
     if(RobotContainer.driveController.circle().getAsBoolean()){
-      // RobotContainer.driveBase.isControlled = true;
-      RobotContainer.driveBase.setIsControlled(true);
-      RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()), false);
-    }
-    // else RobotContainer.driveBase.isControlled = false;
+        // RobotContainer.driveBase.isControlled = true;
+        RobotContainer.driveBase.setIsControlled(true);
+        RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle_ToAmp()), false);
+      }
     else RobotContainer.driveBase.setIsControlled(false);
   }
 }

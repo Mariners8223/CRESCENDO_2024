@@ -42,7 +42,7 @@ public class QuickAim extends SequentialCommandGroup {
     @Override
     public void initialize() {
       ArmUtil.SetQuikShotMode(true);
-      ArmUtil.UpdateParameters();
+      ArmUtil.UpdateParameters_SpeakerAim();
 
       // Armtarget = ArmUtil.getArmNeededPosition();
       // Armtarget.rotation = MathUtil.clamp(Armtarget.rotation, Units.rotationsToRadians(0.35), Units.rotationsToRadians(0.5));

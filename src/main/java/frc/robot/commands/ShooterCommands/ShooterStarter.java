@@ -20,7 +20,7 @@ public class ShooterStarter extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ArmUtil.UpdateParameters();
+    ArmUtil.UpdateParameters_SpeakerAim();
     shooter.setShooterVelocity(ArmUtil.getWantedSpeed());
   }
 
