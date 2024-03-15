@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
@@ -641,6 +642,10 @@ public class ArmUtil{
 
       inputs.ChassisAngle_AMP = CalcChassisAngleToSetPoint(Constants.Speaker.ampTranslation.getX(), Constants.Speaker.ampTranslation.getY());
 
+      if (RobotContainer.isBlueAllince.getAsBoolean()) {
+        inputs.ChassisAngle_AMP = Units.degreesToRadians(180) - inputs.ChassisAngle_AMP;
+      }
+      
       if (inputs.isBetaShoot_AMP) {
         inputs.ArmAngle_AMP = Units.degreesToRadians(180) - inputs.ArmAngle_AMP;
         inputs.ChassisAngle_AMP += 180;
