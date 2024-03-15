@@ -20,6 +20,12 @@
         {
           "type": "named",
           "data": {
+            "name": "shooter starter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "QuikAim"
           }
         },
@@ -52,6 +58,12 @@
           "type": "named",
           "data": {
             "name": "RollOut"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shooter starter"
           }
         },
         {
