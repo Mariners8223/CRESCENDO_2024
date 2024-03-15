@@ -376,6 +376,9 @@ public class Arm extends SubsystemBase{
     sparkFlex.enableVoltageCompensation(12);
     //Todo: What is Voltage Compensation? 
 
+    sparkFlex.setSmartCurrentLimit(55);
+    sparkFlex.setSecondaryCurrentLimit(75);
+
     return sparkFlex;
   }
 

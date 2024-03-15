@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.armCommands.MoveToFree;
+import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 import frc.robot.subsystem.Arm.Intake.Intake;
@@ -23,8 +24,8 @@ public class ShootToAmp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Unknown),
-      new SequentialCommandGroup(new MoveToAmp(true), new MoveToAmp(false)).onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Amp)
+      new MoveToHome().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Home || Arm.getInstance().lastknownPosition != knownArmPosition.Free),
+      new SequentialCommandGroup(new MoveToAmp(true), new MoveToAmp(false), new WaitCommand(0.5), new MoveToAmp2()).onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Amp)
     );
   }
 
@@ -89,9 +90,34 @@ public class ShootToAmp extends SequentialCommandGroup {
     @Override
     public void initialize(){
       if(this.isMain){
-      arm.moveMotorsToRotation(0.3, arm.getSecondaryMotorRotation());
+      arm.moveMotorsToRotation(0.3, 0);
       }
-      else arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.33);
+      else arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.2);
+    }
+
+    @Override
+    public void end(boolean interrupted){
+      if(interrupted) arm.lastknownPosition = Arm.knownArmPosition.Unknown;
+    }
+    
+    @Override 
+    public boolean isFinished() {
+      return arm.isArmInPosition();
+    }
+  }
+
+  private static class MoveToAmp2 extends Command{
+    Arm arm;
+
+    public MoveToAmp2(){
+      arm = Arm.getInstance();
+
+      addRequirements(arm);
+    }
+
+    @Override
+    public void initialize(){
+      arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.3);
     }
 
     @Override
@@ -99,9 +125,9 @@ public class ShootToAmp extends SequentialCommandGroup {
       if(!interrupted) arm.lastknownPosition = Arm.knownArmPosition.Amp;
       else arm.lastknownPosition = Arm.knownArmPosition.Unknown;
     }
-    
-    @Override 
-    public boolean isFinished() {
+
+    @Override
+    public boolean isFinished(){
       return arm.isArmInPosition();
     }
   }
