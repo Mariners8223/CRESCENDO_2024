@@ -14,6 +14,8 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
@@ -101,7 +103,9 @@ public class Robot extends LoggedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+    new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors());// TODO: please check if its right, i want it to stop the shooter motors
+  }
 
   @Override
   public void teleopInit() {
