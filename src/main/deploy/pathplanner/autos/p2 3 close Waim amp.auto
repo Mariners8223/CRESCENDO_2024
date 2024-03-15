@@ -92,6 +92,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "close upper shooting pose"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "QuikAim"

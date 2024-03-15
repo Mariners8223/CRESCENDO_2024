@@ -14,9 +14,12 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -26,7 +29,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommands.Collect_noProxy;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
-import frc.robot.commands.IntakeCommands.Collect.Collect;
+import frc.robot.commands.IntakeCommands.SourceCollect;
 import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
@@ -37,6 +40,7 @@ import frc.robot.commands.armCommands.MoveToStartShootPose_Auto;
 import frc.robot.commands.armCommands.MoveToStow;
 import frc.robot.commands.autonomous.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.autonomous.BetaAim_Auto;
+import frc.robot.commands.autonomous.HigherAim_Auto;
 import frc.robot.commands.autonomous.LowerAim_Auto;
 import frc.robot.commands.autonomous.ShootNote;
 import frc.robot.commands.autonomous.Shoot_Auto;
@@ -141,6 +145,8 @@ public class RobotContainer {
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
     autoChooser.addOption("Shoot Note", new ShootNote());
     SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
+
+    new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> driveBase.getField2d().getObject("AutoPath").setPoses()).ignoringDisable(true));
   }
 
 
@@ -175,12 +181,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
     NamedCommands.registerCommand("StartPosition", new MoveToStartShootPose_Auto());
     NamedCommands.registerCommand("RollOut", new RollOut());
-    NamedCommands.registerCommand("AutoCollect", new SequentialCommandGroup(new IntakeToFloor(), new Collect()));
+    NamedCommands.registerCommand("AutoCollect", new SequentialCommandGroup(new IntakeToFloor(), new CollectFloor()));
     NamedCommands.registerCommand("shooter starter", new ShooterStarter_Auto());
 
     //Aiming positions
     NamedCommands.registerCommand("lower aim", new LowerAim_Auto());
-    NamedCommands.registerCommand("higher aim", new InstantCommand()); //TODO: dis thing
+    NamedCommands.registerCommand("higher aim", new HigherAim_Auto());
 
     NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
      {Arm.getInstance().getShooterSub().setShooterPower(0.5); Arm.getInstance().getIntakeSub().setMotor(0.8);}));

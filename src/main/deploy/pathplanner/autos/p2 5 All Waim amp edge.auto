@@ -172,15 +172,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "go shoot high"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "QuikAim"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "go shoot high"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "higher aim"
+                }
+              }
+            ]
           }
         },
         {

@@ -105,6 +105,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "close upper shooting pose"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "QuikAim"
@@ -142,15 +148,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "go shoot high"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "higher aim"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "go shoot high"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "higher aim"
+                }
+              }
+            ]
           }
         },
         {
