@@ -14,8 +14,6 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
@@ -104,7 +102,8 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousExit() {
-    new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors());
+    Arm.getInstance().getShooterSub().stopMotors();
+    RobotContainer.updateFieldFromAuto("bla bla bla");
   }
 
   @Override
