@@ -55,6 +55,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "close lower shooting pose"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "QuikAim"
@@ -126,6 +132,12 @@
           "type": "named",
           "data": {
             "name": "shooter starter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "close upper shooting pose"
           }
         },
         {
