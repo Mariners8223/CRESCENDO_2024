@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "shooter starter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "QuikAim"
           }
         },
@@ -45,7 +51,7 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "shooter starter"
           }
         },
         {
@@ -57,7 +63,7 @@
         {
           "type": "named",
           "data": {
-            "name": "QuikAim"
+            "name": "lower aim"
           }
         },
         {
@@ -107,7 +113,7 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "shooter starter"
           }
         },
         {
@@ -119,7 +125,7 @@
         {
           "type": "named",
           "data": {
-            "name": "QuikAim"
+            "name": "lower aim"
           }
         },
         {
