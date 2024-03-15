@@ -38,7 +38,6 @@ public class AlphaAimToAmpArea extends InstantCommand {
     arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedVelocity_ToAmp());
 
     if(RobotContainer.driveController.circle().getAsBoolean()){
-        // RobotContainer.driveBase.isControlled = true;
         RobotContainer.driveBase.setIsControlled(true);
         RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle_ToAmp()), false);
       }

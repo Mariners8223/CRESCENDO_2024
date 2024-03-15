@@ -15,7 +15,7 @@ import frc.robot.subsystem.Arm.Shooter.Shooter;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShooterStarter_Auto extends InstantCommand {
-  public static Trigger trigger = new Trigger(RobotState::isTeleop).onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
+  // public static Trigger trigger = new Trigger(RobotState::isTeleop).onTrue(new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors()));
   private static Shooter shooter;
   public ShooterStarter_Auto() {
     // Use addRequirements() here to declare subsystem dependencies.

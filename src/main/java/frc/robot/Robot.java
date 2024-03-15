@@ -104,7 +104,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousExit() {
-    // new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors());// TODO: please check if its right, i want it to stop the shooter motors
+    new InstantCommand(() -> Arm.getInstance().getShooterSub().stopMotors());
   }
 
   @Override
