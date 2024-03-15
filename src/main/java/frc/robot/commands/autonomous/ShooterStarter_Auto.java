@@ -12,9 +12,9 @@ import frc.robot.subsystem.Arm.Shooter.Shooter;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShooterStarter extends InstantCommand {
+public class ShooterStarter_Auto extends InstantCommand {
   private static Shooter shooter;
-  public ShooterStarter() {
+  public ShooterStarter_Auto() {
     // Use addRequirements() here to declare subsystem dependencies.
     shooter = Arm.getInstance().getShooterSub();
   }

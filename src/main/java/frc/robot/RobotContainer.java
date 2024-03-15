@@ -34,7 +34,6 @@ import frc.robot.commands.IntakeCommands.Collect.Collect;
 import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
 import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.ShooterCommands.Shoot;
-import frc.robot.commands.ShooterCommands.Shoot_Auto;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
@@ -44,7 +43,8 @@ import frc.robot.commands.armCommands.MoveToStow;
 import frc.robot.commands.autonomous.BetaAim_Auto;
 import frc.robot.commands.autonomous.LowerAim_Auto;
 import frc.robot.commands.autonomous.ShootNote;
-import frc.robot.commands.autonomous.ShooterStarter;
+import frc.robot.commands.autonomous.Shoot_Auto;
+import frc.robot.commands.autonomous.ShooterStarter_Auto;
 import frc.robot.commands.sequences.AimRegularToSpeaker;
 import frc.robot.commands.sequences.AimToRing;
 import frc.robot.commands.sequences.ShootToAmp;
@@ -182,7 +182,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("StartPosition", new MoveToStartShootPose_Auto());
     NamedCommands.registerCommand("RollOut", new RollOut());
     NamedCommands.registerCommand("AutoCollect", new SequentialCommandGroup(new IntakeToFloor(), new Collect()));
-    NamedCommands.registerCommand("shooter starter", new ShooterStarter());
+    NamedCommands.registerCommand("shooter starter", new ShooterStarter_Auto());
 
     //Aiming positions
     NamedCommands.registerCommand("lower aim", new LowerAim_Auto());
