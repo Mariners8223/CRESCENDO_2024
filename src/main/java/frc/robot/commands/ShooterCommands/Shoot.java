@@ -24,10 +24,10 @@ public class Shoot extends SequentialCommandGroup {
 
       //just in case, ends the control of aim
       // RobotContainer.driveBase.isControlled = false;
+      RobotContainer.AlphaAimCommand.cancel();
+      
       RobotContainer.driveBase.setIsControlled(false);
       Arm.getInstance().getIntakeSub().setIsGamePieceDetected(false);
-
-      RobotContainer.AlphaAimCommand.cancel();
       // RobotContainer.BetaAimCommand.cancel();
     }));
   }
