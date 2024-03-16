@@ -100,7 +100,7 @@ public class ArmUtil{
     private static double CalcDz(){
       if(inputs.IsQuikShot){
         inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - 0.4)
-        + 0.3;//Arm.getInstance().getShooterPosition().y);
+        + 0.27;//Arm.getInstance().getShooterPosition().y);
         // TODO: check if its better to do the calc with just minus 0.4 meters - the arm hieght
       }
       else{
