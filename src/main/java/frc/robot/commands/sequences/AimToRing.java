@@ -96,11 +96,14 @@ public class AimToRing extends SequentialCommandGroup {
       angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
 
       if(angleToRing == -1000){
+        driveBase.robotRelativeDrive(0, 0, 0);
       }
-      else
+      else{
         driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
+        driveBase.robotRelativeDrive(1, 0, 0);
+      }
 
-      driveBase.robotRelativeDrive(1, 0, 0);
+      
     }
 
     @Override
