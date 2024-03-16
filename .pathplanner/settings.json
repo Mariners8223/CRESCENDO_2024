@@ -18,7 +18,7 @@
     "p3",
     "p4"
   ],
-  "defaultMaxVel": 3.0,
+  "defaultMaxVel": 3.5,
   "defaultMaxAccel": 5.0,
   "defaultMaxAngVel": 200.0,
   "defaultMaxAngAccel": 550.0,
