@@ -186,15 +186,15 @@ public class ArmUtil{
      * @return the wanted velocity
      */
     private static double CalcWantedSpeed(double distanceToSpeaker){
-      // if (inputs.isZone1) {
-      //   inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone1;
-      // }
-      // else{
-      //   inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
-      // }
-      inputs.GamePieceVelocityX = CalcVelocityX_GP(inputs.Dz, inputs.Dz, distanceToSpeaker);
-      inputs.GamePieceVelocityZ = ClacVelocityZ_GP(distanceToSpeaker);
-      inputs.WantedVelocity = Math.hypot(inputs.GamePieceVelocityX, inputs.GamePieceVelocityZ );
+      if (inputs.isZone1) {
+        inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone1;
+      }
+      else{
+        inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
+      }
+      // inputs.GamePieceVelocityX = CalcVelocityX_GP(inputs.Dz, inputs.Dz, distanceToSpeaker);
+      // inputs.GamePieceVelocityZ = ClacVelocityZ_GP(distanceToSpeaker);
+      // inputs.WantedVelocity = Math.hypot(inputs.GamePieceVelocityX, inputs.GamePieceVelocityZ );
 
       inputs.WantedVelocity = MathUtil.clamp(inputs.WantedVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(5500) * Constants.Shooter.wheelRadius);//shooting speed clamp
       inputs.StartSpeed = inputs.WantedVelocity;
@@ -314,6 +314,10 @@ public class ArmUtil{
       return Math.atan(inputs.GamePieceVelocityZ/inputs.GamePieceVelocityX);
     }
 
+    public static double Zone2_Equasion_speedrelative(double MaxHieght, double speed){
+      return Math.asin(speed/(Math.sqrt(2*MaxHieght* Constants.gGravity_phisics)));
+    }
+
     /**
      * calculates the needed velocity on the z axis in order to get to the targeted hieght 
      * @param MaxHieght the max hieght the game piece is allowed to get *IN METERS*
@@ -380,7 +384,7 @@ public class ArmUtil{
       }
       else{
         // inputs.ArmAngle = Zone2_Equasion(StartSpeed, Dz, distanceToSpeaker);
-        inputs.ArmAngle = Zone2_Equasion_NEW(Dz + 0.01, Dz, distanceToSpeaker);
+        inputs.ArmAngle = Zone2_Equasion_speedrelative(inputs.Dz, inputs.StartSpeed);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         if(inputs.IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
