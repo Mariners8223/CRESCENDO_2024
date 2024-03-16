@@ -64,7 +64,7 @@ public class AimToRingAuto extends SequentialCommandGroup {
       angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
 
       if(angleToRing == -1000){
-        //TODO add what to do if no gp is detected
+        cancel();
       }
 
       driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
@@ -109,7 +109,7 @@ public class AimToRingAuto extends SequentialCommandGroup {
       angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
 
       if(angleToRing == -1000){
-        //TODO add no gp detcted shit
+        cancel();
       }
 
       driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
