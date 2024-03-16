@@ -39,6 +39,7 @@ import frc.robot.commands.armCommands.MoveToSourceCollection;
 import frc.robot.commands.armCommands.MoveToStartShootPose_Auto;
 import frc.robot.commands.armCommands.MoveToStow;
 import frc.robot.commands.autonomous.AimAndShootToAmpArea_Auto;
+import frc.robot.commands.autonomous.AimToRingAuto;
 import frc.robot.commands.autonomous.BetaAim_Auto;
 import frc.robot.commands.autonomous.HigherAim_Auto;
 import frc.robot.commands.autonomous.LowerAim_Auto;
@@ -172,7 +173,7 @@ public class RobotContainer {
     //AUTOSSSSS related shit
     NamedCommands.registerCommand("Shoot", new Shoot_Auto());
     NamedCommands.registerCommand("QuikAim", new BetaAim_Auto());
-    NamedCommands.registerCommand("Collect", new SequentialCommandGroup(new IntakeToFloor(), new Collect_noProxy()));
+    NamedCommands.registerCommand("Collect", new SequentialCommandGroup(new IntakeToFloor(), new CollectFloor()));
     NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
     NamedCommands.registerCommand("MoveToHome", new MoveToHome());
@@ -181,7 +182,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
     NamedCommands.registerCommand("StartPosition", new MoveToStartShootPose_Auto());
     NamedCommands.registerCommand("RollOut", new RollOut());
-    NamedCommands.registerCommand("AutoCollect", new SequentialCommandGroup(new IntakeToFloor(), new CollectFloor()));
+    NamedCommands.registerCommand("AutoCollect", new AimToRingAuto());
     NamedCommands.registerCommand("shooter starter", new ShooterStarter_Auto());
 
     //Aiming positions
