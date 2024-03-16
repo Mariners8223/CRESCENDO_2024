@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.25,
-      "y": 5.550936522700434
+      "x": 1.28,
+      "y": 5.55
     },
     "rotation": 0
   },
@@ -34,9 +34,15 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "IntakeToFloor"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
-                  "pathName": "get 1st row middle note"
+                  "pathName": "Front 2nd note"
                 }
               },
               {
@@ -57,7 +63,62 @@
         {
           "type": "path",
           "data": {
-            "pathName": "near speaker"
+            "pathName": "close in front shooting pose"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "QuikAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeToFloor"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Collect upper"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoCollect"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shooter starter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "close upper shooting pose"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "QuikAim"
           }
         },
         {
@@ -73,7 +134,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "get 1st row upper note"
+                  "pathName": "Middle 5th note"
                 }
               },
               {
@@ -86,21 +147,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "shooter starter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "near speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "go shoot high"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "higher aim"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "shooter starter"
+                }
+              }
+            ]
           }
         },
         {
@@ -108,36 +176,12 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "get 1st row bottom note"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
-                  "name": "AutoCollect"
+                  "name": "Shoot"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shooter starter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "near speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         }
       ]

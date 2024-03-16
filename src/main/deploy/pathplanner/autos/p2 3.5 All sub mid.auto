@@ -30,7 +30,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -42,7 +42,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
+                  "name": "AutoCollect"
                 }
               }
             ]
@@ -67,7 +67,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -79,7 +79,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
+                  "name": "AutoCollect"
                 }
               }
             ]
@@ -104,7 +104,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -116,7 +116,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
+                  "name": "AutoCollect"
                 }
               }
             ]
