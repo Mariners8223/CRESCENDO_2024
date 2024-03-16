@@ -168,8 +168,8 @@ public class Constants {
             public static final double[] mainSoftLimits = new double[]{0.3206787109375, -0.03125};//was 0.35, -0.04 // 0.3206787109375
             public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.007};
 
-            public static final double[] mainMaxOutputs = new double[]{0.2, -0.1}; //0.45, -0.25
-            public static final double[] secondaryMaxOutputs = new double[]{0.2, -0.2}; //0.5, -0.35
+            public static final double[] mainMaxOutputs = new double[]{0.45, -0.3}; //0.45, -0.25
+            public static final double[] secondaryMaxOutputs = new double[]{0.55, -0.4}; //0.5, -0.35
  
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 81; //121.5
@@ -213,8 +213,8 @@ public class Constants {
         public static final double StallCurrent = 15;
         public static final int MaxStallTime = 30;
 
-        public static final double secondaryIntakeAngle = 0.392333984375;
-        public static final double mainIntakeAngle = -0.0263671875;
+        public static final double secondaryIntakeAngle = 0.3779296875;
+        public static final double mainIntakeAngle = -0.0333251953125;
 
         public static final int laserPort = 4;
     }
