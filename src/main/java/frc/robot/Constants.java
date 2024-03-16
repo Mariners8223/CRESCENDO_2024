@@ -95,7 +95,7 @@ public class Constants {
             // public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
 
             public static Translation3d ampTranslation = new Translation3d(3, 8, 0);
-            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), 2.15);//z = 2.03
+            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 5.55, 2.15);//z = 2.03
             //x is about 0.0381, y is about 5.547868 METER
             //z may be 1.628768995 meter through calculations
             public static final double AlphaShootOffset_distance = 0.618398323;//or just add this
@@ -148,7 +148,7 @@ public class Constants {
         public static final ArmPosition AlphaFromClose = new ArmPosition(Arm.armLengthMeters * Math.cos(Units.degreesToRadians(57.7)),
          Arm.armLengthMeters * Math.sin(Units.degreesToRadians(57.7)), 0);
 
-        public static final double EndOfZone1 = 3.2;//TODO: the distince from the speaker right before the lazer equasion is not relevent
+        public static final double EndOfZone1 = 3.4;//TODO: the distince from the speaker right before the lazer equasion is not relevent
 
         public static class Motors{
             public static final int mainMotorID = 15;
