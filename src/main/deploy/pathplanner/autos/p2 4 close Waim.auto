@@ -116,6 +116,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "close in front shooting pose"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "QuikAim"
