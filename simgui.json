@@ -10,6 +10,11 @@
       "/SmartDashboard/navX-Sensor[4]": "Gyro"
     },
     "windows": {
+      "/AdvantageKit/RealOutputs/ArmMechanism": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Chooser": {
         "window": {
           "visible": true

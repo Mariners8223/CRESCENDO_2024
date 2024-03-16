@@ -20,8 +20,12 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.proto.System;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -136,6 +140,9 @@ public class Arm extends SubsystemBase{
   private Shooter shooter;
   private Intake intake;
 
+  double armAngle;
+  double intakeAngle;  
+
   private Arm() {
     mainMotor = configureMotors(Constants.Arm.Motors.mainMotorID ,Constants.Arm.Motors.mainPID,
     Constants.Arm.Motors.mainInverted, Constants.Arm.Motors.mainSoftLimits, Constants.Arm.Motors.mainMaxOutputs);
@@ -155,7 +162,7 @@ public class Arm extends SubsystemBase{
     shooterPosition = new ArmPosition();
 
     shooter = new Shooter();
-    intake = new Intake();  
+    intake = new Intake();
 
     lastknownPosition = knownArmPosition.Unknown;
     mechanism = new Mechanism();
@@ -169,6 +176,12 @@ public class Arm extends SubsystemBase{
     // inputs.visualArm_Root.append(inputs.visualArm_MainPivot);
     // inputs.visualArm_MainPivot.append(inputs.visualArm_SeconderyPivot);
     // inputs.visualArm_MainPivot.append(inputs.visualArm_Elavator);
+
+    armAngle = 0;
+    intakeAngle = 0;
+    
+    // SmartDashboard.putNumber("Arm Angle", 0);
+    // SmartDashboard.putNumber("Intake Angle", 0);
   }
 
   /**
@@ -285,16 +298,33 @@ public class Arm extends SubsystemBase{
     inputs.secondaryAbsolutePostion = secondaryAbsEncoder.getPosition();
 
     mechanism.UpdatePivots();
+
     Logger.recordOutput("ArmMechanism", mechanism.getMechanism());
+
     Logger.recordOutput("0 3d", new Pose3d());
     Logger.recordOutput("0 2d", new Pose2d());
 
+    Logger.recordOutput("Arm rotation", new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(inputs.mainMotorPostion)), 0)));
+    Logger.recordOutput("Intake Position", new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.secondaryMotorPosition) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0)));
+  
+    // Logger.recordOutput("Arm rotation", new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(armAngle)), 0)));
+    // Logger.recordOutput("Intake Position", new Pose3d((Math.cos(Units.rotationsToRadians(armAngle)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(armAngle)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(armAngle) - Units.rotationsToRadians(intakeAngle) - Math.PI, 0)));
+    // armAngle += 0.0001;
+    // intakeAngle += 0.0002;
+
+    // RobotContainer.driveController.cross().whileTrue(new InstantCommand(() -> armAngle++));
+    // RobotContainer.driveController.circle().whileTrue(new InstantCommand(() -> armAngle--));
+
+    // Logger.recordOutput("Arm rotation", new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.degreesToRadians(SmartDashboard.getNumber("Arm Angle", 0))), 0)));
+    // Logger.recordOutput("Intake Position", new Pose3d((Math.cos(Units.degreesToRadians((SmartDashboard.getNumber("Arm Angle", 0)))) * 0.435) + 0.32 - 0.475, 0.25 - 0.475, (Math.sin((Units.degreesToRadians(SmartDashboard.getNumber("Arm Angle", 0)))) * 0.435 )+ 0.4, new Rotation3d(0, - (Units.degreesToRadians(SmartDashboard.getNumber("Arm Angle", 0))) - (Units.degreesToRadians(SmartDashboard.getNumber("Intake Angle", 0))) - Math.PI, 0)));
+
+
     // inputs.visualArm_MainPivot.setAngle(Units.rotationsToDegrees(mainEncoder.getPosition()));
-    // inputs.visualArm_SeconderyPivot.setAngle(Units.rotationsToDegrees(secondaryEncoder.getPosition()));
     // inputs.visualArm_Elavator.setLength(elavator.getRailMotorPosition());
 
     Logger.processInputs(getName(), inputs);
   }
+
 
   /**
    * takes the recoreded motor positions and calculates the arm positions
