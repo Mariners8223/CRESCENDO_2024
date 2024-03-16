@@ -304,9 +304,15 @@ public class Arm extends SubsystemBase{
     Logger.recordOutput("0 3d", new Pose3d());
     Logger.recordOutput("0 2d", new Pose2d());
 
-    Logger.recordOutput("Arm rotation", new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(inputs.mainMotorPostion)), 0)));
-    Logger.recordOutput("Intake Position", new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.secondaryMotorPosition) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0)));
+    Pose3d armPosition = new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(inputs.mainMotorPostion)), 0));
+    Pose3d intakePosition = new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.secondaryMotorPosition) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0));
+    Logger.recordOutput("Components", new Pose3d[] {armPosition, intakePosition});
+
+    // Logger.recordOutput("Arm rotation", new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(inputs.mainMotorPostion)), 0)));
+    // Logger.recordOutput("Intake Position", new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.secondaryMotorPosition) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0)));
   
+    // Logger.recordOutput("Drive Base", new Pose2d(0,0, new Rotation2d((armAngle++)/1000)));
+
     // Logger.recordOutput("Arm rotation", new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(armAngle)), 0)));
     // Logger.recordOutput("Intake Position", new Pose3d((Math.cos(Units.rotationsToRadians(armAngle)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(armAngle)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(armAngle) - Units.rotationsToRadians(intakeAngle) - Math.PI, 0)));
     // armAngle += 0.0001;
