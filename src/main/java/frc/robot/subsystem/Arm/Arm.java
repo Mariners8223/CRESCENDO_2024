@@ -102,6 +102,8 @@ public class Arm extends SubsystemBase{
     double mainOutput;
     double secondaryOutput;
 
+    Pose3d[] components;
+
     // Mechanism2d visualArm;
     // MechanismRoot2d visualArm_Root;
     // MechanismLigament2d visualArm_MainPivot;
@@ -311,11 +313,15 @@ public class Arm extends SubsystemBase{
 
     mechanism.UpdatePivots();
     Logger.recordOutput("ArmMechanism", mechanism.getMechanism());
-    Logger.recordOutput("0 3d", new Pose3d());
-    Logger.recordOutput("0 2d", new Pose2d());
-    Pose3d armPosition = new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(inputs.mainMotorPostion)), 0));
-    Pose3d intakePosition = new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.secondaryMotorPosition) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0));
-    Logger.recordOutput("Components", new Pose3d[] {armPosition, intakePosition});
+
+    // Logger.recordOutput("0 3d", new Pose3d());
+    // Logger.recordOutput("0 2d", new Pose2d());
+    // Pose3d armPosition = new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(inputs.mainMotorPostion)), 0));
+    // Pose3d intakePosition = new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.secondaryMotorPosition) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0));
+    // Logger.recordOutput("Components", new Pose3d[] {armPosition, intakePosition});
+
+    inputs.components[0] = new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(inputs.mainMotorPostion)), 0));
+    inputs.components[1] = new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.secondaryMotorPosition) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0));
     // inputs.visualArm_MainPivot.setAngle(Units.rotationsToDegrees(mainEncoder.getPosition()));
     // inputs.visualArm_Elavator.setLength(elavator.getRailMotorPosition());
 
