@@ -367,6 +367,21 @@ public class DriveBase extends SubsystemBase {
     //calculateTheta(alpha);//dis may work
   }
 
+  public void setTargetChassisAngle(Rotation2d Angle, boolean isBeyond360){
+    double targetAngle;
+    if (isBeyond360) {
+      targetAngle = Angle.getDegrees() % 360;
+    }
+    int k = (int)Units.degreesToRotations(getAngle());
+    double targetPluse = Angle.getDegrees() + k * 360;
+    double targetMius = 360 * k - Angle.getDegrees();
+    if (targetMius - getAngle() > targetPluse - getAngle()) {
+      inputs.targetRotation = Rotation2d.fromDegrees(targetMius);
+    }
+    else inputs.targetRotation = Rotation2d.fromDegrees(targetPluse);
+    targetRotation = inputs.targetRotation;
+  }
+
   /**
    * gets the target rotation of the robot's angle
    * @return //the target rotation
