@@ -89,10 +89,10 @@ public class RobotContainer {
     configureBindings();
     configChooser();
 
-    new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> {
-      if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
+    // new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> {
+    //   if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
 
-    new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> Logger.recordOutput("allince", DriverStation.getAlliance().get().toString())).ignoringDisable(true)); 
+    // new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> Logger.recordOutput("allince", DriverStation.getAlliance().get().toString())).ignoringDisable(true)); 
   }
 
   private void configureBindings() {
