@@ -4,23 +4,60 @@
 
 package frc.robot.commands.autonomous;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystem.Arm.Arm;
-import frc.robot.subsystem.Arm.Intake.Intake;
+import frc.robot.subsystem.Arm.ArmUtil;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Shoot_Auto extends InstantCommand {
-  private static Intake intake;
+public class Shoot_Auto extends SequentialCommandGroup {
   public Shoot_Auto() {
-    intake = Arm.getInstance().getIntakeSub();
-    // Use addRequirements() here to declare subsystem dependencies.
+    addCommands(new Shoot_Auto1(),
+    new WaitCommand(0.6),
+    new InstantCommand(() -> {Arm.getInstance().getShooterSub().stopMotors(); Arm.getInstance().getIntakeSub().stopMotor();}));
   }
+  public class Shoot_Auto1 extends Command{
+    private static Arm arm;
+    private static int timer;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    intake.setPosition(intake.getMotorPosition() + 15);
+    public Shoot_Auto1(){
+      arm = Arm.getInstance();
+      timer = 0;
+    }
+    @Override
+    public void initialize() {
+      if (DriverStation.isAutonomous() && ArmUtil.isZone1()) {
+        arm.getShooterSub().setShooterRPM(4000);
+      }
+      else arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedSpeed());
+      timer = 0;
+    }
+
+    @Override
+    public void execute() {
+      timer++;
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+      arm.getIntakeSub().setMotor(1);
+      Arm.getInstance().getIntakeSub().setIsGamePieceDetected(false);
+      if(interrupted){
+        Arm.getInstance().getShooterSub().stopMotors();
+        Arm.getInstance().getIntakeSub().stopMotor();
+      }
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+      return (arm.getShooterSub().isAtSelctedVelocity()) || timer > 60 || (arm.getShooterSub().isMotorsAtSameSpeed());
+    }
   }
 }
