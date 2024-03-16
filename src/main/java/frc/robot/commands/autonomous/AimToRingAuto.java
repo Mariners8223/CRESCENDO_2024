@@ -81,7 +81,7 @@ public class AimToRingAuto extends SequentialCommandGroup {
 
     @Override
     public boolean isFinished(){
-      return angleToRing <= Constants.Vision.aimToRingToleranceDegrees || Timer.getFPGATimestamp() - startTime >= 2;
+      return angleToRing <= Constants.Vision.aimToRingToleranceDegrees || Timer.getFPGATimestamp() - startTime >= 1;
     }
 
   }
@@ -127,7 +127,7 @@ public class AimToRingAuto extends SequentialCommandGroup {
 
     @Override
     public boolean isFinished(){
-      return Arm.getInstance().getIntakeSub().isGamePieceDetected() || Timer.getFPGATimestamp() - startTime >= 2;
+      return Arm.getInstance().getIntakeSub().isGamePieceDetected() || Timer.getFPGATimestamp() - startTime >= 1;
     }
   }
 }
