@@ -19,7 +19,7 @@ public class Shoot_Auto extends SequentialCommandGroup {
   public Shoot_Auto() {
     addCommands(new Shoot_Auto1(),
     new WaitCommand(0.6),
-    new InstantCommand(() -> {Arm.getInstance().getShooterSub().stopMotors(); Arm.getInstance().getIntakeSub().stopMotor();
+    new InstantCommand(() -> {Arm.getInstance().getShooterSub().setShooterRPM(4000); Arm.getInstance().getIntakeSub().stopMotor();
     Arm.getInstance().getIntakeSub().setIsGamePieceDetected(false);}));
   }
   public class Shoot_Auto1 extends Command{

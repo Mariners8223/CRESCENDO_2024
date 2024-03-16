@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommands.Collect_noProxy;
@@ -172,7 +173,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("Do Nothing", new InstantCommand());
     //AUTOSSSSS related shit
     NamedCommands.registerCommand("Shoot", new Shoot_Auto());
-    NamedCommands.registerCommand("QuikAim", new BetaAim_Auto());
+    NamedCommands.registerCommand("QuikAim", new SequentialCommandGroup(new BetaAim_Auto(), new WaitCommand(0.3)));
     NamedCommands.registerCommand("Collect", new SequentialCommandGroup(new IntakeToFloor(), new CollectFloor()));
     NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
@@ -186,8 +187,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("shooter starter", new ShooterStarter_Auto());
 
     //Aiming positions
-    NamedCommands.registerCommand("lower aim", new LowerAim_Auto());
-    NamedCommands.registerCommand("higher aim", new HigherAim_Auto());
+    NamedCommands.registerCommand("lower aim", new SequentialCommandGroup(new LowerAim_Auto(), new WaitCommand(0.3)));
+    NamedCommands.registerCommand("higher aim", new SequentialCommandGroup(new HigherAim_Auto(), new WaitCommand(0.3)));
 
     NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
      {Arm.getInstance().getShooterSub().setShooterPower(0.5); Arm.getInstance().getIntakeSub().setMotor(0.8);}));
