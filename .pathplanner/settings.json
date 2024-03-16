@@ -19,7 +19,7 @@
     "p4"
   ],
   "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 6.0,
+  "defaultMaxAccel": 5.0,
   "defaultMaxAngVel": 200.0,
   "defaultMaxAngAccel": 550.0,
   "maxModuleSpeed": 3.7

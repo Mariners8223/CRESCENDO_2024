@@ -29,7 +29,7 @@ public class AimToRingAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new IntakeToFloor().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Intake),
+      new IntakeToFloor(),
       new AimToRingAuto1(),
       new ParallelRaceGroup(
         new AimToRingAuto2(),
@@ -65,6 +65,7 @@ public class AimToRingAuto extends SequentialCommandGroup {
 
       if(angleToRing == -1000){
         cancel();
+        return;
       }
 
       driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
@@ -110,6 +111,7 @@ public class AimToRingAuto extends SequentialCommandGroup {
 
       if(angleToRing == -1000){
         cancel();
+        return;
       }
 
       driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
