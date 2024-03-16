@@ -102,7 +102,7 @@ public class Arm extends SubsystemBase{
     double mainOutput;
     double secondaryOutput;
 
-    Pose3d[] components;
+    Pose3d[] components = new Pose3d[2];
 
     // Mechanism2d visualArm;
     // MechanismRoot2d visualArm_Root;
