@@ -81,7 +81,7 @@ public class AimToRingAuto extends SequentialCommandGroup {
 
     @Override
     public boolean isFinished(){
-      return angleToRing <= Constants.Vision.aimToRingToleranceDegrees || Timer.getFPGATimestamp() - startTime >= 1;
+      return angleToRing <= Constants.Vision.aimToRingToleranceDegrees || Timer.getFPGATimestamp() - startTime >= 0.25;
     }
 
   }
