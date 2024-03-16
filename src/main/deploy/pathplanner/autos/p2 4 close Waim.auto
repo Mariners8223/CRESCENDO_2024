@@ -30,7 +30,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -42,7 +42,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
+                  "name": "AutoCollect"
                 }
               }
             ]
@@ -67,13 +67,19 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot"
           }
         },
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -85,7 +91,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
+                  "name": "AutoCollect"
                 }
               }
             ]
@@ -104,13 +110,19 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot"
           }
         },
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -122,7 +134,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
+                  "name": "AutoCollect"
                 }
               }
             ]
@@ -144,6 +156,12 @@
           "type": "named",
           "data": {
             "name": "QuikAim"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
           }
         },
         {
