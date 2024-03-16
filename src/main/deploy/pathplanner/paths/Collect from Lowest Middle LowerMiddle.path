@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.018221791227425,
-        "y": 1.0626473981509263
+        "x": 7.895509771048071,
+        "y": 0.8197585582047061
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.018221791227425,
-        "y": 1.0626473981509261
+        "x": 7.901616952872307,
+        "y": 0.8197585582047061
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "MiddleNotes_BottmNote"
     },
     {
       "anchor": {
-        "x": 8.018221791227425,
-        "y": 2.7038039051273004
+        "x": 7.380232963033685,
+        "y": 2.4709865111598974
       },
       "prevControl": {
-        "x": 6.018062392419323,
-        "y": 2.456939070647738
+        "x": 6.771269462653047,
+        "y": 2.271902289881611
       },
       "nextControl": null,
       "isLocked": false,
@@ -51,7 +51,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -40.94999999999999,
+    "rotation": -1.5074357587749527,
     "rotateFast": false
   },
   "reversed": false,
