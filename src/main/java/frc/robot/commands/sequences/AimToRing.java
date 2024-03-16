@@ -6,6 +6,7 @@ package frc.robot.commands.sequences;
 
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -33,6 +34,48 @@ public class AimToRing extends SequentialCommandGroup {
         new CollectFloor()
       ).onlyIf(() -> RobotContainer.vision.hasTarget(CameraLocation.Front_Arm))
       );
+  }
+
+  public static class AimToRingTrigo extends Command{
+    DriveBase driveBase;
+    Vision vision;
+    double angleToRing;
+
+    public AimToRingTrigo(){
+      driveBase = RobotContainer.driveBase;
+      vision = RobotContainer.vision;
+
+      addRequirements(driveBase);
+    }
+
+    @Override
+    public void initialize(){
+      driveBase.setIsControlled(true);
+    }
+
+    @Override
+    public void execute(){
+      angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
+
+      if(angleToRing == -1000){
+        driveBase.robotRelativeDrive(0, 0, 0);
+      }
+      else{
+        driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
+        driveBase.robotRelativeDrive(Math.cos(Units.degreesToRadians(angleToRing)), -Math.sin(Units.degreesToRadians(angleToRing)), 0);
+      }
+    }
+
+    @Override
+    public void end(boolean interrupt) {
+      driveBase.setIsControlled(false);
+      driveBase.drive(0, 0, 0);
+    }
+
+    @Override
+    public boolean isFinished() {
+      return Arm.getInstance().getIntakeSub().isGamePieceDetected();
+    }
   }
 
   public static class AimToRing1 extends Command {
