@@ -213,7 +213,7 @@ public class ArmUtil{
       }
       else inputs.YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);
       if (inputs.IsQuikShot) inputs.YaxisWantedAngle = Units.degreesToRadians(180) + inputs.YaxisWantedAngle;
-      else inputs.YaxisWantedAngle = inputs.YaxisWantedAngle;
+      else inputs.YaxisWantedAngle = inputs.YaxisWantedAngle%(2 * Math.PI);
       return inputs.YaxisWantedAngle;
     }
 
