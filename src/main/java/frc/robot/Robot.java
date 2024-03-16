@@ -12,16 +12,20 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriveTrain.Drive;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
   String lastAutoName = "InstantCommand";
+  Boolean driverStationWasConnected = false;
 
   @Override
   public void robotInit() {
@@ -85,6 +89,14 @@ public class Robot extends LoggedRobot {
     if(RobotContainer.getAutoCommand() != null && RobotContainer.getAutoCommand().getName() != lastAutoName){
       lastAutoName = RobotContainer.getAutoCommand().getName();
       RobotContainer.updateFieldFromAuto(lastAutoName);
+    }
+
+    if(DriverStation.isDSAttached() && !driverStationWasConnected){
+      driverStationWasConnected = true;
+      Logger.recordOutput("Allince", DriverStation.getAlliance().get().name());
+      if(DriverStation.getAlliance().get() == Alliance.Red){
+        Constants.SwapToRed();
+      }
     }
   }
 
