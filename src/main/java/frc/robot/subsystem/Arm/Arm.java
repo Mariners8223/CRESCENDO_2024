@@ -5,6 +5,7 @@
 package frc.robot.subsystem.Arm;
 
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.CANSparkFlex;
@@ -17,10 +18,20 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.proto.System;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -130,9 +141,13 @@ public class Arm extends SubsystemBase{
   private ArmPosition shooterPosition;
 
   public knownArmPosition lastknownPosition;
+  private Mechanism mechanism;
 
   private Shooter shooter;
   private Intake intake;
+
+  double armAngle;
+  double intakeAngle;  
 
   private Arm() {
     mainMotor = configureMotors(Constants.Arm.Motors.mainMotorID ,Constants.Arm.Motors.mainPID,
@@ -153,9 +168,10 @@ public class Arm extends SubsystemBase{
     shooterPosition = new ArmPosition();
 
     shooter = new Shooter();
-    intake = new Intake();  
+    intake = new Intake();
 
     lastknownPosition = knownArmPosition.Unknown;
+    mechanism = new Mechanism();
 
     // inputs.visualArm = new Mechanism2d(getMainMotorRotation(), getAngleToSpeaker()); //TODO add length\
     // inputs.visualArm_Root = inputs.visualArm.getRoot("arm root", -Constants.Arm.mainPivotDistanceFromCenterMeters, 0);
@@ -166,6 +182,12 @@ public class Arm extends SubsystemBase{
     // inputs.visualArm_Root.append(inputs.visualArm_MainPivot);
     // inputs.visualArm_MainPivot.append(inputs.visualArm_SeconderyPivot);
     // inputs.visualArm_MainPivot.append(inputs.visualArm_Elavator);
+
+    armAngle = 0;
+    intakeAngle = 0;
+    
+    // SmartDashboard.putNumber("Arm Angle", 0);
+    // SmartDashboard.putNumber("Intake Angle", 0);
   }
 
   /**
@@ -287,12 +309,19 @@ public class Arm extends SubsystemBase{
     inputs.mainOutput = mainMotor.getAppliedOutput();
     inputs.secondaryOutput = secondaryMotor.getAppliedOutput();
 
+    mechanism.UpdatePivots();
+    Logger.recordOutput("ArmMechanism", mechanism.getMechanism());
+    Logger.recordOutput("0 3d", new Pose3d());
+    Logger.recordOutput("0 2d", new Pose2d());
+    Pose3d armPosition = new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(inputs.mainMotorPostion)), 0));
+    Pose3d intakePosition = new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.secondaryMotorPosition) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0));
+    Logger.recordOutput("Components", new Pose3d[] {armPosition, intakePosition});
     // inputs.visualArm_MainPivot.setAngle(Units.rotationsToDegrees(mainEncoder.getPosition()));
-    // inputs.visualArm_SeconderyPivot.setAngle(Units.rotationsToDegrees(secondaryEncoder.getPosition()));
     // inputs.visualArm_Elavator.setLength(elavator.getRailMotorPosition());
 
     Logger.processInputs(getName(), inputs);
   }
+
 
   /**
    * takes the recoreded motor positions and calculates the arm positions
@@ -425,5 +454,44 @@ public class Arm extends SubsystemBase{
     motor.getPIDController().setFeedbackDevice(encoder);
 
     return encoder;
+  }
+
+  private class Mechanism{
+    private Mechanism2d mechanism;
+    private MechanismRoot2d rootPivot1;
+    private MechanismLigament2d Pivot1;
+    private MechanismLigament2d Pivot2;
+
+    private Mechanism(){
+      mechanism = new Mechanism2d(1.20, 1.20);
+      // 2d Canvas of the Mechansim (side of robot)
+
+      rootPivot1 = mechanism.getRoot("Pivot 1", 0.50, 0.24);
+      // Where Pivot 1 is connected to the robot
+
+      Pivot1 = rootPivot1.append(new MechanismLigament2d("Pivot 1", 0.45, 180, 10, new Color8Bit(Color.kRed)));
+      Pivot2 = Pivot1.append(new MechanismLigament2d("Pivot 2", 0.40, 10, 10, new Color8Bit(Color.kDeepSkyBlue)));
+      // The pivots as vectors
+    }
+
+    public Mechanism2d getMechanism(){
+      return mechanism;
+    }
+
+    // public static void movePivotsInterval(double interval){
+    //   if (Pivot1.getAngle() > 180){Pivot1.setAngle(0);}
+    //   if (Pivot2.getAngle() > 180){Pivot2.setAngle(0);}
+
+    //   Pivot1.setAngle(Pivot1.getAngle() + interval);
+    //   Pivot2.setAngle(Pivot2.getAngle() + interval);
+    // }
+
+    public void UpdatePivots(){
+      // Pivot1.setAngle(Units.rotationsToDegrees(getMainMotorRotation()));
+      // Pivot2.setAngle(Units.rotationsToDegrees(getSecondaryMotorRotation()));
+
+      Pivot1.setAngle(Units.rotationsToDegrees(inputs.mainMotorPostion));
+      Pivot2.setAngle(Units.rotationsToDegrees(inputs.secondaryMotorPosition));
+    }
   }
 }
