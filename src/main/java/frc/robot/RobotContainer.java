@@ -14,9 +14,10 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
-
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,15 +29,22 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCommands.Collect_noProxy;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
-import frc.robot.commands.ShooterCommands.AimAndShootToAmpArea_Auto;
+import frc.robot.commands.IntakeCommands.SourceCollect;
+import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
+import frc.robot.commands.armCommands.MoveToSourceCollection;
 import frc.robot.commands.armCommands.MoveToStartShootPose_Auto;
 import frc.robot.commands.armCommands.MoveToStow;
+import frc.robot.commands.autonomous.AimAndShootToAmpArea_Auto;
 import frc.robot.commands.autonomous.BetaAim_Auto;
+import frc.robot.commands.autonomous.HigherAim_Auto;
+import frc.robot.commands.autonomous.LowerAim_Auto;
 import frc.robot.commands.autonomous.ShootNote;
+import frc.robot.commands.autonomous.Shoot_Auto;
+import frc.robot.commands.autonomous.ShooterStarter_Auto;
 import frc.robot.commands.sequences.AimRegularToSpeaker;
 import frc.robot.commands.sequences.AimToRing;
 import frc.robot.commands.sequences.ShootToAmp;
@@ -55,7 +63,6 @@ public class RobotContainer {
   public static CommandPS5Controller armController;
 
   public static Command AlphaAimCommand;
-  public static Command BetaAimCommand;
 
   public static LoggedDashboardChooser<Command> autoChooser;
   public static boolean aimingAtSpeaker = true;
@@ -89,28 +96,32 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    var ringAim = new AimToRing();
+    // var ringAim = new AimToRing();
 
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
-    driveController.cross().whileTrue(ringAim.onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake)).onFalse(new RollOut()); //.onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
+    driveController.cross().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake)); //.onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
     // driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
     
     AlphaAimCommand = new AimRegularToSpeaker();
     //BetaAimCommand = new QuickAim();
-    var collect = new Collect_noProxy();
+    // var collect = new Collect_noProxy();
 
     // driveController.square().onTrue(aimCommand);
     // driveController.triangle().onTrue(new Shoot());
 
     armController.cross().onTrue(new IntakeToFloor()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
-    armController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
+    // armController.circle().onTrue(collect).onFalse(new InstantCommand(() -> collect.cancel()));
+    // armController.circle().whileTrue(new Collect_noProxy());
+    armController.circle().whileTrue(new CollectFloor());
+    armController.povLeft().onTrue(new MoveToSourceCollection());
+    // armController.square().whileTrue(new SourceCollect());
     armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.triangle().onTrue(new Shoot());
     //check if still necesery
     // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
 
-    armController.povLeft().onTrue(AlphaAimCommand);
+    armController.povRight().onTrue(AlphaAimCommand);
     //armController.povRight().onTrue(BetaAimCommand);
 
     armController.povDown().onTrue(new MoveToHome()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
@@ -135,21 +146,11 @@ public class RobotContainer {
     autoChooser.addOption("Shoot Note", new ShootNote());
     SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
 
-    String[] lastAutoName = new String[]{"Do Nothing"};
-
-    new Trigger(DriverStation::isDSAttached).and(() -> autoChooser.get().getName() != lastAutoName[0]).onTrue(
-      new InstantCommand(() -> {
-        lastAutoName[0] = autoChooser.get().getName();
-        updateFieldFromAuto(autoChooser.get().getName());
-      }).ignoringDisable(true)
-    );
-
     new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> driveBase.getField2d().getObject("AutoPath").setPoses()).ignoringDisable(true));
-    
   }
 
 
-  private void updateFieldFromAuto(String autoName){
+  public static void updateFieldFromAuto(String autoName){
     List<Pose2d> poses = new ArrayList<>();
     boolean DoesExsit = false;
     for (String name : AutoBuilder.getAllAutoNames()) {
@@ -169,7 +170,7 @@ public class RobotContainer {
   private void configureNamedCommands(){
     // NamedCommands.registerCommand("Do Nothing", new InstantCommand());
     //AUTOSSSSS related shit
-    NamedCommands.registerCommand("Shoot", new Shoot());
+    NamedCommands.registerCommand("Shoot", new Shoot_Auto());
     NamedCommands.registerCommand("QuikAim", new BetaAim_Auto());
     NamedCommands.registerCommand("Collect", new SequentialCommandGroup(new IntakeToFloor(), new Collect_noProxy()));
     NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
@@ -180,6 +181,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("AimToAmpArea", new AimAndShootToAmpArea_Auto());
     NamedCommands.registerCommand("StartPosition", new MoveToStartShootPose_Auto());
     NamedCommands.registerCommand("RollOut", new RollOut());
+    NamedCommands.registerCommand("AutoCollect", new SequentialCommandGroup(new IntakeToFloor(), new CollectFloor()));
+    NamedCommands.registerCommand("shooter starter", new ShooterStarter_Auto());
+
+    //Aiming positions
+    NamedCommands.registerCommand("lower aim", new LowerAim_Auto());
+    NamedCommands.registerCommand("higher aim", new HigherAim_Auto());
 
     NamedCommands.registerCommand("Start Intake and Shoter motors", new InstantCommand(() ->
      {Arm.getInstance().getShooterSub().setShooterPower(0.5); Arm.getInstance().getIntakeSub().setMotor(0.8);}));

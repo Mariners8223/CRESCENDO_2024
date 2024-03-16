@@ -62,12 +62,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "RollOut"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Shoot to amp middle"
@@ -96,12 +90,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "RollOut"
           }
         },
         {

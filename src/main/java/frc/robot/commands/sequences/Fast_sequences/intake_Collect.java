@@ -5,8 +5,8 @@
 package frc.robot.commands.sequences.Fast_sequences;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.IntakeCommands.Collect;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
+import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 
@@ -19,7 +19,7 @@ public class intake_Collect extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new IntakeToFloor().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Intake),
-      new Collect()
+      new CollectFloor()
     );
   }
 }

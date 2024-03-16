@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "shooter starter"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -64,7 +70,7 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "shooter starter"
           }
         },
         {
@@ -126,7 +132,7 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "shooter starter"
           }
         },
         {

@@ -14,15 +14,20 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
+  String lastAutoName = "InstantCommand";
 
   @Override
   public void robotInit() {
     Pathfinding.setPathfinder(new LocalADStarAK());
+
+    ArmUtil.StartArmUtil();
 
     if(isReal()){
       Logger.addDataReceiver(new NT4Publisher());
@@ -38,7 +43,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    ArmUtil.UpdateParameters();
+    ArmUtil.UpdateParameters_SpeakerAim();
     SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
     // SmartDashboard.putNumber("Robot (chassis) angle", Units.radiansToDegrees(ArmUtil.getChassisAngle()));
     SmartDashboard.putNumber("zone 1 angle", Units.radiansToDegrees(ArmUtil.getZone1()));
@@ -76,7 +81,12 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if(RobotContainer.getAutoCommand() != null && RobotContainer.getAutoCommand().getName() != lastAutoName){
+      lastAutoName = RobotContainer.getAutoCommand().getName();
+      RobotContainer.updateFieldFromAuto(lastAutoName);
+    }
+  }
 
   @Override
   public void disabledExit() {
@@ -93,7 +103,9 @@ public class Robot extends LoggedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+    Arm.getInstance().getShooterSub().stopMotors();
+  }
 
   @Override
   public void teleopInit() {

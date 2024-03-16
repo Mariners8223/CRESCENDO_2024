@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.241177037061454,
-      "y": 5.550936522700434
+      "x": 1.0,
+      "y": 2
     },
     "rotation": 0
   },
@@ -14,13 +14,32 @@
         {
           "type": "named",
           "data": {
-            "name": "IntakeToFloor"
+            "name": "shooter starter"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Shoot"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "go shoot lower"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "lower aim"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -30,13 +49,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "get 1st row middle note"
+                  "pathName": "Auto_1st middle note"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
+                  "name": "IntakeToFloor"
                 }
               }
             ]
@@ -45,19 +64,38 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "near speaker"
+            "name": "AutoCollect"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "shooter starter"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "go shoot lower"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "lower aim"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -67,13 +105,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "get 1st row bottom note"
+                  "pathName": "Auto_2nd middle note"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
+                  "name": "IntakeToFloor"
                 }
               }
             ]
@@ -82,19 +120,13 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "near speaker"
+            "name": "AutoCollect"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "shooter starter"
           }
         },
         {
@@ -104,13 +136,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Middle 3rd note"
+                  "pathName": "go shoot lower"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
+                  "name": "lower aim"
                 }
               }
             ]
@@ -119,12 +151,12 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": "p2",
+  "folder": "p4",
   "choreoAuto": false
 }

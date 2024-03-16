@@ -36,7 +36,7 @@ public class Constants {
     public static final List<Translation2d> robotZones = new ArrayList<Translation2d>() {
         //TODO: add robot zones
     };
-    public static final double gGravity_phisics = 9.81;
+    public static final double gGravity_phisics = 9.8066;
 
     public static final Pose2d AmpPose = new Pose2d(1.829, 8.46, Rotation2d.fromDegrees(90));
     public static final Pose2d RobotShootingToAMPPosition = new Pose2d(1.83, 7.71, Rotation2d.fromDegrees(-90));
@@ -154,25 +154,25 @@ public class Constants {
             public static final int mainMotorID = 15;
             public static final int secondaryMotorID = 16;
 
-            public static final PIDFGains mainPID = new PIDFGains(10, 0.02, 0, 0, 0.005, 0.02);
-            public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0, 0.01, 0.002);
+            public static final PIDFGains mainPID = new PIDFGains(0.15, 0.00072, 0.000000525, 0, 0.005, 1.5); //i was 0.2 d was 0.001
+            public static final PIDFGains secondaryPID = new PIDFGains(0.05, 0.001, 0, 0, 0.01, 0.1);
 
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = false;
 
-            public static final double mainZeroOffset = 0.7092497 - 0.25;//0.4647;
-            public static final double secondaryZeroOffset = 0.24099403619766235 + 0.5;
+            public static final double mainZeroOffset = 0.464425862;//0.4647;
+            public static final double secondaryZeroOffset = 0.598 - 0.25;
             // public static final double mainZeroOffset = 0;
             // public static final double secondaryZeroOffset = 0;
 
             public static final double[] mainSoftLimits = new double[]{0.3206787109375, -0.03125};//was 0.35, -0.04 // 0.3206787109375
             public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.007};
 
-            public static final double[] mainMaxOutputs = new double[]{0.45, -0.25};
-            public static final double[] secondaryMaxOutputs = new double[]{0.5, -0.35};
+            public static final double[] mainMaxOutputs = new double[]{0.2, -0.1}; //0.45, -0.25
+            public static final double[] secondaryMaxOutputs = new double[]{0.2, -0.2}; //0.5, -0.35
  
             public static final double mainConversionFactor = 150;
-            public static final double secondaryConversionFactor = 121.5;
+            public static final double secondaryConversionFactor = 81; //121.5
             public static final boolean mainEncoderInverted = false;
             public static final boolean secondaryEncoderInverted = false;
 
@@ -213,11 +213,10 @@ public class Constants {
         public static final double StallCurrent = 15;
         public static final int MaxStallTime = 30;
 
-        public static final I2C.Port ColorSensorPort = I2C.Port.kMXP;
-        public static final int CloseProximity = 40;
+        public static final double secondaryIntakeAngle = 0.392333984375;
+        public static final double mainIntakeAngle = -0.0263671875;
 
-        public static final double secondaryIntakeAngle = 0.405;
-        public static final double mainIntakeAngle = -0.029;
+        public static final int laserPort = 4;
     }
 
     public static class Elevator{

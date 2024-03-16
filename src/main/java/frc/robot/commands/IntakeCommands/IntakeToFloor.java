@@ -9,13 +9,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.subsystem.Arm.*;
+import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class IntakeToFloor extends SequentialCommandGroup {  
   public IntakeToFloor() {
     addCommands(
-      new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake),
+      new MoveToFree().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake
+      && Arm.getInstance().lastknownPosition != knownArmPosition.Free),
       new MoveIntakeNumber(false),
       new MoveIntakeNumber(true)
     );

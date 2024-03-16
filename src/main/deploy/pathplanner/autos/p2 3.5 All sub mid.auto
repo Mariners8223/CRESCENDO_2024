@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.28,
-      "y": 5.55
+      "x": 1.241177037061454,
+      "y": 5.550936522700434
     },
     "rotation": 0
   },
@@ -11,6 +11,12 @@
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "shooter starter"
+          }
+        },
         {
           "type": "named",
           "data": {
@@ -30,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "get 2nd row uppest note"
+                  "pathName": "get 1st row middle note"
                 }
               },
               {
@@ -45,19 +51,13 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "shooter starter"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "QuikAim from stage"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "QuikAim"
+            "pathName": "near speaker"
           }
         },
         {
@@ -73,7 +73,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "get 2nd row 2nd uppest note"
+                  "pathName": "get 1st row bottom note"
                 }
               },
               {
@@ -88,25 +88,38 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "shooter starter"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "QuikAim from stage"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "QuikAim"
+            "pathName": "near speaker"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle 3rd note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Collect"
+                }
+              }
+            ]
           }
         }
       ]

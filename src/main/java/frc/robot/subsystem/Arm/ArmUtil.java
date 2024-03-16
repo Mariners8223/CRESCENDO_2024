@@ -40,15 +40,27 @@ public class ArmUtil{
     boolean isZone1;
     double WantedVelocity;
 
+    double GamePieceVelocityX;
+    double GamePieceVelocityZ;
+
     int IndexOfClimbingRope;//Updated in update parameters
 
-    double d;//the distance to the amp
-    double alpha;//the angle the robot should face to aim to the amp
-    double v;//the velocity the gp should fly in in-order to get to the wanted position near the amp
+    //AMP SHIT
+
+    // double d;//the distance to the amp
+    // double alpha;//the angle the robot should face to aim to the amp
+    // double v;//the velocity the gp should fly in in-order to get to the wanted position near the amp
+
+    double AmpVelocity;//the needed velocity to amp
+    double ArmAngle_AMP;//the arm angle to amp
+    double DistanceToAMP;//the distance to amp
+    double ChassisAngle_AMP;//the chassis angle to the amp
+    boolean isBetaShoot_AMP;//whether we aim with alpha or beta
   }
   
     private static ArmPosition ZaxisTarget;//arm angle arm position
     private static ArmUtilInputsAutoLogged inputs = new ArmUtilInputsAutoLogged();
+    private static boolean isFirstReset = true;
 
     /**
    * calculates the distance from the robot to the speaker on the y axis
@@ -67,7 +79,7 @@ public class ArmUtil{
         //  -(//Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
         //  + RobotContainer.driveBase.getPose().getTranslation().getY()));//aim to a point prespective to the robot location in the chosen shooting zone
       }
-      inputs.Dy = -(Constants.Arm.SpeakerMidlleLocationY - RobotContainer.driveBase.getPose().getY());
+      inputs.Dy = Constants.Arm.SpeakerMidlleLocationY - RobotContainer.driveBase.getPose().getY();
       return inputs.Dy;
     }
 
@@ -147,6 +159,24 @@ public class ArmUtil{
         inputs.VelocityX = 1;//field relative
         inputs.isResetNeeded = false;
         inputs.isZone1 = inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1;
+        inputs.GamePieceVelocityX = 1;
+        inputs.GamePieceVelocityZ = 1;
+
+        if (isFirstReset) {
+        inputs.AmpVelocity = 1;
+        inputs.ArmAngle_AMP = 30;
+        inputs.DistanceToAMP = 1;
+        }
+      }
+    }
+
+    /**
+     * resets all parametes so we wont have problems
+     */
+    public static void StartArmUtil(){
+      if (isFirstReset) {
+        ResetParameters();
+        isFirstReset = false;
       }
     }
 
@@ -156,13 +186,17 @@ public class ArmUtil{
      * @return the wanted velocity
      */
     private static double CalcWantedSpeed(double distanceToSpeaker){
-      if (inputs.isZone1) {
-        inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone1;
-      }
-      else{
-        inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
-      }
-      inputs.WantedVelocity = MathUtil.clamp(inputs.WantedVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(6000) * Constants.Shooter.wheelRadius);//shooting speed clamp
+      // if (inputs.isZone1) {
+      //   inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone1;
+      // }
+      // else{
+      //   inputs.WantedVelocity = distanceToSpeaker/Constants.Shooter.GPAirTimeZone2;
+      // }
+      inputs.GamePieceVelocityX = CalcVelocityX_GP(inputs.Dz, inputs.Dz, distanceToSpeaker);
+      inputs.GamePieceVelocityZ = ClacVelocityZ_GP(distanceToSpeaker);
+      inputs.WantedVelocity = Math.hypot(inputs.GamePieceVelocityX, inputs.GamePieceVelocityZ );
+
+      inputs.WantedVelocity = MathUtil.clamp(inputs.WantedVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(5500) * Constants.Shooter.wheelRadius);//shooting speed clamp
       inputs.StartSpeed = inputs.WantedVelocity;
       return inputs.WantedVelocity;
     }
@@ -178,8 +212,8 @@ public class ArmUtil{
         inputs.YaxisWantedAngle = Math.atan(Dy/Dx);
       }
       else inputs.YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);
-      if (inputs.IsQuikShot) inputs.YaxisWantedAngle = Units.degreesToRadians(180) - inputs.YaxisWantedAngle;
-      else inputs.YaxisWantedAngle = -inputs.YaxisWantedAngle;
+      if (inputs.IsQuikShot) inputs.YaxisWantedAngle = Units.degreesToRadians(180) + inputs.YaxisWantedAngle;
+      else inputs.YaxisWantedAngle = inputs.YaxisWantedAngle;
       return inputs.YaxisWantedAngle;
     }
 
@@ -189,7 +223,7 @@ public class ArmUtil{
      * @param YaxisWantedAngle the angle in which the game piece will fly - xy axis
      * @return the velocity in x axis
      */
-    private static double CalcVelocityX_field(double ArmAngle, double YaxisWantedAngle){
+    private static double CalcRobotVelocityX_field(double ArmAngle, double YaxisWantedAngle){
       inputs.VelocityX = inputs.StartSpeed*Math.cos(ArmAngle)*(-1)*Math.cos(YaxisWantedAngle)
         + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vxMetersPerSecond + RobotContainer.driveBase.getAbsoluteChassisSpeeds().omegaRadiansPerSecond
         * RobotContainer.arm.getShooterPosition().x * Math.cos(Units.degreesToRadians(-90) + YaxisWantedAngle);
@@ -202,7 +236,7 @@ public class ArmUtil{
      * @param YaxisWantedAngle the angle in which the game piece will fly - xy axis
      * @return the velocity in y axis
      */
-    private static double CalcVelocityY_field(double ArmAngle, double YaxisWantedAngle){
+    private static double CalcRobotVelocityY_field(double ArmAngle, double YaxisWantedAngle){
       inputs.VelocityY = inputs.StartSpeed*Math.cos(ArmAngle)*Math.sin(YaxisWantedAngle)
         + RobotContainer.driveBase.getAbsoluteChassisSpeeds().vyMetersPerSecond + RobotContainer.driveBase.getAbsoluteChassisSpeeds().omegaRadiansPerSecond
         * RobotContainer.arm.getShooterPosition().x * Math.sin(Units.degreesToRadians(-90) + YaxisWantedAngle);
@@ -266,6 +300,43 @@ public class ArmUtil{
       }
       return inputs.ArmAngle;
     }
+
+    /**
+     * calculates the needed Arm Angle to reach the targetted place
+     * @param MaxHieght the max hieght the game piece is allowed to get *IN METERS*
+     * @param TargetHieght the hieght in which you wish the game piece to finigh at *IN METERS*
+     * @param distanceToSpeaker the starting distance between the game piece and the speaker *IN METERS*
+     * @return the Arm angle
+     */
+    public static double Zone2_Equasion_NEW(double MaxHieght, double TargetHieght, double distanceToSpeaker){
+      inputs.GamePieceVelocityX = CalcVelocityX_GP(inputs.Dz, inputs.Dz, distanceToSpeaker);
+      inputs.GamePieceVelocityZ = ClacVelocityZ_GP(distanceToSpeaker);
+      return Math.atan(inputs.GamePieceVelocityZ/inputs.GamePieceVelocityX);
+    }
+
+    /**
+     * calculates the needed velocity on the z axis in order to get to the targeted hieght 
+     * @param MaxHieght the max hieght the game piece is allowed to get *IN METERS*
+     * @return the velocity in the z axis
+     */
+    public static double ClacVelocityZ_GP(double MaxHieght){
+      if (MaxHieght >= 0) return Math.sqrt(2*MaxHieght* Constants.gGravity_phisics);
+      return inputs.GamePieceVelocityZ;
+    }
+
+    /**
+     * calculates the needed velocity on the x axis in order to get to the targeted distance
+     * @param MaxHieght the max hieght the game piece is allowed to get *IN METERS*
+     * @param TargetHieght the hieght in which you wish the game piece to finigh at *IN METERS*
+     * @param distanceToSpeaker the starting distance between the game piece and the speaker *IN METERS*
+     * @return the velocity in the x axis
+     */
+    public static double CalcVelocityX_GP(double MaxHieght, double TargetHieght, double distanceToSpeaker){
+      if (MaxHieght >= TargetHieght && TargetHieght >= 0)
+      return (Constants.gGravity_phisics * distanceToSpeaker)
+        /(Math.sqrt(2* Constants.gGravity_phisics*MaxHieght) + Math.sqrt(2*Constants.gGravity_phisics*(MaxHieght - TargetHieght)));
+      return inputs.GamePieceVelocityX;
+    }
   
     /**
      * calculates the angle that the arm should have with consideration of the robots momeentom (velocity)
@@ -294,7 +365,7 @@ public class ArmUtil{
      * @return the angle using a more complex equasion - phizics
      */
     private static double CalcAngleZaxis(double StartSpeed, double Dz, double distanceToSpeaker, double YaxisWantedAngle){
-      if (inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1) {
+      if (inputs.isZone1) {
         inputs.ArmAngle = Zone1_Equasion(Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         if(inputs.IsQuikShot){
@@ -308,7 +379,8 @@ public class ArmUtil{
         }
       }
       else{
-        inputs.ArmAngle = Zone2_Equasion(StartSpeed, Dz, distanceToSpeaker);
+        // inputs.ArmAngle = Zone2_Equasion(StartSpeed, Dz, distanceToSpeaker);
+        inputs.ArmAngle = Zone2_Equasion_NEW(Dz + 0.01, Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         if(inputs.IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
@@ -326,7 +398,7 @@ public class ArmUtil{
     /**
      * updates all the parameters so we can have our desired angles
      */
-    public static void UpdateParameters(){
+    public static void UpdateParameters_SpeakerAim(){
       ResetParameters();
 
       inputs.Dx = calcDx();
@@ -339,14 +411,15 @@ public class ArmUtil{
       //   inputs.isResetNeeded = true;
       // }
       inputs.isZone1 = inputs.distanceToSpeaker <= Constants.Arm.EndOfZone1;
+      // inputs.isZone1 = CalcWantedSpeed(inputs.distanceToSpeaker) < 18.6;
 
       inputs.WantedVelocity = CalcWantedSpeed(inputs.distanceToSpeaker);
       inputs.YaxisWantedAngle = getWantedDegree(inputs.Dy, inputs.Dx);
 
       inputs.ArmAngle = CalcAngleZaxis(inputs.StartSpeed, inputs.Dz, inputs.distanceToSpeaker, inputs.YaxisWantedAngle);
 
-      inputs.VelocityX = CalcVelocityX_field(inputs.ArmAngle, inputs.YaxisWantedAngle);
-      inputs.VelocityY = CalcVelocityY_field(inputs.ArmAngle, inputs.YaxisWantedAngle);
+      inputs.VelocityX = CalcRobotVelocityX_field(inputs.ArmAngle, inputs.YaxisWantedAngle);
+      inputs.VelocityY = CalcRobotVelocityY_field(inputs.ArmAngle, inputs.YaxisWantedAngle);
 
       if (inputs.IsQuikShot) {
         ZaxisTarget.rotation = inputs.ArmAngle;        
@@ -359,9 +432,9 @@ public class ArmUtil{
       inputs.ChassisAngle = CalcYaxisAngle(inputs.YaxisWantedAngle, inputs.YaxisOffset);
 
       //Climb
-      inputs.IndexOfClimbingRope = Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope.indexOf(//gets the index of the clossest rope
-        RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope)
-      );
+      // inputs.IndexOfClimbingRope = Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope.indexOf(//gets the index of the clossest rope
+      //   RobotContainer.driveBase.getPose().getTranslation().nearest(Constants.Elevator.SlidingPositions.SlidingPositions_MiddleRope)
+      // );
 
       Logger.processInputs("ArmUtil", inputs);
     }
@@ -488,39 +561,145 @@ public class ArmUtil{
       return inputs.IndexOfClimbingRope;
     }
 
-    //Aim to amp area
-    /**
-     * calcs the velocity, the distance and the angle that the robot should have in order to shoot to the amp area
-     */
-    private static void CalcAimToAmp(){
-      inputs.alpha = Math.atan((Constants.AmpPose.getY() - RobotContainer.driveBase.getPose().getY())
-        /(Constants.AmpPose.getX() - RobotContainer.driveBase.getPose().getX()));
+    // //Aim to amp area
+    // /**
+    //  * calcs the velocity, the distance and the angle that the robot should have in order to shoot to the amp area
+    //  * THIS IS BETA AIM WITH VELOCITY, PROBABLY WONT WORK
+    //  */
+    // private static void CalcAimToAmp(){
+    //   inputs.alpha = Math.atan((Constants.AmpPose.getY() - RobotContainer.driveBase.getPose().getY())
+    //     /(Constants.AmpPose.getX() - RobotContainer.driveBase.getPose().getX()));
 
-      inputs.d = Math.hypot(Constants.AmpPose.getX() - RobotContainer.driveBase.getPose().getX(), 
-        Constants.AmpPose.getY() - RobotContainer.driveBase.getPose().getY());
+    //   inputs.d = Math.hypot(Constants.AmpPose.getX() - RobotContainer.driveBase.getPose().getX(), 
+    //     Constants.AmpPose.getY() - RobotContainer.driveBase.getPose().getY());
       
-      inputs.v = Math.sqrt((Constants.gGravity_phisics*inputs.d)
-        /(2*Math.tan(Arm.getInstance().getShooterPosition().rotation)
-        *Math.pow(Math.cos(Arm.getInstance().getShooterPosition().rotation), 2)));
-    }
+    //   inputs.v = Math.sqrt((Constants.gGravity_phisics*inputs.d)
+    //     /(2*Math.tan(Arm.getInstance().getShooterPosition().rotation)
+    //     *Math.pow(Math.cos(Arm.getInstance().getShooterPosition().rotation), 2)));
+    // }
 
     /**
-     * get the angle that the robot should face in order to shoot to the amp area
-     * @return chassis angle
+     * returns the distance between the robot and the point it was given
+     * @param x the x axis value of the target IN METERS
+     * @param y the y axis value of the target IN METERS
+     * @return the distance
      */
-    public static double getChassisAngle_ToAmp(){
-      CalcAimToAmp();
-      return inputs.alpha;
+    private static double CalcDistanceToSetPoint(double x, double y){
+      return Math.hypot(x - RobotContainer.driveBase.getPose().getX(), y - RobotContainer.driveBase.getPose().getY());
     }
 
     /**
-     * get the wanted velocity that the gp should have in order to get to the AMP area
-     * @return the speed in m/s
+     * calculates the velocity on the x axis in order to get to the same hieght as we started
+     * @param MaxHieght the maximum hieght the gp is allowed to get IN METER
+     * @param DistnaceToAMP the distance to the targeted place IN METERS
+     * @return the velocity in M/S
+     */
+    private static double CalcVelocityAMPX_GP(double MaxHieght, double DistanceToAMP){
+      if (MaxHieght >= 0) {
+        return (2*Math.sqrt(2*MaxHieght* Constants.gGravity_phisics) * DistanceToAMP)/ Constants.gGravity_phisics;
+      }
+      return 1;
+    }
+
+    /**
+     * calcs the arm angle for the amp area
+     * @param MaxHieght the maximum hieght the gp is allowed to get IN METER
+     * @param Velocity the velocity that the gp shell travel IN M/S
+     * @return the arm angle in RAD
+     */
+    private static double CalcArmAngleToAMP(double MaxHieght, double Velocity){
+      if (Velocity != 0 && MaxHieght >= 0) {
+        return Math.asin((Math.sqrt(MaxHieght*2* Constants.gGravity_phisics))/Velocity);
+      }
+      return inputs.ArmAngle_AMP;
+    }
+
+    /**
+     * calculates the chassis angle to a set point
+     * @param x the x axis value of the target
+     * @param y the y axis value of the target
+     * @return the angle in RAD
+     */
+    private static double CalcChassisAngleToSetPoint(double x, double y){
+      if (x != RobotContainer.driveBase.getPose().getX()) {
+        return Math.atan((y - RobotContainer.driveBase.getPose().getY())/(x - RobotContainer.driveBase.getPose().getX()));
+      }
+      return Units.degreesToRadians(90);
+    }
+
+    /**
+     * updates the parameters for the amp area shooting calculations
+     */
+    public static void UpdateParameters_AMPAim(){
+      inputs.DistanceToAMP = CalcDistanceToSetPoint(Constants.Speaker.ampTranslation.getX(), Constants.Speaker.ampTranslation.getY());
+
+      inputs.AmpVelocity = Math.hypot(CalcVelocityAMPX_GP(3.5, inputs.DistanceToAMP), ClacVelocityZ_GP(3.5));
+      
+      inputs.AmpVelocity = MathUtil.clamp(inputs.AmpVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(5500) * Constants.Shooter.wheelRadius);//shooting speed clamp
+
+      inputs.ArmAngle_AMP = CalcArmAngleToAMP(3.5, inputs.AmpVelocity);
+
+      inputs.ChassisAngle_AMP = CalcChassisAngleToSetPoint(Constants.Speaker.ampTranslation.getX(), Constants.Speaker.ampTranslation.getY());
+
+      if (RobotContainer.isBlueAllince.getAsBoolean()) {
+        inputs.ChassisAngle_AMP = Units.degreesToRadians(180) - inputs.ChassisAngle_AMP;
+      }
+
+      if (inputs.isBetaShoot_AMP) {
+        inputs.ArmAngle_AMP = Units.degreesToRadians(180) - inputs.ArmAngle_AMP;
+        inputs.ChassisAngle_AMP += 180;
+      }
+    }
+
+    /**
+     * return the needed velocity for the amp area
+     * @return the velocity in m/s
      */
     public static double getWantedVelocity_ToAmp(){
-      CalcAimToAmp();
-      return inputs.v;
+      return inputs.AmpVelocity;
     }
+
+    /**
+     * return the needed armangle for the amp area
+     * @return the arm angle in RAD
+     */
+    public static double getArmAngle_ToAMP(){
+      return inputs.ArmAngle_AMP;
+    }
+    
+    /**
+     * returns the chassis angle for aimming to amp area
+     * @return the angle in RAD
+     */
+    public static double getChassisAngle_ToAmp(){
+      return inputs.ChassisAngle_AMP;
+    }
+
+    /**
+     * set wether you use the alpha or beta shot
+     * @param isBeta is it beta?
+     */
+    public static void setIsBetaShoot_amp(boolean isBeta){
+      inputs.isBetaShoot_AMP = isBeta;
+    }
+
+    // /**
+    //  * get the angle that the robot should face in order to shoot to the amp area
+    //  * @return chassis angle
+    //  */
+    // public static double getChassisAngle_ToAmp(){
+    //   CalcAimToAmp();
+    //   return inputs.alpha;
+    // }
+
+    // /**
+    //  * get the wanted velocity that the gp should have in order to get to the AMP area
+    //  * @return the speed in m/s
+    //  */
+    // public static double getWantedVelocity_ToAmp(){
+    //   CalcAimToAmp();
+    //   return inputs.v;
+    // }
 
     /**
      * returns the arm angle if it in was zone 1
@@ -534,5 +713,9 @@ public class ArmUtil{
      */
     public static double getZone2(){
       return Zone2_Equasion(inputs.StartSpeed, inputs.Dz, inputs.distanceToSpeaker);
+    }
+
+    public static double getNEWZone2(){
+      return Zone2_Equasion_NEW(inputs.Dz, inputs.Dz, inputs.distanceToSpeaker);
     }
   }

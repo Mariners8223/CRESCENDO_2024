@@ -5,6 +5,7 @@
       "/SmartDashboard/": "String Chooser",
       "/SmartDashboard/Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Navx": "Gyro",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
       "/SmartDashboard/chooser": "String Chooser",
       "/SmartDashboard/navX-Sensor[4]": "Gyro"
@@ -26,15 +27,30 @@
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
     "retained": {
       "SmartDashboard": {
+        "SendableChooser[0]": {
+          "open": true
+        },
         "open": true
       }
     },
     "transitory": {
       "SmartDashboard": {
+        "Field": {
+          "open": true
+        },
         "SendableChooser[0]": {
           "string[]##v_/SmartDashboard/SendableChooser[0]/options": {
+            "open": true
+          }
+        },
+        "chooser": {
+          "open": true,
+          "string[]##v_/SmartDashboard/chooser/options": {
             "open": true
           }
         },

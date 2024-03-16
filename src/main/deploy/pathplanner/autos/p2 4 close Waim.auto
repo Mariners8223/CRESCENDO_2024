@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "shooter starter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "IntakeToFloor"
           }
         },
@@ -45,7 +51,13 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "shooter starter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "close lower shooting pose"
           }
         },
         {
@@ -82,7 +94,7 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "shooter starter"
           }
         },
         {
@@ -119,13 +131,19 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "shooter starter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "close upper shooting pose"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Start Intake and Shoter motors"
+            "name": "QuikAim"
           }
         },
         {

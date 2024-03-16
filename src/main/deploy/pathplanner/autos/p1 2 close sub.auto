@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "IntakeToFloor"
+            "name": "shooter starter"
           }
         },
         {
@@ -51,7 +51,7 @@
         {
           "type": "named",
           "data": {
-            "name": "RollOut"
+            "name": "shooter starter"
           }
         },
         {
