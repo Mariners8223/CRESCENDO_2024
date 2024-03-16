@@ -86,7 +86,7 @@ public class Shoot extends SequentialCommandGroup {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (arm.getShooterSub().isAtSelctedVelocity() && timer > 60) || timer > 120;
+    return (arm.getShooterSub().isAtSelctedVelocity() && timer > 60) || timer > 120 || (arm.getShooterSub().isMotorsAtSameSpeed() && timer >= 60);
     // return timer >= 20;
   }
 }
