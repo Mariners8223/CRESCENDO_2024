@@ -340,47 +340,56 @@ public class DriveBase extends SubsystemBase {
   }
 
   /**
-   * gets the new wanted angle including the current angle of the robot
-   * @param wantedAngle the wanted angle (in radians)
-   * @return the wanted angle in the current angle of the robot (in radians)
+   * gets the target rotation from and angle (from the robot to the target)
+   * @param angle the angle in degrees
+   * @return the target rotation (in dgrees)
    */
-  public double getWantedAngleInCurrentRobotAngle(double wantedAngle){
-    return Units.degreesToRadians(getAngle() - (getAngle()%360 - Units.radiansToDegrees(wantedAngle)));
+  public double getTargetAngleInRobotAngle(double angle){
+    return getAngle() - (getAngle()%360 + angle);
   }
 
   /**
-   * gets the new wanted angle including the current angle of the robot
-   * @param wantedAngle the wanted angle
-   * @return the wanted angle in the current angle of the robot
+   * gets the target rotation from and angle (from the robot to the target)
+   * @param angle the angle
+   * @return the target rotation
    */
-  public Rotation2d getWantedAngleInCurrentRobotAngle(Rotation2d wantedAngle){
-    return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 - wantedAngle.getDegrees()));
-    // return Rotation2d.fromRadians(getRotation2d().getRadians() - (MathUtil.angleModulus(getRotation2d().getRadians()) - wantedAngle.getRadians()));
+  public Rotation2d getWantedAngleInCurrentRobotAngle(Rotation2d angle){
+    return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
   }
   
+  /**
+   * sets the target rotation of the robot's angle (of the theta pid controller)
+   * @param alpha the target rotation
+   * @param isBeyond360 if the target rotation is beyond 360 degrees
+   */
   public void setTargetRotation(Rotation2d alpha, boolean isBeyond360){//TODO: dis shit
-    if(isBeyond360) inputs.targetRotation = alpha;
-    // else inputs.targetRotation = Rotation2d.fromRotations(alpha.getRotations() + (int)getRotation2d().getRotations());
-    else inputs.targetRotation = getWantedAngleInCurrentRobotAngle(alpha);
-    // inputs.targetRotation = alpha.plus(Rotation2d.fromRotations((int)getRotation2d().getRotations()));
-    targetRotation = inputs.targetRotation;
-    //calculateTheta(alpha);//dis may work
+    // if(isBeyond360) inputs.targetRotation = alpha;
+    // // else inputs.targetRotation = Rotation2d.fromRotations(alpha.getRotations() + (int)getRotation2d().getRotations());
+    // else inputs.targetRotation = getWantedAngleInCurrentRobotAngle(alpha);
+    // // inputs.targetRotation = alpha.plus(Rotation2d.fromRotations((int)getRotation2d().getRotations()));
+    // targetRotation = inputs.targetRotation;
+    // //calculateTheta(alpha);//dis may work
+
+    if(isBeyond360) targetRotation = alpha;
+    else targetRotation = getWantedAngleInCurrentRobotAngle(alpha);
+
+    inputs.targetRotation = targetRotation;
   }
 
-  public void setTargetChassisAngle(Rotation2d Angle, boolean isBeyond360){
-    double targetAngle;
-    if (isBeyond360) {
-      targetAngle = Angle.getDegrees() % 360;
-    }
-    int k = (int)Units.degreesToRotations(getAngle());
-    double targetPluse = Angle.getDegrees() + k * 360;
-    double targetMius = 360 * k - Angle.getDegrees();
-    if (targetMius - getAngle() > targetPluse - getAngle()) {
-      inputs.targetRotation = Rotation2d.fromDegrees(targetMius);
-    }
-    else inputs.targetRotation = Rotation2d.fromDegrees(targetPluse);
-    targetRotation = inputs.targetRotation;
-  }
+  // public void setTargetChassisAngle(Rotation2d Angle, boolean isBeyond360){
+  //   double targetAngle;
+  //   if (isBeyond360) {
+  //     targetAngle = Angle.getDegrees() % 360;
+  //   }
+  //   int k = (int)Units.degreesToRotations(getAngle());
+  //   double targetPluse = Angle.getDegrees() + k * 360;
+  //   double targetMius = 360 * k - Angle.getDegrees();
+  //   if (targetMius - getAngle() > targetPluse - getAngle()) {
+  //     inputs.targetRotation = Rotation2d.fromDegrees(targetMius);
+  //   }
+  //   else inputs.targetRotation = Rotation2d.fromDegrees(targetPluse);
+  //   targetRotation = inputs.targetRotation;
+  // }
 
   /**
    * gets the target rotation of the robot's angle
