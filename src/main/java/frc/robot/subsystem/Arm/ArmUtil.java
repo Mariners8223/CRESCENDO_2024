@@ -105,8 +105,8 @@ public class ArmUtil{
       else{
         inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Constants.Arm.armHeightFromFrameMeters
          - Constants.DriveTrain.Global.RobotHeightFromGround)
-        + Constants.Arm.DistanceFromMainArmToShooterOutput
-        + CalcAlphaOffset(inputs.ArmAngle);//adds the distance between the main arm and where the gp is flying out of
+        + Constants.Arm.DistanceFromMainArmToShooterOutput;
+        // + CalcAlphaOffset(inputs.ArmAngle);//adds the distance between the main arm and where the gp is flying out of
         // inputs.Dz = Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y;
       }
       return inputs.Dz;
@@ -208,7 +208,7 @@ public class ArmUtil{
      * @return the wanted arial angle to the speaker
      */
     private static double getWantedDegree(double Dy, double Dx){
-      if (RobotContainer.isRedAllince.getAsBoolean()) {
+      if (RobotContainer.isBlueAllince.getAsBoolean()) {
         inputs.YaxisWantedAngle = Math.atan(Dy/Dx);
       }
       else inputs.YaxisWantedAngle = Units.degreesToRadians(180) - Math.atan(Dy/Dx);
@@ -314,8 +314,8 @@ public class ArmUtil{
       return Math.atan(inputs.GamePieceVelocityZ/inputs.GamePieceVelocityX);
     }
 
-    public static double Zone2_Equasion_speedrelative(double MaxHieght, double speed){
-      return Math.asin(speed/(Math.sqrt(2*MaxHieght* Constants.gGravity_phisics)));
+    public static double Zone2_Equasion_overShoot(double MaxHieght, double distanceToSpeaker){
+      return Math.atan(2*(MaxHieght/distanceToSpeaker));
     }
 
     /**
@@ -368,7 +368,7 @@ public class ArmUtil{
      * @param YaxisWantedAngle the wanted arial angle to the speaker (the direction in which we want the gp to fly on)
      * @return the angle using a more complex equasion - phizics
      */
-    private static double CalcAngleZaxis(double StartSpeed, double Dz, double distanceToSpeaker, double YaxisWantedAngle){
+    private static double CalcAngleZaxis(double StartSpeed, double Dz, double distanceToSpeaker, double YaxisWantedAngle) {
       if (inputs.isZone1) {
         inputs.ArmAngle = Zone1_Equasion(Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
@@ -376,16 +376,19 @@ public class ArmUtil{
           ZaxisTarget = Constants.Arm.QuikShotPosition;
           inputs.ArmAngle = Units.degreesToRadians(180) - inputs.ArmAngle;
         }
-        else{
+        else {
           ZaxisTarget = Constants.Arm.Zone1_ArmPosition;
           ZaxisTarget.y = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.sin(inputs.ArmAngle), 0, Constants.Arm.armLengthMeters);
           ZaxisTarget.x = MathUtil.clamp(Constants.Arm.armLengthMeters * Math.cos(inputs.ArmAngle), Constants.Arm.armLengthMeters, 0);
         }
       }
-      else{
+      else {
         // inputs.ArmAngle = Zone2_Equasion(StartSpeed, Dz, distanceToSpeaker);
-        inputs.ArmAngle = Zone2_Equasion_speedrelative(inputs.Dz, inputs.StartSpeed);
+        inputs.ArmAngle = Zone2_Equasion_overShoot(Dz - 0.8, distanceToSpeaker);
+        // inputs.ArmAngle = Zone2_Equasion_NEW(Dz, Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
+        // inputs.ArmAngle = Zone1_Equasion(Dz + 0.1, distanceToSpeaker);
+
         if(inputs.IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
           inputs.ArmAngle = Units.degreesToRadians(180) - inputs.ArmAngle;
