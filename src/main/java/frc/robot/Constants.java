@@ -342,8 +342,8 @@ public class Constants {
             public static final double pathErrorTolerance = 0.1; //the max error in position before pathPlaneer replans the path in meters
             public static final double pathErrorSpikeTolerance = 1; //the max postion spike before path planner replans the path
 
-            public static final PIDFGains thetaPID = new PIDFGains(5, 0.0, 0.0); //the pid gains for the PID Controller of the robot angle, units are radians
-            public static final PIDFGains XYPID = new PIDFGains(4, 0.0, 0.9); //the pid gains for the pid controller of the robot's postion (xy)
+            public static final PIDFGains thetaPID = new PIDFGains(5.5, 0.0, 0.0); //the pid gains for the PID Controller of the robot angle, units are radians
+            public static final PIDFGains XYPID = new PIDFGains(4.5, 0.0, 0.9); //the pid gains for the pid controller of the robot's postion (xy)
         }
 
         public static class SwerveModule{
