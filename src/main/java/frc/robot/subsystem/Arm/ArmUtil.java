@@ -99,13 +99,14 @@ public class ArmUtil{
    */
     private static double CalcDz(){
       if(inputs.IsQuikShot){
-        inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y);
+        inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - 0.4);//Arm.getInstance().getShooterPosition().y);
         // TODO: check if its better to do the calc with just minus 0.4 meters - the arm hieght
       }
       else{
         inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Constants.Arm.armHeightFromFrameMeters
          - Constants.DriveTrain.Global.RobotHeightFromGround)
-        + Constants.Arm.DistanceFromMainArmToShooterOutput;
+        + Constants.Arm.DistanceFromMainArmToShooterOutput
+        + 0.12;
         // + CalcAlphaOffset(inputs.ArmAngle);//adds the distance between the main arm and where the gp is flying out of
         // inputs.Dz = Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y;
       }
