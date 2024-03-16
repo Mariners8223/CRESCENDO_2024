@@ -136,16 +136,16 @@ public class Arm extends SubsystemBase{
 
   private Arm() {
     mainMotor = configureMotors(Constants.Arm.Motors.mainMotorID ,Constants.Arm.Motors.mainPID,
-    Constants.Arm.Motors.mainInverted, Constants.Arm.Motors.mainSoftLimits, Constants.Arm.Motors.mainMaxOutputs, Constants.Arm.Motors.mainConversionFactor);
+    Constants.Arm.Motors.mainInverted, Constants.Arm.Motors.mainSoftLimits, Constants.Arm.Motors.mainMaxOutputs);
 
     secondaryMotor = configureMotors(Constants.Arm.Motors.secondaryMotorID, Constants.Arm.Motors.secondaryPID,
-    Constants.Arm.Motors.secondaryInverted, Constants.Arm.Motors.secondarySoftLimits, Constants.Arm.Motors.secondaryMaxOutputs,  Constants.Arm.Motors.secondaryConversionFactor);
+    Constants.Arm.Motors.secondaryInverted, Constants.Arm.Motors.secondarySoftLimits, Constants.Arm.Motors.secondaryMaxOutputs);
 
-    mainAbsEncoder = configAbsoluteEncoder(mainMotor, true, Constants.Arm.Motors.mainZeroOffset, Constants.Arm.Motors.mainConversionFactor);
-    secondaryAbsEncoder = configAbsoluteEncoder(secondaryMotor, true, Constants.Arm.Motors.secondaryZeroOffset, Constants.Arm.Motors.secondaryConversionFactor);
+    mainAbsEncoder = configAbsoluteEncoder(mainMotor, true, Constants.Arm.Motors.mainZeroOffset);
+    secondaryAbsEncoder = configAbsoluteEncoder(secondaryMotor, true, Constants.Arm.Motors.secondaryZeroOffset);
 
-    mainEncoder = configEncoder(mainMotor, 8192, Constants.Arm.Motors.mainEncoderInverted, getRollOverPosition(mainAbsEncoder.getPosition(), Constants.Arm.Motors.mainConversionFactor), Constants.Arm.Motors.mainConversionFactor);
-    secondaryEncoder = configEncoder(secondaryMotor, 8192, Constants.Arm.Motors.secondaryEncoderInverted, getRollOverPosition(secondaryAbsEncoder.getPosition(), Constants.Arm.Motors.secondaryConversionFactor), Constants.Arm.Motors.secondaryConversionFactor);
+    mainEncoder = configEncoder(mainMotor, 8192, Constants.Arm.Motors.mainEncoderInverted, getRollOverPosition(mainAbsEncoder.getPosition()));
+    secondaryEncoder = configEncoder(secondaryMotor, 8192, Constants.Arm.Motors.secondaryEncoderInverted, getRollOverPosition(secondaryAbsEncoder.getPosition()));
 
     inputs = new ArmInputsAutoLogged();
 
@@ -237,13 +237,13 @@ public class Arm extends SubsystemBase{
     inputs.mainMotorTargetPostion = Math.asin(position.y / Constants.Arm.armLengthMeters) / (Math.PI * 2);
     inputs.mainMotorTargetPostion = MathUtil.clamp(inputs.mainMotorTargetPostion, Constants.Arm.Motors.mainSoftLimits[1], Constants.Arm.Motors.mainSoftLimits[0]);
 
-    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion * Constants.Arm.Motors.mainConversionFactor, ControlType.kPosition);
+    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kPosition);
 
 
     inputs.secondaryMotorTargetPostion =  Units.radiansToRotations(position.rotation) - inputs.mainMotorTargetPostion;
     inputs.secondaryMotorTargetPostion = MathUtil.clamp(inputs.secondaryMotorTargetPostion, Constants.Arm.Motors.secondarySoftLimits[1], Constants.Arm.Motors.secondarySoftLimits[0]);
 
-    secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion *  Constants.Arm.Motors.secondaryConversionFactor, ControlType.kPosition);
+    secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kPosition);
   }
 
   /**
@@ -256,8 +256,8 @@ public class Arm extends SubsystemBase{
     inputs.secondaryMotorTargetPostion = beta;
 
 
-    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion * Constants.Arm.Motors.mainConversionFactor, ControlType.kPosition);
-    secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion *  Constants.Arm.Motors.secondaryConversionFactor, ControlType.kPosition);
+    mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kPosition);
+    secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kPosition);
   }
 
   @Override
@@ -272,14 +272,14 @@ public class Arm extends SubsystemBase{
    * recored the inputs of the arm and sends them to the logger
    */
   public void updateLogger(){
-    inputs.mainMotorPostion = mainEncoder.getPosition() / Constants.Arm.Motors.mainConversionFactor;
-    inputs.secondaryMotorPosition = secondaryEncoder.getPosition() / Constants.Arm.Motors.secondaryConversionFactor;
+    inputs.mainMotorPostion = mainEncoder.getPosition();
+    inputs.secondaryMotorPosition = secondaryEncoder.getPosition();
 
     inputs.mainCurrent = mainMotor.getOutputCurrent();
     inputs.secondaryCurrent = secondaryMotor.getOutputCurrent();
 
-    inputs.mainMotorAbsolutePostion = mainAbsEncoder.getPosition() / Constants.Arm.Motors.mainConversionFactor;
-    inputs.secondaryAbsolutePostion = secondaryAbsEncoder.getPosition() / Constants.Arm.Motors.secondaryConversionFactor;
+    inputs.mainMotorAbsolutePostion = mainAbsEncoder.getPosition();
+    inputs.secondaryAbsolutePostion = secondaryAbsEncoder.getPosition();
 
     inputs.mainTempture = mainMotor.getMotorTemperature();
     inputs.secondaryTempture = secondaryMotor.getMotorTemperature();
@@ -316,9 +316,9 @@ public class Arm extends SubsystemBase{
    * @param value the value of the abs encoder
    * @return the roll over position of the given value (MAY BE NEGETIVE)
    */
-  private double getRollOverPosition(double value, double conversionFactor){
-    if(value / conversionFactor < 0.75) return value;
-    return value - 1 * conversionFactor;
+  private double getRollOverPosition(double value){
+    if(value < 0.75) return value;
+    return value - 1;
   }
 
   public static class IsLastPosition extends Command{
@@ -343,7 +343,7 @@ public class Arm extends SubsystemBase{
    * @param maxOutputs the max outputs of the motor
    * @return
    */
-  private CANSparkFlex configureMotors(int canID, PIDFGains pidfGains, boolean motorInverted , double[] softLimit, double[] maxOutputs, double conversionFactor) {
+  private CANSparkFlex configureMotors(int canID, PIDFGains pidfGains, boolean motorInverted , double[] softLimit, double[] maxOutputs) {
     CANSparkFlex sparkFlex = new CANSparkFlex(canID, MotorType.kBrushless);
 
     sparkFlex.restoreFactoryDefaults();
@@ -363,8 +363,8 @@ public class Arm extends SubsystemBase{
 
     if(softLimit.length != 2) softLimit = new double[]{1, -1};
 
-    sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)(softLimit[0] * conversionFactor));
-    sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)(softLimit[1] * conversionFactor));
+    sparkFlex.setSoftLimit(SoftLimitDirection.kForward, (float)(softLimit[0]));
+    sparkFlex.setSoftLimit(SoftLimitDirection.kReverse, (float)(softLimit[1]));
 
     sparkFlex.enableSoftLimit(SoftLimitDirection.kForward, true);
     sparkFlex.enableSoftLimit(SoftLimitDirection.kReverse, true);
@@ -389,15 +389,14 @@ public class Arm extends SubsystemBase{
    * @param ZeroOffset the zero offset of the encoder
    * @return
    */
-  private SparkAbsoluteEncoder configAbsoluteEncoder(CANSparkFlex motor, boolean inverted, double ZeroOffset, double conversionFactor){
+  private SparkAbsoluteEncoder configAbsoluteEncoder(CANSparkFlex motor, boolean inverted, double ZeroOffset){
     SparkAbsoluteEncoder encoder = motor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
 
     encoder.setInverted(inverted);
-    encoder.setPositionConversionFactor(conversionFactor);
 
     Timer.delay(0.2);
 
-    encoder.setZeroOffset(ZeroOffset * conversionFactor);
+    encoder.setZeroOffset(ZeroOffset);
 
     Timer.delay(0.2);
 
@@ -412,11 +411,10 @@ public class Arm extends SubsystemBase{
    * @param absPosition the absolute position of the abs encoder
    * @return
    */
-  private RelativeEncoder configEncoder(CANSparkFlex motor, int ccountsPerRev, boolean inverted, double absPosition, double conversionFactor){
+  private RelativeEncoder configEncoder(CANSparkFlex motor, int ccountsPerRev, boolean inverted, double absPosition){
     RelativeEncoder encoder = motor.getExternalEncoder(ccountsPerRev);
 
     encoder.setInverted(inverted);
-    encoder.setPositionConversionFactor(conversionFactor);
 
     Timer.delay(0.2);
 
