@@ -49,7 +49,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    ArmUtil.UpdateParameters_SpeakerAim();
+    // ArmUtil.UpdateParameters();
     // SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
     // SmartDashboard.putNumber("Robot (chassis) angle", Units.radiansToDegrees(ArmUtil.getChassisAngle()));
     // SmartDashboard.putNumber("zone 1 angle", Units.radiansToDegrees(ArmUtil.getZone1()));

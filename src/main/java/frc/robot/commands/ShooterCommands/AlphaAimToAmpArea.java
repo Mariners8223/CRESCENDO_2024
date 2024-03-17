@@ -28,7 +28,8 @@ public class AlphaAimToAmpArea extends InstantCommand {
   @Override
   public void initialize() {
     ArmUtil.setIsBetaShoot_amp(false);
-    ArmUtil.UpdateParameters_AMPAim();
+    ArmUtil.setIsAmpShot(true);
+    ArmUtil.UpdateParameters();
 
     arm.moveMotorsToRotation(
       MathUtil.clamp(ArmUtil.getArmAngle_ToAMP(), Units.degreesToRadians(20), Units.degreesToRadians(80))

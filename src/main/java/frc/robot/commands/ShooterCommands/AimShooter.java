@@ -29,7 +29,8 @@ public class AimShooter extends InstantCommand {
   @Override
   public void initialize() {
     ArmUtil.SetQuikShotMode(false);
-    ArmUtil.UpdateParameters_SpeakerAim();
+    ArmUtil.setIsAmpShot(false);
+    ArmUtil.UpdateParameters();
     // arm.moveShooterToPose(ArmUtil.getArmNeededPosition());
     target = MathUtil.clamp(ArmUtil.getArmAngle(), Units.degreesToRadians(20), Units.degreesToRadians(80));
     arm.moveMotorsToRotation(Units.radiansToRotations(target) - Constants.Arm.Motors.secondarySoftLimits[1], Constants.Arm.Motors.secondarySoftLimits[1]);
