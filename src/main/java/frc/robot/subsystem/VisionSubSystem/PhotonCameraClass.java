@@ -150,8 +150,9 @@ public class PhotonCameraClass implements CameraInterface{
         poseEstimator.setReferencePose(RobotContainer.driveBase.getPose());
         estimatedPose = poseEstimator.update();
         if(estimatedPose.isPresent()){
-          inputs.estimatedPose = estimatedPose.get().estimatedPose;
           inputs.poseConfidence = latestResult.getBestTarget().getPoseAmbiguity();
+          if(inputs.poseConfidence > Constants.Vision.confidanceThreshold) inputs.estimatedPose = estimatedPose.get().estimatedPose;
+          else inputs.estimatedPose = Constants.Vision.rubbishPose;
         }
         else{
           inputs.estimatedPose = Constants.Vision.rubbishPose;

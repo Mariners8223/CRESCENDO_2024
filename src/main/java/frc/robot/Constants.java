@@ -16,7 +16,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.I2C;
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
 import frc.util.PIDFGains;
 
@@ -56,7 +55,6 @@ public class Constants {
         public static final double[] rubbishAngle = new double[]{-1000};
         public static final Pose3d rubbishPose = new Pose3d(new Pose2d(new Translation2d(-20, -20), new Rotation2d(69)));
 
-        public static final PIDFGains aimToRingPID = new PIDFGains(0.5, 0, 0, 0, 0, 0);
         public static final double aimToRingToleranceDegrees = 2;
 
         public static final int numberOfCameras = 3;
@@ -64,6 +62,7 @@ public class Constants {
             public static final Transform3d[][] cameraLocations = Constants.createCameraTransforms();
 
             public static final double gamePieceHeight = 0.05; //the height of the game piece in meters
+            public static final double confidanceThreshold = 0.5; //the min confidance of the vision system to be able to detect the pose of the robot //TODO get the real value
 
         public static final class PhotonVision{
             public static final String rightCameraName = "Right Camera"; //the name of the right camera
