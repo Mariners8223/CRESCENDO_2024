@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -13,8 +14,10 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.DriveTrain.PathPlanner;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
 import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
@@ -47,6 +51,7 @@ import frc.robot.commands.sequences.AimToRing;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.commands.sequences.ShootToAmp.MiniShoot;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.ArmUtil;
 import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
@@ -85,6 +90,8 @@ public class RobotContainer {
     configureNamedCommands();
     configureBindings();
     configChooser();
+
+    PPHolonomicDriveController.setRotationTargetOverride(RobotContainer::getTargetRotationToSpeakerAuto);
 
     // new Trigger(DriverStation::isDSAttached).onTrue(new InstantCommand(() -> {
     //   if(DriverStation.getAlliance().get() == DriverStation.Alliance.Red) Constants.SwapToRed();}).ignoringDisable(true));
@@ -144,6 +151,13 @@ public class RobotContainer {
     SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
 
     new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> driveBase.getField2d().getObject("AutoPath").setPoses()).ignoringDisable(true));
+  }
+
+  public static Optional<Rotation2d> getTargetRotationToSpeakerAuto(){
+    if(Arm.getInstance().getIntakeSub().isGamePieceDetected()){
+      return Optional.of(driveBase.getWantedAngleInCurrentRobotAngle(Rotation2d.fromRadians(ArmUtil.getChassisAngle())));
+    }
+    else return Optional.empty();
   }
 
 
