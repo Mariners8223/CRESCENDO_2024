@@ -83,7 +83,7 @@ public class ArmUtil{
         //  -(//Arm.getInstance().getShooterPosition().x*Math.sin(ChasisAngle)
         //  + RobotContainer.driveBase.getPose().getTranslation().getY()));//aim to a point prespective to the robot location in the chosen shooting zone
       }
-      inputs.Dy = Constants.Arm.SpeakerMidlleLocationY - RobotContainer.driveBase.getPose().getY();
+      inputs.Dy = Constants.Speaker.SpeakerTranslation.getY() - RobotContainer.driveBase.getPose().getY();
       return inputs.Dy;
     }
 
@@ -398,7 +398,7 @@ public class ArmUtil{
       }
       else {
         // inputs.ArmAngle = Zone2_Equasion(StartSpeed, Dz, distanceToSpeaker);
-        inputs.ArmAngle = Zone2_Equasion_overShoot(Dz - 0.87, distanceToSpeaker);//-0.8 is an offset, funny right?
+        inputs.ArmAngle = Zone2_Equasion_overShoot(Dz - 0.83, distanceToSpeaker);//-0.8 is an offset, funny right?
         // inputs.ArmAngle = Zone2_Equasion_NEW(Dz, Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         // inputs.ArmAngle = Zone1_Equasion(Dz + 0.1, distanceToSpeaker);
