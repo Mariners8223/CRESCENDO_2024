@@ -353,6 +353,8 @@ public class DriveBase extends SubsystemBase {
    */
   public Rotation2d getWantedAngleInCurrentRobotAngle(Rotation2d angle){
     return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
+    // if(Math.abs(getAngle()) <= 360) return angle.unaryMinus();
+    // else return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
   }
   
   /**
