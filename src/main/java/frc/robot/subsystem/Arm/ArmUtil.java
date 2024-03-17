@@ -56,6 +56,7 @@ public class ArmUtil{
     double DistanceToAMP;//the distance to amp
     double ChassisAngle_AMP;//the chassis angle to the amp
     boolean isBetaShoot_AMP;//whether we aim with alpha or beta
+    boolean isAmpShot;
   }
   
     private static ArmPosition ZaxisTarget;//arm angle arm position
@@ -168,6 +169,7 @@ public class ArmUtil{
         inputs.AmpVelocity = 1;
         inputs.ArmAngle_AMP = 30;
         inputs.DistanceToAMP = 1;
+        inputs.isAmpShot = false;
         }
       }
     }
@@ -646,6 +648,8 @@ public class ArmUtil{
       
       inputs.AmpVelocity = MathUtil.clamp(inputs.AmpVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(5500) * Constants.Shooter.wheelRadius);//shooting speed clamp
 
+      inputs.WantedVelocity = inputs.AmpVelocity;
+      
       inputs.ArmAngle_AMP = CalcArmAngleToAMP(3.5, inputs.AmpVelocity);
 
       inputs.ChassisAngle_AMP = CalcChassisAngleToSetPoint(Constants.Speaker.ampTranslation.getX(), Constants.Speaker.ampTranslation.getY());
@@ -658,6 +662,14 @@ public class ArmUtil{
         inputs.ArmAngle_AMP = Units.degreesToRadians(180) - inputs.ArmAngle_AMP;
         inputs.ChassisAngle_AMP += 180;
       }
+    }
+
+    /**
+     * changes the mode, wether to update the amp shot or the speaker shoot
+     * @param isAmpShot is it amp shoot
+     */
+    public static void setIsAmpShot(boolean isAmpShot){
+      inputs.isAmpShot = isAmpShot;
     }
 
     /**
@@ -726,5 +738,15 @@ public class ArmUtil{
 
     public static double getNEWZone2(){
       return Zone2_Equasion_NEW(inputs.Dz, inputs.Dz, inputs.distanceToSpeaker);
+    }
+
+    /**updates parameters*/
+    public static void UpdateParameters(){
+      if (inputs.isAmpShot) {
+        UpdateParameters_AMPAim();
+      }
+      else{
+        UpdateParameters_SpeakerAim();
+      }
     }
   }

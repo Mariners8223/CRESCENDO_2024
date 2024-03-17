@@ -49,12 +49,13 @@ public class AimAndShootToAmpArea_Auto extends SequentialCommandGroup {
   public void initialize() {
     timer = 0;
     ArmUtil.setIsBetaShoot_amp(true);
-      ArmUtil.UpdateParameters_AMPAim();
-      arm.moveMotorsToRotation(0, MathUtil.clamp(ArmUtil.getArmAngle_ToAMP(), Units.degreesToRadians(115), Units.degreesToRadians(180)));
-      // RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle_ToAmp()), false);
-      shooter.setShooterVelocity(ArmUtil.getWantedVelocity_ToAmp());
-      // RobotContainer.driveBase.setIsControlled(false);
-      // RobotContainer.driveBase.isControlled = false;
+    ArmUtil.setIsAmpShot(true);
+    ArmUtil.UpdateParameters();
+    arm.moveMotorsToRotation(0, MathUtil.clamp(ArmUtil.getArmAngle_ToAMP(), Units.degreesToRadians(115), Units.degreesToRadians(180)));
+    // RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle_ToAmp()), false);
+    shooter.setShooterVelocity(ArmUtil.getWantedVelocity_ToAmp());
+    // RobotContainer.driveBase.setIsControlled(false);
+    // RobotContainer.driveBase.isControlled = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -66,7 +67,7 @@ public class AimAndShootToAmpArea_Auto extends SequentialCommandGroup {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.getShooterSub().stopMotors();
+    // arm.getShooterSub().stopMotors();
   }
 
   // Returns true when the command should end.
