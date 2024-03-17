@@ -30,6 +30,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -132,13 +133,18 @@ public class DriveBase extends SubsystemBase {
     targetRotation = new Rotation2d(); //creates a new target rotation
 
     replanConfig = new ReplanningConfig(Constants.DriveTrain.PathPlanner.planPathTostartingPointIfNotAtIt, Constants.DriveTrain.PathPlanner.enableDynamicReplanning, Constants.DriveTrain.PathPlanner.pathErrorTolerance, Constants.DriveTrain.PathPlanner.pathErrorSpikeTolerance);
-    //^how pathplanner reacts to postion error
+    // ^how pathplanner reacts to postion error
     pathFollowerConfig = new HolonomicPathFollowerConfig(
       Constants.DriveTrain.PathPlanner.XYPID.createPIDConstants(),
       Constants.DriveTrain.PathPlanner.thetaPID.createPIDConstants(),
       Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec,
       Math.sqrt(Math.pow((Constants.DriveTrain.Global.distanceBetweenWheels / 2), 2) * 2),
       replanConfig);
+
+    // pathFollowerConfig = new HolonomicPathFollowerConfig(
+    //   Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec,
+    //   Math.sqrt(Math.pow((Constants.DriveTrain.Global.distanceBetweenWheels / 2), 2) * 2),
+    //   replanConfig);
     //^config for the swerve path follower
 
     pathConstraints = new PathConstraints(
@@ -372,8 +378,41 @@ public class DriveBase extends SubsystemBase {
 
     if(isBeyond360) targetRotation = alpha;
     else targetRotation = getWantedAngleInCurrentRobotAngle(alpha);
+    // else inputs.targetRotation = Rotation2d.fromDegrees(OptimizeSetTarget(alpha));
 
     inputs.targetRotation = targetRotation;
+  }
+
+  /**
+   * calculates the best targetfor the chassis given a target field relative
+   * @param target the target (NOT ABOVE 360)
+   * @return the target rotations IN DEGREES
+   */
+  public double OptimizeSetTarget(Rotation2d target){
+    int Rotations = (int)Units.degreesToRotations(getAngle());
+    if (getAngle() > 0) {
+      if (getAngle() % 360 > 180) {
+        return (Rotations + 1) * 360 + target.getDegrees();
+      }
+      else{
+        return Rotations * 360 + target.getDegrees();
+      }
+    }
+    else{
+      if (getAngle() % 360 < 180) {
+        return (Rotations - 1) * 360 - target.getDegrees();
+      }
+      else{
+        return (Rotations) * 360 - target.getDegrees();
+      }
+    }
+  }
+  public void yuvi(Rotation2d target){
+    // min(abs(b-(a-(m(a))),abs((b-(a-m(-a)))-360))
+    //b- target
+    //a - current
+    //m(a) = 360*int(a/360)
+    //result - what needs to be added to a to get to b in quickest way
   }
 
   // public void setTargetChassisAngle(Rotation2d Angle, boolean isBeyond360){

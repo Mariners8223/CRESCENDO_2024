@@ -52,6 +52,12 @@
           "data": {
             "name": "AutoCollect"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "near speaker"
+          }
         }
       ]
     }

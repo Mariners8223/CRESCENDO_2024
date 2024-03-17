@@ -167,8 +167,8 @@ public class Constants {
             public static final double[] mainSoftLimits = new double[]{0.3206787109375, -0.03125};//was 0.35, -0.04 // 0.3206787109375
             public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.007};
 
-            public static final double[] mainMaxOutputs = new double[]{0.45, -0.3}; //0.45, -0.25
-            public static final double[] secondaryMaxOutputs = new double[]{0.55, -0.4}; //0.5, -0.35
+            public static final double[] mainMaxOutputs = new double[]{0.55, -0.4}; //0.45, -0.25
+            public static final double[] secondaryMaxOutputs = new double[]{0.65, -0.5}; //0.5, -0.35
  
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 81; //121.5
@@ -341,8 +341,8 @@ public class Constants {
             public static final double pathErrorTolerance = 0.1; //the max error in position before pathPlaneer replans the path in meters
             public static final double pathErrorSpikeTolerance = 1; //the max postion spike before path planner replans the path
 
-            public static final PIDFGains thetaPID = new PIDFGains(10, 1, 0.5); //the pid gains for the PID Controller of the robot angle, units are radians
-            public static final PIDFGains XYPID = new PIDFGains(6, 0.7, 1.2); //the pid gains for the pid controller of the robot's postion (xy)
+            public static final PIDFGains thetaPID = new PIDFGains(5, 0, 0); //the pid gains for the PID Controller of the robot angle, units are radians
+            public static final PIDFGains XYPID = new PIDFGains(5.5, 0.055, 0.05); //the pid gains for the pid controller of the robot's postion (xy)
         }
 
         public static class SwerveModule{

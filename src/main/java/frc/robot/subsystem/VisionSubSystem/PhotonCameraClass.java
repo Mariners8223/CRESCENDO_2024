@@ -144,7 +144,7 @@ public class PhotonCameraClass implements CameraInterface{
       }
 
       inputs.timeStamp = latestResult.getTimestampSeconds();
-      inputs.latency = latestResult.getLatencyMillis() * 100;
+      inputs.latency = latestResult.getLatencyMillis() / 1000;
 
       if(mode == CameraMode.AprilTags && inputs.isfieldLoaded){
         if(latestResult.getBestTarget().getFiducialId() < 1 || latestResult.getBestTarget().getFiducialId() > 16) return;

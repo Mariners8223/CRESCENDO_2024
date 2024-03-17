@@ -65,11 +65,14 @@ public class AimToRingAuto extends SequentialCommandGroup {
       angleToRing = vision.getAngleToBestObject(CameraLocation.Front_Arm);
 
       if(angleToRing == -1000){
+        // driveBase.robotRelativeDrive(1, 0, 0);
         return;
+
       }
 
       driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
       
+      // driveBase.robotRelativeDrive(1.2*Math.cos(Units.degreesToRadians(angleToRing)), -1.2*Math.sin(Units.degreesToRadians(angleToRing)), 0);
       driveBase.robotRelativeDrive(1.2*Math.cos(Units.degreesToRadians(angleToRing)), -1.2*Math.sin(Units.degreesToRadians(angleToRing)), 0);
     }
 
@@ -81,7 +84,8 @@ public class AimToRingAuto extends SequentialCommandGroup {
 
     @Override
     public boolean isFinished(){
-      return Arm.getInstance().getIntakeSub().isGamePieceDetected() || Timer.getFPGATimestamp() - startTime >= 0.9;
+      return Arm.getInstance().getIntakeSub().getLaserReading() || Timer.getFPGATimestamp() - startTime >= 1.1;
+
     }
   }
 

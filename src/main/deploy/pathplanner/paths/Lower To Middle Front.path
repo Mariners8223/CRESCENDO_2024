@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.25,
-        "y": 6.945524323618622
+        "x": 2.634896291170256,
+        "y": 4.1338974839469875
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6589529362264837,
-        "y": 6.06819493537206
+        "x": 2.3229040282308606,
+        "y": 4.494638537970663
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.25,
-        "y": 5.550936522700434
+        "x": 2.751893389772529,
+        "y": 4.884628866644907
       },
       "prevControl": {
-        "x": 1.75,
-        "y": 5.550936522700434
+        "x": 2.7226441151219607,
+        "y": 4.592136120139224
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "QuikShot auto position"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -38,12 +38,12 @@
     "maxAngularAcceleration": 550.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0,
-    "rotateFast": false
+    "velocity": 1.0,
+    "rotation": 80.27242144859838,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "starters",
+  "folder": "Connectors",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
