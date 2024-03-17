@@ -12,9 +12,33 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Front 2nd note"
+            "name": "IntakeToFloor"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoCollect"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "QuikAim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -24,9 +48,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "near speaker"
+            "name": "AutoCollect"
           }
         }
       ]
