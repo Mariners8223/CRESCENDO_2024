@@ -17,6 +17,9 @@ import frc.robot.RobotContainer;
 /** Add your docs here.
  * ArmUtil is the aiming mechanizem of the robot
  * it aims and calculates every thing that has to do with the arm of our 2024 robot
+ * i know i know its complitly unorgenized, deal with it! it works :')
+ * if you wish to understand you may search for the "UpdateParameters" functions which call to all of the other calculations
+ * stay safe and have fun :)
  */
 public class ArmUtil{
 
@@ -318,6 +321,13 @@ public class ArmUtil{
       return Math.atan(inputs.GamePieceVelocityZ/inputs.GamePieceVelocityX);
     }
 
+    /**
+     * funny shit, this is acully a phisics equasion lol, it calcs the angle to the speaker tho it complitly over shoots
+     * so we added an offset :) you can find it on the angle calculator for the z axis
+     * @param MaxHieght the targeted hieght and the hieght the game piece shell not pass
+     * @param distanceToSpeaker the distance to the target
+     * @return the angle
+     */
     public static double Zone2_Equasion_overShoot(double MaxHieght, double distanceToSpeaker){
       return Math.atan(2*(MaxHieght/distanceToSpeaker));
     }
@@ -388,7 +398,7 @@ public class ArmUtil{
       }
       else {
         // inputs.ArmAngle = Zone2_Equasion(StartSpeed, Dz, distanceToSpeaker);
-        inputs.ArmAngle = Zone2_Equasion_overShoot(Dz - 0.8, distanceToSpeaker);
+        inputs.ArmAngle = Zone2_Equasion_overShoot(Dz - 0.8, distanceToSpeaker);//-0.8 is an offset, funny right?
         // inputs.ArmAngle = Zone2_Equasion_NEW(Dz, Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         // inputs.ArmAngle = Zone1_Equasion(Dz + 0.1, distanceToSpeaker);
@@ -649,7 +659,7 @@ public class ArmUtil{
       inputs.AmpVelocity = MathUtil.clamp(inputs.AmpVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(5500) * Constants.Shooter.wheelRadius);//shooting speed clamp
 
       inputs.WantedVelocity = inputs.AmpVelocity;
-      
+
       inputs.ArmAngle_AMP = CalcArmAngleToAMP(3.5, inputs.AmpVelocity);
 
       inputs.ChassisAngle_AMP = CalcChassisAngleToSetPoint(Constants.Speaker.ampTranslation.getX(), Constants.Speaker.ampTranslation.getY());
