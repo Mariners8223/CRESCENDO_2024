@@ -4,14 +4,16 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
-
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -20,8 +22,18 @@ import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
+  @AutoLog
+  public static class pathPLannerInputs{
+    Pose2d targetPose = new Pose2d();
+    // Pose2d[] path;
+    // List<Pose2d> path = new ArrayList<>();
+    Pose2d[] path = new Pose2d[0];
+  }
+
   String lastAutoName = "InstantCommand";
   Boolean driverStationWasConnected = false;
+  pathPLannerInputsAutoLogged pathPlannerInputs;
+
 
   @Override
   public void robotInit() {
@@ -34,10 +46,18 @@ public class Robot extends LoggedRobot {
       Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
     }
     // else setUseTiming(false);
+    // Logger.addDataReceiver(new NT4Publisher());
 
     Logger.start();
 
     new RobotContainer();
+
+    pathPlannerInputs = new pathPLannerInputsAutoLogged();
+
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> pathPlannerInputs.targetPose = pose);
+    PathPlannerLogging.setLogActivePathCallback((posees) -> pathPlannerInputs.path = posees.toArray(new Pose2d[0]));
+
+    Logger.processInputs("pathPlanner", pathPlannerInputs);
   }
 
   @Override
@@ -108,7 +128,9 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    Logger.processInputs("pathPlanner", pathPlannerInputs);
+  }
 
   @Override
   public void autonomousExit() {
