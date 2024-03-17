@@ -82,10 +82,10 @@ public class Shooter {
 
     public boolean isAtSelctedVelocity(){
         // return Math.abs((inputs.motor1RPM + inputs.motor2RPM) / 2 - inputs.RPMTarget) <= 250;
-        return Math.abs(inputs.motor1RPM - inputs.RPMTarget) <= 80 && Math.abs(inputs.motor2RPM - inputs.RPMTarget) <= 80;
+        return Math.abs(inputs.motor1RPM - inputs.RPMTarget) <= 65 && Math.abs(inputs.motor2RPM - inputs.RPMTarget) <= 65;
     }
     public boolean isMotorsAtSameSpeed(){
-        return Math.abs(inputs.motor1RPM - inputs.motor2RPM) <= 80;
+        return Math.abs(inputs.motor1RPM - inputs.motor2RPM) <= 65;
     }
 
     /**

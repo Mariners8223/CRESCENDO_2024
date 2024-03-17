@@ -29,11 +29,15 @@ public class AimToRingAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new IntakeToFloor(),
-      new AimToRingAuto1(),
       new ParallelRaceGroup(
-        new AimToRingAuto2(),
+        new AimToRingAutoTrigo(),
         new CollectFloor()
       )
+      // new AimToRingAuto1(),
+      // new ParallelRaceGroup(
+      //   new AimToRingAuto2(),
+      //   new CollectFloor()
+      // )
     );
   }
 

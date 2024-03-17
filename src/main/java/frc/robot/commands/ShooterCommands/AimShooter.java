@@ -37,7 +37,7 @@ public class AimShooter extends InstantCommand {
 
     if(RobotContainer.driveController.circle().getAsBoolean()){
       RobotContainer.driveBase.setIsControlled(true);
-      RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle()), false);
+      RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle() - Math.PI), false);
     }
     else RobotContainer.driveBase.setIsControlled(false);
   }

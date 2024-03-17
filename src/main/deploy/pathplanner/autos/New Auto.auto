@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2796798990272578,
+      "y": 5.52811290895741
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Front 2nd note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Front 1st note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "near speaker"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

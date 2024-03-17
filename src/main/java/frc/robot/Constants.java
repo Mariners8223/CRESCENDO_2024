@@ -94,7 +94,7 @@ public class Constants {
             // public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
 
             public static Translation3d ampTranslation = new Translation3d(3, 8, 0);
-            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 5.55, 2.03);//z = 2.03
+            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 5.8, 2.03);//z = 2.03
             //x is about 0.0381, y is about 5.547868 METER
             //z may be 1.628768995 meter through calculations
             public static final double AlphaShootOffset_distance = 0.618398323;//or just add this
@@ -199,8 +199,8 @@ public class Constants {
         public static final double ShootToAmpTime = 2;
         // public static final double RPMforShooterZone1 = 4000;
         // public static final double RPMforShooterZone2 = 5000;
-        public static double GPAirTimeZone1 = 0.115;
-        public static double GPAirTimeZone2 = 0.15;
+        public static double GPAirTimeZone1 = 0.125;
+        public static double GPAirTimeZone2 = 0.159;
     }
 
     public static final class Intake{
@@ -212,7 +212,7 @@ public class Constants {
         public static final double StallCurrent = 15;
         public static final int MaxStallTime = 30;
 
-        public static final double secondaryIntakeAngle = 0.3779296875;
+        public static final double secondaryIntakeAngle = 0.3829296875;
         public static final double mainIntakeAngle = -0.0333251953125;
 
         public static final int laserPort = 4;
@@ -341,8 +341,8 @@ public class Constants {
             public static final double pathErrorTolerance = 0.1; //the max error in position before pathPlaneer replans the path in meters
             public static final double pathErrorSpikeTolerance = 1; //the max postion spike before path planner replans the path
 
-            public static final PIDFGains thetaPID = new PIDFGains(5.5, 0.0, 0.0); //the pid gains for the PID Controller of the robot angle, units are radians
-            public static final PIDFGains XYPID = new PIDFGains(4.5, 0.0, 0.9); //the pid gains for the pid controller of the robot's postion (xy)
+            public static final PIDFGains thetaPID = new PIDFGains(10, 1, 0.5); //the pid gains for the PID Controller of the robot angle, units are radians
+            public static final PIDFGains XYPID = new PIDFGains(6, 0.7, 1.2); //the pid gains for the pid controller of the robot's postion (xy)
         }
 
         public static class SwerveModule{

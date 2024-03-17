@@ -59,6 +59,8 @@ public class PhotonCameraClass implements CameraInterface{
       camera = new PhotonCamera(cameraName);
       inputs = new PhotonCameraInputsAutoLogged();
 
+      camera.setDriverMode(false);
+
       inputs.cameraName = cameraName;
       inputs.location = location.toString();
 
@@ -151,7 +153,7 @@ public class PhotonCameraClass implements CameraInterface{
         estimatedPose = poseEstimator.update();
         if(estimatedPose.isPresent()){
           inputs.poseConfidence = latestResult.getBestTarget().getPoseAmbiguity();
-          if(inputs.poseConfidence > Constants.Vision.confidanceThreshold) inputs.estimatedPose = estimatedPose.get().estimatedPose;
+          if(inputs.poseConfidence < Constants.Vision.confidanceThreshold) inputs.estimatedPose = estimatedPose.get().estimatedPose;
           else inputs.estimatedPose = Constants.Vision.rubbishPose;
         }
         else{

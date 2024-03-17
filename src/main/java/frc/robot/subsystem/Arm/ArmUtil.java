@@ -111,7 +111,7 @@ public class ArmUtil{
         inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Constants.Arm.armHeightFromFrameMeters
          - Constants.DriveTrain.Global.RobotHeightFromGround)
         + Constants.Arm.DistanceFromMainArmToShooterOutput
-        + 0.12;
+        + 0.1;
         // + CalcAlphaOffset(inputs.ArmAngle);//adds the distance between the main arm and where the gp is flying out of
         // inputs.Dz = Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y;
       }
@@ -384,7 +384,7 @@ public class ArmUtil{
      */
     private static double CalcAngleZaxis(double StartSpeed, double Dz, double distanceToSpeaker, double YaxisWantedAngle) {
       if (inputs.isZone1) {
-        inputs.ArmAngle = Zone1_Equasion(Dz, distanceToSpeaker);
+        inputs.ArmAngle = Zone1_Equasion(Dz + 0.05, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         if(inputs.IsQuikShot){
           ZaxisTarget = Constants.Arm.QuikShotPosition;
@@ -398,7 +398,7 @@ public class ArmUtil{
       }
       else {
         // inputs.ArmAngle = Zone2_Equasion(StartSpeed, Dz, distanceToSpeaker);
-        inputs.ArmAngle = Zone2_Equasion_overShoot(Dz - 0.8, distanceToSpeaker);//-0.8 is an offset, funny right?
+        inputs.ArmAngle = Zone2_Equasion_overShoot(Dz - 0.87, distanceToSpeaker);//-0.8 is an offset, funny right?
         // inputs.ArmAngle = Zone2_Equasion_NEW(Dz, Dz, distanceToSpeaker);
         // inputs.ArmAngle = RobotSpeedRelative_angle(StartSpeed, YaxisWantedAngle, inputs.ArmAngle);
         // inputs.ArmAngle = Zone1_Equasion(Dz + 0.1, distanceToSpeaker);
@@ -656,7 +656,7 @@ public class ArmUtil{
 
       inputs.AmpVelocity = Math.hypot(CalcVelocityAMPX_GP(3.5, inputs.DistanceToAMP), ClacVelocityZ_GP(3.5));
       
-      inputs.AmpVelocity = MathUtil.clamp(inputs.AmpVelocity, Units.rotationsPerMinuteToRadiansPerSecond(3500) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(5500) * Constants.Shooter.wheelRadius);//shooting speed clamp
+      inputs.AmpVelocity = MathUtil.clamp(inputs.AmpVelocity, Units.rotationsPerMinuteToRadiansPerSecond(2000) *  Constants.Shooter.wheelRadius, Units.rotationsPerMinuteToRadiansPerSecond(5500) * Constants.Shooter.wheelRadius);//shooting speed clamp
 
       inputs.WantedVelocity = inputs.AmpVelocity;
 
@@ -668,10 +668,12 @@ public class ArmUtil{
         inputs.ChassisAngle_AMP = Units.degreesToRadians(180) - inputs.ChassisAngle_AMP;
       }
 
-      if (inputs.isBetaShoot_AMP) {
-        inputs.ArmAngle_AMP = Units.degreesToRadians(180) - inputs.ArmAngle_AMP;
-        inputs.ChassisAngle_AMP += 180;
-      }
+      // if (inputs.isBetaShoot_AMP) {
+      //   inputs.ArmAngle_AMP = Units.degreesToRadians(180) - inputs.ArmAngle_AMP;
+      //   inputs.ChassisAngle_AMP += 180;
+      // }
+
+      Logger.processInputs("ArmUtil", inputs);
     }
 
     /**
