@@ -29,6 +29,7 @@ import frc.robot.commands.IntakeCommands.RollOut;
 import frc.robot.commands.IntakeCommands.SourceCollect;
 import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
 import frc.robot.commands.ShooterCommands.AlphaAimToAmpArea;
+import frc.robot.commands.ShooterCommands.QuikAim_Auto;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
@@ -106,6 +107,7 @@ public class RobotContainer {
     // driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
     
     AlphaAimCommand = new AimRegularToSpeaker();
+    // AlphaAimCommand = new QuikAim_Auto();
     // AlphaAimCommand = new AlphaAimToAmpArea();
 
 

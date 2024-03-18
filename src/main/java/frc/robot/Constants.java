@@ -94,7 +94,7 @@ public class Constants {
             // public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
 
             public static Translation3d ampTranslation = new Translation3d(3, 8, 0);
-            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 5.7, 2.03);//z = 2.03 y = 5.55
+            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 5.55, 2.03);//z = 2.03 y = 5.55
             //x is about 0.0381, y is about 5.547868 METER
             //z may be 1.628768995 meter through calculations
             public static final double AlphaShootOffset_distance = 0.618398323;//or just add this
@@ -200,7 +200,7 @@ public class Constants {
         // public static final double RPMforShooterZone1 = 4000;
         // public static final double RPMforShooterZone2 = 5000;
         public static double GPAirTimeZone1 = 0.125;
-        public static double GPAirTimeZone2 = 0.159;
+        public static double GPAirTimeZone2 = 0.165;
     }
 
     public static final class Intake{
