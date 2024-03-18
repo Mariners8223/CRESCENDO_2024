@@ -82,7 +82,6 @@ public class DriveBase extends SubsystemBase {
   Command driveCommand; //the command that drives the robot (default)
   Command swerveXPattern; //makes the swerve in an X pattern (overrides default command)
   Command orchestraCommand; //makes the falcons sing (overrudes default command)
-
   @AutoLog
   public static class DriveBaseInputs{
     double XspeedInput = 0; //the X speed input
@@ -358,9 +357,14 @@ public class DriveBase extends SubsystemBase {
    * @return the target rotation
    */
   public Rotation2d getWantedAngleInCurrentRobotAngle(Rotation2d angle){
-    return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
+    //return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
     // if(Math.abs(getAngle()) <= 360) return angle.unaryMinus();
     // else return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
+
+
+    double amountOfRot = Math.min(Math.abs(angle.getDegrees() - getAngle()%360) - 360, Math.abs(angle.getDegrees() - getAngle()));
+    if(getAngle() + amountOfRot == angle.getDegrees()) return Rotation2d.fromDegrees(getAngle() + amountOfRot);
+    else return Rotation2d.fromDegrees(getAngle() - amountOfRot);
   }
   
   /**
