@@ -33,7 +33,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -83,7 +82,6 @@ public class DriveBase extends SubsystemBase {
   Command driveCommand; //the command that drives the robot (default)
   Command swerveXPattern; //makes the swerve in an X pattern (overrides default command)
   Command orchestraCommand; //makes the falcons sing (overrudes default command)
-
   @AutoLog
   public static class DriveBaseInputs{
     double XspeedInput = 0; //the X speed input
@@ -134,13 +132,18 @@ public class DriveBase extends SubsystemBase {
     targetRotation = new Rotation2d(); //creates a new target rotation
 
     replanConfig = new ReplanningConfig(Constants.DriveTrain.PathPlanner.planPathTostartingPointIfNotAtIt, Constants.DriveTrain.PathPlanner.enableDynamicReplanning, Constants.DriveTrain.PathPlanner.pathErrorTolerance, Constants.DriveTrain.PathPlanner.pathErrorSpikeTolerance);
-    //^how pathplanner reacts to postion error
+    // ^how pathplanner reacts to postion error
     pathFollowerConfig = new HolonomicPathFollowerConfig(
       Constants.DriveTrain.PathPlanner.XYPID.createPIDConstants(),
       Constants.DriveTrain.PathPlanner.thetaPID.createPIDConstants(),
       Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec,
       Math.sqrt(Math.pow((Constants.DriveTrain.Global.distanceBetweenWheels / 2), 2) * 2),
       replanConfig);
+
+    // pathFollowerConfig = new HolonomicPathFollowerConfig(
+    //   Constants.DriveTrain.Drive.freeWheelSpeedMetersPerSec,
+    //   Math.sqrt(Math.pow((Constants.DriveTrain.Global.distanceBetweenWheels / 2), 2) * 2),
+    //   replanConfig);
     //^config for the swerve path follower
 
     pathConstraints = new PathConstraints(
@@ -354,7 +357,15 @@ public class DriveBase extends SubsystemBase {
    * @return the target rotation
    */
   public Rotation2d getWantedAngleInCurrentRobotAngle(Rotation2d angle){
-    return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
+   if(getAngle() > 0) return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
+   else return Rotation2d.fromDegrees((getAngle() - (getAngle()%360 + angle.getDegrees()))-360);
+    // if(Math.abs(getAngle()) <= 360) return angle.unaryMinus();
+    // else return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
+
+
+    // double amountOfRot = Math.min(Math.abs(angle.getDegrees() - getAngle()%360) - 360, Math.abs(angle.getDegrees() - getAngle()));
+    // if(getAngle() + amountOfRot == angle.getDegrees()) return Rotation2d.fromDegrees(getAngle() + amuntOfRot);
+    // else return Rotation2d.fromDegrees(getAngle() - amountOfRot);
   }
   
   /**
@@ -372,24 +383,36 @@ public class DriveBase extends SubsystemBase {
 
     if(isBeyond360) targetRotation = alpha;
     else targetRotation = getWantedAngleInCurrentRobotAngle(alpha);
+    // else inputs.targetRotation = Rotation2d.fromDegrees(OptimizeSetTarget(alpha));
 
     inputs.targetRotation = targetRotation;
   }
 
-  // public void setTargetChassisAngle(Rotation2d Angle, boolean isBeyond360){
-  //   double targetAngle;
-  //   if (isBeyond360) {
-  //     targetAngle = Angle.getDegrees() % 360;
-  //   }
-  //   int k = (int)Units.degreesToRotations(getAngle());
-  //   double targetPluse = Angle.getDegrees() + k * 360;
-  //   double targetMius = 360 * k - Angle.getDegrees();
-  //   if (targetMius - getAngle() > targetPluse - getAngle()) {
-  //     inputs.targetRotation = Rotation2d.fromDegrees(targetMius);
-  //   }
-  //   else inputs.targetRotation = Rotation2d.fromDegrees(targetPluse);
-  //   targetRotation = inputs.targetRotation;
-  // }
+  /**
+   * calculates the best targetfor the chassis given a target field relative
+   * @param target the target (NOT ABOVE 360)
+   * @return the target rotations IN DEGREES
+   */
+  public double OptimizeSetTarget(Rotation2d target){
+    int Rotations = (int)Units.degreesToRotations(getAngle());
+    if (getAngle() > 0) {
+      if (getAngle() % 360 > 180) {
+        return (Rotations + 1) * 360 + target.getDegrees();
+      }
+      else{
+        return Rotations * 360 + target.getDegrees();
+      }
+    }
+    else{
+      if (getAngle() % 360 < 180) {
+        return (Rotations - 1) * 360 - target.getDegrees();
+      }
+      else{
+        return (Rotations) * 360 - target.getDegrees();
+      }
+    }
+  }
+
 
   /**
    * gets the target rotation of the robot's angle

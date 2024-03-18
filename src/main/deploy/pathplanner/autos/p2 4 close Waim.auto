@@ -73,12 +73,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.3
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Shoot"
@@ -97,7 +91,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Front 2nd note"
+                  "pathName": "Lower To Middle Front"
                 }
               },
               {
@@ -125,12 +119,6 @@
           "type": "named",
           "data": {
             "name": "QuikAim"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.3
           }
         },
         {
@@ -180,12 +168,6 @@
           "type": "named",
           "data": {
             "name": "QuikAim"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.3
           }
         },
         {

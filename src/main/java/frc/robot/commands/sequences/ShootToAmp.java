@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Arm.knownArmPosition;

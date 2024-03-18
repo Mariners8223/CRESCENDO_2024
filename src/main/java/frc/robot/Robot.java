@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -11,24 +12,29 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.pathplanner.lib.pathfinding.Pathfinding;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.DriveTrain.Drive;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
 
 public class Robot extends LoggedRobot {
+  @AutoLog
+  public static class pathPLannerInputs{
+    Pose2d targetPose = new Pose2d();
+    // Pose2d[] path;
+    // List<Pose2d> path = new ArrayList<>();
+    Pose2d[] path = new Pose2d[0];
+  }
+
   String lastAutoName = "InstantCommand";
   Boolean driverStationWasConnected = false;
+  pathPLannerInputsAutoLogged pathPlannerInputs;
+
 
   @Override
   public void robotInit() {
@@ -41,26 +47,36 @@ public class Robot extends LoggedRobot {
       Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
     }
     // else setUseTiming(false);
+    // Logger.addDataReceiver(new NT4Publisher());
+
     Logger.start();
 
     new RobotContainer();
+
+    pathPlannerInputs = new pathPLannerInputsAutoLogged();
+
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> pathPlannerInputs.targetPose = pose);
+    PathPlannerLogging.setLogActivePathCallback((posees) -> pathPlannerInputs.path = posees.toArray(new Pose2d[0]));
+
+    Logger.processInputs("pathPlanner", pathPlannerInputs);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    ArmUtil.UpdateParameters_SpeakerAim();
-    SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
+    ArmUtil.setIsAmpShot(false);
+    ArmUtil.UpdateParameters();
+    // SmartDashboard.putNumber("Arm angle", 180 - Units.radiansToDegrees(ArmUtil.getArmAngle()));
     // SmartDashboard.putNumber("Robot (chassis) angle", Units.radiansToDegrees(ArmUtil.getChassisAngle()));
-    SmartDashboard.putNumber("zone 1 angle", Units.radiansToDegrees(ArmUtil.getZone1()));
-    SmartDashboard.putNumber("zone 2 angle", Units.radiansToDegrees(ArmUtil.getZone2()));
-    SmartDashboard.putNumber("diff between zone 1 and 2", Units.radiansToDegrees(ArmUtil.getZone2() - ArmUtil.getZone1()));
+    // SmartDashboard.putNumber("zone 1 angle", Units.radiansToDegrees(ArmUtil.getZone1()));
+    // SmartDashboard.putNumber("zone 2 angle", Units.radiansToDegrees(ArmUtil.getZone2()));
+    // SmartDashboard.putNumber("diff between zone 1 and 2", Units.radiansToDegrees(ArmUtil.getZone2() - ArmUtil.getZone1()));
     // SmartDashboard.putNumber("dx", ArmUtil.getDx());
     // SmartDashboard.putNumber("dy", ArmUtil.getDy());
     // SmartDashboard.putNumber("dz", ArmUtil.getDz());
-    SmartDashboard.putBoolean("is in zone 1", ArmUtil.isZone1());
-    SmartDashboard.putBoolean("is arm in position", Arm.getInstance().isArmInPosition());
-    SmartDashboard.putNumber("main real Angle", 360 * RobotContainer.arm.getMainMotorRotation());
+    // SmartDashboard.putBoolean("is in zone 1", ArmUtil.isZone1());
+    // SmartDashboard.putBoolean("is arm in position", Arm.getInstance().isArmInPosition());
+    // SmartDashboard.putNumber("main real Angle", 360 * RobotContainer.arm.getMainMotorRotation());
     // SmartDashboard.putNumber("distance to speaker", ArmUtil.get)
     // SmartDashboard.putNumber("arm x", Arm.getInstance().getShooterPosition().x);
     // SmartDashboard.putNumber("angle to ring", RobotContainer.vision.getAngleToObjects(CameraLocation.Front_Arm)[0]);
@@ -68,9 +84,9 @@ public class Robot extends LoggedRobot {
     // SmartDashboard.putNumber("ArmPose z", Arm.getInstance().getShooterPosition().y);
     // // SmartDashboard.putNumber("armX", Arm.getInstance().getShooterPosition().x);
 
-    SmartDashboard.putBoolean("is at selected velocity", Arm.getInstance().getShooterSub().isAtSelctedVelocity());
+    // SmartDashboard.putBoolean("is at selected velocity", Arm.getInstance().getShooterSub().isAtSelctedVelocity());
     
-    SmartDashboard.putNumber("wanted speed", Units.radiansPerSecondToRotationsPerMinute(ArmUtil.getWantedSpeed() / Constants.Shooter.wheelRadius));
+    // SmartDashboard.putNumber("wanted speed", Units.radiansPerSecondToRotationsPerMinute(ArmUtil.getWantedSpeed() / Constants.Shooter.wheelRadius));
     // // Constants.Shooter.frictionPowerParameterForGPVelocity = SmartDashboard.getNumber("cof", Constants.Shooter.frictionPowerParameterForGPVelocity);
     // SmartDashboard.putNumber("angle to gp", RobotContainer.vision.getAngleToBestObject(CameraLocation.Front_Right));
     // SmartDashboard.putNumber("distance to gp", RobotContainer.vision.getDistanceToBestObject(CameraLocation.Front_Right));
@@ -79,7 +95,7 @@ public class Robot extends LoggedRobot {
     // Constants.Shooter.GPAirTimeZone1 = SmartDashboard.getNumber("Zone1", Constants.Shooter.GPAirTimeZone1);
     // Constants.Shooter.GPAirTimeZone2 = SmartDashboard.getNumber("Zone2", Constants.Shooter.GPAirTimeZone2);
 
-    SmartDashboard.putBoolean("isAtSelctedVelocity", Arm.getInstance().getShooterSub().isAtSelctedVelocity());
+    // SmartDashboard.putBoolean("isAtSelctedVelocity", Arm.getInstance().getShooterSub().isAtSelctedVelocity());
   }
 
   @Override
@@ -93,7 +109,7 @@ public class Robot extends LoggedRobot {
       RobotContainer.updateFieldFromAuto(lastAutoName);
     }
 
-    if(DriverStation.isDSAttached() && !driverStationWasConnected){
+    if(DriverStation.isDSAttached() && !driverStationWasConnected && DriverStation.getAlliance().isPresent()){
       driverStationWasConnected = true;
       Logger.recordOutput("Allince", DriverStation.getAlliance().get().name());
       if(DriverStation.getAlliance().get() == Alliance.Red){
@@ -114,7 +130,9 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    Logger.processInputs("pathPlanner", pathPlannerInputs);
+  }
 
   @Override
   public void autonomousExit() {

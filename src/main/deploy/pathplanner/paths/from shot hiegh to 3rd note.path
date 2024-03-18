@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.436471720215054,
-        "y": 5.701978720780042
+        "x": 5.166552515082301,
+        "y": 6.442115680826736
       },
       "isLocked": true,
       "linkedName": "amp shooting pose"
     },
     {
       "anchor": {
-        "x": 8.012618136505887,
-        "y": 4.403274541213847
+        "x": 7.591028020857753,
+        "y": 4.731177964495728
       },
       "prevControl": {
-        "x": 6.837042082635236,
-        "y": 6.5128384888598765
+        "x": 6.415451966987102,
+        "y": 6.840741912141758
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 200.0,
     "maxAngularAcceleration": 550.0
   },

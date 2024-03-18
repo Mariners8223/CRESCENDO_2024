@@ -24,8 +24,7 @@ public class CollectFloor extends Command {
   public void initialize() {
     startTime = Timer.getFPGATimestamp();
     WasGamePieceDetected = intake.isGamePieceDetected();
-    if(!WasGamePieceDetected) intake.setMotor(0.8);
-    else intake.setMotor(-0.6);
+    intake.setMotor(0.8);
   }
 
   // Called once the command ends or is interrupted.
@@ -35,19 +34,15 @@ public class CollectFloor extends Command {
       intake.stopMotor();
       if(WasGamePieceDetected) WasGamePieceDetected = false;
     }
-    else if(!WasGamePieceDetected){
+    else{
       intake.setPosition(intake.getMotorPosition());
       intake.setIsGamePieceDetected(true);
-    }
-    else{
-      intake.stopMotor();
-      intake.setIsGamePieceDetected(false);
     }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.getLaserReading() && !WasGamePieceDetected) || (WasGamePieceDetected && Timer.getFPGATimestamp() - startTime >= 0.5);
+    return (intake.getLaserReading() && !WasGamePieceDetected);
   }
 }

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.28,
-      "y": 5.550936522700434
+      "x": 1.2796798990272578,
+      "y": 5.52811290895741
     },
     "rotation": 0
   },
@@ -24,34 +24,15 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "get 1st row middle note"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AutoCollect"
-                }
-              }
-            ]
+            "name": "AutoCollect"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shooter starter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "near speaker"
+            "name": "QuikAim"
           }
         },
         {
@@ -59,10 +40,28 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Front 1st note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoCollect"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "near speaker"
+          }
         }
       ]
     }
   },
-  "folder": "p2",
+  "folder": null,
   "choreoAuto": false
 }

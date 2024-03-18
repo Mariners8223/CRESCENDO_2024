@@ -28,6 +28,7 @@ public class BetaAim_AutoInstants extends InstantCommand {
   @Override
   public void initialize() {
     ArmUtil.SetQuikShotMode(true);
+    ArmUtil.setIsAmpShot(false);
       ArmUtil.UpdateParameters_SpeakerAim();
 
       // Armtarget = ArmUtil.getArmNeededPosition();

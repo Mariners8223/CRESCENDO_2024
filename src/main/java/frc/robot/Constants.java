@@ -16,7 +16,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.I2C;
 import frc.robot.subsystem.Arm.Arm.ArmPosition;
 import frc.util.PIDFGains;
 
@@ -56,7 +55,6 @@ public class Constants {
         public static final double[] rubbishAngle = new double[]{-1000};
         public static final Pose3d rubbishPose = new Pose3d(new Pose2d(new Translation2d(-20, -20), new Rotation2d(69)));
 
-        public static final PIDFGains aimToRingPID = new PIDFGains(0.5, 0, 0, 0, 0, 0);
         public static final double aimToRingToleranceDegrees = 2;
 
         public static final int numberOfCameras = 3;
@@ -64,6 +62,7 @@ public class Constants {
             public static final Transform3d[][] cameraLocations = Constants.createCameraTransforms();
 
             public static final double gamePieceHeight = 0.05; //the height of the game piece in meters
+            public static final double confidanceThreshold = 0.5; //the min confidance of the vision system to be able to detect the pose of the robot //TODO get the real value
 
         public static final class PhotonVision{
             public static final String rightCameraName = "Right Camera"; //the name of the right camera
@@ -95,7 +94,7 @@ public class Constants {
             // public static final double SpeakerIsCenterRatioBottomLocation = FieldYLength - 2*(FieldYLength - SpeakerMiddleLocationY);
 
             public static Translation3d ampTranslation = new Translation3d(3, 8, 0);
-            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 5.55, 2.03);//z = 2.03
+            public static Translation3d SpeakerTranslation = new Translation3d(Units.inchesToMeters(-1.5), 5.7, 2.03);//z = 2.03 y = 5.55
             //x is about 0.0381, y is about 5.547868 METER
             //z may be 1.628768995 meter through calculations
             public static final double AlphaShootOffset_distance = 0.618398323;//or just add this
@@ -168,8 +167,8 @@ public class Constants {
             public static final double[] mainSoftLimits = new double[]{0.3206787109375, -0.03125};//was 0.35, -0.04 // 0.3206787109375
             public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.007};
 
-            public static final double[] mainMaxOutputs = new double[]{0.45, -0.3}; //0.45, -0.25
-            public static final double[] secondaryMaxOutputs = new double[]{0.55, -0.4}; //0.5, -0.35
+            public static final double[] mainMaxOutputs = new double[]{0.55, -0.4}; //0.45, -0.25
+            public static final double[] secondaryMaxOutputs = new double[]{0.65, -0.5}; //0.5, -0.35
  
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 81; //121.5
@@ -200,8 +199,8 @@ public class Constants {
         public static final double ShootToAmpTime = 2;
         // public static final double RPMforShooterZone1 = 4000;
         // public static final double RPMforShooterZone2 = 5000;
-        public static double GPAirTimeZone1 = 0.115;
-        public static double GPAirTimeZone2 = 0.15;
+        public static double GPAirTimeZone1 = 0.125;
+        public static double GPAirTimeZone2 = 0.159;
     }
 
     public static final class Intake{
@@ -213,7 +212,7 @@ public class Constants {
         public static final double StallCurrent = 15;
         public static final int MaxStallTime = 30;
 
-        public static final double secondaryIntakeAngle = 0.3779296875;
+        public static final double secondaryIntakeAngle = 0.3829296875;
         public static final double mainIntakeAngle = -0.0333251953125;
 
         public static final int laserPort = 4;
@@ -342,8 +341,8 @@ public class Constants {
             public static final double pathErrorTolerance = 0.1; //the max error in position before pathPlaneer replans the path in meters
             public static final double pathErrorSpikeTolerance = 1; //the max postion spike before path planner replans the path
 
-            public static final PIDFGains thetaPID = new PIDFGains(5.5, 0.0, 0.0); //the pid gains for the PID Controller of the robot angle, units are radians
-            public static final PIDFGains XYPID = new PIDFGains(4.5, 0.0, 0.9); //the pid gains for the pid controller of the robot's postion (xy)
+            public static final PIDFGains thetaPID = new PIDFGains(5, 0, 0); //the pid gains for the PID Controller of the robot angle, units are radians
+            public static final PIDFGains XYPID = new PIDFGains(5.5, 0.055, 0.05); //the pid gains for the pid controller of the robot's postion (xy)
         }
 
         public static class SwerveModule{

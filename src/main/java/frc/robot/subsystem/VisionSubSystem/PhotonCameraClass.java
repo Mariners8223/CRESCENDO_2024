@@ -59,6 +59,8 @@ public class PhotonCameraClass implements CameraInterface{
       camera = new PhotonCamera(cameraName);
       inputs = new PhotonCameraInputsAutoLogged();
 
+      camera.setDriverMode(false);
+
       inputs.cameraName = cameraName;
       inputs.location = location.toString();
 
@@ -142,7 +144,7 @@ public class PhotonCameraClass implements CameraInterface{
       }
 
       inputs.timeStamp = latestResult.getTimestampSeconds();
-      inputs.latency = latestResult.getLatencyMillis() * 100;
+      inputs.latency = latestResult.getLatencyMillis() / 1000;
 
       if(mode == CameraMode.AprilTags && inputs.isfieldLoaded){
         if(latestResult.getBestTarget().getFiducialId() < 1 || latestResult.getBestTarget().getFiducialId() > 16) return;
@@ -150,8 +152,9 @@ public class PhotonCameraClass implements CameraInterface{
         poseEstimator.setReferencePose(RobotContainer.driveBase.getPose());
         estimatedPose = poseEstimator.update();
         if(estimatedPose.isPresent()){
-          inputs.estimatedPose = estimatedPose.get().estimatedPose;
           inputs.poseConfidence = latestResult.getBestTarget().getPoseAmbiguity();
+          if(inputs.poseConfidence < Constants.Vision.confidanceThreshold) inputs.estimatedPose = estimatedPose.get().estimatedPose;
+          else inputs.estimatedPose = Constants.Vision.rubbishPose;
         }
         else{
           inputs.estimatedPose = Constants.Vision.rubbishPose;

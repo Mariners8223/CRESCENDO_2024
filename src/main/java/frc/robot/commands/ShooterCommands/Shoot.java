@@ -47,6 +47,7 @@ public class Shoot extends SequentialCommandGroup {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // ArmUtil.UpdateParameters();
     // if(!Arm.getInstance().getIntakeSub().isGamePieceDetected()){
     //   cancel();
     //   return;

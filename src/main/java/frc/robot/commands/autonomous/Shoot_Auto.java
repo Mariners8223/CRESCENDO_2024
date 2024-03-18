@@ -32,6 +32,7 @@ public class Shoot_Auto extends SequentialCommandGroup {
     }
     @Override
     public void initialize() {
+      ArmUtil.UpdateParameters();
       if (DriverStation.isAutonomous() && ArmUtil.isZone1()) {
         arm.getShooterSub().setShooterRPM(4000);
       }

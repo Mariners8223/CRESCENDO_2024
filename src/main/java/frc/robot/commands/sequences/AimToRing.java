@@ -21,18 +21,14 @@ import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AimToRing extends SequentialCommandGroup {
+public class AimToRing extends ParallelRaceGroup {
   /** Creates a new AimToRing. */
   public AimToRing() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      // new IntakeToFloor().onlyIf(() -> Arm.getInstance().lastknownPosition != Arm.knownArmPosition.Intake),
-      new AimToRing1(),
-      new ParallelRaceGroup(
-        new AimToRing2(),
-        new CollectFloor()
-      ).onlyIf(() -> RobotContainer.vision.hasTarget(CameraLocation.Front_Arm))
+      new AimToRingTrigo(),
+      new CollectFloor()
       );
   }
 
@@ -62,7 +58,7 @@ public class AimToRing extends SequentialCommandGroup {
       }
       else{
         driveBase.setTargetRotation(Rotation2d.fromDegrees(driveBase.getAngle() - angleToRing), true);
-        driveBase.robotRelativeDrive(Math.cos(Units.degreesToRadians(angleToRing)), -Math.sin(Units.degreesToRadians(angleToRing)), 0);
+        driveBase.robotRelativeDrive(1.2*Math.cos(Units.degreesToRadians(angleToRing)), -1.2*Math.sin(Units.degreesToRadians(angleToRing)), 0);
       }
     }
 

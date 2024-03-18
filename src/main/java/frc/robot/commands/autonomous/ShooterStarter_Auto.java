@@ -4,9 +4,7 @@
 
 package frc.robot.commands.autonomous;
 
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.robot.subsystem.Arm.Shooter.Shooter;
@@ -25,7 +23,6 @@ public class ShooterStarter_Auto extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ArmUtil.UpdateParameters_SpeakerAim();
-    shooter.setShooterVelocity(ArmUtil.getWantedSpeed());
+    shooter.setShooterRPM(4000);
   }
 }

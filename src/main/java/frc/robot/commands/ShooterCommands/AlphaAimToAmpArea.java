@@ -8,17 +8,27 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.armCommands.MoveToHome;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
+import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AlphaAimToAmpArea extends InstantCommand {
+public class AlphaAimToAmpArea extends SequentialCommandGroup{
+  public AlphaAimToAmpArea(){
+    addCommands(new MoveToHome().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake ||
+    Arm.getInstance().lastknownPosition == knownArmPosition.Unknown),
+    new RepeatCommand(new AlphaAimToAmpArea1()));
+  }
+  public class AlphaAimToAmpArea1 extends InstantCommand {
   private static Arm arm;
-  public AlphaAimToAmpArea() {
+  public AlphaAimToAmpArea1() {
     // Use addRequirements() here to declare subsystem dependencies.
     arm = Arm.getInstance();
     addRequirements(arm);
@@ -28,13 +38,14 @@ public class AlphaAimToAmpArea extends InstantCommand {
   @Override
   public void initialize() {
     ArmUtil.setIsBetaShoot_amp(false);
-    ArmUtil.UpdateParameters_AMPAim();
+    ArmUtil.setIsAmpShot(true);
+    // ArmUtil.UpdateParameters();
 
     arm.moveMotorsToRotation(
       MathUtil.clamp(ArmUtil.getArmAngle_ToAMP(), Units.degreesToRadians(20), Units.degreesToRadians(80))
          - Constants.Arm.Motors.secondarySoftLimits[1], Constants.Arm.Motors.secondarySoftLimits[1]);
     
-    arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedVelocity_ToAmp());
+    // arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedVelocity_ToAmp());
 
     if(RobotContainer.driveController.circle().getAsBoolean()){
         RobotContainer.driveBase.setIsControlled(true);
@@ -42,4 +53,6 @@ public class AlphaAimToAmpArea extends InstantCommand {
       }
     else RobotContainer.driveBase.setIsControlled(false);
   }
+}
+
 }

@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.91,
-  "robotLength": 0.91,
+  "robotWidth": 0.75,
+  "robotLength": 0.75,
   "holonomicMode": true,
   "pathFolders": [
     "Connectors",
@@ -19,7 +19,7 @@
     "p4"
   ],
   "defaultMaxVel": 3.5,
-  "defaultMaxAccel": 5.0,
+  "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 200.0,
   "defaultMaxAngAccel": 550.0,
   "maxModuleSpeed": 3.7

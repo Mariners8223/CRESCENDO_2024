@@ -8,16 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,11 +24,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.IntakeCommands.Collect_noProxy;
 import frc.robot.commands.IntakeCommands.IntakeToFloor;
 import frc.robot.commands.IntakeCommands.RollOut;
 import frc.robot.commands.IntakeCommands.SourceCollect;
 import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
+import frc.robot.commands.ShooterCommands.AlphaAimToAmpArea;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
@@ -55,6 +52,7 @@ import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
+import frc.robot.subsystem.VisionSubSystem.Vision.CameraInterface.CameraLocation;
 
 public class RobotContainer {
   public static DriveBase driveBase;
@@ -102,10 +100,15 @@ public class RobotContainer {
 
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
-    driveController.cross().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake)); //.onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
+    driveController.cross().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake && vision.hasTarget(CameraLocation.Front_Arm))); //.onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
+    // driveController.cross().whileTrue(new AimToRingAuto().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake && vision.hasTarget(CameraLocation.Front_Arm))); //.onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
+
     // driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
     
     AlphaAimCommand = new AimRegularToSpeaker();
+    // AlphaAimCommand = new AlphaAimToAmpArea();
+
+
     //BetaAimCommand = new QuickAim();
     // var collect = new Collect_noProxy();
 
@@ -117,8 +120,8 @@ public class RobotContainer {
     // armController.circle().whileTrue(new Collect_noProxy());
     armController.circle().whileTrue(new CollectFloor());
     armController.povLeft().onTrue(new MoveToSourceCollection());
-    // armController.square().whileTrue(new SourceCollect());
-    armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
+    armController.square().whileTrue(new SourceCollect());
+    // armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.triangle().onTrue(new Shoot());
     //check if still necesery
     // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
