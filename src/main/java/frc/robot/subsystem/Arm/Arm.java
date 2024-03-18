@@ -98,7 +98,7 @@ public class Arm extends SubsystemBase{
     double mainOutput;
     double secondaryOutput;
 
-    Pose3d[] components = new Pose3d[2];
+    Pose3d[] components = new Pose3d[3];
 
     // Mechanism2d visualArm;
     // MechanismRoot2d visualArm_Root;
@@ -145,7 +145,8 @@ public class Arm extends SubsystemBase{
   private Intake intake;
 
   double armAngle;
-  double intakeAngle;  
+  double intakeAngle;
+  double gamePiece;
 
   private Arm() {
     mainMotor = configureMotors(Constants.Arm.Motors.mainMotorID ,Constants.Arm.Motors.mainPID,
@@ -308,19 +309,23 @@ public class Arm extends SubsystemBase{
     inputs.secondaryOutput = secondaryMotor.getAppliedOutput();
 
     mechanism.UpdatePivots();
-    Logger.recordOutput("ArmMechanism", mechanism.getMechanism());
 
+    Logger.recordOutput("ArmMechanism", mechanism.getMechanism());
     // Logger.recordOutput("0 3d", new Pose3d());
     // Logger.recordOutput("0 2d", new Pose2d());
     // Pose3d armPosition = new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(inputs.mainMotorPostion)), 0));
     // Pose3d intakePosition = new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.secondaryMotorPosition) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0));
     // Logger.recordOutput("Components", new Pose3d[] {armPosition, intakePosition});
 
+    if (Arm.getInstance().getIntakeSub().isGamePieceDetected()){gamePiece = 0;}
+    else {gamePiece = 20;}
+
     inputs.components[0] = new Pose3d(0.32 - 0.475, 0.2 - 0.475, 0.4, new Rotation3d(0, -(Units.rotationsToRadians(inputs.mainMotorPostion)), 0));
-    // inputs.components[1] = new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.secondaryMotorPosition) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0));
     inputs.components[1] = new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.mainMotorPostion) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0));
+    inputs.components[2] = new Pose3d((Math.cos(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.32 - 0.475 + gamePiece, 0.2 - 0.475, (Math.sin(Units.rotationsToRadians(inputs.mainMotorPostion)) * 0.435) + 0.4, new Rotation3d(0, -Units.rotationsToRadians(inputs.mainMotorPostion) - Units.rotationsToRadians(inputs.secondaryMotorPosition) - Math.PI, 0));
     // inputs.visualArm_MainPivot.setAngle(Units.rotationsToDegrees(mainEncoder.getPosition()));
     // inputs.visualArm_Elavator.setLength(elavator.getRailMotorPosition());
+
 
     Logger.processInputs(getName(), inputs);
   }
