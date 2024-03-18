@@ -357,14 +357,15 @@ public class DriveBase extends SubsystemBase {
    * @return the target rotation
    */
   public Rotation2d getWantedAngleInCurrentRobotAngle(Rotation2d angle){
-    //return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
+   if(getAngle() > 0) return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
+   else return Rotation2d.fromDegrees((getAngle() - (getAngle()%360 + angle.getDegrees()))-360);
     // if(Math.abs(getAngle()) <= 360) return angle.unaryMinus();
     // else return Rotation2d.fromDegrees(getAngle() - (getAngle()%360 + angle.getDegrees()));
 
 
-    double amountOfRot = Math.min(Math.abs(angle.getDegrees() - getAngle()%360) - 360, Math.abs(angle.getDegrees() - getAngle()));
-    if(getAngle() + amountOfRot == angle.getDegrees()) return Rotation2d.fromDegrees(getAngle() + amountOfRot);
-    else return Rotation2d.fromDegrees(getAngle() - amountOfRot);
+    // double amountOfRot = Math.min(Math.abs(angle.getDegrees() - getAngle()%360) - 360, Math.abs(angle.getDegrees() - getAngle()));
+    // if(getAngle() + amountOfRot == angle.getDegrees()) return Rotation2d.fromDegrees(getAngle() + amuntOfRot);
+    // else return Rotation2d.fromDegrees(getAngle() - amountOfRot);
   }
   
   /**
@@ -411,28 +412,7 @@ public class DriveBase extends SubsystemBase {
       }
     }
   }
-  public void yuvi(Rotation2d target){
-    // min(abs(b-(a-(m(a))),abs((b-(a-m(-a)))-360))
-    //b- target
-    //a - current
-    //m(a) = 360*int(a/360)
-    //result - what needs to be added to a to get to b in quickest way
-  }
 
-  // public void setTargetChassisAngle(Rotation2d Angle, boolean isBeyond360){
-  //   double targetAngle;
-  //   if (isBeyond360) {
-  //     targetAngle = Angle.getDegrees() % 360;
-  //   }
-  //   int k = (int)Units.degreesToRotations(getAngle());
-  //   double targetPluse = Angle.getDegrees() + k * 360;
-  //   double targetMius = 360 * k - Angle.getDegrees();
-  //   if (targetMius - getAngle() > targetPluse - getAngle()) {
-  //     inputs.targetRotation = Rotation2d.fromDegrees(targetMius);
-  //   }
-  //   else inputs.targetRotation = Rotation2d.fromDegrees(targetPluse);
-  //   targetRotation = inputs.targetRotation;
-  // }
 
   /**
    * gets the target rotation of the robot's angle
