@@ -199,8 +199,8 @@ public class Constants {
         public static final double ShootToAmpTime = 2;
         // public static final double RPMforShooterZone1 = 4000;
         // public static final double RPMforShooterZone2 = 5000;
-        public static double GPAirTimeZone1 = 0.125;
-        public static double GPAirTimeZone2 = 0.165;
+        public static double GPAirTimeZone1 = 0.135;
+        public static double GPAirTimeZone2 = 0.16;
     }
 
     public static final class Intake{

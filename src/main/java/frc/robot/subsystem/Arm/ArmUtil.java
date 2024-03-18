@@ -111,7 +111,7 @@ public class ArmUtil{
         inputs.Dz = (Constants.Speaker.SpeakerTranslation.getZ() - Constants.Arm.armHeightFromFrameMeters
          - Constants.DriveTrain.Global.RobotHeightFromGround)
         + Constants.Arm.DistanceFromMainArmToShooterOutput
-        + 0.1;
+        + 0.12;
         // + CalcAlphaOffset(inputs.ArmAngle);//adds the distance between the main arm and where the gp is flying out of
         // inputs.Dz = Constants.Speaker.SpeakerTranslation.getZ() - Arm.getInstance().getShooterPosition().y;
       }
