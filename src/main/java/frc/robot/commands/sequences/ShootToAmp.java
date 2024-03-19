@@ -23,8 +23,8 @@ public class ShootToAmp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new MoveToHome().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Home || Arm.getInstance().lastknownPosition != knownArmPosition.Free),
-      new SequentialCommandGroup(new MoveToAmp(true), new MoveToAmp(false), new WaitCommand(0.25), new MoveToAmp2()).onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Amp)
+      new MoveToHome().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Home || Arm.getInstance().lastknownPosition != knownArmPosition.Free || Arm.getInstance().lastknownPosition != knownArmPosition.Intake),
+      new SequentialCommandGroup(new MoveToAmp(true), new MoveToAmp(false)).onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Amp)
     );
   }
 
@@ -32,8 +32,7 @@ public class ShootToAmp extends SequentialCommandGroup {
 
     public MiniShoot() {
       addCommands(
-        new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(0.2)),
-        new WaitCommand(0.2),
+        new InstantCommand(() -> Arm.getInstance().getShooterSub().setShooterPower(-0.35)),
         new MiniShoot1()
         );
     }
@@ -51,7 +50,7 @@ public class ShootToAmp extends SequentialCommandGroup {
     @Override
     public void initialize() {
       // shooter.setShooterPower(0.65);
-      intake.setMotor(0.6);
+      intake.setMotor(-0.8);
 
       timer = 0;
     }
@@ -89,9 +88,9 @@ public class ShootToAmp extends SequentialCommandGroup {
     @Override
     public void initialize(){
       if(this.isMain){
-      arm.moveMotorsToRotation(0.3, 0);
+      arm.moveMotorsToRotation(0.183, 0);
       }
-      else arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.2);
+      else arm.moveMotorsToRotation(arm.getMainMotorRotation(), 0.254);
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,6 +32,7 @@ import frc.robot.commands.IntakeCommands.Collect.CollectFloor;
 import frc.robot.commands.ShooterCommands.AlphaAimToAmpArea;
 import frc.robot.commands.ShooterCommands.QuikAim_Auto;
 import frc.robot.commands.ShooterCommands.Shoot;
+import frc.robot.commands.ShooterCommands.ShooterStarter;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
@@ -50,6 +52,7 @@ import frc.robot.commands.sequences.AimToRing;
 import frc.robot.commands.sequences.ShootToAmp;
 import frc.robot.commands.sequences.ShootToAmp.MiniShoot;
 import frc.robot.subsystem.Arm.Arm;
+import frc.robot.subsystem.Arm.ArmUtil;
 import frc.robot.subsystem.Arm.Arm.knownArmPosition;
 import frc.robot.subsystem.DriveTrain.DriveBase;
 import frc.robot.subsystem.VisionSubSystem.Vision;
@@ -102,6 +105,8 @@ public class RobotContainer {
     driveController.options().onTrue(new InstantCommand(() -> driveBase.resetOnlyDirection()));
     driveController.touchpad().whileTrue(DriveBase.OrchestraCommand.getInstance());
     driveController.cross().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake && vision.hasTarget(CameraLocation.Front_Arm))); //.onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
+    driveController.circle().whileTrue(new InstantCommand(() -> { driveBase.setIsControlled(true);
+    driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle() - Math.PI), false); })).onFalse(new InstantCommand(() -> driveBase.setIsControlled(false)));
     // driveController.cross().whileTrue(new AimToRingAuto().onlyIf(() -> Arm.getInstance().lastknownPosition == knownArmPosition.Intake && vision.hasTarget(CameraLocation.Front_Arm))); //.onFalse(new InstantCommand(() -> { ringAim.cancel(); driveBase.isControlled = false; new RollOut(); }));
 
     // driveController.L1().whileTrue(new AimToRing().onlyIf(() -> Arm.getInstance().lastknownPosition == Arm.knownArmPosition.Intake));
@@ -125,6 +130,7 @@ public class RobotContainer {
     armController.square().whileTrue(new SourceCollect());
     // armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.triangle().onTrue(new Shoot());
+    armController.button(9).onTrue(new ShootToAmp()); // share button
     //check if still necesery
     // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
 
@@ -179,7 +185,7 @@ public class RobotContainer {
     //AUTOSSSSS related shit
     NamedCommands.registerCommand("Shoot", new Shoot_Auto());
     NamedCommands.registerCommand("QuikAim", new SequentialCommandGroup(new BetaAim_Auto(), new WaitCommand(0.3)));
-    NamedCommands.registerCommand("Collect", new SequentialCommandGroup(new IntakeToFloor(), new CollectFloor()));
+    NamedCommands.registerCommand("Collect", new SequentialCommandGroup(new CollectFloor()));
     NamedCommands.registerCommand("IntakeToFloor", new IntakeToFloor());
     NamedCommands.registerCommand("MoveToFree", new MoveToFree());
     NamedCommands.registerCommand("MoveToHome", new MoveToHome());

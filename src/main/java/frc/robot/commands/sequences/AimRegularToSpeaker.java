@@ -21,7 +21,7 @@ public class AimRegularToSpeaker extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     
     addCommands(
-      new MoveToHome().onlyIf(() -> Arm.getInstance().lastknownPosition != knownArmPosition.Home),//moves to free within
+      new MoveToHome().onlyIf(() -> (Arm.getInstance().lastknownPosition != knownArmPosition.Home || Arm.getInstance().lastknownPosition != knownArmPosition.Stow)),//moves to free within
       new RepeatCommand(new AimShooter())
     );
   }

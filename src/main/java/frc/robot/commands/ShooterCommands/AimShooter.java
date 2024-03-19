@@ -35,10 +35,10 @@ public class AimShooter extends InstantCommand {
     target = MathUtil.clamp(ArmUtil.getArmAngle(), Units.degreesToRadians(20), Units.degreesToRadians(80));
     arm.moveMotorsToRotation(Units.radiansToRotations(target) - Constants.Arm.Motors.secondarySoftLimits[1], Constants.Arm.Motors.secondarySoftLimits[1]);
 
-    if(RobotContainer.driveController.circle().getAsBoolean()){
-      RobotContainer.driveBase.setIsControlled(true);
-      RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle() - Math.PI), false);
-    }
-    else RobotContainer.driveBase.setIsControlled(false);
+    // if(RobotContainer.driveController.circle().getAsBoolean()){
+    //   RobotContainer.driveBase.setIsControlled(true);
+    //   RobotContainer.driveBase.setTargetRotation(Rotation2d.fromRadians(ArmUtil.getChassisAngle() - Math.PI), false);
+    // }
+    // else RobotContainer.driveBase.setIsControlled(false);
   }
 }
