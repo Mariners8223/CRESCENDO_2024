@@ -130,7 +130,8 @@ public class RobotContainer {
     armController.square().whileTrue(new SourceCollect());
     // armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.triangle().onTrue(new Shoot());
-    armController.button(9).onTrue(new ShootToAmp()); // share button
+    armController.button(9).onTrue(new ShooterStarter()); // share button
+    armController.options().onTrue(new ShootToAmp());
     //check if still necesery
     // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
 
