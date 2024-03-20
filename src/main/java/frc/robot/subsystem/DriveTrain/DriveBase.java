@@ -33,6 +33,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -202,7 +203,9 @@ public class DriveBase extends SubsystemBase {
    * @param newPose the new pose the robot should be in
    */
   public void resetOnlyDirection(){
-    currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d());
+    if(DriverStation.getAlliance().isPresent()) if(DriverStation.getAlliance().get() == Alliance.Blue) currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d());
+    else currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d(-Math.PI));
+    else currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d());
     poseEstimator.resetPosition(Rotation2d.fromDegrees(getNavxAngle()), currentPostions, currentPose);
     targetRotation = currentPose.getRotation();
     navxOffset = -getNavxAngle();
@@ -660,6 +663,8 @@ public class DriveBase extends SubsystemBase {
     }
     poseEstimator.update(Rotation2d.fromDegrees(getNavxAngle()), currentPostions);    
     currentPose = poseEstimator.getEstimatedPosition();
+    currentPose = new Pose2d(currentPose.getTranslation(), getRotation2d());
+    
     field.setRobotPose(currentPose);
 
     // SmartDashboard.putData(field);
