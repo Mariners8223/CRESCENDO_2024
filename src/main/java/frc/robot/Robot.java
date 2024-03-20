@@ -43,7 +43,7 @@ public class Robot extends LoggedRobot {
     ArmUtil.StartArmUtil();
 
     if(isReal()){
-      Logger.addDataReceiver(new NT4Publisher());
+      // Logger.addDataReceiver(new NT4Publisher());
       Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
     }
     // else setUseTiming(false);
