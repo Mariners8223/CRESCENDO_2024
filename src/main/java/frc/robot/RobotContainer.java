@@ -138,6 +138,8 @@ public class RobotContainer {
     armController.povRight().onTrue(AlphaAimCommand);
     //armController.povRight().onTrue(BetaAimCommand);
 
+    armController.touchpad().onTrue(new MoveToAlphaPose_close());
+
     armController.povDown().onTrue(new MoveToHome()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.L1().onTrue(new RollOut());
     armController.R1().onTrue(new MiniShoot());

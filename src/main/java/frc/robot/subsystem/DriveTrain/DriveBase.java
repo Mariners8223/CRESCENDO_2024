@@ -244,7 +244,7 @@ public class DriveBase extends SubsystemBase {
     }
 
     poseEstimator.resetPosition(Rotation2d.fromDegrees(getNavxAngle()), currentPostions, startingPose2d); //reset poseEstimator with the new starting postion
-    navxOffset = startingPose2d.getRotation().getDegrees() - getNavxAngle();
+    navxOffset = -(startingPose2d.getRotation().getDegrees() - getNavxAngle());
     currentPose = poseEstimator.getEstimatedPosition();
     targetRotation = currentPose.getRotation();
 
@@ -263,7 +263,7 @@ public class DriveBase extends SubsystemBase {
    */
   public void reset(Pose2d newPose){
     poseEstimator.resetPosition(Rotation2d.fromDegrees(getNavxAngle()), currentPostions, newPose); //reset poseEstimator with the new starting postion
-    navxOffset = newPose.getRotation().getDegrees() - getNavxAngle();
+    navxOffset = -(newPose.getRotation().getDegrees() - getNavxAngle());
     currentPose = poseEstimator.getEstimatedPosition();
     targetRotation = currentPose.getRotation();
 
@@ -663,7 +663,7 @@ public class DriveBase extends SubsystemBase {
     }
     poseEstimator.update(Rotation2d.fromDegrees(getNavxAngle()), currentPostions);    
     currentPose = poseEstimator.getEstimatedPosition();
-    currentPose = new Pose2d(currentPose.getTranslation(), getRotation2d());
+    // currentPose = new Pose2d(currentPose.getTranslation(), getRotation2d());
     
     field.setRobotPose(currentPose);
 
