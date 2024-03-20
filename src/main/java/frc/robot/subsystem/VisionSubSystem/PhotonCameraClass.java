@@ -163,7 +163,7 @@ public class PhotonCameraClass implements CameraInterface{
       }
       else{   
         for(int i = 0; i < 5 && i < latestResult.getTargets().size(); i++){
-          inputs.angleToObjects[i] = latestResult.getTargets().get(i).getYaw();
+          inputs.angleToObjects[i] = -latestResult.getTargets().get(i).getYaw();
         }
       }
 
