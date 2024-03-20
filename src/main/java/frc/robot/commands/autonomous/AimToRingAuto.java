@@ -84,7 +84,7 @@ public class AimToRingAuto extends SequentialCommandGroup {
 
     @Override
     public boolean isFinished(){
-      return Arm.getInstance().getIntakeSub().getLaserReading() || Timer.getFPGATimestamp() - startTime >= 1.1;
+      return Arm.getInstance().getIntakeSub().getLaserReading() || Timer.getFPGATimestamp() - startTime >= 1;
 
     }
   }

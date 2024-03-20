@@ -183,7 +183,7 @@ public class Constants {
         public static final int shooterMotor2ID = 18;
 
         public static final PIDFGains shooter1PID = new PIDFGains(0.0003, 0, 0, 0.000155, 0.0, 0);
-        public static final PIDFGains shooter2PID = new PIDFGains(0.0003, 0, 0, 0.00016, 0, 0); //TODO: get the real value
+        public static final PIDFGains shooter2PID = new PIDFGains(0.00038, 0, 0, 0.00015, 0, 0); //TODO: get the real value
 
         public static final boolean shooter1Inverted = true;
         public static final boolean shooter2Inverted = false;

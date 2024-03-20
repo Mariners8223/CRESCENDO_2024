@@ -37,6 +37,9 @@ public class Shooter {
         double motor1Current;
         double motor2Current;
 
+        double motor1Tempture;
+        double motor2Tempture;
+
         double RPMTarget;
     }
     // initialize motors
@@ -154,6 +157,9 @@ public class Shooter {
         inputs.motor1Current = shooterMotor1.getOutputCurrent();
         inputs.motor2Current = shooterMotor2.getOutputCurrent();
 
+        inputs.motor1Tempture = shooterMotor1.getMotorTemperature();
+        inputs.motor2Tempture = shooterMotor2.getMotorTemperature();
+
         Logger.processInputs("shooter", inputs);
     }
 
@@ -173,6 +179,9 @@ public class Shooter {
         pidController.setD(pidGains.getD());
         pidController.setFF(pidGains.getF());
         pidController.setIZone(pidGains.getIZone());
+
+        motor.setSmartCurrentLimit(60);
+        motor.setSecondaryCurrentLimit(70);
         return motor;
     }
 }

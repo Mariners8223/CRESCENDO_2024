@@ -31,9 +31,13 @@ public class AimShooter extends InstantCommand {
     ArmUtil.SetQuikShotMode(false);
     ArmUtil.setIsAmpShot(false);
     // ArmUtil.UpdateParameters();
+
+
     // arm.moveShooterToPose(ArmUtil.getArmNeededPosition());
     target = MathUtil.clamp(ArmUtil.getArmAngle(), Units.degreesToRadians(20), Units.degreesToRadians(80));
     arm.moveMotorsToRotation(Units.radiansToRotations(target) - Constants.Arm.Motors.secondarySoftLimits[1], Constants.Arm.Motors.secondarySoftLimits[1]);
+
+    // arm.getShooterSub().setShooterVelocity(ArmUtil.getWantedSpeed());
 
     // if(RobotContainer.driveController.circle().getAsBoolean()){
     //   RobotContainer.driveBase.setIsControlled(true);

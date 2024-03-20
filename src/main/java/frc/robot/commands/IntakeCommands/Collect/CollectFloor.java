@@ -32,7 +32,7 @@ public class CollectFloor extends Command {
   public void end(boolean interrupted) {
     if(interrupted){
       intake.stopMotor();
-      if(WasGamePieceDetected) WasGamePieceDetected = false;
+      //if(WasGamePieceDetected) WasGamePieceDetected = false;
     }
     else{
       intake.setPosition(intake.getMotorPosition());

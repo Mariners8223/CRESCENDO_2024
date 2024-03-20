@@ -125,7 +125,7 @@ public class SourceCollect extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted) {
       System.out.println("Note is in position");
-      intake.stopMotor();
+      // intake.stopMotor();
       shooter.stopMotors();
       intake.setPosition(intake.getMotorPosition());
       intake.setIsGamePieceDetected(true);

@@ -4,6 +4,7 @@
 
 package frc.robot.commands.ShooterCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
@@ -12,6 +13,7 @@ import frc.robot.subsystem.Arm.Shooter.Shooter;
 public class ShooterStarter extends Command {
   /** THIS COMMAND WILL STOP ONLY IF YOU CANCEL IT */
   private static Shooter shooter;
+  double startTime;
   public ShooterStarter() {
     // Use addRequirements() here to declare subsystem dependencies.
     shooter = Arm.getInstance().getShooterSub();
@@ -22,6 +24,7 @@ public class ShooterStarter extends Command {
   public void initialize() {
     // ArmUtil.UpdateParameters_SpeakerAim();
     shooter.setShooterVelocity(ArmUtil.getWantedSpeed());
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +43,7 @@ public class ShooterStarter extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // return Timer.getFPGATimestamp() - startTime > 10 && !Arm.getInstance().getIntakeSub().isGamePieceDetected();
     return false;
   }
 }

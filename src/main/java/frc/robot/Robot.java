@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.DriveTrain.Drive;
 import frc.robot.subsystem.Arm.Arm;
 import frc.robot.subsystem.Arm.ArmUtil;
 import frc.util.LocalADStarAK;
@@ -109,13 +110,13 @@ public class Robot extends LoggedRobot {
       RobotContainer.updateFieldFromAuto(lastAutoName);
     }
 
-    if(DriverStation.isDSAttached() && !driverStationWasConnected && DriverStation.getAlliance().isPresent()){
-      driverStationWasConnected = true;
-      Logger.recordOutput("Allince", DriverStation.getAlliance().get().name());
-      if(DriverStation.getAlliance().get() == Alliance.Red){
-        Constants.SwapToRed();
-      }
-    }
+    // if(DriverStation.isDSAttached() && !driverStationWasConnected && DriverStation.getAlliance().isPresent()){
+    //   driverStationWasConnected = true;
+    //   Logger.recordOutput("Allince", DriverStation.getAlliance().get().name());
+    //   if(DriverStation.getAlliance().get() == Alliance.Red){
+    //     Constants.SwapToRed();
+    //   }
+    // }
   }
 
   @Override
@@ -124,6 +125,11 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousInit() {
+    if(DriverStation.getAlliance().isPresent()){
+      Logger.recordOutput("Allince", DriverStation.getAlliance().get().name());
+      if(DriverStation.getAlliance().get() == Alliance.Red) Constants.SwapToRed();
+    }
+
     if (RobotContainer.getAutoCommand() != null) {
       RobotContainer.getAutoCommand().schedule();
     }

@@ -130,7 +130,7 @@ public class RobotContainer {
     armController.square().whileTrue(new SourceCollect());
     // armController.square().onTrue(new ShootToAmp()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.triangle().onTrue(new Shoot());
-    armController.button(9).onTrue(new ShooterStarter()); // share button
+    armController.button(9).whileTrue(new ShooterStarter()); // share button
     armController.options().onTrue(new ShootToAmp());
     //check if still necesery
     // armController.povLeft().onTrue(new MoveToAlphaPose_close()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel())).onTrue(new InstantCommand(() -> BetaAimCommand.cancel()));
@@ -157,7 +157,7 @@ public class RobotContainer {
     autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
 
     autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
-    autoChooser.addOption("Shoot Note", new ShootNote());
+    // autoChooser.addOption("Shoot Note", new ShootNote());
     SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
 
     new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> driveBase.getField2d().getObject("AutoPath").setPoses()).ignoringDisable(true));
@@ -197,6 +197,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RollOut", new RollOut());
     NamedCommands.registerCommand("AutoCollect", new AimToRingAuto());
     NamedCommands.registerCommand("shooter starter", new ShooterStarter_Auto());
+    NamedCommands.registerCommand("Shoot Note", new ShootNote());
 
     //Aiming positions
     NamedCommands.registerCommand("lower aim", new SequentialCommandGroup(new LowerAim_Auto(), new WaitCommand(0.3)));
