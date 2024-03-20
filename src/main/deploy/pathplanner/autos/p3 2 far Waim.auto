@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8104536608502588,
-      "y": 4.473539560488536
+      "x": 0.7621099939708783,
+      "y": 4.5087832049922705
     },
-    "rotation": -50.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "QuikAim"
+            "name": "IntakeToFloor"
           }
         },
         {
@@ -30,7 +30,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
@@ -42,7 +42,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Collect"
+                  "name": "AutoCollect"
                 }
               }
             ]
