@@ -96,6 +96,7 @@ public class ShootToAmp extends SequentialCommandGroup {
     @Override
     public void end(boolean interrupted){
       if(interrupted) arm.lastknownPosition = Arm.knownArmPosition.Unknown;
+      if(!isMain) arm.lastknownPosition = knownArmPosition.Amp;
     }
     
     @Override 
