@@ -6,6 +6,7 @@ package frc.robot.commands.armCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystem.Arm.Arm;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -34,7 +35,7 @@ public class MoveToStow extends SequentialCommandGroup {
     @Override
     public void initialize(){
       System.out.println("stow started");
-      arm.moveMotorsToRotation(0.0325, arm.getSecondaryMotorRotation());
+      arm.moveMotorsToRotation(0.0325, Constants.Arm.Motors.secondarySoftLimits[1]);
     }
 
     @Override
