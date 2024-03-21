@@ -154,7 +154,7 @@ public class Constants {
             public static final int secondaryMotorID = 16;
 
             public static final PIDFGains mainPID = new PIDFGains(10, 0.02, 0, 0, 0.005, 0.02);
-            public static final PIDFGains secondaryPID = new PIDFGains(3.5, 0, 0, 0, 0.01, 0.002);
+            public static final PIDFGains secondaryPID = new PIDFGains(1.9, 0, 0.01, 0.09, 0.01, 0.002); //  p =3.5
 
             public static final boolean mainInverted = false;
             public static final boolean secondaryInverted = false;
@@ -165,10 +165,10 @@ public class Constants {
             // public static final double secondaryZeroOffset = 0;
 
             public static final double[] mainSoftLimits = new double[]{0.3206787109375, -0.03125};//was 0.35, -0.04 // 0.3206787109375
-            public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.003};
+            public static final double[] secondarySoftLimits = new double[]{0.5560302734375, 0.009};
 
             public static final double[] mainMaxOutputs = new double[]{0.45, -0.35}; //0.45, -0.25
-            public static final double[] secondaryMaxOutputs = new double[]{0.55, -0.45}; //0.5, -0.35
+            public static final double[] secondaryMaxOutputs = new double[]{0.25, -0.15}; //0.55, -0.45
  
             public static final double mainConversionFactor = 150;
             public static final double secondaryConversionFactor = 81; //121.5
