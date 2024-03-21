@@ -276,6 +276,8 @@ public class Arm extends SubsystemBase{
     inputs.mainMotorTargetPostion = alpha;
     inputs.secondaryMotorTargetPostion = beta;
 
+    inputs.mainMotorTargetPostion = MathUtil.clamp(inputs.mainMotorTargetPostion, Constants.Arm.Motors.mainSoftLimits[1], Constants.Arm.Motors.mainSoftLimits[0]);
+    inputs.secondaryMotorTargetPostion = MathUtil.clamp(inputs.secondaryMotorTargetPostion, Constants.Arm.Motors.secondarySoftLimits[1], Constants.Arm.Motors.secondarySoftLimits[0]);
 
     mainMotor.getPIDController().setReference(inputs.mainMotorTargetPostion, ControlType.kPosition);
     secondaryMotor.getPIDController().setReference(inputs.secondaryMotorTargetPostion, ControlType.kPosition);
@@ -390,6 +392,7 @@ public class Arm extends SubsystemBase{
     sparkFlex.getPIDController().setP(pidfGains.getP());
     sparkFlex.getPIDController().setI(pidfGains.getI());
     sparkFlex.getPIDController().setD(pidfGains.getD());
+    sparkFlex.getPIDController().setFF(pidfGains.getF());
     sparkFlex.getPIDController().setIZone(pidfGains.getIZone());
 
     if(maxOutputs.length != 2) maxOutputs = new double[]{0.25, -0.25};
