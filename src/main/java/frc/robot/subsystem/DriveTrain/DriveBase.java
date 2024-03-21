@@ -376,7 +376,7 @@ public class DriveBase extends SubsystemBase {
    * @param alpha the target rotation
    * @param isBeyond360 if the target rotation is beyond 360 degrees
    */
-  public void setTargetRotation(Rotation2d alpha, boolean isBeyond360){//TODO: dis shit
+  public void setTargetRotation(Rotation2d alpha, boolean isBeyond360){
     // if(isBeyond360) inputs.targetRotation = alpha;
     // // else inputs.targetRotation = Rotation2d.fromRotations(alpha.getRotations() + (int)getRotation2d().getRotations());
     // else inputs.targetRotation = getWantedAngleInCurrentRobotAngle(alpha);
