@@ -33,6 +33,7 @@ import frc.robot.commands.ShooterCommands.AlphaAimToAmpArea;
 import frc.robot.commands.ShooterCommands.QuikAim_Auto;
 import frc.robot.commands.ShooterCommands.Shoot;
 import frc.robot.commands.ShooterCommands.ShooterStarter;
+import frc.robot.commands.ShooterCommands.SlowShoot;
 import frc.robot.commands.armCommands.MoveToAlphaPose_close;
 import frc.robot.commands.armCommands.MoveToFree;
 import frc.robot.commands.armCommands.MoveToHome;
@@ -138,7 +139,8 @@ public class RobotContainer {
     armController.povRight().onTrue(AlphaAimCommand);
     //armController.povRight().onTrue(BetaAimCommand);
 
-    armController.touchpad().onTrue(new MoveToAlphaPose_close());
+    // armController.touchpad().onTrue(new MoveToAlphaPose_close());
+    armController.touchpad().onTrue(new SlowShoot());
 
     armController.povDown().onTrue(new MoveToHome()).onTrue(new InstantCommand(() -> AlphaAimCommand.cancel()));
     armController.L1().onTrue(new RollOut());
