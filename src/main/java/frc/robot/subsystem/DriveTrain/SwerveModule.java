@@ -18,6 +18,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -60,6 +61,7 @@ public class SwerveModule{
   // private CANcoder absEncoder; //the absolute encoder
   private DutyCycleEncoder absEncoder; //the absolute encoder
   private CANSparkMax steerMotor; //the steer motor
+  private RelativeEncoder steerEncoder;
 
   private SwerveModuleInputsAutoLogged inputs;
 
@@ -79,7 +81,8 @@ public class SwerveModule{
     double steerMotorPosition;
     double steerMotorTempture;
 
-    double absEncoderPostion;
+    double absEncoderAbsPostion;
+    double absEncoderPosition;
   }
 
   /**
@@ -99,7 +102,7 @@ public class SwerveModule{
     driveMotorConfig = getTalonFXConfiguration();
     driveMotor = configTalonFX(driveMotorConfig);
 
-    steerMotor = configCanSparkMax();
+    steerMotor = configCanSparkMax(true);
 
     driveMotorVoltagePID = Constants.DriveTrain.Drive.driveMotorPID.createPIDController();
     steerMotorVoltagePID = Constants.DriveTrain.Steer.steerMotorPID.createPIDController();
@@ -240,11 +243,19 @@ public class SwerveModule{
 
     inputs.steerMotorCurrent = steerMotorCurrent.get(); //updates the current output of the steer motor
     inputs.steerMotorVoltage = steerMotorVoltage.get(); //updates the voltage output of the steer motor
-    inputs.steerMotorPosition = steerMotorPostion.get();
+    // inputs.steerMotorPosition = steerMotorPostion.get();
     inputs.steerMotorTempture = steerMotor.getMotorTemperature();
 
+    if(steerEncoder != null){
+      inputs.steerMotorPosition = steerMotor.getEncoder().getPosition() / Constants.DriveTrain.Steer.steerGearRatio;
+    }
+    else{
+      inputs.steerMotorPosition = steerMotorPostion.get();
+    }
+
     // inputs.absEncoderPostion = absEncoder.getAbsolutePosition().getValueAsDouble() * 360;
-    inputs.absEncoderPostion = (absEncoder.getAbsolutePosition() - absEncoder.getPositionOffset()) * 360;
+    inputs.absEncoderAbsPostion = (absEncoder.getAbsolutePosition() - absEncoder.getPositionOffset()) * 360;
+    inputs.absEncoderPosition = steerMotorPostion.get();
     // inputs.absEncoderPostion = absEncoder.get() * 360;
 
     Logger.processInputs(moduleConstants.moduleName.name(), inputs); //updates the logger
@@ -390,7 +401,7 @@ public class SwerveModule{
   /**
    * use this to config the steer motor at the start of the program
    */
-  private CANSparkMax configCanSparkMax(){
+  private CANSparkMax configCanSparkMax(boolean isUsingRleativeEncoder){
     CANSparkMax sparkMax = new CANSparkMax(moduleConstants.steerMotorID, MotorType.kBrushless);
 
     sparkMax.restoreFactoryDefaults();
@@ -414,11 +425,23 @@ public class SwerveModule{
 
     // sparkMax.getEncoder().setPosition(absEncoder.getAbsolutePosition().getValueAsDouble() * Constants.DriveTrain.Steer.steerGearRatio); //place holder, place getabsencoder postion
     // sparkMax.getEncoder().setPosition(0);
-    sparkMax.getEncoder().setPosition(absEncoder.get() * Constants.DriveTrain.Steer.steerGearRatio);
-
     steerMotorCurrent = () -> sparkMax.getOutputCurrent();
     steerMotorVoltage = () -> sparkMax.getAppliedOutput() * sparkMax.getBusVoltage();
-    steerMotorPostion = () -> sparkMax.getEncoder().getPosition() / Constants.DriveTrain.Steer.steerGearRatio;
+
+    if(!isUsingRleativeEncoder){
+      sparkMax.getEncoder().setPosition(absEncoder.get() * Constants.DriveTrain.Steer.steerGearRatio);
+
+      steerMotorPostion = () -> sparkMax.getEncoder().getPosition() / Constants.DriveTrain.Steer.steerGearRatio;
+    }
+    else{
+      steerEncoder = sparkMax.getAlternateEncoder(8192);
+      steerEncoder.setPositionConversionFactor(Constants.DriveTrain.Steer.steerGearRatio);
+      steerEncoder.setPosition(absEncoder.getAbsolutePosition() * Constants.DriveTrain.Steer.steerGearRatio);
+
+      sparkMax.getPIDController().setFeedbackDevice(steerEncoder);
+
+      steerMotorPostion = () -> steerEncoder.getPosition() / Constants.DriveTrain.Steer.steerGearRatio;
+    }
 
     steerMotorPostionInput = position -> sparkMax.getPIDController().setReference(position * Constants.DriveTrain.Steer.steerGearRatio, ControlType.kPosition);
     steerMotorVoltageInput = position -> sparkMax.getPIDController().setReference(steerMotorVoltagePID.calculate(steerMotorPostion.get(), position), ControlType.kVoltage);
