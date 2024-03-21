@@ -46,7 +46,7 @@ public class SlowShoot extends SequentialCommandGroup {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterRPM(4000);
+    shooter.setShooterPower(0.35);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -69,7 +69,7 @@ public class SlowShoot extends SequentialCommandGroup {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (shooter.isAtSelctedVelocity() && timer > 60) || timer > 120 || (shooter.isMotorsAtSameSpeed() && timer > 90);
+    return timer > 100 || (shooter.isMotorsAtSameSpeed() && timer > 60);
   }
   }
 }
