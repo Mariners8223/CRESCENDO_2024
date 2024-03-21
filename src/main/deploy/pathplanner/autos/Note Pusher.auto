@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.4351730640783217,
+      "y": 2.0464770274269903
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "p4 push all notes"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "p4",
+  "choreoAuto": false
+}
